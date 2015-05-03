@@ -33,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CodeFixProvider.cs" />
+    <Compile Include="Diagnostics\Async\AsyncMethodWithoutAsyncSuffixAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\EmptyArgumentExceptionAnalyzer\EmptyArgumentExceptionAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\SingleGeneralExceptionAnalyzer\SingleGeneralExceptionAnalyzer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

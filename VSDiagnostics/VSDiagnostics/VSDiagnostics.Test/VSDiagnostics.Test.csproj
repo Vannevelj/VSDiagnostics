@@ -104,6 +104,7 @@
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Tests\Async\AsyncMethodWithoutAsyncSuffixAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\EmptyArgumentExceptionAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\SingleGeneralExceptionAnalyzerTests.cs" />
     <Compile Include="Verifiers\CodeFixVerifier.cs" />
