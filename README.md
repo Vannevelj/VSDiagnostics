@@ -16,7 +16,6 @@ Currently these diagnostics are implemented:
 * Exceptions
   * EmptyArgumentException: guards against using an `ArgumentException` without specifying which argument.
   * SingleGeneralException: guards against using a catch-all clause.
-  * 
 
 ## How do I use this?
 
