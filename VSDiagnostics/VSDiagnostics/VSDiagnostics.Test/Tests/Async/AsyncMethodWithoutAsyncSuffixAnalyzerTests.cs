@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestHelper;
 using VSDiagnostics.Diagnostics.Async;
+using VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffixAnalyzer;
 using VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentExceptionAnalyzer;
 
 namespace VSDiagnostics.Test.Tests.Async
