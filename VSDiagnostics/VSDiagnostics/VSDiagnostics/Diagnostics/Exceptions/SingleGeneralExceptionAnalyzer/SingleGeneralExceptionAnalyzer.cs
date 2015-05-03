@@ -22,9 +22,9 @@ namespace VSDiagnostics.Diagnostics.Exceptions.SingleGeneralExceptionAnalyzer
             context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.TryStatement);
         }
 
-        private void AnalyzeNode(SyntaxNodeAnalysisContext obj)
+        private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var tryStatement = obj.Node as TryStatementSyntax;
+            var tryStatement = context.Node as TryStatementSyntax;
             if (tryStatement == null)
             {
                 return;
@@ -42,10 +42,10 @@ namespace VSDiagnostics.Diagnostics.Exceptions.SingleGeneralExceptionAnalyzer
                 return;
             }
 
-            var catchType = obj.SemanticModel.GetSymbolInfo(declaredException).Symbol.MetadataName;
+            var catchType = context.SemanticModel.GetSymbolInfo(declaredException).Symbol.MetadataName;
             if (catchType == "Exception")
             {
-                obj.ReportDiagnostic(Diagnostic.Create(Rule, catchClause.GetLocation()));
+                context.ReportDiagnostic(Diagnostic.Create(Rule, catchClause.GetLocation()));
             }
         }
     }
