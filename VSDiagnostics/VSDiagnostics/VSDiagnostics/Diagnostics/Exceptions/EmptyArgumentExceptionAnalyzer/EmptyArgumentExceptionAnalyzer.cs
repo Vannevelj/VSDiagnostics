@@ -12,10 +12,10 @@ namespace VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentExceptionAnalyzer
     {
         public const string DiagnosticId = "EmptyArgumentExceptionAnalyzer";
         internal const string Title = "Verifies whether an ArgumentException is thrown with a message.";
-        internal const string MessageFormat = "ArgumentException is thrown without a message.";
+        internal const string Message = "ArgumentException is thrown without a message.";
         internal const string Category = "Exceptions";
         internal const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)

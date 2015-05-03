@@ -26,10 +26,10 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            var expected = new DiagnosticResult
+            var expectedDiagnostic = new DiagnosticResult
             {
                 Id = EmptyArgumentExceptionAnalyzer.DiagnosticId,
-                Message = EmptyArgumentExceptionAnalyzer.MessageFormat,
+                Message = EmptyArgumentExceptionAnalyzer.Message,
                 Severity = EmptyArgumentExceptionAnalyzer.Severity,
                 Locations =
                     new[]
@@ -38,7 +38,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
                     }
             };
 
-            VerifyCSharpDiagnostic(test, expected);
+            VerifyCSharpDiagnostic(test, expectedDiagnostic);
         }
 
         [TestMethod]
