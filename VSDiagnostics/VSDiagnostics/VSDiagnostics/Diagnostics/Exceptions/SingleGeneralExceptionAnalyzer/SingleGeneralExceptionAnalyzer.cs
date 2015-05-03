@@ -11,10 +11,10 @@ namespace VSDiagnostics.Diagnostics.Exceptions.SingleGeneralExceptionAnalyzer
     {
         public const string DiagnosticId = "SingleGeneralExceptionAnalyzer";
         internal const string Title = "Verifies whether a try-catch block does not contain just a single Exception clause.";
-        internal const string MessageFormat = "A single catch-all clause has been used.";
+        internal const string Message = "A single catch-all clause has been used.";
         internal const string Category = "Exceptions";
         internal const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)
@@ -36,7 +36,13 @@ namespace VSDiagnostics.Diagnostics.Exceptions.SingleGeneralExceptionAnalyzer
             }
 
             var catchClause = tryStatement.Catches.First();
-            var catchType = obj.SemanticModel.GetSymbolInfo(catchClause.Declaration.Type).Symbol.MetadataName;
+            var declaredException = catchClause.Declaration?.Type;
+            if (declaredException == null)
+            {
+                return;
+            }
+
+            var catchType = obj.SemanticModel.GetSymbolInfo(declaredException).Symbol.MetadataName;
             if (catchType == "Exception")
             {
                 obj.ReportDiagnostic(Diagnostic.Create(Rule, catchClause.GetLocation()));
