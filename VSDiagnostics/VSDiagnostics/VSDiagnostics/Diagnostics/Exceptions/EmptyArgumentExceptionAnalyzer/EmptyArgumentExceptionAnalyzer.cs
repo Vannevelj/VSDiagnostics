@@ -10,7 +10,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentExceptionAnalyzer
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class EmptyArgumentExceptionAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "EmptyArgumentExceptionAnalyzer";
+        public const string DiagnosticId = nameof(EmptyArgumentExceptionAnalyzer);
         internal const string Title = "Verifies whether an ArgumentException is thrown with a message.";
         internal const string Message = "ArgumentException is thrown without a message.";
         internal const string Category = "Exceptions";

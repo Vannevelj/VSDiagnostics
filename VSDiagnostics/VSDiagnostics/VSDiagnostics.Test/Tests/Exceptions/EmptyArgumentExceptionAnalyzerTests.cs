@@ -6,7 +6,7 @@ using VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentExceptionAnalyzer;
 namespace VSDiagnostics.Test.Tests.Exceptions
 {
     [TestClass]
-    public class UnitTest : CodeFixVerifier
+    public class EmptyArgumentExceptionAnalyzerTests : CodeFixVerifier
     {
         [TestMethod]
         public void EmptyArgumentExceptionAnalyzer_WithEmptyArgument_InvokesWarning()
