@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestHelper;
 using VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix;
@@ -12,7 +13,7 @@ namespace VSDiagnostics.Test.Tests.Async
         [TestMethod]
         public void AsyncMethodWithoutAsyncSuffixAnalyzer_WithAsyncKeywordAndNoSuffix_InvokesWarning()
         {
-            var test = @"
+            var original = @"
     using System;
     using System.Text;
 
@@ -21,6 +22,21 @@ namespace VSDiagnostics.Test.Tests.Async
         class MyClass
         {   
             async Task Method()
+            {
+                
+            }
+        }
+    }";
+
+            var result = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            async Task MethodAsync()
             {
                 
             }
@@ -39,13 +55,14 @@ namespace VSDiagnostics.Test.Tests.Async
                     }
             };
 
-            VerifyCSharpDiagnostic(test, expectedDiagnostic);
+            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyCSharpFix(original, result);
         }
 
         [TestMethod]
         public void AsyncMethodWithoutAsyncSuffixAnalyzer_WithAsyncKeywordAndSuffix_DoesNotDisplayWarning()
         {
-            var test = @"
+            var original = @"
     using System;
     using System.Text;
 
@@ -59,13 +76,13 @@ namespace VSDiagnostics.Test.Tests.Async
             }
         }
     }";
-            VerifyCSharpDiagnostic(test);
+            VerifyCSharpDiagnostic(original);
         }
 
         [TestMethod]
         public void AsyncMethodWithoutAsyncSuffixAnalyzer_WithoutAsyncKeywordAndSuffix_DoesNotDisplayWarning()
         {
-            var test = @"
+            var original = @"
     using System;
     using System.Text;
 
@@ -79,12 +96,17 @@ namespace VSDiagnostics.Test.Tests.Async
             }
         }
     }";
-            VerifyCSharpDiagnostic(test);
+            VerifyCSharpDiagnostic(original);
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new AsyncMethodWithoutAsyncSuffixAnalyzer();
+        }
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider()
+        {
+            return new AsyncMethodWithoutAsyncSuffixCodeFix();
         }
     }
 }
