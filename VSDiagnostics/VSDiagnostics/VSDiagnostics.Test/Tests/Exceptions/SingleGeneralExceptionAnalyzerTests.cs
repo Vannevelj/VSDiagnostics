@@ -6,7 +6,7 @@ using VSDiagnostics.Diagnostics.Exceptions.SingleGeneralExceptionAnalyzer;
 namespace VSDiagnostics.Test.Tests.Exceptions
 {
     [TestClass]
-    public class SingleGeneralExceptionAnalyzerTests : CodeFixVerifier
+    public class SingleGeneralExceptionAnalyzerTests : DiagnosticVerifier
     {
         [TestMethod]
         public void SingleGeneralExceptionAnalyzer_WithSingleGeneralException_InvokesWarning()
