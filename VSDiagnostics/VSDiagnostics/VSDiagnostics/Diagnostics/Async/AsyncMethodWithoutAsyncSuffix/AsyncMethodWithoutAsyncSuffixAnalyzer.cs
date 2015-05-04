@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffixAnalyzer
+namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AsyncMethodWithoutAsyncSuffixAnalyzer : DiagnosticAnalyzer

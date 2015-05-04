@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestHelper;
-using VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentExceptionAnalyzer;
+using VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentException;
 
 namespace VSDiagnostics.Test.Tests.Exceptions
 {

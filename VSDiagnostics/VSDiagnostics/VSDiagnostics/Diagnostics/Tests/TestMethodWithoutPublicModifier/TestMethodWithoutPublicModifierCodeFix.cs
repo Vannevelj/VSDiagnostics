@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
 
-namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifierAnalyzer
+namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
 {
     [ExportCodeFixProvider("TestMethodWithoutPublicModifier", LanguageNames.CSharp), Shared]
     public class TestMethodWithoutPublicModifierCodeFix : CodeFixProvider

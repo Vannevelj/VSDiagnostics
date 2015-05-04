@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace VSDiagnostics.Diagnostics.Exceptions.SingleGeneralExceptionAnalyzer
+namespace VSDiagnostics.Diagnostics.Exceptions.SingleGeneralException
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class SingleGeneralExceptionAnalyzer : DiagnosticAnalyzer

@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifierAnalyzer
+namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class TestMethodWithoutPublicModifierAnalyzer : DiagnosticAnalyzer

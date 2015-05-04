@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestHelper;
-using VSDiagnostics.Diagnostics.Exceptions.SingleGeneralExceptionAnalyzer;
+using VSDiagnostics.Diagnostics.Exceptions.SingleGeneralException;
 
 namespace VSDiagnostics.Test.Tests.Exceptions
 {
