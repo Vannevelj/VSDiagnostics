@@ -13,9 +13,16 @@ Full text available on [my blog](http://www.vannevel.net/2015/05/03/getting-star
 
 Currently these diagnostics are implemented:
 
-* Exceptions
+* **Exceptions**
   * EmptyArgumentException: guards against using an `ArgumentException` without specifying which argument.
   * SingleGeneralException: guards against using a catch-all clause.
+  * CatchNullReferenceException: guards against catching a NullReferenceException.
+* **Async**
+  * AsyncMethodWithoutAsyncSuffix: Asynchronous methods should end with -Async (+ Code Fix).
+* **Strings**
+  * ReplaceEmptyStringWithStringDotEmpty: Use `string.Empty` instead of `""` (+ Code Fix).
+* **Tests**
+  * TestMethodWithoutPublicModifier: Change the access modifier to `public` for all methods annotated as test. Supports 3 frameworks and includes a Code Fix.
 
 ## How do I use this?
 
