@@ -105,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tests\Async\AsyncMethodWithoutAsyncSuffixAnalyzerTests.cs" />
+    <Compile Include="Tests\Exceptions\CatchNullReferenceExceptionAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\EmptyArgumentExceptionAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\SingleGeneralExceptionAnalyzerTests.cs" />
     <Compile Include="Tests\Strings\ReplaceEmptyStringWithStringDotEmptyTests.cs" />
