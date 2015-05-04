@@ -32,10 +32,10 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
             var diagnosticSpan = diagnostic.Location.SourceSpan;
             var methodDeclaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
 
-            context.RegisterFix(CodeAction.Create("Add suffix", x => AddSuffixAsync(context.Document, root, methodDeclaration, context.CancellationToken)), diagnostic);
+            context.RegisterFix(CodeAction.Create("Add suffix", x => AddSuffixAsync(context.Document, methodDeclaration, context.CancellationToken)), diagnostic);
         }
 
-        private async Task<Solution> AddSuffixAsync(Document document, SyntaxNode root, MethodDeclarationSyntax methodDeclaration, CancellationToken cancellationToken)
+        private async Task<Solution> AddSuffixAsync(Document document, MethodDeclarationSyntax methodDeclaration, CancellationToken cancellationToken)
         {
             var methodSymbol = (await document.GetSemanticModelAsync(cancellationToken)).GetDeclaredSymbol(methodDeclaration);
             return await Renamer.RenameSymbolAsync(
