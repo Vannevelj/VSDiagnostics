@@ -32,7 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CodeFixProvider.cs" />
     <Compile Include="Diagnostics\Async\AsyncMethodWithoutAsyncSuffix\AsyncMethodWithoutAsyncSuffixAnalyzer.cs" />
     <Compile Include="Diagnostics\Async\AsyncMethodWithoutAsyncSuffix\AsyncMethodWithoutAsyncSuffixCodeFix.cs" />
     <Compile Include="Diagnostics\Exceptions\EmptyArgumentException\EmptyArgumentExceptionAnalyzer.cs" />
