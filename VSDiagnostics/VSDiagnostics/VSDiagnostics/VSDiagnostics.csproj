@@ -37,6 +37,7 @@
     <Compile Include="Diagnostics\Exceptions\EmptyArgumentExceptionAnalyzer\EmptyArgumentExceptionAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\SingleGeneralExceptionAnalyzer\SingleGeneralExceptionAnalyzer.cs" />
     <Compile Include="Diagnostics\Tests\TestMethodWithoutPublicModifierAnalyzer\TestMethodWithoutPublicModifierAnalyzer.cs" />
+    <Compile Include="Diagnostics\Tests\TestMethodWithoutPublicModifierAnalyzer\TestMethodWithoutPublicModifierCodeFix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
