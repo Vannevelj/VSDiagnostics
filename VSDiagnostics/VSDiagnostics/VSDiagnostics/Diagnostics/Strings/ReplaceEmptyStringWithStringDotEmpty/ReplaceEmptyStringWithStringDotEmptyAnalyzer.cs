@@ -36,7 +36,6 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
                 return;
             }
 
-            var a = stringLiteral.Ancestors().ToArray();
             if (stringLiteral.Ancestors().Any(x => x.IsKind(SyntaxKind.Parameter)))
             {
                 return;
