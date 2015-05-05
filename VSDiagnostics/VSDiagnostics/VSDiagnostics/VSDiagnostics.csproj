@@ -37,6 +37,8 @@
     <Compile Include="Diagnostics\Exceptions\CatchNullReferenceException\CatchNullReferenceExceptionAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\EmptyArgumentException\EmptyArgumentExceptionAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\SingleGeneralException\SingleGeneralExceptionAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\NullableToShorthand\NullableToShorthandAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\NullableToShorthand\NullableToShorthandCodeFix.cs" />
     <Compile Include="Diagnostics\Strings\ReplaceEmptyStringWithStringDotEmpty\ReplaceEmptyStringWithStringDotEmptyAnalyzer.cs" />
     <Compile Include="Diagnostics\Strings\ReplaceEmptyStringWithStringDotEmpty\ReplaceEmptyStringWithStringDotEmptyCodeFix.cs" />
     <Compile Include="Diagnostics\Tests\TestMethodWithoutPublicModifier\TestMethodWithoutPublicModifierAnalyzer.cs" />
