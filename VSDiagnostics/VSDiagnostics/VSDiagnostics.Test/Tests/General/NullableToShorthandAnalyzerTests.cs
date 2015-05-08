@@ -171,7 +171,7 @@ namespace VSDiagnostics.Test.Tests.General
         {   
             void Method()
             {
-                var obj = new MyClass<Nullable<T>>();
+                var obj = new MyClass<Nullable<int>>();
             }
         }
     }";
@@ -410,7 +410,7 @@ namespace VSDiagnostics.Test.Tests.General
         {   
             void Method()
             {
-                Dictionary<Nullable<int>, Nullable<int>> myDic = null;
+                Dictionary<Nullable<int>, Nullable<int>> myVar = null;
             }
         }
     }";
@@ -425,7 +425,105 @@ namespace VSDiagnostics.Test.Tests.General
         {   
             void Method()
             {
-                Dictionary<int?, int?> myDic = null;
+                Dictionary<int?, int?> myVar = null;
+            }
+        }
+    }";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = NullableToShorthandAnalyzer.DiagnosticId,
+                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
+                Severity = NullableToShorthandAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 9, 13)
+                    }
+            };
+
+            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyCSharpFix(original, result);
+        }
+
+        [TestMethod]
+        public void NullableToShorthandAnalyzer_WithUnassignedNullableAsLocalVariable_InvokesWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass<T>
+        {   
+            void Method()
+            {
+                new MyClass<Nullable<int>>();
+            }
+        }
+    }";
+
+            var result = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass<T>
+        {   
+            void Method()
+            {
+                new MyClass<Nullable<int?>>();
+            }
+        }
+    }";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = NullableToShorthandAnalyzer.DiagnosticId,
+                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
+                Severity = NullableToShorthandAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 9, 13)
+                    }
+            };
+
+            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyCSharpFix(original, result);
+        }
+
+        [TestMethod]
+        public void NullableToShorthandAnalyzer_WithNullableTypeAsTypeParameterForNestedDictionaries_InvokesWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            void Method()
+            {
+                Dictionary<Dictionary<int, Nullable<int>, int> myVar = null;
+            }
+        }
+    }";
+
+            var result = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            void Method()
+            {
+                Dictionary<Dictionary<int, int?>, int> myVar = null;
             }
         }
     }";

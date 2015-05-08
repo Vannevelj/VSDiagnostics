@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -26,6 +26,7 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
                 SyntaxKind.FieldDeclaration,
                 SyntaxKind.Parameter,
                 SyntaxKind.TypeParameter,
+                SyntaxKind.TypeArgumentList,
                 SyntaxKind.PropertyDeclaration);
         }
 
@@ -43,8 +44,8 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
                 case SyntaxKind.Parameter:
                     HandleParameterDeclaration(context.Node as ParameterSyntax);
                     break;
-                case SyntaxKind.TypeParameter:
-                    HandleTypeParameterDeclaration(context.Node as TypeParameterSyntax);
+                case SyntaxKind.TypeArgumentList:
+                    HandleTypeParameterDeclaration(context.Node as TypeArgumentListSyntax);
                     break;
                 case SyntaxKind.PropertyDeclaration:
                     HandlePropertyDeclaration(context.Node as PropertyDeclarationSyntax);
@@ -56,22 +57,65 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
 
         private void HandlePropertyDeclaration(PropertyDeclarationSyntax property)
         {
-            throw new NotImplementedException();
+            var declaredType = property.Type;
+            if (!declaredType.IsKind(SyntaxKind.NullableType))
+            {
+                return;
+            }
+
+            var nullableType = declaredType as NullableTypeSyntax;
+            if (nullableType == null)
+            {
+                _context.ReportDiagnostic(Diagnostic.Create(Rule, property.GetLocation(), property.Identifier.Text));
+            }
         }
 
-        private void HandleTypeParameterDeclaration(TypeParameterSyntax type)
+        private void HandleTypeParameterDeclaration(TypeArgumentListSyntax typeArguments)
         {
-            throw new NotImplementedException();
+            foreach (var argument in typeArguments.Arguments)
+            {
+                if (!argument.IsKind(SyntaxKind.NullableType))
+                {
+                    return;
+                }
+
+                var nullableType = argument as NullableTypeSyntax;
+                if (nullableType == null)
+                {
+                    _context.ReportDiagnostic(Diagnostic.Create(Rule, argument.GetLocation(),
+                        typeArguments.Ancestors()?.OfType<VariableDeclarationSyntax>()?.FirstOrDefault()?.Variables.FirstOrDefault()?.Identifier.Text));
+                }
+            }
         }
 
         private void HandleParameterDeclaration(ParameterSyntax parameter)
         {
-            throw new NotImplementedException();
+            var declaredType = parameter.Type;
+            if (!declaredType.IsKind(SyntaxKind.NullableType))
+            {
+                return;
+            }
+
+            var nullableType = declaredType as NullableTypeSyntax;
+            if (nullableType == null)
+            {
+                _context.ReportDiagnostic(Diagnostic.Create(Rule, parameter.GetLocation(), parameter.Identifier.Text));
+            }
         }
 
         private void HandleFieldDeclaration(FieldDeclarationSyntax field)
         {
-            throw new NotImplementedException();
+            var declaredType = field.Declaration.Type;
+            if (!declaredType.IsKind(SyntaxKind.NullableType))
+            {
+                return;
+            }
+
+            var nullableType = declaredType as NullableTypeSyntax;
+            if (nullableType == null)
+            {
+                _context.ReportDiagnostic(Diagnostic.Create(Rule, field.GetLocation(), field.Declaration.Variables.First().Identifier.Text));
+            }
         }
 
         private void HandleLocalDeclaration(LocalDeclarationStatementSyntax local)
@@ -82,14 +126,11 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
                 return;
             }
 
-            // Type is already in T? notation
             var nullableType = declaredType as NullableTypeSyntax;
             if (nullableType == null)
             {
-                return;
+                _context.ReportDiagnostic(Diagnostic.Create(Rule, local.GetLocation(), local.Declaration.Variables.First().Identifier.Text));
             }
-
-            _context.ReportDiagnostic(Diagnostic.Create(Rule, local.GetLocation(), local.Declaration.Variables.First().Identifier.Text));
         }
     }
 }
