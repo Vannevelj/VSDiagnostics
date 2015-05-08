@@ -16,101 +16,68 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
         internal const string Category = "General";
         internal const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
         internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
-        private SyntaxNodeAnalysisContext _context;
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol,
-                SyntaxKind.LocalDeclarationStatement,
-                SyntaxKind.FieldDeclaration,
-                SyntaxKind.Parameter,
-                SyntaxKind.TypeParameter,
-                SyntaxKind.TypeArgumentList,
-                SyntaxKind.PropertyDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.GenericName);
         }
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            _context = context;
-            switch (context.Node.CSharpKind())
+            var argumentList = (GenericNameSyntax) context.Node;
+            var identifier = "Unnamed variable";
+            var ancestorNodes = new[] { SyntaxKind.LocalDeclarationStatement, SyntaxKind.FieldDeclaration, SyntaxKind.Parameter, SyntaxKind.PropertyDeclaration };
+            var parentNode = context.Node.AncestorsAndSelf().FirstOrDefault(x => ancestorNodes.Contains(x.CSharpKind()));
+
+            if (parentNode != null)
             {
-                case SyntaxKind.LocalDeclarationStatement:
+                switch (parentNode.CSharpKind())
                 {
-                    var obj = (LocalDeclarationStatementSyntax) context.Node;
-                    var identifier = obj.Declaration?.Variables.FirstOrDefault()?.Identifier.Text;
-                    var location = obj.GetLocation();
-                    Handle(identifier, location, obj.Declaration.Type);
-                    break;
+                    case SyntaxKind.LocalDeclarationStatement:
+                    {
+                        identifier = ((LocalDeclarationStatementSyntax) parentNode).Declaration?.Variables.FirstOrDefault()?.Identifier.Text;
+                        break;
+                    }
+                    case SyntaxKind.FieldDeclaration:
+                    {
+                        identifier = ((FieldDeclarationSyntax) parentNode).Declaration?.Variables.FirstOrDefault()?.Identifier.Text;
+                        break;
+                    }
+                    case SyntaxKind.Parameter:
+                    {
+                        identifier = ((ParameterSyntax) parentNode).Identifier.Text;
+                        break;
+                    }
+                    case SyntaxKind.TypeParameter:
+                    {
+                        identifier = ((TypeParameterSyntax) parentNode).Identifier.Text;
+                        break;
+                    }
+                    case SyntaxKind.PropertyDeclaration:
+                    {
+                        identifier = ((PropertyDeclarationSyntax) parentNode).Identifier.Text;
+                        break;
+                    }
                 }
-
-                case SyntaxKind.FieldDeclaration:
-                {
-                    var obj = (FieldDeclarationSyntax) context.Node;
-                    var identifier = obj.Declaration.Variables.First().Identifier.Text;
-                    var location = obj.GetLocation();
-                    Handle(identifier, location, obj.Declaration.Type);
-                    break;
-                }
-                case SyntaxKind.Parameter:
-                {
-                    var obj = (ParameterSyntax) context.Node;
-                    var identifier = obj.Identifier.Text;
-                    var location = obj.GetLocation();
-                    Handle(identifier, location, obj.Type);
-                    break;
-                }
-                case SyntaxKind.TypeArgumentList:
-                {
-                    var obj = (TypeArgumentListSyntax) context.Node;
-                    var identifier = obj.Ancestors()?.OfType<VariableDeclarationSyntax>()?.FirstOrDefault()?.Variables.FirstOrDefault()?.Identifier.Text;
-                    var location = obj.GetLocation();
-                    Handle(identifier, location, obj.Arguments.ToArray());
-                    break;
-                }
-                case SyntaxKind.PropertyDeclaration:
-                {
-                    var obj = (PropertyDeclarationSyntax) context.Node;
-                    var identifier = obj.Identifier.Text;
-                    var location = obj.GetLocation();
-                    Handle(identifier, location, obj.Type);
-                    break;
-                }
-
-                default:
-                    return;
             }
+
+
+            Handle(identifier, context.Node.GetLocation(), argumentList, context);
         }
 
-        private void Handle(string identifier, Location location, params TypeSyntax[] types)
+        private void Handle(string identifier, Location location, GenericNameSyntax genericName, SyntaxNodeAnalysisContext context)
         {
-            foreach (var type in types)
+            // Leave if type is in nullable form
+            if (genericName.IsKind(SyntaxKind.NullableType))
             {
-                // Leave if type is in nullable form
-                if (type.IsKind(SyntaxKind.NullableType))
-                {
-                    return;
-                }
+                return;
+            }
 
-                // Leave if type is not a generic
-                var genericType = type as GenericNameSyntax;
-                if (genericType == null)
-                {
-                    return;
-                }
-
-                // Display diagnostic if argument is of type Nullable
-                var innerType = _context.SemanticModel.GetTypeInfo(type);
-                if (innerType.Type.MetadataName == "Nullable`1")
-                {
-                    _context.ReportDiagnostic(Diagnostic.Create(Rule, location, identifier ?? "Unnamed variable"));
-                    return;
-                }
-
-                foreach (var argument in genericType.TypeArgumentList.Arguments)
-                {
-                    Handle(identifier, location, argument);
-                }
+            var genericType = context.SemanticModel.GetTypeInfo(genericName);
+            if (genericType.Type?.MetadataName == "Nullable`1")
+            {
+                context.ReportDiagnostic(Diagnostic.Create(Rule, location, identifier));
             }
         }
     }

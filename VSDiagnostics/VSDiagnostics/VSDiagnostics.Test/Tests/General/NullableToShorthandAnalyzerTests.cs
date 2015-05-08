@@ -69,7 +69,7 @@ namespace VSDiagnostics.Test.Tests.General
     {
         class MyClass
         {   
-            private Nullable<int> _myVar = 5;
+            private Nullable<int> myVar = 5;
             void Method()
             {
                 
@@ -85,7 +85,7 @@ namespace VSDiagnostics.Test.Tests.General
     {
         class MyClass
         {
-            private int? _myVar = 5; 
+            private int? myVar = 5; 
             void Method()
             {
                 
@@ -199,7 +199,7 @@ namespace VSDiagnostics.Test.Tests.General
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 11, 40)
+                        new DiagnosticResultLocation("Test0.cs", 11, 41)
                     }
             };
 
@@ -250,7 +250,7 @@ namespace VSDiagnostics.Test.Tests.General
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 9, 13)
+                        new DiagnosticResultLocation("Test0.cs", 9, 20)
                     }
             };
 
@@ -463,7 +463,7 @@ namespace VSDiagnostics.Test.Tests.General
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 11, 17)
+                        new DiagnosticResultLocation("Test0.cs", 11, 28)
                     }
             };
 
@@ -475,7 +475,7 @@ namespace VSDiagnostics.Test.Tests.General
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 11, 17)
+                        new DiagnosticResultLocation("Test0.cs", 11, 43)
                     }
             };
 
@@ -524,7 +524,7 @@ namespace VSDiagnostics.Test.Tests.General
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 11, 28)
+                        new DiagnosticResultLocation("Test0.cs", 11, 29)
                     }
             };
 
@@ -573,7 +573,7 @@ namespace VSDiagnostics.Test.Tests.General
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 9, 13)
+                        new DiagnosticResultLocation("Test0.cs", 11, 44)
                     }
             };
 
