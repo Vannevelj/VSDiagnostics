@@ -581,6 +581,55 @@ namespace VSDiagnostics.Test.Tests.General
             VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
+        [TestMethod]
+        public void NullableToShorthandAnalyzer_WithNullableTypeAsReturnType_InvokesWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            Nullable<int> Method()
+            {
+                return null;
+            }
+        }
+    }";
+
+            var result = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            int? Method()
+            {
+                return null;
+            }
+        }
+    }";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = NullableToShorthandAnalyzer.DiagnosticId,
+                Message = string.Format(NullableToShorthandAnalyzer.Message, "Return statement"),
+                Severity = NullableToShorthandAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 9, 13)
+                    }
+            };
+
+            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
+        }
+
         protected override CodeFixProvider GetCSharpCodeFixProvider()
         {
             return new NullableToShorthandCodeFix();

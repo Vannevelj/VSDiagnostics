@@ -76,14 +76,11 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
                 }
             }
 
-            var newExpression = SyntaxFactory.ParseTypeName(typeNameString + "?")
-                                             .WithLeadingTrivia(node.GetLeadingTrivia())
-                                             .WithTrailingTrivia(node.GetTrailingTrivia());
+            var newExpression = SyntaxFactory.ParseTypeName(typeNameString + "?");
 
-            var newParent = node.ReplaceNode(node, newExpression);
+            var newParent = node.ReplaceNode(node, newExpression).WithAdditionalAnnotations(Formatter.Annotation);
             var newRoot = root.ReplaceNode(node, newParent);
-            var formattedRoot = Formatter.Format(newRoot, newParent.Span, document.Project.Solution.Workspace, document.Project.Solution.Workspace.Options);
-            var newDocument = document.WithSyntaxRoot(formattedRoot);
+            var newDocument = document.WithSyntaxRoot(newRoot);
 
             return newDocument.Project.Solution;
         }

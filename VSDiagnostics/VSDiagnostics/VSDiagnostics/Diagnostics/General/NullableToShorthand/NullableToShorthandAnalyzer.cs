@@ -30,6 +30,12 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
             var ancestorNodes = new[] { SyntaxKind.LocalDeclarationStatement, SyntaxKind.FieldDeclaration, SyntaxKind.Parameter, SyntaxKind.PropertyDeclaration };
             var parentNode = context.Node.AncestorsAndSelf().FirstOrDefault(x => ancestorNodes.Contains(x.CSharpKind()));
 
+            // We're having a return type
+            if (context.Node.Parent is MethodDeclarationSyntax)
+            {
+                identifier = "Return statement";
+            }
+
             if (parentNode != null)
             {
                 switch (parentNode.CSharpKind())
