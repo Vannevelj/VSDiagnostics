@@ -22,7 +22,7 @@ namespace VSDiagnostics.Test.Tests.General
         {   
             void Method()
             {
-                Nullable<int> myVar = 5;
+                Nullable<float> myVar = 5.0f;
             }
         }
     }";
@@ -37,7 +37,7 @@ namespace VSDiagnostics.Test.Tests.General
         {   
             void Method()
             {
-                int? myVar = 5;
+                float? myVar = 5.0f;
             }
         }
     }";
@@ -55,7 +55,7 @@ namespace VSDiagnostics.Test.Tests.General
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         [TestMethod]
@@ -106,7 +106,7 @@ namespace VSDiagnostics.Test.Tests.General
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         [TestMethod]
@@ -120,7 +120,7 @@ namespace VSDiagnostics.Test.Tests.General
     {
         class MyClass
         {   
-            void Method(Nullable<int> myVar)
+            void Method(Nullable<double> myVar)
             {
                 
             }
@@ -135,7 +135,7 @@ namespace VSDiagnostics.Test.Tests.General
     {
         class MyClass
         {   
-            void Method(int? myVar)
+            void Method(double? myVar)
             {
                 
             }
@@ -155,7 +155,7 @@ namespace VSDiagnostics.Test.Tests.General
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         [TestMethod]
@@ -204,7 +204,7 @@ namespace VSDiagnostics.Test.Tests.General
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         [TestMethod]
@@ -255,7 +255,7 @@ namespace VSDiagnostics.Test.Tests.General
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         [TestMethod]
@@ -370,7 +370,7 @@ namespace VSDiagnostics.Test.Tests.General
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         [TestMethod]
@@ -419,7 +419,7 @@ namespace VSDiagnostics.Test.Tests.General
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         [TestMethod]
@@ -480,7 +480,7 @@ namespace VSDiagnostics.Test.Tests.General
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic1, expectedDiagnostic2);
-            VerifyCSharpFix(original, result);
+            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         [TestMethod]
@@ -529,7 +529,7 @@ namespace VSDiagnostics.Test.Tests.General
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         [TestMethod]
@@ -578,7 +578,7 @@ namespace VSDiagnostics.Test.Tests.General
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         protected override CodeFixProvider GetCSharpCodeFixProvider()
