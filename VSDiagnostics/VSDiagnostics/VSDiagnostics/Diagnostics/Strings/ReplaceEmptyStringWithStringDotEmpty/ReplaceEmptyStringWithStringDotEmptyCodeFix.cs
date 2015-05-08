@@ -33,7 +33,7 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
             context.RegisterFix(CodeAction.Create("Use string.Empty", x => UseStringDotEmpty(context.Document, root, literalDeclaration)), diagnostic);
         }
 
-        private Task<Solution> UseStringDotEmpty(Document document, SyntaxNode root, LiteralExpressionSyntax literalDeclaration)
+        private static Task<Solution> UseStringDotEmpty(Document document, SyntaxNode root, LiteralExpressionSyntax literalDeclaration)
         {
             var stringDotEmptyInvocation = SyntaxFactory.ParseExpression("string.Empty");
             var newRoot = root.ReplaceNode(literalDeclaration, stringDotEmptyInvocation);
