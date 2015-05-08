@@ -50,7 +50,7 @@ namespace VSDiagnostics.Test.Tests.General
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 9, 13)
+                        new DiagnosticResultLocation("Test0.cs", 11, 17)
                     }
             };
 
@@ -150,7 +150,7 @@ namespace VSDiagnostics.Test.Tests.General
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 9, 13)
+                        new DiagnosticResultLocation("Test0.cs", 9, 25)
                     }
             };
 
@@ -171,7 +171,7 @@ namespace VSDiagnostics.Test.Tests.General
         {   
             void Method()
             {
-                var obj = new MyClass<Nullable<int>>();
+                var myVar = new MyClass<Nullable<int>>();
             }
         }
     }";
@@ -186,7 +186,7 @@ namespace VSDiagnostics.Test.Tests.General
         {   
             void Method()
             {
-                var obj = new MyClass<int?>();
+                var myVar = new MyClass<int?>();
             }
         }
     }";
@@ -199,7 +199,7 @@ namespace VSDiagnostics.Test.Tests.General
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 9, 13)
+                        new DiagnosticResultLocation("Test0.cs", 11, 40)
                     }
             };
 
@@ -256,6 +256,31 @@ namespace VSDiagnostics.Test.Tests.General
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
             VerifyCSharpFix(original, result);
+        }
+
+        [TestMethod]
+        public void NullableToShorthandAnalyzer_WithNonNullableNestedTypeParameter_DoesNotInvokeWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass<T>
+        {   
+            void Method()
+            {
+                var myVar = new MyClass<Dictionary<MyOtherClass, string>>();
+            }
+        }
+
+        class MyOtherClass
+        {
+
+        }
+    }";
+            VerifyCSharpDiagnostic(original);
         }
 
         [TestMethod]
@@ -340,7 +365,7 @@ namespace VSDiagnostics.Test.Tests.General
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 9, 13)
+                        new DiagnosticResultLocation("Test0.cs", 11, 17)
                     }
             };
 
@@ -359,7 +384,7 @@ namespace VSDiagnostics.Test.Tests.General
     {
         class MyClass
         {   
-            void Method(Nullable<int> x = 5)
+            void Method(Nullable<int> myVar = 5)
             {
                 
             }
@@ -374,7 +399,7 @@ namespace VSDiagnostics.Test.Tests.General
     {
         class MyClass
         {   
-            void Method(int? x = 5)
+            void Method(int? myVar = 5)
             {
                 
             }
@@ -389,7 +414,7 @@ namespace VSDiagnostics.Test.Tests.General
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 9, 13)
+                        new DiagnosticResultLocation("Test0.cs", 9, 25)
                     }
             };
 
@@ -430,7 +455,7 @@ namespace VSDiagnostics.Test.Tests.General
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
+            var expectedDiagnostic1 = new DiagnosticResult
             {
                 Id = NullableToShorthandAnalyzer.DiagnosticId,
                 Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
@@ -438,11 +463,23 @@ namespace VSDiagnostics.Test.Tests.General
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 9, 13)
+                        new DiagnosticResultLocation("Test0.cs", 11, 17)
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            var expectedDiagnostic2 = new DiagnosticResult
+            {
+                Id = NullableToShorthandAnalyzer.DiagnosticId,
+                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
+                Severity = NullableToShorthandAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 11, 17)
+                    }
+            };
+
+            VerifyCSharpDiagnostic(original, expectedDiagnostic1, expectedDiagnostic2);
             VerifyCSharpFix(original, result);
         }
 
@@ -474,7 +511,7 @@ namespace VSDiagnostics.Test.Tests.General
         {   
             void Method()
             {
-                new MyClass<Nullable<int?>>();
+                new MyClass<int?>();
             }
         }
     }";
@@ -482,12 +519,12 @@ namespace VSDiagnostics.Test.Tests.General
             var expectedDiagnostic = new DiagnosticResult
             {
                 Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
+                Message = string.Format(NullableToShorthandAnalyzer.Message, "Unnamed variable"),
                 Severity = NullableToShorthandAnalyzer.Severity,
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 9, 13)
+                        new DiagnosticResultLocation("Test0.cs", 11, 28)
                     }
             };
 

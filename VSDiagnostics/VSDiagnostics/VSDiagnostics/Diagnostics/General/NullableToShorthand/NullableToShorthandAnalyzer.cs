@@ -36,100 +36,81 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
             switch (context.Node.CSharpKind())
             {
                 case SyntaxKind.LocalDeclarationStatement:
-                    HandleLocalDeclaration(context.Node as LocalDeclarationStatementSyntax);
+                {
+                    var obj = (LocalDeclarationStatementSyntax) context.Node;
+                    var identifier = obj.Declaration?.Variables.FirstOrDefault()?.Identifier.Text;
+                    var location = obj.GetLocation();
+                    Handle(identifier, location, obj.Declaration.Type);
                     break;
+                }
+
                 case SyntaxKind.FieldDeclaration:
-                    HandleFieldDeclaration(context.Node as FieldDeclarationSyntax);
+                {
+                    var obj = (FieldDeclarationSyntax) context.Node;
+                    var identifier = obj.Declaration.Variables.First().Identifier.Text;
+                    var location = obj.GetLocation();
+                    Handle(identifier, location, obj.Declaration.Type);
                     break;
+                }
                 case SyntaxKind.Parameter:
-                    HandleParameterDeclaration(context.Node as ParameterSyntax);
+                {
+                    var obj = (ParameterSyntax) context.Node;
+                    var identifier = obj.Identifier.Text;
+                    var location = obj.GetLocation();
+                    Handle(identifier, location, obj.Type);
                     break;
+                }
                 case SyntaxKind.TypeArgumentList:
-                    HandleTypeParameterDeclaration(context.Node as TypeArgumentListSyntax);
+                {
+                    var obj = (TypeArgumentListSyntax) context.Node;
+                    var identifier = obj.Ancestors()?.OfType<VariableDeclarationSyntax>()?.FirstOrDefault()?.Variables.FirstOrDefault()?.Identifier.Text;
+                    var location = obj.GetLocation();
+                    Handle(identifier, location, obj.Arguments.ToArray());
                     break;
+                }
                 case SyntaxKind.PropertyDeclaration:
-                    HandlePropertyDeclaration(context.Node as PropertyDeclarationSyntax);
+                {
+                    var obj = (PropertyDeclarationSyntax) context.Node;
+                    var identifier = obj.Identifier.Text;
+                    var location = obj.GetLocation();
+                    Handle(identifier, location, obj.Type);
                     break;
+                }
+
                 default:
                     return;
             }
         }
 
-        private void HandlePropertyDeclaration(PropertyDeclarationSyntax property)
+        private void Handle(string identifier, Location location, params TypeSyntax[] types)
         {
-            var declaredType = property.Type;
-            if (!declaredType.IsKind(SyntaxKind.NullableType))
+            foreach (var type in types)
             {
-                return;
-            }
-
-            var nullableType = declaredType as NullableTypeSyntax;
-            if (nullableType == null)
-            {
-                _context.ReportDiagnostic(Diagnostic.Create(Rule, property.GetLocation(), property.Identifier.Text));
-            }
-        }
-
-        private void HandleTypeParameterDeclaration(TypeArgumentListSyntax typeArguments)
-        {
-            foreach (var argument in typeArguments.Arguments)
-            {
-                if (!argument.IsKind(SyntaxKind.NullableType))
+                // Leave if type is in nullable form
+                if (type.IsKind(SyntaxKind.NullableType))
                 {
                     return;
                 }
 
-                var nullableType = argument as NullableTypeSyntax;
-                if (nullableType == null)
+                // Leave if type is not a generic
+                var genericType = type as GenericNameSyntax;
+                if (genericType == null)
                 {
-                    _context.ReportDiagnostic(Diagnostic.Create(Rule, argument.GetLocation(),
-                        typeArguments.Ancestors()?.OfType<VariableDeclarationSyntax>()?.FirstOrDefault()?.Variables.FirstOrDefault()?.Identifier.Text));
+                    return;
                 }
-            }
-        }
 
-        private void HandleParameterDeclaration(ParameterSyntax parameter)
-        {
-            var declaredType = parameter.Type;
-            if (!declaredType.IsKind(SyntaxKind.NullableType))
-            {
-                return;
-            }
+                // Display diagnostic if argument is of type Nullable
+                var innerType = _context.SemanticModel.GetTypeInfo(type);
+                if (innerType.Type.MetadataName == "Nullable`1")
+                {
+                    _context.ReportDiagnostic(Diagnostic.Create(Rule, location, identifier ?? "Unnamed variable"));
+                    return;
+                }
 
-            var nullableType = declaredType as NullableTypeSyntax;
-            if (nullableType == null)
-            {
-                _context.ReportDiagnostic(Diagnostic.Create(Rule, parameter.GetLocation(), parameter.Identifier.Text));
-            }
-        }
-
-        private void HandleFieldDeclaration(FieldDeclarationSyntax field)
-        {
-            var declaredType = field.Declaration.Type;
-            if (!declaredType.IsKind(SyntaxKind.NullableType))
-            {
-                return;
-            }
-
-            var nullableType = declaredType as NullableTypeSyntax;
-            if (nullableType == null)
-            {
-                _context.ReportDiagnostic(Diagnostic.Create(Rule, field.GetLocation(), field.Declaration.Variables.First().Identifier.Text));
-            }
-        }
-
-        private void HandleLocalDeclaration(LocalDeclarationStatementSyntax local)
-        {
-            var declaredType = local.Declaration.Type;
-            if (!declaredType.IsKind(SyntaxKind.NullableType))
-            {
-                return;
-            }
-
-            var nullableType = declaredType as NullableTypeSyntax;
-            if (nullableType == null)
-            {
-                _context.ReportDiagnostic(Diagnostic.Create(Rule, local.GetLocation(), local.Declaration.Variables.First().Identifier.Text));
+                foreach (var argument in genericType.TypeArgumentList.Arguments)
+                {
+                    Handle(identifier, location, argument);
+                }
             }
         }
     }
