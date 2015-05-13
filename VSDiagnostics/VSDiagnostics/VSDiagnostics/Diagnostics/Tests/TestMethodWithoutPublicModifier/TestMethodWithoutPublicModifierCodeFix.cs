@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CodeGeneration;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
@@ -46,14 +47,14 @@ namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
             };
 
             var modifierList = new SyntaxTokenList()
-                .Add(SyntaxFactory.Token(SyntaxKind.PublicKeyword).WithLeadingTrivia(method.GetLeadingTrivia()))
+                .Add(SyntaxFactory.Token(SyntaxKind.PublicKeyword))
                 .AddRange(method.Modifiers.Where(x => !removableModifiers.Select(y => y.RawKind).Contains(x.RawKind)));
 
-            var newMethod = method.WithModifiers(modifierList);
-            var formattedMethod = Formatter.Format(newMethod, newMethod.Modifiers.Span, document.Project.Solution.Workspace, document.Project.Solution.Workspace.Options);
+            var newMethod = method.WithModifiers(modifierList).WithAdditionalAnnotations(Formatter.Annotation);
 
-            var newRoot = root.ReplaceNode(method, formattedMethod);
-            var newDocument = document.WithSyntaxRoot(newRoot);
+            var newRoot = root.ReplaceNode(method, newMethod);
+            var formattedRoot = Formatter.Format(newRoot, Formatter.Annotation, document.Project.Solution.Workspace);
+            var newDocument = document.WithSyntaxRoot(formattedRoot);
 
             return Task.FromResult(newDocument.Project.Solution);
         }
