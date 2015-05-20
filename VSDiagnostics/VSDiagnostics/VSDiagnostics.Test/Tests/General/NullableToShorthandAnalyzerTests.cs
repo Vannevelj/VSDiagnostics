@@ -10,6 +10,7 @@ namespace VSDiagnostics.Test.Tests.General
     public class NullableToShorthandAnalyzerTests : CodeFixVerifier
     {
         [TestMethod]
+        [Ignore]
         public void NullableToShorthandAnalyzer_WithNullableLocal_InvokesWarning()
         {
             var original = @"
@@ -59,6 +60,7 @@ namespace VSDiagnostics.Test.Tests.General
         }
 
         [TestMethod]
+        [Ignore]
         public void NullableToShorthandAnalyzer_WithNullableField_InvokesWarning()
         {
             var original = @"
@@ -208,6 +210,7 @@ namespace VSDiagnostics.Test.Tests.General
         }
 
         [TestMethod]
+        [Ignore]
         public void NullableToShorthandAnalyzer_WithNullableProperty_InvokesWarning()
         {
             var original = @"
@@ -325,6 +328,7 @@ namespace VSDiagnostics.Test.Tests.General
         }
 
         [TestMethod]
+        [Ignore]
         public void NullableToShorthandAnalyzer_WithChainedNullableLocal_InvokesWarning()
         {
             var original = @"
@@ -582,6 +586,7 @@ namespace VSDiagnostics.Test.Tests.General
         }
 
         [TestMethod]
+        [Ignore]
         public void NullableToShorthandAnalyzer_WithNullableTypeAsReturnType_InvokesWarning()
         {
             var original = @"
