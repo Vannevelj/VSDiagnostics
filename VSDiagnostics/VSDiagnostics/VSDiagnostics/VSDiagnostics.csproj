@@ -34,6 +34,7 @@
   <ItemGroup>
     <Compile Include="Diagnostics\Async\AsyncMethodWithoutAsyncSuffix\AsyncMethodWithoutAsyncSuffixAnalyzer.cs" />
     <Compile Include="Diagnostics\Async\AsyncMethodWithoutAsyncSuffix\AsyncMethodWithoutAsyncSuffixCodeFix.cs" />
+    <Compile Include="Diagnostics\Exceptions\ArgumentExceptionWithNameofOperator\ArgumentExceptionWithNameofOperatorAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\CatchNullReferenceException\CatchNullReferenceExceptionAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\EmptyArgumentException\EmptyArgumentExceptionAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\SingleGeneralException\SingleGeneralExceptionAnalyzer.cs" />
@@ -44,6 +45,7 @@
     <Compile Include="Diagnostics\Tests\TestMethodWithoutPublicModifier\TestMethodWithoutPublicModifierAnalyzer.cs" />
     <Compile Include="Diagnostics\Tests\TestMethodWithoutPublicModifier\TestMethodWithoutPublicModifierCodeFix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\Extensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Diagnostic.nuspec">
