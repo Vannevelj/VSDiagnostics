@@ -28,7 +28,7 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
             var argumentList = (GenericNameSyntax) context.Node;
             var identifier = "Unnamed variable";
             var ancestorNodes = new[] { SyntaxKind.LocalDeclarationStatement, SyntaxKind.FieldDeclaration, SyntaxKind.Parameter, SyntaxKind.PropertyDeclaration };
-            var parentNode = context.Node.AncestorsAndSelf().FirstOrDefault(x => ancestorNodes.Contains(x.CSharpKind()));
+            var parentNode = context.Node.AncestorsAndSelf().FirstOrDefault(x => ancestorNodes.Contains(x.Kind()));
 
             // We're having a return type
             if (context.Node.Parent is MethodDeclarationSyntax)
@@ -38,7 +38,7 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
 
             if (parentNode != null)
             {
-                switch (parentNode.CSharpKind())
+                switch (parentNode.Kind())
                 {
                     case SyntaxKind.LocalDeclarationStatement:
                     {

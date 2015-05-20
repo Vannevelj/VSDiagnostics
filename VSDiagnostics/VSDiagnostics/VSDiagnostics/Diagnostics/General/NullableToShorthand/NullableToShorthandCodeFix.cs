@@ -14,24 +14,21 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
     [ExportCodeFixProvider("NullableToShorthand", LanguageNames.CSharp), Shared]
     public class NullableToShorthandCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> GetFixableDiagnosticIds()
-        {
-            return ImmutableArray.Create(NullableToShorthandAnalyzer.DiagnosticId);
-        }
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(NullableToShorthandAnalyzer.DiagnosticId);
 
         public override FixAllProvider GetFixAllProvider()
         {
             return WellKnownFixAllProviders.BatchFixer;
         }
 
-        public override async Task ComputeFixesAsync(CodeFixContext context)
+        public override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var declaration = root.FindToken(diagnosticSpan.Start);
-            context.RegisterFix(CodeAction.Create("Use shorthand notation", x => UseShorthandNotation(context.Document, root, declaration)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Use shorthand notation", x => UseShorthandNotation(context.Document, root, declaration)), diagnostic);
         }
 
         private static async Task<Solution> UseShorthandNotation(Document document, SyntaxNode root, SyntaxToken declaration)

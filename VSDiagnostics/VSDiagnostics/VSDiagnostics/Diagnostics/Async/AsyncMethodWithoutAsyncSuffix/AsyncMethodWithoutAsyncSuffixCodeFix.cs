@@ -15,24 +15,21 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
     [ExportCodeFixProvider("AsyncMethodWithoutAsyncSuffix", LanguageNames.CSharp), Shared]
     public class AsyncMethodWithoutAsyncSuffixCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> GetFixableDiagnosticIds()
-        {
-            return ImmutableArray.Create(AsyncMethodWithoutAsyncSuffixAnalyzer.DiagnosticId);
-        }
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(AsyncMethodWithoutAsyncSuffixAnalyzer.DiagnosticId);
 
         public override FixAllProvider GetFixAllProvider()
         {
             return WellKnownFixAllProviders.BatchFixer;
         }
 
-        public override async Task ComputeFixesAsync(CodeFixContext context)
+        public override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
             var methodDeclaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
 
-            context.RegisterFix(CodeAction.Create("Add suffix", x => AddSuffixAsync(context.Document, methodDeclaration, context.CancellationToken)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Add suffix", x => AddSuffixAsync(context.Document, methodDeclaration, context.CancellationToken)), diagnostic);
         }
 
         private async Task<Solution> AddSuffixAsync(Document document, MethodDeclarationSyntax methodDeclaration, CancellationToken cancellationToken)
