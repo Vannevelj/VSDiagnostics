@@ -42,6 +42,39 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
+        public void EmptyArgumentExceptionAnalyzer_WithEmptyNullArgument_InvokesWarning()
+        {
+            var test = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            void Method(string input)
+            {
+                throw new ArgumentNullException();
+            }
+        }
+    }";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = EmptyArgumentExceptionAnalyzer.DiagnosticId,
+                Message = EmptyArgumentExceptionAnalyzer.Message,
+                Severity = EmptyArgumentExceptionAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 11, 23)
+                    }
+            };
+
+            VerifyCSharpDiagnostic(test, expectedDiagnostic);
+        }
+
+        [TestMethod]
         public void EmptyArgumentExceptionAnalyzer_WithArgument_DoesNotInvokeWarning()
         {
             var test = @"
@@ -54,7 +87,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         {   
             void Method(string input)
             {
-                throw new ArgumentException(input);
+                throw new ArgumentException(""input"");
             }
         }
     }";
@@ -62,7 +95,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void EmptyArgumentExceptionAnyalzer_WithDumbRethrowStatement_DoesNotInvokeWarning()
+        public void EmptyArgumentExceptionAnalyzer_WithDumbRethrowStatement_DoesNotInvokeWarning()
         {
             var test = @"
     using System;
@@ -75,7 +108,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
             void Method(string input)
             {
                 try { }
-                catch (Exception e) { throw e; }
+                catch (ArgumentException e) { throw e; }
             }
         }
     }";
@@ -84,7 +117,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void EmptyArgumentExceptionAnyalzer_WithRethrowStatement_DoesNotInvokeWarning()
+        public void EmptyArgumentExceptionAnalyzer_WithRethrowStatement_DoesNotInvokeWarning()
         {
             var test = @"
     using System;
@@ -97,7 +130,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
             void Method(string input)
             {
                 try { }
-                catch (Exception e) { throw; }
+                catch (ArgumentException e) { throw; }
             }
         }
     }";

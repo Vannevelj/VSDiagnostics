@@ -1,9 +1,11 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentException
 {
@@ -38,7 +40,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentException
             }
 
             var symbolInformation = context.SemanticModel.GetSymbolInfo(expression.Type);
-            if (symbolInformation.Symbol.MetadataName != "ArgumentException")
+            if (!symbolInformation.Symbol.InheritsFrom(typeof (ArgumentException)))
             {
                 return;
             }
