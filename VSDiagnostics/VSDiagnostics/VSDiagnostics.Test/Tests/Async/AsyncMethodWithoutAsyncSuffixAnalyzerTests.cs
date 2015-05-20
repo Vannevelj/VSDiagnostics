@@ -16,6 +16,7 @@ namespace VSDiagnostics.Test.Tests.Async
             var original = @"
     using System;
     using System.Text;
+    using System.Threading.Tasks;
 
     namespace ConsoleApplication1
     {
@@ -31,6 +32,7 @@ namespace VSDiagnostics.Test.Tests.Async
             var result = @"
     using System;
     using System.Text;
+    using System.Threading.Tasks;
 
     namespace ConsoleApplication1
     {
@@ -51,7 +53,7 @@ namespace VSDiagnostics.Test.Tests.Async
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 9, 13)
+                        new DiagnosticResultLocation("Test0.cs", 10, 13)
                     }
             };
 
@@ -65,6 +67,7 @@ namespace VSDiagnostics.Test.Tests.Async
             var original = @"
     using System;
     using System.Text;
+    using System.Threading.Tasks;
 
     namespace ConsoleApplication1
     {
@@ -85,6 +88,7 @@ namespace VSDiagnostics.Test.Tests.Async
             var original = @"
     using System;
     using System.Text;
+    using System.Threading.Tasks;
 
     namespace ConsoleApplication1
     {

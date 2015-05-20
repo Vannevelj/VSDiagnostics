@@ -101,7 +101,7 @@ namespace VSDiagnostics.Test.Tests.General
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 9, 13)
+                        new DiagnosticResultLocation("Test0.cs", 9, 21)
                     }
             };
 
