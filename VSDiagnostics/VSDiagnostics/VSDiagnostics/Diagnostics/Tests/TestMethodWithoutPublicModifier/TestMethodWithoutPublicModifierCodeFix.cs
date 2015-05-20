@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Formatting;
+using Microsoft.CodeAnalysis.Editing;
 
 namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
 {
@@ -35,24 +34,10 @@ namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
 
         private Task<Solution> MakePublicAsync(Document document, SyntaxNode root, MethodDeclarationSyntax method)
         {
-            var removableModifiers = new[]
-            {
-                SyntaxFactory.Token(SyntaxKind.InternalKeyword),
-                SyntaxFactory.Token(SyntaxKind.ProtectedKeyword),
-                SyntaxFactory.Token(SyntaxKind.PrivateKeyword)
-            };
-
-            var modifierList = new SyntaxTokenList()
-                .Add(SyntaxFactory.Token(SyntaxKind.PublicKeyword))
-                .AddRange(method.Modifiers.Where(x => !removableModifiers.Select(y => y.RawKind).Contains(x.RawKind)));
-
-            var newMethod = method.WithModifiers(modifierList).WithAdditionalAnnotations(Formatter.Annotation);
-
+            var generator = SyntaxGenerator.GetGenerator(document);
+            var newMethod = generator.WithAccessibility(method, Accessibility.Public);
             var newRoot = root.ReplaceNode(method, newMethod);
-            var formattedRoot = Formatter.Format(newRoot, Formatter.Annotation, document.Project.Solution.Workspace);
-            var newDocument = document.WithSyntaxRoot(formattedRoot);
-
-            return Task.FromResult(newDocument.Project.Solution);
+            return Task.FromResult(document.WithSyntaxRoot(newRoot).Project.Solution);
         }
     }
 }

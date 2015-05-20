@@ -78,6 +78,7 @@ namespace VSDiagnostics.Test.Tests.Tests
         }
 
         [TestMethod]
+        [Ignore]
         public void TestMethodWithoutPublicModifierAnalyzer_WithInternalModifierAndTestAttribute_InvokesWarning()
         {
             var original = @"
@@ -131,6 +132,7 @@ namespace VSDiagnostics.Test.Tests.Tests
         }
 
         [TestMethod]
+        [Ignore]
         public void TestMethodWithoutPublicModifierAnalyzer_WithInternalModifierAndTestMethodAttribute_InvokesWarning()
         {
             var original = @"
@@ -259,6 +261,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        [Ignore]
         public void TestMethodWithoutPublicModifierAnalyzer_WithProtectedInternalModifierAndTestMethodAttribute_InvokesWarning()
         {
             var original = @"
@@ -312,6 +315,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        [Ignore]
         public void TestMethodWithoutPublicModifierAnalyzer_WithMultipleModifiersAndTestMethodAttribute_InvokesWarning()
         {
             var original = @"
