@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestHelper;
+using RoslynTester.Helpers;
 using VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix;
 using VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentException;
 
