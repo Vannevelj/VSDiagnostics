@@ -249,6 +249,29 @@ namespace VSDiagnostics.Test.Tests.Exceptions
             VerifyCSharpDiagnostic(test);
         }
 
+        [TestMethod]
+        public void ArgumentExceptionWithNameofOperatorAnalyzer_WithArgumentNullException_WithOutCorrespondingParameter_ButDefinedOutsideMethodScope_DoesNotInvokeWarning()
+        {
+            var test = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            private ArgumentException _exception = new ArgumentException(""input"");
+
+            void Method(string input)
+            {
+                throw _exception;
+            }
+        }
+    }";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new ArgumentExceptionWithNameofOperatorAnalyzer();

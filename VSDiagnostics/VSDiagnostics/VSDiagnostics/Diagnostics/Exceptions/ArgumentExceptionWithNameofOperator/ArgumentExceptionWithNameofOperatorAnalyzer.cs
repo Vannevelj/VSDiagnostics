@@ -43,12 +43,18 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithNameofOperat
             if (symbolInformation.Symbol.InheritsFrom(typeof (ArgumentException)))
             {
                 var arguments = objectCreationExpression.ArgumentList.Arguments.Select(x => x.Expression).OfType<LiteralExpressionSyntax>();
-                var methodParameters = objectCreationExpression.Ancestors().OfType<MethodDeclarationSyntax>().First().ParameterList.Parameters;
+                var methodParameters = objectCreationExpression.Ancestors().OfType<MethodDeclarationSyntax>().FirstOrDefault()?.ParameterList.Parameters;
+
+                // Exception is declared outside a method
+                if (methodParameters == null)
+                {
+                    return;
+                }
 
                 foreach (var argument in arguments)
                 {
                     var argumentName = argument.Token.Value;
-                    var correspondingParameter = methodParameters.FirstOrDefault(x => string.Equals((string) x.Identifier.Value, (string) argumentName, StringComparison.OrdinalIgnoreCase));
+                    var correspondingParameter = methodParameters.Value.FirstOrDefault(x => string.Equals((string) x.Identifier.Value, (string) argumentName, StringComparison.OrdinalIgnoreCase));
                     if (correspondingParameter != null)
                     {
                         context.ReportDiagnostic(Diagnostic.Create(Rule, objectCreationExpression.GetLocation(), correspondingParameter.Identifier.Value));
