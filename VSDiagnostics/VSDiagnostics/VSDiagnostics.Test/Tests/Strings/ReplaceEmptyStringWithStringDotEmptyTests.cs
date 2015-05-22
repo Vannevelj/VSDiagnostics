@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers;
 using VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty;
 
