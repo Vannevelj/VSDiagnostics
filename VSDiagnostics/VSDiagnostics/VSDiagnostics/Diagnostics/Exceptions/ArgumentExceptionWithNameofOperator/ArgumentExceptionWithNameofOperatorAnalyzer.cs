@@ -22,18 +22,12 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithNameofOperat
 
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.ThrowStatement);
+            context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.ObjectCreationExpression);
         }
 
         private void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
-            var throwStatement = context.Node as ThrowStatementSyntax;
-            if (throwStatement == null)
-            {
-                return;
-            }
-
-            var objectCreationExpression = throwStatement.Expression as ObjectCreationExpressionSyntax;
+            var objectCreationExpression = context.Node as ObjectCreationExpressionSyntax;
             if (objectCreationExpression == null)
             {
                 return;
@@ -49,7 +43,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithNameofOperat
             if (symbolInformation.Symbol.InheritsFrom(typeof (ArgumentException)))
             {
                 var arguments = objectCreationExpression.ArgumentList.Arguments.Select(x => x.Expression).OfType<LiteralExpressionSyntax>();
-                var methodParameters = throwStatement.Ancestors().OfType<MethodDeclarationSyntax>().First().ParameterList.Parameters;
+                var methodParameters = objectCreationExpression.Ancestors().OfType<MethodDeclarationSyntax>().First().ParameterList.Parameters;
 
                 foreach (var argument in arguments)
                 {
