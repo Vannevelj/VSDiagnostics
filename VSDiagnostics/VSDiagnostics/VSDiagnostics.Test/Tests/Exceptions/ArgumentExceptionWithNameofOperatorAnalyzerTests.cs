@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers;
@@ -12,7 +13,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         [TestMethod]
         public void ArgumentExceptionWithNameofOperatorAnalyzer_WithArgumentException_WithoutCorrespondingParameter_InvokesWarning()
         {
-            var test = @"
+            var original = @"
     using System;
     using System.Text;
 
@@ -23,6 +24,21 @@ namespace VSDiagnostics.Test.Tests.Exceptions
             void Method(string input)
             {
                 throw new ArgumentException(""input"");
+            }
+        }
+    }";
+
+            var result = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            void Method(string input)
+            {
+                throw new ArgumentException(nameof(input));
             }
         }
     }";
@@ -39,13 +55,14 @@ namespace VSDiagnostics.Test.Tests.Exceptions
                     }
             };
 
-            VerifyCSharpDiagnostic(test, expectedDiagnostic);
+            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyCSharpFix(original, result);
         }
 
         [TestMethod]
         public void ArgumentExceptionWithNameofOperatorAnalyzer_WithArgumentException_WithoutCorrespondingParameterInDifferentCase_InvokesWarning()
         {
-            var test = @"
+            var original = @"
     using System;
     using System.Text;
 
@@ -60,6 +77,21 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
+            var result = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            void Method(string input)
+            {
+                throw new ArgumentException(nameof(input));
+            }
+        }
+    }";
+
             var expectedDiagnostic = new DiagnosticResult
             {
                 Id = ArgumentExceptionWithNameofOperatorAnalyzer.DiagnosticId,
@@ -72,13 +104,14 @@ namespace VSDiagnostics.Test.Tests.Exceptions
                     }
             };
 
-            VerifyCSharpDiagnostic(test, expectedDiagnostic);
+            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyCSharpFix(original, result);
         }
 
         [TestMethod]
         public void ArgumentExceptionWithNameofOperatorAnalyzer_WithArgumentException_WithMultipleArguments_InvokesWarning()
         {
-            var test = @"
+            var original = @"
     using System;
     using System.Text;
 
@@ -93,6 +126,21 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
+            var result = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            void Method(string input)
+            {
+                throw new ArgumentException(nameof(input), new Exception());
+            }
+        }
+    }";
+
             var expectedDiagnostic = new DiagnosticResult
             {
                 Id = ArgumentExceptionWithNameofOperatorAnalyzer.DiagnosticId,
@@ -105,13 +153,14 @@ namespace VSDiagnostics.Test.Tests.Exceptions
                     }
             };
 
-            VerifyCSharpDiagnostic(test, expectedDiagnostic);
+            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyCSharpFix(original, result);
         }
 
         [TestMethod]
         public void ArgumentExceptionWithNameofOperatorAnalyzer_WithArgumentException_WithMultipleParameters_AndCorrespondingParameter_InvokesWarning()
         {
-            var test = @"
+            var original = @"
     using System;
     using System.Text;
 
@@ -126,6 +175,21 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
+            var result = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            void Method(string input, int anotherInput)
+            {
+                throw new ArgumentException(nameof(input));
+            }
+        }
+    }";
+
             var expectedDiagnostic = new DiagnosticResult
             {
                 Id = ArgumentExceptionWithNameofOperatorAnalyzer.DiagnosticId,
@@ -138,13 +202,14 @@ namespace VSDiagnostics.Test.Tests.Exceptions
                     }
             };
 
-            VerifyCSharpDiagnostic(test, expectedDiagnostic);
+            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyCSharpFix(original, result);
         }
 
         [TestMethod]
         public void ArgumentExceptionWithNameofOperatorAnalyzer_WithArgumentNullException_WithCorrespondingParameterAsString_InvokesWarning()
         {
-            var test = @"
+            var original = @"
     using System;
     using System.Text;
 
@@ -159,58 +224,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.DiagnosticId,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Message, "input"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 23)
-                    }
-            };
-
-            VerifyCSharpDiagnostic(test, expectedDiagnostic);
-        }
-
-        [TestMethod]
-        public void ArgumentExceptionWithNameofOperatorAnalyzer_WithArgumentException_WithCorrespondingParameterAsString_InvokesWarning()
-        {
-            var test = @"
-    using System;
-    using System.Text;
-
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            void Method(string input)
-            {
-                throw new ArgumentException(""input"");
-            }
-        }
-    }";
-
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.DiagnosticId,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Message, "input"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 23)
-                    }
-            };
-
-            VerifyCSharpDiagnostic(test, expectedDiagnostic);
-        }
-
-        [TestMethod]
-        public void ArgumentExceptionWithNameofOperatorAnalyzer_WithArgumentNullException_WithCorrespondingParameterAsNameOf_DoesNotInvokeWarning()
-        {
-            var test = @"
+            var result = @"
     using System;
     using System.Text;
 
@@ -225,13 +239,47 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            VerifyCSharpDiagnostic(test);
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = ArgumentExceptionWithNameofOperatorAnalyzer.DiagnosticId,
+                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Message, "input"),
+                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 11, 23)
+                    }
+            };
+
+            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyCSharpFix(original, result);
+        }
+
+        [TestMethod]
+        public void ArgumentExceptionWithNameofOperatorAnalyzer_WithArgumentNullException_WithCorrespondingParameterAsNameOf_DoesNotInvokeWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            void Method(string input)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+        }
+    }";
+
+            VerifyCSharpDiagnostic(original);
         }
 
         [TestMethod]
         public void ArgumentExceptionWithNameofOperatorAnalyzer_WithArgumentNullException_WithOutCorrespondingParameter_DoesNotInvokeWarning()
         {
-            var test = @"
+            var original = @"
     using System;
     using System.Text;
 
@@ -246,13 +294,13 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            VerifyCSharpDiagnostic(test);
+            VerifyCSharpDiagnostic(original);
         }
 
         [TestMethod]
         public void ArgumentExceptionWithNameofOperatorAnalyzer_WithArgumentNullException_WithOutCorrespondingParameter_ButDefinedOutsideMethodScope_DoesNotInvokeWarning()
         {
-            var test = @"
+            var original = @"
     using System;
     using System.Text;
 
@@ -269,12 +317,17 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            VerifyCSharpDiagnostic(test);
+            VerifyCSharpDiagnostic(original);
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new ArgumentExceptionWithNameofOperatorAnalyzer();
+        }
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider()
+        {
+            return new ArgumentExceptionWithNameofOperatorCodeFix();
         }
     }
 }

@@ -9,7 +9,6 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Editing;
 
 namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithNameofOperator
 {
@@ -30,15 +29,12 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithNameofOperat
             var diagnosticSpan = diagnostic.Location.SourceSpan;
             var objectCreationExpression = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<ObjectCreationExpressionSyntax>().First();
 
-            context.RegisterCodeFix(CodeAction.Create("Use nameof", x => UseNameofAsync(context.Document, objectCreationExpression, context.CancellationToken)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Use nameof", x => UseNameofAsync(context.Document, root, objectCreationExpression, context.CancellationToken)), diagnostic);
         }
 
-        private async Task<Document> UseNameofAsync(Document document, ObjectCreationExpressionSyntax objectCreationExpression, CancellationToken cancellationToken)
+        private Task<Solution> UseNameofAsync(Document document, SyntaxNode root, ObjectCreationExpressionSyntax objectCreationExpression, CancellationToken cancellationToken)
         {
-            var syntaxGenerator = SyntaxGenerator.GetGenerator(document);
             var method = objectCreationExpression.Ancestors().OfType<MethodDeclarationSyntax>().First();
-            var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
-            var methodSymbol = semanticModel.GetSymbolInfo(method).Symbol as IMethodSymbol;
             var methodParameters = method.ParameterList.Parameters;
             var expressionArguments = objectCreationExpression.ArgumentList.Arguments;
 
@@ -48,8 +44,11 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithNameofOperat
                 {
                     if (string.Equals((string) methodParameter.Identifier.Value, (string) ((LiteralExpressionSyntax) expressionArgument.Expression).Token.Value, StringComparison.OrdinalIgnoreCase))
                     {
-                        //var newArgument = syntaxGenerator.WithExpression(expressionArgument, syntaxGenerator.InvocationExpression(SyntaxFactory.InvocationExpression(SyntaxFactory.ExpressionStatement()))
-                        //var newMethod = syntaxGenerator.ObjectCreationExpression(objectCreationExpression.WithArgumentList())
+                        var newExpression = SyntaxFactory.ParseExpression($"nameof({methodParameter.Identifier})");
+                        var newParent = objectCreationExpression.ReplaceNode(expressionArgument.Expression, newExpression);
+                        var newRoot = root.ReplaceNode(objectCreationExpression, newParent);
+                        var newDocument = document.WithSyntaxRoot(newRoot);
+                        return Task.FromResult(newDocument.Project.Solution);
                     }
                 }
             }
