@@ -57,7 +57,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithNameofOperat
                     var correspondingParameter = methodParameters.Value.FirstOrDefault(x => string.Equals((string) x.Identifier.Value, (string) argumentName, StringComparison.OrdinalIgnoreCase));
                     if (correspondingParameter != null)
                     {
-                        context.ReportDiagnostic(Diagnostic.Create(Rule, objectCreationExpression.GetLocation(), correspondingParameter.Identifier.Value));
+                        context.ReportDiagnostic(Diagnostic.Create(Rule, argument.GetLocation(), correspondingParameter.Identifier.Value));
                         return;
                     }
                 }

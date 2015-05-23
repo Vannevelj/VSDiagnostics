@@ -36,22 +36,23 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithNameofOperat
         {
             var method = objectCreationExpression.Ancestors().OfType<MethodDeclarationSyntax>().First();
             var methodParameters = method.ParameterList.Parameters;
-            var expressionArguments = objectCreationExpression.ArgumentList.Arguments;
+            var expressionArguments = objectCreationExpression.ArgumentList.Arguments.Select(x => x.Expression).OfType<LiteralExpressionSyntax>();
 
             foreach (var expressionArgument in expressionArguments)
             {
                 foreach (var methodParameter in methodParameters)
                 {
-                    if (string.Equals((string) methodParameter.Identifier.Value, (string) ((LiteralExpressionSyntax) expressionArgument.Expression).Token.Value, StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals((string) methodParameter.Identifier.Value, (string) expressionArgument.Token.Value, StringComparison.OrdinalIgnoreCase))
                     {
                         var newExpression = SyntaxFactory.ParseExpression($"nameof({methodParameter.Identifier})");
-                        var newParent = objectCreationExpression.ReplaceNode(expressionArgument.Expression, newExpression);
+                        var newParent = objectCreationExpression.ReplaceNode(expressionArgument, newExpression);
                         var newRoot = root.ReplaceNode(objectCreationExpression, newParent);
                         var newDocument = document.WithSyntaxRoot(newRoot);
                         return Task.FromResult(newDocument.Project.Solution);
                     }
                 }
             }
+
             return null;
         }
     }
