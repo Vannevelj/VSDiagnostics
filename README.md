@@ -13,17 +13,15 @@ Full text available on [my blog](http://www.vannevel.net/2015/05/03/getting-star
 
 Currently these diagnostics are implemented:
 
-* **Exceptions**
-  * EmptyArgumentException: guards against using an `ArgumentException` without specifying which argument.
-  * SingleGeneralException: guards against using a catch-all clause.
-  * CatchNullReferenceException: guards against catching a NullReferenceException.
-  * ArgumentExceptionWithNameofOperator: `ArgumentException` and its subclasses should use `nameof()` when they refer to a method parameter.
-* **Async**
-  * AsyncMethodWithoutAsyncSuffix: Asynchronous methods should end with -Async (+ Code Fix).
-* **Strings**
-  * ReplaceEmptyStringWithStringDotEmpty: Use `string.Empty` instead of `""` (+ Code Fix).
-* **Tests**
-  * TestMethodWithoutPublicModifier: Change the access modifier to `public` for all methods annotated as test. Supports 3 frameworks and includes a Code Fix.
+| Category | Name | Description | Analyzer | Code Fix |
+|:-:|:-:|:-:|:-:|:-:|
+| Exceptions | EmptyArgumentException | Guards against using an `ArgumentException` without specifying which argument. | Yes  | No  |
+| Exceptions   | SingleGeneralException  | Guards against using a catch-all clause.  | Yes  | No   |
+| Exceptions  | CatchNullReferenceException  | Guards against catching a NullReferenceException  | Yes   | No   |
+| Exceptions | ArgumentExceptionWithNameofOperator | `ArgumentException` and its subclasses should use `nameof()` when they refer to a method parameter. | Yes | Yes |
+| Async | AsyncMethodWithoutAsyncSuffix | Asynchronous methods should end with -Async | Yes | Yes |
+| Strings | ReplaceEmptyStringWithStringDotEmpty | Use `string.Empty` instead of `""`. | Yes | Yes |
+| Tests | TestMethodWithoutPublicModifier | Change the access modifier to `public` for all methods annotated as test. Supports NUnit, MSTest and xUnit.net. | Yes | Yes |
 
 ## How do I use this?
 
