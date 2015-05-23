@@ -22,6 +22,7 @@ Currently these diagnostics are implemented:
 | Async | AsyncMethodWithoutAsyncSuffix | Asynchronous methods should end with -Async | Yes | Yes |
 | Strings | ReplaceEmptyStringWithStringDotEmpty | Use `string.Empty` instead of `""`. | Yes | Yes |
 | Tests | TestMethodWithoutPublicModifier | Change the access modifier to `public` for all methods annotated as test. Supports NUnit, MSTest and xUnit.net. | Yes | Yes |
+| General | NullableToShorthand | Changes `Nullable<T>` to `T?` | Yes | Yes |
 
 ## How do I use this?
 
