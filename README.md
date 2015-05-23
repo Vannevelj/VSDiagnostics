@@ -17,6 +17,7 @@ Currently these diagnostics are implemented:
   * EmptyArgumentException: guards against using an `ArgumentException` without specifying which argument.
   * SingleGeneralException: guards against using a catch-all clause.
   * CatchNullReferenceException: guards against catching a NullReferenceException.
+  * ArgumentExceptionWithNameofOperator: `ArgumentException` and its subclasses should use `nameof()` when they refer to a method parameter.
 * **Async**
   * AsyncMethodWithoutAsyncSuffix: Asynchronous methods should end with -Async (+ Code Fix).
 * **Strings**
