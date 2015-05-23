@@ -11,38 +11,37 @@ namespace VSDiagnostics.Test.Tests.General
     public class NullableToShorthandAnalyzerTests : CodeFixVerifier
     {
         [TestMethod]
-        [Ignore]
         public void NullableToShorthandAnalyzer_WithNullableLocal_InvokesWarning()
         {
             var original = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            void Method()
-            {
-                Nullable<float> myVar = 5.0f;
-            }
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            Nullable<float> myVar = 5.0f;
         }
-    }";
+    }
+}";
 
             var result = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            void Method()
-            {
-                float? myVar = 5.0f;
-            }
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            float? myVar = 5.0f;
         }
-    }";
+    }
+}";
 
             var expectedDiagnostic = new DiagnosticResult
             {
@@ -52,7 +51,7 @@ namespace VSDiagnostics.Test.Tests.General
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 11, 17)
+                        new DiagnosticResultLocation("Test0.cs", 11, 13)
                     }
             };
 
@@ -61,7 +60,6 @@ namespace VSDiagnostics.Test.Tests.General
         }
 
         [TestMethod]
-        [Ignore]
         public void NullableToShorthandAnalyzer_WithNullableField_InvokesWarning()
         {
             var original = @"
@@ -71,7 +69,7 @@ namespace VSDiagnostics.Test.Tests.General
     namespace ConsoleApplication1
     {
         class MyClass
-        {   
+        {
             private Nullable<int> myVar = 5;
             void Method()
             {
@@ -88,7 +86,7 @@ namespace VSDiagnostics.Test.Tests.General
     {
         class MyClass
         {
-            private int? myVar = 5; 
+            private int? myVar = 5;
             void Method()
             {
                 
@@ -211,40 +209,39 @@ namespace VSDiagnostics.Test.Tests.General
         }
 
         [TestMethod]
-        [Ignore]
         public void NullableToShorthandAnalyzer_WithNullableProperty_InvokesWarning()
         {
             var original = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            public Nullable<int> myVar { get; set; }
-            void Method()
-            {
-                
-            }
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        public Nullable<int> myVar { get; set; }
+        void Method()
+        {
+            
         }
-    }";
+    }
+}";
 
             var result = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        class MyClass
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        public int? myVar { get; set; }
+        void Method()
         {
-            public int? myVar { get; set; }
-            void Method()
-            {
-                
-            }
+            
         }
-    }";
+    }
+}";
 
             var expectedDiagnostic = new DiagnosticResult
             {
@@ -254,7 +251,7 @@ namespace VSDiagnostics.Test.Tests.General
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 9, 20)
+                        new DiagnosticResultLocation("Test0.cs", 9, 16)
                     }
             };
 
@@ -329,38 +326,37 @@ namespace VSDiagnostics.Test.Tests.General
         }
 
         [TestMethod]
-        [Ignore]
         public void NullableToShorthandAnalyzer_WithChainedNullableLocal_InvokesWarning()
         {
             var original = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
+namespace ConsoleApplication1
+{
+    class MyClass
     {
-        class MyClass
-        {   
-            void Method()
-            {
-                Nullable<int> myVar, mySecondVar = 5;
-            }
+        void Method()
+        {
+            Nullable<int> myVar, mySecondVar = 5;
         }
-    }";
+    }
+}";
 
             var result = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
+namespace ConsoleApplication1
+{
+    class MyClass
     {
-        class MyClass
-        {   
-            void Method()
-            {
-                int? myVar, mySecondVar = 5;
-            }
+        void Method()
+        {
+            int? myVar, mySecondVar = 5;
         }
-    }";
+    }
+}";
 
             var expectedDiagnostic = new DiagnosticResult
             {
@@ -370,7 +366,7 @@ namespace VSDiagnostics.Test.Tests.General
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 11, 17)
+                        new DiagnosticResultLocation("Test0.cs", 11, 13)
                     }
             };
 
@@ -541,34 +537,34 @@ namespace VSDiagnostics.Test.Tests.General
         public void NullableToShorthandAnalyzer_WithNullableTypeAsTypeParameterForNestedDictionaries_InvokesWarning()
         {
             var original = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            void Method()
-            {
-                Dictionary<Dictionary<int, Nullable<int>, int> myVar = null;
-            }
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            Dictionary<Dictionary<int, Nullable<int>, int> myVar = null;
         }
-    }";
+    }
+}";
 
             var result = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            void Method()
-            {
-                Dictionary<Dictionary<int, int?>, int> myVar = null;
-            }
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            Dictionary<Dictionary<int, int?>, int> myVar = null;
         }
-    }";
+    }
+}";
 
             var expectedDiagnostic = new DiagnosticResult
             {
@@ -587,38 +583,37 @@ namespace VSDiagnostics.Test.Tests.General
         }
 
         [TestMethod]
-        [Ignore]
         public void NullableToShorthandAnalyzer_WithNullableTypeAsReturnType_InvokesWarning()
         {
             var original = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
+namespace ConsoleApplication1
+{
+    class MyClass
     {
-        class MyClass
-        {   
-            Nullable<int> Method()
-            {
-                return null;
-            }
+        Nullable<int> Method()
+        {
+            return null;
         }
-    }";
+    }
+}";
 
             var result = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
+namespace ConsoleApplication1
+{
+    class MyClass
     {
-        class MyClass
-        {   
-            int? Method()
-            {
-                return null;
-            }
+        int? Method()
+        {
+            return null;
         }
-    }";
+    }
+}";
 
             var expectedDiagnostic = new DiagnosticResult
             {
@@ -628,7 +623,7 @@ namespace VSDiagnostics.Test.Tests.General
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 9, 13)
+                        new DiagnosticResultLocation("Test0.cs", 9, 9)
                     }
             };
 

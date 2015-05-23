@@ -79,42 +79,41 @@ namespace VSDiagnostics.Test.Tests.Tests
         }
 
         [TestMethod]
-        [Ignore]
         public void TestMethodWithoutPublicModifierAnalyzer_WithInternalModifierAndTestAttribute_InvokesWarning()
         {
             var original = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        [TestFixture]
-        public class MyClass
-        {   
-            [Test]
-            internal void Method()
-            {
+namespace ConsoleApplication1
+{
+    [TestFixture]
+    public class MyClass
+    {   
+        [Test]
+        internal void Method()
+        {
                 
-            }
         }
-    }";
+    }
+}";
 
             var result = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        [TestFixture]
-        public class MyClass
-        {   
-            [Test]
-            public void Method()
-            {
+namespace ConsoleApplication1
+{
+    [TestFixture]
+    public class MyClass
+    {   
+        [Test]
+        public void Method()
+        {
                 
-            }
         }
-    }";
+    }
+}";
 
             var expectedDiagnostic = new DiagnosticResult
             {
@@ -124,7 +123,7 @@ namespace VSDiagnostics.Test.Tests.Tests
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 10, 13)
+                        new DiagnosticResultLocation("Test0.cs", 10, 9)
                     }
             };
 
@@ -133,42 +132,41 @@ namespace VSDiagnostics.Test.Tests.Tests
         }
 
         [TestMethod]
-        [Ignore]
         public void TestMethodWithoutPublicModifierAnalyzer_WithInternalModifierAndTestMethodAttribute_InvokesWarning()
         {
             var original = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
+namespace ConsoleApplication1
+{
+    [TestClass]
+    public class MyClass
     {
-        [TestClass]
-        public class MyClass
+        [TestMethod]
+        internal void Method()
         {
-            [TestMethod]
-            internal void Method()
-            {
 
-            }
         }
-    }";
+    }
+}";
 
             var result = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
+namespace ConsoleApplication1
+{
+    [TestClass]
+    public class MyClass
     {
-        [TestClass]
-        public class MyClass
+        [TestMethod]
+        public void Method()
         {
-            [TestMethod]
-            public void Method()
-            {
 
-            }
         }
-    }";
+    }
+}";
 
             var expectedDiagnostic = new DiagnosticResult
             {
@@ -178,7 +176,7 @@ namespace VSDiagnostics.Test.Tests.Tests
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 10, 13)
+                        new DiagnosticResultLocation("Test0.cs", 10, 9)
                     }
             };
 
@@ -262,42 +260,41 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        [Ignore]
         public void TestMethodWithoutPublicModifierAnalyzer_WithProtectedInternalModifierAndTestMethodAttribute_InvokesWarning()
         {
             var original = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
+namespace ConsoleApplication1
+{
+    [TestClass]
+    public class MyClass
     {
-        [TestClass]
-        public class MyClass
+        [TestMethod]
+        protected internal virtual void Method()
         {
-            [TestMethod]
-            protected internal void Method()
-            {
 
-            }
         }
-    }";
+    }
+}";
 
             var result = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
+namespace ConsoleApplication1
+{
+    [TestClass]
+    public class MyClass
     {
-        [TestClass]
-        public class MyClass
+        [TestMethod]
+        public virtual void Method()
         {
-            [TestMethod]
-            public void Method()
-            {
 
-            }
         }
-    }";
+    }
+}";
 
             var expectedDiagnostic = new DiagnosticResult
             {
@@ -307,7 +304,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 10, 13)
+                        new DiagnosticResultLocation("Test0.cs", 10, 9)
                     }
             };
 
@@ -316,42 +313,41 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        [Ignore]
         public void TestMethodWithoutPublicModifierAnalyzer_WithMultipleModifiersAndTestMethodAttribute_InvokesWarning()
         {
             var original = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
+namespace ConsoleApplication1
+{
+    [TestClass]
+    public class MyClass
     {
-        [TestClass]
-        public class MyClass
+        [TestMethod]
+        internal virtual void Method()
         {
-            [TestMethod]
-            internal virtual void Method()
-            {
 
-            }
         }
-    }";
+    }
+}";
 
             var result = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
+namespace ConsoleApplication1
+{
+    [TestClass]
+    public class MyClass
     {
-        [TestClass]
-        public class MyClass
+        [TestMethod]
+        public virtual void Method()
         {
-            [TestMethod]
-            public virtual void Method()
-            {
 
-            }
         }
-    }";
+    }
+}";
 
             var expectedDiagnostic = new DiagnosticResult
             {
@@ -361,7 +357,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 10, 13)
+                        new DiagnosticResultLocation("Test0.cs", 10, 9)
                     }
             };
 
