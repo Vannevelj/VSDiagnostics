@@ -1,6 +1,10 @@
 # VSDiagnostics
 A collection of code-quality analyzers based on the new Roslyn platform. This project aims to ensure code-quality as you type it in your editor rather than having to do this as a separate build-step. Likewise it also tries to help avoid some common pitfalls.
 
+<img src="https://cloud.githubusercontent.com/assets/2777107/7789534/a06db792-0264-11e5-955f-11cbf3261d4f.gif" />
+
+[Get it from NuGet!](https://www.nuget.org/packages/VSDiagnostics/)
+
 ## What is an analyzer exactly?
 
 > With the release of Visual Studio 2015 RC, we also received the pretty much final implementation of the Diagnostics implementation. This SDK allows us to create our own diagnostics to help us write proper code that’s being verified against those rules in real-time: you don’t have to perform the verification at a separate build-step. What’s more is that we can combine that with a code fix: a shortcut integrated in Visual Studio that provides us a solution to what we determine to be a problem.
@@ -23,6 +27,7 @@ Currently these diagnostics are implemented:
 | Strings | ReplaceEmptyStringWithStringDotEmpty | Use `string.Empty` instead of `""`. | Yes | Yes |
 | Tests | TestMethodWithoutPublicModifier | Change the access modifier to `public` for all methods annotated as test. Supports NUnit, MSTest and xUnit.net. | Yes | Yes |
 | General | NullableToShorthand | Changes `Nullable<T>` to `T?` | Yes | Yes |
+| General | IfStatementWithoutBraces | Changes one-liner `if` and `else` statements to be surrounded in a block. | Yes | Yes |
 
 ## How do I use this?
 
