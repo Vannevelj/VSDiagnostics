@@ -40,7 +40,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
                 Severity = SingleGeneralExceptionAnalyzer.Severity,
                 Locations = new[]
                 {
-                    new DiagnosticResultLocation("Test0.cs", 14, 17)
+                    new DiagnosticResultLocation("Test0.cs", 14, 23)
                 }
             };
 

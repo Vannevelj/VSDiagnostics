@@ -47,7 +47,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.SingleGeneralException
             {
                 if (symbol.MetadataName == "Exception")
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, catchClause.GetLocation()));
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, declaredException.GetLocation()));
                 }
             }
         }
