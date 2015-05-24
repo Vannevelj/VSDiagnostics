@@ -59,7 +59,7 @@ namespace ConsoleApplication1
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            //VerifyCSharpFix(original, result);
+            VerifyCSharpFix(original, result);
         }
 
         [TestMethod]
@@ -90,9 +90,8 @@ namespace ConsoleApplication1
     {   
         void Method()
         {
-            if(true)
+            if(true) /* comments */
             {
-                /* comments */
                 Console.WriteLine(""true"");
             }
         }
@@ -112,7 +111,7 @@ namespace ConsoleApplication1
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            //VerifyCSharpFix(original, result);
+            VerifyCSharpFix(original, result);
         }
 
         [TestMethod]
@@ -165,7 +164,7 @@ namespace ConsoleApplication1
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            //VerifyCSharpFix(original, result);
+            VerifyCSharpFix(original, result);
         }
 
         [TestMethod]
@@ -193,7 +192,7 @@ namespace ConsoleApplication1
 
         protected override CodeFixProvider GetCSharpCodeFixProvider()
         {
-            return null;
+            return new IfStatementWithoutBracesCodeFix();
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
