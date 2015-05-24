@@ -30,12 +30,25 @@ namespace VSDiagnostics.Diagnostics.General.IfStatementWithoutBraces
                 return;
             }
 
+            var hasElseStatement = ifStatement.Else != null;
+
+            if (ifStatement.Statement is BlockSyntax && !hasElseStatement)
+            {
+                return; // If is correct and there's no else
+            }
+
+            if (ifStatement.Statement is BlockSyntax && ifStatement.Else.Statement is BlockSyntax)
+            {
+                return; // Both are a block
+            }
+
             if (ifStatement.Statement is BlockSyntax)
             {
+                context.ReportDiagnostic(Diagnostic.Create(Rule, ifStatement.Else.ElseKeyword.GetLocation()));
                 return;
             }
 
-            context.ReportDiagnostic(Diagnostic.Create(Rule, ifStatement.GetLocation()));
+            context.ReportDiagnostic(Diagnostic.Create(Rule, ifStatement.IfKeyword.GetLocation()));
         }
     }
 }

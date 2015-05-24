@@ -190,6 +190,154 @@ namespace ConsoleApplication1
             VerifyCSharpDiagnostic(original);
         }
 
+        [TestMethod]
+        public void IfStatementWithoutBracesAnalyzer_ElseStatementWithoutBraces_OnSameLine_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            if(true)
+            {
+                Console.WriteLine(""true"");
+            }
+            else Console.WriteLine(""false"");
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            if(true)
+            {
+                Console.WriteLine(""true"");
+            }
+            else
+            {
+                Console.WriteLine(""false"");
+            }
+        }
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
+                Message = IfStatementWithoutBracesAnalyzer.Message,
+                Severity = IfStatementWithoutBracesAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 15, 13)
+                    }
+            };
+
+            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyCSharpFix(original, result);
+        }
+
+        [TestMethod]
+        public void IfStatementWithoutBracesAnalyzer_ElseStatementWithoutBraces_OnNextLine_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            if(true)
+            {
+                Console.WriteLine(""true"");
+            }
+            else 
+                Console.WriteLine(""false"");
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            if(true)
+            {
+                Console.WriteLine(""true"");
+            }
+            else
+            {
+                Console.WriteLine(""false"");
+            }
+        }
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
+                Message = IfStatementWithoutBracesAnalyzer.Message,
+                Severity = IfStatementWithoutBracesAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 15, 13)
+                    }
+            };
+
+            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyCSharpFix(original, result);
+        }
+
+        [TestMethod]
+        public void IfStatementWithoutBracesAnalyzer_ElseStatementWithBraces_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            if(true)
+            {
+                Console.WriteLine(""true"");
+            }
+            else 
+            {
+                Console.WriteLine(""false"");
+            }
+        }
+    }
+}";
+            VerifyCSharpDiagnostic(original);
+        }
+
         protected override CodeFixProvider GetCSharpCodeFixProvider()
         {
             return new IfStatementWithoutBracesCodeFix();

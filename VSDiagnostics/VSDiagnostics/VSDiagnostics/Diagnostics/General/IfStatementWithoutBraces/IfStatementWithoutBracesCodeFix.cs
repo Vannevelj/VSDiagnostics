@@ -26,18 +26,35 @@ namespace VSDiagnostics.Diagnostics.General.IfStatementWithoutBraces
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
-            var ifStatement = (IfStatementSyntax) root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Use braces", x => UseBracesNotation(context.Document, root, ifStatement)), diagnostic);
+            var statement = root.FindNode(diagnosticSpan);
+            context.RegisterCodeFix(CodeAction.Create("Use braces", x => UseBracesNotation(context.Document, root, statement)), diagnostic);
         }
 
-        private Task<Solution> UseBracesNotation(Document document, SyntaxNode root, IfStatementSyntax ifStatement)
+        private Task<Solution> UseBracesNotation(Document document, SyntaxNode root, SyntaxNode statement)
         {
-            var body = SyntaxFactory.Block(ifStatement.Statement);
+            SyntaxNode newBlock = null;
 
-            var newBlock = ifStatement.ReplaceNode(ifStatement.Statement, body);
-            var newRoot = root.ReplaceNode(ifStatement, newBlock);
+            var ifSyntax = statement as IfStatementSyntax;
+            if (ifSyntax != null)
+            {
+                newBlock = GetNewBlock(statement, ifSyntax.Statement);
+            }
+
+            var elseSyntax = statement as ElseClauseSyntax;
+            if (elseSyntax != null)
+            {
+                newBlock = GetNewBlock(statement, elseSyntax.Statement);
+            }
+
+            var newRoot = root.ReplaceNode(statement, newBlock);
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);
+        }
+
+        private SyntaxNode GetNewBlock(SyntaxNode statement, StatementSyntax statementBody)
+        {
+            var body = SyntaxFactory.Block(statementBody);
+            return statement.ReplaceNode(statementBody, body);
         }
     }
 }
