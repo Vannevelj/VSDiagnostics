@@ -36,10 +36,13 @@ namespace VSDiagnostics.Diagnostics.Exceptions.CatchNullReferenceException
                 return;
             }
 
-            var catchSymbol = context.SemanticModel.GetSymbolInfo(catchType).Symbol.MetadataName;
-            if (catchSymbol == "NullReferenceException")
+            var catchSymbol = context.SemanticModel.GetSymbolInfo(catchType).Symbol;
+            if (catchSymbol != null)
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, catchDeclaration.GetLocation()));
+                if (catchSymbol.MetadataName == "NullReferenceException")
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, catchDeclaration.GetLocation()));
+                }
             }
         }
     }

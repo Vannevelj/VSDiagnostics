@@ -42,10 +42,13 @@ namespace VSDiagnostics.Diagnostics.Exceptions.SingleGeneralException
                 return;
             }
 
-            var catchType = context.SemanticModel.GetSymbolInfo(declaredException).Symbol.MetadataName;
-            if (catchType == "Exception")
+            var symbol = context.SemanticModel.GetSymbolInfo(declaredException).Symbol;
+            if (symbol != null)
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, catchClause.GetLocation()));
+                if (symbol.MetadataName == "Exception")
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, catchClause.GetLocation()));
+                }
             }
         }
     }
