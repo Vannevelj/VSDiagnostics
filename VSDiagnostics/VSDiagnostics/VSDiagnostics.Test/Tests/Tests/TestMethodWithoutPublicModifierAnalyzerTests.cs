@@ -365,6 +365,80 @@ namespace ConsoleApplication1
             VerifyCSharpFix(original, result);
         }
 
+        [TestMethod]
+        public void TestMethodWithoutPublicModifierAnalyzer_WithoutModifierAndTestAttribute_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    [TestFixture]
+    public class MyClass
+    {   
+        [Test]
+        void Method()
+        {
+                
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    [TestFixture]
+    public class MyClass
+    {   
+        [Test]
+        public void Method()
+        {
+                
+        }
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = TestMethodWithoutPublicModifierAnalyzer.DiagnosticId,
+                Message = string.Format(TestMethodWithoutPublicModifierAnalyzer.Message, "Method"),
+                Severity = TestMethodWithoutPublicModifierAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 10, 9)
+                    }
+            };
+
+            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyCSharpFix(original, result);
+        }
+
+        [TestMethod]
+        public void TestMethodWithoutPublicModifierAnalyzer_WithoutTestAttributeAttribute_DoesNotInvokeWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        public class MyClass
+        {   
+            private static void Method()
+            {
+                
+            }
+        }
+    }";
+
+            VerifyCSharpDiagnostic(original);
+        }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new TestMethodWithoutPublicModifierAnalyzer();

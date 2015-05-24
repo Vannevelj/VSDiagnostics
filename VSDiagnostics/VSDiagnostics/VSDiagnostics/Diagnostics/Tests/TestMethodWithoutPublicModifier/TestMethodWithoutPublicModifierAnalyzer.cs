@@ -43,8 +43,14 @@ namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
         private static bool IsTestMethod(MethodDeclarationSyntax method)
         {
             var methodAttributes = new[] { "Test", "TestMethod", "Fact" };
+            var attributes = method.AttributeLists.FirstOrDefault()?.Attributes;
 
-            return method.AttributeLists.First().Attributes.Any(x => methodAttributes.Contains(x.Name.ToString()));
+            if (attributes == null)
+            {
+                return false;
+            }
+
+            return attributes.Value.Any(x => methodAttributes.Contains(x.Name.ToString()));
         }
     }
 }
