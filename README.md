@@ -23,6 +23,7 @@ Currently these diagnostics are implemented:
 | Strings | ReplaceEmptyStringWithStringDotEmpty | Use `string.Empty` instead of `""`. | Yes | Yes |
 | Tests | TestMethodWithoutPublicModifier | Change the access modifier to `public` for all methods annotated as test. Supports NUnit, MSTest and xUnit.net. | Yes | Yes |
 | General | NullableToShorthand | Changes `Nullable<T>` to `T?` | Yes | Yes |
+| General | IfStatementWithoutBraces | Changes one-liner `if` and `else` statements to be surrounded in a block. | Yes | Yes |
 
 ## How do I use this?
 
