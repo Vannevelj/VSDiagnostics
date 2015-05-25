@@ -27,10 +27,10 @@ namespace VSDiagnostics.Diagnostics.General.IfStatementWithoutBraces
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Use braces", x => UseBracesNotation(context.Document, root, statement)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Use braces", x => UseBracesNotationAsync(context.Document, root, statement)), diagnostic);
         }
 
-        private Task<Solution> UseBracesNotation(Document document, SyntaxNode root, SyntaxNode statement)
+        private Task<Solution> UseBracesNotationAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             SyntaxNode newBlock = null;
 
