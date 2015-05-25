@@ -54,7 +54,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 11, 13)
+                        new DiagnosticResultLocation("Test0.cs", 13, 29)
                     }
             };
 
@@ -155,12 +155,35 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 11, 13)
+                        new DiagnosticResultLocation("Test0.cs", 13, 20)
                     }
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
             //VerifyCSharpFix(original, result);
+        }
+
+        [TestMethod]
+        public void ConditionalOperatorReturnsDefaultOptionsAnalyzer_WithStrings_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            int legalAge = 18;
+            int myAge = 22;
+            string ageGroup = myAge >= legalAge ? ""Adult"" : ""Child"";
+        }
+    }
+}";
+
+            VerifyCSharpDiagnostic(original);
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()

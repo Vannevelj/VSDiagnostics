@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsDefaultOptions
@@ -24,7 +24,36 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsDefaultOpt
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            throw new NotImplementedException();
+            var conditionalExpression = context.Node as ConditionalExpressionSyntax;
+            if (conditionalExpression == null)
+            {
+                return;
+            }
+
+            var trueExpression = conditionalExpression.WhenTrue as LiteralExpressionSyntax;
+            if (trueExpression == null)
+            {
+                return;
+            }
+
+            var falseExpression = conditionalExpression.WhenFalse as LiteralExpressionSyntax;
+            if (falseExpression == null)
+            {
+                return;
+            }
+
+            var hasTrueLiteral = IsLiteral(trueExpression.Token.ValueText);
+            var hasFalseLiteral = IsLiteral(falseExpression.Token.ValueText);
+
+            if (hasTrueLiteral && hasFalseLiteral)
+            {
+                context.ReportDiagnostic(Diagnostic.Create(Rule, conditionalExpression.GetLocation()));
+            }
+        }
+
+        private bool IsLiteral(string value)
+        {
+            return value == "true" || value == "false";
         }
     }
 }
