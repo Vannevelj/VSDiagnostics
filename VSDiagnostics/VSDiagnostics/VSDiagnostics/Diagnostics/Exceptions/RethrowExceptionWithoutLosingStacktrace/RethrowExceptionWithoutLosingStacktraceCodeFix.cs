@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStacktrace
@@ -26,14 +25,17 @@ namespace VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStac
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
-            var throwStatement = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<ThrowStatementSyntax>().First();
+            var throwStatement = root.FindNode(diagnosticSpan).AncestorsAndSelf().OfType<ThrowStatementSyntax>().First();
 
-            context.RegisterCodeFix(CodeAction.Create("Remove rethrow", x => RemoveRethrowAsync(context.Document, root, throwStatement, context.CancellationToken)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Remove rethrow", x => RemoveRethrowAsync(context.Document, root, throwStatement)), diagnostic);
         }
 
-        private Task<Document> RemoveRethrowAsync(Document document, SyntaxNode root, ThrowStatementSyntax throwStatement, CancellationToken cancellationToken)
+        private Task<Solution> RemoveRethrowAsync(Document document, SyntaxNode root, ThrowStatementSyntax throwStatement)
         {
-            throw new NotImplementedException();
+            var newStatement = SyntaxFactory.ThrowStatement();
+            var newRoot = root.ReplaceNode(throwStatement, newStatement);
+            var newDocument = document.WithSyntaxRoot(newRoot);
+            return Task.FromResult(newDocument.Project.Solution);
         }
     }
 }

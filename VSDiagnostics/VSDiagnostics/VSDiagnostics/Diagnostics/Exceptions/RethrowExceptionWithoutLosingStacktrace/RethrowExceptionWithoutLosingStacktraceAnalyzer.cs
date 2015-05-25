@@ -56,7 +56,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStac
 
             if (string.Equals(catchClauseIdentifier, thrownIdentifier, StringComparison.Ordinal))
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, exceptionIdentifier.Value.GetLocation()));
+                context.ReportDiagnostic(Diagnostic.Create(Rule, throwStatement.GetLocation()));
             }
         }
     }
