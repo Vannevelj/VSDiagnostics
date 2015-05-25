@@ -35,7 +35,7 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
             {
                 if (!method.Identifier.Text.EndsWith("Async"))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, method.GetLocation(), method.Identifier.Text));
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, method.Identifier.GetLocation(), method.Identifier.Text));
                 }
             }
         }

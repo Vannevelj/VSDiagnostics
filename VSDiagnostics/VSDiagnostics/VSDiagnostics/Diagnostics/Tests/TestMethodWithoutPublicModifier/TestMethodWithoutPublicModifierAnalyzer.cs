@@ -35,7 +35,7 @@ namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
             {
                 if (!method.Modifiers.Any(SyntaxKind.PublicKeyword))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, method.GetLocation(), method.Identifier.Text));
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, method.Identifier.GetLocation(), method.Identifier.Text));
                 }
             }
         }

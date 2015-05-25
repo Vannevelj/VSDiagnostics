@@ -123,7 +123,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 10, 9)
+                        new DiagnosticResultLocation("Test0.cs", 11, 23)
                     }
             };
 
@@ -176,7 +176,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 10, 9)
+                        new DiagnosticResultLocation("Test0.cs", 11, 23)
                     }
             };
 
@@ -227,7 +227,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 9, 9)
+                        new DiagnosticResultLocation("Test0.cs", 10, 23)
                     }
             };
 
@@ -304,7 +304,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 10, 9)
+                        new DiagnosticResultLocation("Test0.cs", 11, 41)
                     }
             };
 
@@ -357,7 +357,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 10, 9)
+                        new DiagnosticResultLocation("Test0.cs", 11, 31)
                     }
             };
 
@@ -410,7 +410,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 10, 9)
+                        new DiagnosticResultLocation("Test0.cs", 11, 14)
                     }
             };
 

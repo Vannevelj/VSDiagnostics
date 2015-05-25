@@ -54,7 +54,7 @@ namespace VSDiagnostics.Test.Tests.Async
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 10, 13)
+                        new DiagnosticResultLocation("Test0.cs", 10, 24)
                     }
             };
 
