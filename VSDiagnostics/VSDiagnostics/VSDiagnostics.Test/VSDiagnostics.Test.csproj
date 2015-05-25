@@ -106,6 +106,7 @@
     <Compile Include="Tests\Exceptions\EmptyArgumentExceptionAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\RethrowExceptionWithoutLosingStracktraceAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\SingleGeneralExceptionAnalyzerTests.cs" />
+    <Compile Include="Tests\General\ConditionalOperatorReturnsDefaultOptionsAnalyzerTests.cs" />
     <Compile Include="Tests\General\IfStatementWithoutBracesAnalyzerTests.cs" />
     <Compile Include="Tests\General\NullableToShorthandAnalyzerTests.cs" />
     <Compile Include="Tests\Strings\ReplaceEmptyStringWithStringDotEmptyTests.cs" />
