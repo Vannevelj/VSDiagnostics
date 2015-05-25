@@ -42,18 +42,13 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsDefaultOpt
                 return;
             }
 
-            var hasTrueLiteral = IsLiteral(trueExpression.Token.ValueText);
-            var hasFalseLiteral = IsLiteral(falseExpression.Token.ValueText);
+            var hasTrueLiteral = trueExpression.Token.ValueText == "true";
+            var hasFalseLiteral = falseExpression.Token.ValueText == "false";
 
             if (hasTrueLiteral && hasFalseLiteral)
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule, conditionalExpression.GetLocation()));
             }
-        }
-
-        private bool IsLiteral(string value)
-        {
-            return value == "true" || value == "false";
         }
     }
 }

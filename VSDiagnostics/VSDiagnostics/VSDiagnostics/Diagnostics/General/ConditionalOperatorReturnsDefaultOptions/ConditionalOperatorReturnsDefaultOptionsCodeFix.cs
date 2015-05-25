@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsDefaultOptions
 {
@@ -31,7 +32,11 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsDefaultOpt
 
         private Task<Solution> RemoveConditionalAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
-            throw new NotImplementedException();
+            var conditionalExpression = (ConditionalExpressionSyntax) statement;
+
+            var newRoot = root.ReplaceNode(conditionalExpression, conditionalExpression.Condition).WithAdditionalAnnotations(Formatter.Annotation);
+            var newDocument = document.WithSyntaxRoot(newRoot);
+            return Task.FromResult(newDocument.Project.Solution);
         }
     }
 }

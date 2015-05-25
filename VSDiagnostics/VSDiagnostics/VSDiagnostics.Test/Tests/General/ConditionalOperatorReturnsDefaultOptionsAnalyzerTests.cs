@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers;
@@ -19,7 +20,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             int legalAge = 18;
@@ -36,7 +37,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             int legalAge = 18;
@@ -59,7 +60,7 @@ namespace ConsoleApplication1
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            //VerifyCSharpFix(original, result);
+            VerifyCSharpFix(original, result);
         }
 
         [TestMethod]
@@ -120,7 +121,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         bool Method()
         {
             int legalAge = 18;
@@ -137,7 +138,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         bool Method()
         {
             int legalAge = 18;
@@ -160,7 +161,7 @@ namespace ConsoleApplication1
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            //VerifyCSharpFix(original, result);
+            VerifyCSharpFix(original, result);
         }
 
         [TestMethod]
@@ -186,9 +187,90 @@ namespace ConsoleApplication1
             VerifyCSharpDiagnostic(original);
         }
 
+        [TestMethod]
+        public void ConditionalOperatorReturnsDefaultOptionsAnalyzer_WithMoreComplicatedCondition_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int legalAge = 18;
+            int myAge = 22;
+            bool canDrink = (myAge >= legalAge && myAge < 100) ? true : false;
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int legalAge = 18;
+            int myAge = 22;
+            bool canDrink = (myAge >= legalAge && myAge < 100);
+        }
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = ConditionalOperatorReturnsDefaultOptionsAnalyzer.DiagnosticId,
+                Message = ConditionalOperatorReturnsDefaultOptionsAnalyzer.Message,
+                Severity = ConditionalOperatorReturnsDefaultOptionsAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 13, 29)
+                    }
+            };
+
+            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyCSharpFix(original, result);
+        }
+
+        [TestMethod]
+        public void ConditionalOperatorReturnsDefaultOptionsAnalyzer_WithInvertedBooleanLiterals_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            int legalAge = 18;
+            int myAge = 22;
+            bool canDrink = myAge >= legalAge ? false : true;
+        }
+    }
+}";
+
+            VerifyCSharpDiagnostic(original);
+        }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new ConditionalOperatorReturnsDefaultOptionsAnalyzer();
+        }
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider()
+        {
+            return new ConditionalOperatorReturnsDefaultOptionsCodeFix();
         }
     }
 }
