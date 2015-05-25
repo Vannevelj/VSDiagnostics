@@ -29,14 +29,19 @@ Currently these diagnostics are implemented:
 | Tests | TestMethodWithoutPublicModifier | Change the access modifier to `public` for all methods annotated as test. Supports NUnit, MSTest and xUnit.net. | Yes | Yes |
 | General | NullableToShorthand | Changes `Nullable<T>` to `T?`. | Yes | Yes |
 | General | IfStatementWithoutBraces | Changes one-liner `if` and `else` statements to be surrounded in a block. | Yes | Yes |
+| General | ConditionalOperatorReturnsDefaultOptions | The conditional operator shouldn't return redundant `true` and `false` literals. | Yes | Yes |
 
 ## How do I use this?
 
-We will release it as a NuGet package and as a Visual Studio extension once we believe there is a sufficient amount of analyzers. If you can't wait for this you can always fork the project and run it yourself locally.
+Simply head over to [NuGet](https://www.nuget.org/packages/VSDiagnostics/) and install it! If you don't immediately find it: make sure you're also looking through the NuGet V2 package source.
 
-## Can I request analyzers?
+## Can I request diagnostics?
 
 Yes, you can! Create an issue and we'll take a look at your proposal. 
+
+## What if I don't like a diagnostic?
+
+Every diagnostic can be turned off for a single line or for the entire project. At most, you will have to ignore the diagnostic once. For this reason every diagnostic is turned on by default.
 
 ## Can I contribute?
 
