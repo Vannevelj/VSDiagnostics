@@ -10,7 +10,7 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsDefaultOpt
     public class ConditionalOperatorReturnsDefaultOptionsAnalyzer : DiagnosticAnalyzer
     {
         public const string DiagnosticId = nameof(ConditionalOperatorReturnsDefaultOptionsAnalyzer);
-        internal const string Title = "The conditional operator shouldn't return just literals.";
+        internal const string Title = "The conditional operator shouldn't return just true and false literals.";
         internal const string Message = "A conditional operator can be omitted.";
         internal const string Category = "General";
         internal const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
