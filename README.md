@@ -21,12 +21,13 @@ Currently these diagnostics are implemented:
 |:-:|:-:|:-:|:-:|:-:|
 | Exceptions | EmptyArgumentException | Guards against using an `ArgumentException` without specifying which argument. | Yes  | No  |
 | Exceptions   | SingleGeneralException  | Guards against using a catch-all clause.  | Yes  | No   |
-| Exceptions  | CatchNullReferenceException  | Guards against catching a NullReferenceException  | Yes   | No   |
+| Exceptions  | CatchNullReferenceException  | Guards against catching a NullReferenceException.  | Yes   | No   |
 | Exceptions | ArgumentExceptionWithNameofOperator | `ArgumentException` and its subclasses should use `nameof()` when they refer to a method parameter. | Yes | Yes |
-| Async | AsyncMethodWithoutAsyncSuffix | Asynchronous methods should end with -Async | Yes | Yes |
+| Exceptions | RethrowExceptionWithoutLosingStacktrace | Warns when an exception is rethrown in a way that it loses the stacktrace. | Yes | Yes |
+| Async | AsyncMethodWithoutAsyncSuffix | Asynchronous methods should end with -Async. | Yes | Yes |
 | Strings | ReplaceEmptyStringWithStringDotEmpty | Use `string.Empty` instead of `""`. | Yes | Yes |
 | Tests | TestMethodWithoutPublicModifier | Change the access modifier to `public` for all methods annotated as test. Supports NUnit, MSTest and xUnit.net. | Yes | Yes |
-| General | NullableToShorthand | Changes `Nullable<T>` to `T?` | Yes | Yes |
+| General | NullableToShorthand | Changes `Nullable<T>` to `T?`. | Yes | Yes |
 | General | IfStatementWithoutBraces | Changes one-liner `if` and `else` statements to be surrounded in a block. | Yes | Yes |
 
 ## How do I use this?
