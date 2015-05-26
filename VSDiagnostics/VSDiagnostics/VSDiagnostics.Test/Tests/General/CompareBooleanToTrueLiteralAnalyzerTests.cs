@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers;
@@ -23,7 +24,7 @@ namespace ConsoleApplication1
         void Method()
         {
             bool isAwesome = true;
-            if(isAwesome == true)
+            if (isAwesome == true)
             {
                 Console.WriteLine(""awesome"");
             }
@@ -42,7 +43,7 @@ namespace ConsoleApplication1
         void Method()
         {
             bool isAwesome = true;
-            if(isAwesome)
+            if (isAwesome)
             {
                 Console.WriteLine(""awesome"");
             }
@@ -58,12 +59,12 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 12, 29)
+                        new DiagnosticResultLocation("Test0.cs", 12, 30)
                     }
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            //VerifyCSharpFix(original, result);
+            VerifyCSharpFix(original, result);
         }
 
         [TestMethod]
@@ -114,7 +115,7 @@ namespace ConsoleApplication1
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            //VerifyCSharpFix(original, result);
+            VerifyCSharpFix(original, result);
         }
 
         [TestMethod]
@@ -179,7 +180,7 @@ namespace ConsoleApplication1
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            //VerifyCSharpFix(original, result);
+            VerifyCSharpFix(original, result);
         }
 
         [TestMethod]
@@ -236,7 +237,7 @@ namespace ConsoleApplication1
     {
         bool Method()
         {
-            if(""someString"" == ""true"")
+            if (""someString"" == ""true"")
             {
 
             }
@@ -296,12 +297,41 @@ namespace ConsoleApplication1
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            //VerifyCSharpFix(original, result);
+            VerifyCSharpFix(original, result);
+        }
+
+        [TestMethod]
+        public void CompareBooleanToTrueLiteralAnalyzer_WithOtherOperator_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        bool Method()
+        {
+            bool condition = false;
+            if (condition != true)
+            {
+
+            }
+        }
+    }
+}";
+            VerifyCSharpDiagnostic(original);
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new CompareBooleanToTrueLiteralAnalyzer();
+        }
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider()
+        {
+            return new CompareBooleanToTrueLiteralCodeFix();
         }
     }
 }

@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
 {
@@ -31,7 +32,20 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
 
         private Task<Solution> SimplifyExpressionAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
-            throw new NotImplementedException();
+            var trueLiteralExpression = (LiteralExpressionSyntax) statement;
+            var binaryExpression = (BinaryExpressionSyntax) trueLiteralExpression.Parent;
+            SyntaxNode newRoot;
+            if (binaryExpression.Left == trueLiteralExpression)
+            {
+                newRoot = root.ReplaceNode(binaryExpression, binaryExpression.Right).WithAdditionalAnnotations(Formatter.Annotation);
+            }
+            else
+            {
+                newRoot = root.ReplaceNode(binaryExpression, binaryExpression.Left).WithAdditionalAnnotations(Formatter.Annotation);
+            }
+
+            var newDocument = document.WithSyntaxRoot(newRoot);
+            return Task.FromResult(newDocument.Project.Solution);
         }
     }
 }
