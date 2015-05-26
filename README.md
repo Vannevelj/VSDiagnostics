@@ -30,6 +30,7 @@ Currently these diagnostics are implemented:
 | General | NullableToShorthand | Changes `Nullable<T>` to `T?`. | Yes | Yes |
 | General | IfStatementWithoutBraces | Changes one-liner `if` and `else` statements to be surrounded in a block. | Yes | Yes |
 | General | ConditionalOperatorReturnsDefaultOptions | The conditional operator shouldn't return redundant `true` and `false` literals. | Yes | Yes |
+| General | CompareBooleanToTrueLiteral | A boolean expression doesn't have to be compared to true. | Yes | Yes |
 
 ## How do I use this?
 
