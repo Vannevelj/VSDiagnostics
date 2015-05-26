@@ -263,6 +263,29 @@ namespace ConsoleApplication1
             VerifyCSharpDiagnostic(original);
         }
 
+        [TestMethod]
+        public void ConditionalOperatorReturnsDefaultOptionsAnalyzer_WithLiteralsAsString_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            int legalAge = 18;
+            int myAge = 22;
+            string canDrink = myAge >= legalAge ? ""true"" : ""false"";
+        }
+    }
+}";
+
+            VerifyCSharpDiagnostic(original);
+        }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new ConditionalOperatorReturnsDefaultOptionsAnalyzer();
