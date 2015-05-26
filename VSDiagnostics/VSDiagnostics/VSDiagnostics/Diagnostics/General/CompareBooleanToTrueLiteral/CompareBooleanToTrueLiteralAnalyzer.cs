@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
@@ -22,9 +22,31 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
             context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.TrueLiteralExpression);
         }
 
-        private void AnalyzeSymbol(SyntaxNodeAnalysisContext obj)
+        private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            throw new NotImplementedException();
+            var equalsExpression = context.Node as LiteralExpressionSyntax;
+            if (equalsExpression == null)
+            {
+                return;
+            }
+
+            if (!(equalsExpression.Token.ValueText == "true" && equalsExpression.Token.Value is bool))
+            {
+                return;
+            }
+
+            var parentExpression = equalsExpression.Parent as BinaryExpressionSyntax;
+            if (parentExpression == null)
+            {
+                return;
+            }
+
+            if (parentExpression.OperatorToken.ValueText != "==")
+            {
+                return;
+            }
+
+            context.ReportDiagnostic(Diagnostic.Create(Rule, equalsExpression.GetLocation()));
         }
     }
 }

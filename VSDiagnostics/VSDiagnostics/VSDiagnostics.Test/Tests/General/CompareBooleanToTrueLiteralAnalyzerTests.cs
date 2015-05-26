@@ -58,64 +58,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 13, 29)
-                    }
-            };
-
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            //VerifyCSharpFix(original, result);
-        }
-
-        [TestMethod]
-        public void CompareBooleanToTrueLiteralAnalyzer_WithSimpleEqualsTrueLiteralComparison_InvokesWarning()
-        {
-            var original = @"
-using System;
-using System.Text;
-
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        void Method()
-        {
-            bool isAwesome = true;
-            if(isAwesome.Equals(true))
-            {
-                Console.WriteLine(""awesome"");
-            }
-        }
-    }
-}";
-
-            var result = @"
-using System;
-using System.Text;
-
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        void Method()
-        {
-            bool isAwesome = true;
-            if(isAwesome)
-            {
-                Console.WriteLine(""awesome"");
-            }
-        }
-    }
-}";
-
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = CompareBooleanToTrueLiteralAnalyzer.DiagnosticId,
-                Message = CompareBooleanToTrueLiteralAnalyzer.Message,
-                Severity = CompareBooleanToTrueLiteralAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 13, 29)
+                        new DiagnosticResultLocation("Test0.cs", 12, 29)
                     }
             };
 
@@ -166,7 +109,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 13, 29)
+                        new DiagnosticResultLocation("Test0.cs", 12, 33)
                     }
             };
 
@@ -231,7 +174,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 13, 29)
+                        new DiagnosticResultLocation("Test0.cs", 12, 81)
                     }
             };
 
@@ -278,6 +221,82 @@ namespace ConsoleApplication1
     }
 }";
             VerifyCSharpDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void CompareBooleanToTrueLiteralAnalyzer_ComparedToBooleanAsString_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        bool Method()
+        {
+            if(""someString"" == ""true"")
+            {
+
+            }
+        }
+    }
+}";
+            VerifyCSharpDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void CompareBooleanToTrueLiteralAnalyzer_WithTrueLiteralAsLefthandValue_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+using System.Collections.Generic;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        bool Method()
+        {
+            bool isAwesome = false;
+            return true == isAwesome;
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+using System.Collections.Generic;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        bool Method()
+        {
+            bool isAwesome = false;
+            return isAwesome;
+        }
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = CompareBooleanToTrueLiteralAnalyzer.DiagnosticId,
+                Message = CompareBooleanToTrueLiteralAnalyzer.Message,
+                Severity = CompareBooleanToTrueLiteralAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 13, 20)
+                    }
+            };
+
+            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            //VerifyCSharpFix(original, result);
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
