@@ -110,6 +110,7 @@
     <Compile Include="Tests\General\ConditionalOperatorReturnsDefaultOptionsAnalyzerTests.cs" />
     <Compile Include="Tests\General\IfStatementWithoutBracesAnalyzerTests.cs" />
     <Compile Include="Tests\General\NullableToShorthandAnalyzerTests.cs" />
+    <Compile Include="Tests\General\TypeToVarAnalyzerTests.cs" />
     <Compile Include="Tests\Strings\ReplaceEmptyStringWithStringDotEmptyTests.cs" />
     <Compile Include="Tests\Tests\TestMethodWithoutPublicModifierAnalyzerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -49,6 +49,8 @@
     <Compile Include="Diagnostics\General\IfStatementWithoutBraces\IfStatementWithoutBracesCodeFix.cs" />
     <Compile Include="Diagnostics\General\NullableToShorthand\NullableToShorthandAnalyzer.cs" />
     <Compile Include="Diagnostics\General\NullableToShorthand\NullableToShorthandCodeFix.cs" />
+    <Compile Include="Diagnostics\General\TypeToVar\TypeToVarAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\TypeToVar\TypeToVarCodeFix.cs" />
     <Compile Include="Diagnostics\Strings\ReplaceEmptyStringWithStringDotEmpty\ReplaceEmptyStringWithStringDotEmptyAnalyzer.cs" />
     <Compile Include="Diagnostics\Strings\ReplaceEmptyStringWithStringDotEmpty\ReplaceEmptyStringWithStringDotEmptyCodeFix.cs" />
     <Compile Include="Diagnostics\Tests\TestMethodWithoutPublicModifier\TestMethodWithoutPublicModifierAnalyzer.cs" />
