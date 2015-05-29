@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers;
@@ -46,6 +47,40 @@ namespace ConsoleApplication1
     }
 }";
 
+            var expected = @"
+using System;
+using System.Text;
+using System.ComponentModel;
+
+namespace ConsoleApplication1
+{
+    class MyClass : INotifyPropertyChanged
+    {
+        private bool _isEnabled;
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            set
+            {
+                _isEnabled = value;
+                OnPropertyChanged(nameof(IsEnabled));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            if(handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }                
+    }
+}";
+
             var expectedDiagnostic = new DiagnosticResult
             {
                 Id = OnPropertyChangedWithoutNameOfOperatorAnalyzer.DiagnosticId,
@@ -59,6 +94,7 @@ namespace ConsoleApplication1
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyCSharpFix(original, expected);
         }
 
         [TestMethod]
@@ -98,6 +134,40 @@ namespace ConsoleApplication1
     }
 }";
 
+            var expected = @"
+using System;
+using System.Text;
+using System.ComponentModel;
+
+namespace ConsoleApplication1
+{
+    class MyClass : INotifyPropertyChanged
+    {
+        private bool _isEnabled;
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            set
+            {
+                _isEnabled = value;
+                OnPropertyChanged(nameof(IsEnabled));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            if(handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }                
+    }
+}";
+
             var expectedDiagnostic = new DiagnosticResult
             {
                 Id = OnPropertyChangedWithoutNameOfOperatorAnalyzer.DiagnosticId,
@@ -111,6 +181,7 @@ namespace ConsoleApplication1
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyCSharpFix(original, expected);
         }
 
         [TestMethod]
@@ -201,6 +272,51 @@ namespace ConsoleApplication1
     }
 }";
 
+            var expected = @"
+using System;
+using System.Text;
+using System.ComponentModel;
+
+namespace ConsoleApplication1
+{
+    class MyClass : INotifyPropertyChanged
+    {
+        private bool _isEnabled;
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            set
+            {
+                _isEnabled = value;
+                OnPropertyChanged(nameof(IsAnotherBoolean));
+            }
+        }
+
+        private bool _anotherBoolean;
+        public bool IsAnotherBoolean
+        {
+            get { return _anotherBoolean; }
+            set
+            {
+                _anotherBoolean = value;
+                OnPropertyChanged(nameof(IsAnotherBoolean));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            if(handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }                
+    }
+}";
+
             var expectedDiagnostic = new DiagnosticResult
             {
                 Id = OnPropertyChangedWithoutNameOfOperatorAnalyzer.DiagnosticId,
@@ -214,6 +330,7 @@ namespace ConsoleApplication1
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyCSharpFix(original, expected);
         }
 
         [TestMethod]
@@ -256,9 +373,101 @@ namespace ConsoleApplication1
             VerifyCSharpDiagnostic(original);
         }
 
+        [TestMethod]
+        public void OnPropertyChangedWithoutNameOfOperator_WithMultipleArguments_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+using System.ComponentModel;
+
+namespace ConsoleApplication1
+{
+    class MyClass : INotifyPropertyChanged
+    {
+        private bool _isEnabled;
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            set
+            {
+                _isEnabled = value;
+                OnPropertyChanged(""IsEnabled"", true);
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName, bool someBoolean)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            if(handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }                
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+using System.ComponentModel;
+
+namespace ConsoleApplication1
+{
+    class MyClass : INotifyPropertyChanged
+    {
+        private bool _isEnabled;
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            set
+            {
+                _isEnabled = value;
+                OnPropertyChanged(nameof(IsEnabled), true);
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName, bool someBoolean)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            if(handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }                
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = OnPropertyChangedWithoutNameOfOperatorAnalyzer.DiagnosticId,
+                Message = string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Message, "IsEnabled"),
+                Severity = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 17, 35)
+                    }
+            };
+
+            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyCSharpFix(original, expected);
+        }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new OnPropertyChangedWithoutNameOfOperatorAnalyzer();
+        }
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider()
+        {
+            return new OnPropertyChangedWithoutNameOfOperatorCodeFix();
         }
     }
 }
