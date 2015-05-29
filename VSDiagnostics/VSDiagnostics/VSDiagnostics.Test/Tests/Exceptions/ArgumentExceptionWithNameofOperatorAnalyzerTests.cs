@@ -277,7 +277,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithNameofOperatorAnalyzer_WithArgumentNullException_WithOutCorrespondingParameter_DoesNotInvokeWarning()
+        public void ArgumentExceptionWithNameofOperatorAnalyzer_WithArgumentNullException_WithoutCorrespondingParameter_DoesNotInvokeWarning()
         {
             var original = @"
     using System;
@@ -298,7 +298,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithNameofOperatorAnalyzer_WithArgumentNullException_WithOutCorrespondingParameter_ButDefinedOutsideMethodScope_DoesNotInvokeWarning()
+        public void ArgumentExceptionWithNameofOperatorAnalyzer_WithArgumentNullException_WithoutCorrespondingParameter_ButDefinedOutsideMethodScope_DoesNotInvokeWarning()
         {
             var original = @"
     using System;

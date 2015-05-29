@@ -184,7 +184,7 @@ namespace ConsoleApplication1
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
             VerifyCSharpFix(original, newSource);
         }
-        
+
         [TestMethod]
         public void TypeToVarAnalyzer_WithLocalAssignedUsingImplicitConversion_DoesNotInvokeWarning()
         {
@@ -224,7 +224,7 @@ namespace ConsoleApplication1
 
             VerifyCSharpDiagnostic(original);
         }
-        
+
         [TestMethod]
         public void TypeToVarAnalyzer_WithLocalUninitialized_DoesNotInvokeWarning()
         {

@@ -1,8 +1,8 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Immutable;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using System.Collections.Immutable;
 
 namespace VSDiagnostics.Diagnostics.General.TypeToVar
 {
@@ -21,7 +21,7 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
         {
             context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.LocalDeclarationStatement);
         }
-        
+
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var localDeclaration = context.Node as LocalDeclarationStatementSyntax;
@@ -30,7 +30,7 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
             {
                 return;
             }
-            
+
             // can't have more than one implicitly-typed variable in a statement
             var variable = localDeclaration.Declaration.Variables.FirstOrDefault();
 
@@ -41,7 +41,7 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
 
             var variableType = context.SemanticModel.GetTypeInfo(localDeclaration.Declaration.Type).Type;
             var initializerType = context.SemanticModel.GetTypeInfo(variable.Initializer.Value).Type;
-            
+
             if (Equals(variableType, initializerType))
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule, localDeclaration.Declaration.Type.GetLocation()));
