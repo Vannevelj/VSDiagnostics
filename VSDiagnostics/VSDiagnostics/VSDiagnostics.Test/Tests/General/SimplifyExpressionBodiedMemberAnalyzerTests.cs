@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers;
@@ -52,7 +53,7 @@ namespace ConsoleApplication1
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            //VerifyCSharpFix(original, expected);
+            VerifyCSharpFix(original, expected);
         }
 
         [TestMethod]
@@ -95,7 +96,7 @@ namespace ConsoleApplication1
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            //VerifyCSharpFix(original, expected);
+            VerifyCSharpFix(original, expected);
         }
 
         [TestMethod]
@@ -112,8 +113,8 @@ namespace ConsoleApplication1
         string MyProperty 
         { 
             get 
-            { 
-                return ""myString""; 
+            {
+                return ""myString"";
             } 
         }
     }
@@ -144,7 +145,7 @@ namespace ConsoleApplication1
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            //VerifyCSharpFix(original, expected);
+            VerifyCSharpFix(original, expected);
         }
 
         [TestMethod]
@@ -293,6 +294,11 @@ namespace ConsoleApplication1
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new SimplifyExpressionBodiedMemberAnalyzer();
+        }
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider()
+        {
+            return new SimplifyExpressionBodiedMemberCodeFix();
         }
     }
 }
