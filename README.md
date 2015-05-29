@@ -32,7 +32,7 @@ Currently these diagnostics are implemented:
 | General | ConditionalOperatorReturnsDefaultOptions | The conditional operator shouldn't return redundant `true` and `false` literals. | Yes | Yes |
 | General | CompareBooleanToTrueLiteral | A boolean expression doesn't have to be compared to true. | Yes | Yes |
 | General | TypeToVar | Use `var` instead of an explicit type. | Yes | Yes |
-| General | OnPropertyChangedWithoutNameOfOperator | Use the `nameof()` operator in conjunection with `OnPropertyChanged` | Yes | Yes |
+| General | OnPropertyChangedWithoutNameOfOperator | Use the `nameof()` operator in conjunction with `OnPropertyChanged` | Yes | Yes |
 
 ## How do I use this?
 
