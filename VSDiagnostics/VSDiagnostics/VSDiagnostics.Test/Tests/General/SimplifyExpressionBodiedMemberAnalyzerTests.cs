@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers;
 using VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember;
@@ -19,7 +20,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        int Method()
+        int MyMethod()
         {
             return 5;
         }
@@ -34,19 +35,19 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        int Method() => 5;
+        int MyMethod() => 5;
     }
 }";
 
             var expectedDiagnostic = new DiagnosticResult
             {
                 Id = SimplifyExpressionBodiedMemberAnalyzer.DiagnosticId,
-                Message = SimplifyExpressionBodiedMemberAnalyzer.Message,
+                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Message, "Method", "MyMethod"),
                 Severity = SimplifyExpressionBodiedMemberAnalyzer.Severity,
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 13, 29)
+                        new DiagnosticResultLocation("Test0.cs", 11, 13)
                     }
             };
 
@@ -84,12 +85,12 @@ namespace ConsoleApplication1
             var expectedDiagnostic = new DiagnosticResult
             {
                 Id = SimplifyExpressionBodiedMemberAnalyzer.DiagnosticId,
-                Message = SimplifyExpressionBodiedMemberAnalyzer.Message,
+                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Message, "Property", "MyProperty"),
                 Severity = SimplifyExpressionBodiedMemberAnalyzer.Severity,
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 13, 29)
+                        new DiagnosticResultLocation("Test0.cs", 9, 35)
                     }
             };
 
@@ -133,12 +134,12 @@ namespace ConsoleApplication1
             var expectedDiagnostic = new DiagnosticResult
             {
                 Id = SimplifyExpressionBodiedMemberAnalyzer.DiagnosticId,
-                Message = SimplifyExpressionBodiedMemberAnalyzer.Message,
+                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Message, "Property", "MyProperty"),
                 Severity = SimplifyExpressionBodiedMemberAnalyzer.Severity,
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 13, 29)
+                        new DiagnosticResultLocation("Test0.cs", 13, 17)
                     }
             };
 
@@ -181,7 +182,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        int Method()
+        int MyMethod()
         {
             var result = 5 * 5;
             return result;
@@ -202,7 +203,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        void Method()
+        void MyMethod()
         {
             var result = 5 * 5;
         }
@@ -222,7 +223,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        int Method()
+        int MyMethod()
         {
             while(true)
             {
@@ -232,6 +233,66 @@ namespace ConsoleApplication1
     }
 }";
             VerifyCSharpDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMemberAnalyzer_WithMethodWithExpressionBody_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int MyMethod() => 5;
+    }
+}";
+            VerifyCSharpDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMemberAnalyzer_WithPropertyWithExpressionBody_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int MyProperty => 5;
+    }
+}";
+            VerifyCSharpDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMemberAnalyzer_WithMethodWithUnreachableCode_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int MyMethod()
+        {
+            return 5;
+            int x = 6;
+        }
+    }
+}";
+            VerifyCSharpDiagnostic(original);
+        }
+
+        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
+        {
+            return new SimplifyExpressionBodiedMemberAnalyzer();
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
@@ -18,12 +20,83 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
 
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.LocalDeclarationStatement);
+            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.PropertyDeclaration, SyntaxKind.MethodDeclaration);
         }
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            throw new System.NotImplementedException();
+            Diagnostic diagnostic = null;
+
+            var asProperty = context.Node as PropertyDeclarationSyntax;
+            if (asProperty != null)
+            {
+                diagnostic = HandleProperty(asProperty);
+            }
+
+            var asMethod = context.Node as MethodDeclarationSyntax;
+            if (asMethod != null)
+            {
+                diagnostic = HandleMethod(asMethod);
+            }
+
+            if (diagnostic != null)
+            {
+                context.ReportDiagnostic(diagnostic);
+            }
+        }
+
+        private Diagnostic HandleProperty(PropertyDeclarationSyntax propertyDeclaration)
+        {
+            if (propertyDeclaration.ExpressionBody != null)
+            {
+                return null;
+            }
+
+            var getter = propertyDeclaration.AccessorList.Accessors.FirstOrDefault(x => x.Keyword.ValueText == "get");
+            if (getter == null)
+            {
+                return null;
+            }
+
+            if (getter.Body == null)
+            {
+                return null;
+            }
+
+            if (getter.Body.Statements.Count != 1)
+            {
+                return null;
+            }
+
+            var statement = getter.Body.Statements.First();
+            return Diagnostic.Create(Rule, statement.GetLocation(), "Property", propertyDeclaration.Identifier);
+        }
+
+        private Diagnostic HandleMethod(MethodDeclarationSyntax methodDeclaration)
+        {
+            if (methodDeclaration.ExpressionBody != null)
+            {
+                return null;
+            }
+
+            if (methodDeclaration.Body.Statements.Count != 1)
+            {
+                return null;
+            }
+
+            var statement = methodDeclaration.Body.Statements.FirstOrDefault();
+            if (statement == null)
+            {
+                return null;
+            }
+
+            var returnStatement = statement.DescendantNodesAndSelf().OfType<ReturnStatementSyntax>().FirstOrDefault();
+            if (returnStatement == null)
+            {
+                return null;
+            }
+
+            return Diagnostic.Create(Rule, returnStatement.GetLocation(), "Method", methodDeclaration.Identifier.ValueText);
         }
     }
 }
