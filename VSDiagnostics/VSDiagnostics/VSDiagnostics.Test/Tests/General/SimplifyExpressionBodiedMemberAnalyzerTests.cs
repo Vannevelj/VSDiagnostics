@@ -291,6 +291,52 @@ namespace ConsoleApplication1
             VerifyCSharpDiagnostic(original);
         }
 
+        [TestMethod]
+        public void SimplifyExpressionBodiedMemberAnalyzer_WithMethodAndTrailingComments_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int MyMethod()
+        {
+            return 5; /* comments */
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int MyMethod() => 5; /* comments */
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = SimplifyExpressionBodiedMemberAnalyzer.DiagnosticId,
+                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Message, "Method", "MyMethod"),
+                Severity = SimplifyExpressionBodiedMemberAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 11, 13)
+                    }
+            };
+
+            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyCSharpFix(original, expected);
+        }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new SimplifyExpressionBodiedMemberAnalyzer();

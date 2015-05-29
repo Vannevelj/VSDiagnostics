@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
 {
-    [ExportCodeFixProvider("TypeToVar", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider("SimplifyExpressionBodiedMember", LanguageNames.CSharp), Shared]
     public class SimplifyExpressionBodiedMemberCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(SimplifyExpressionBodiedMemberAnalyzer.DiagnosticId);
@@ -32,40 +32,30 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
 
         private Task<Solution> UseExpressionBodiedMember(Document document, SyntaxNode root, SyntaxNode statement)
         {
-            var parentProperty = statement.AncestorsAndSelf().OfType<PropertyDeclarationSyntax>().FirstOrDefault();
-            if (parentProperty != null)
+            var returnStatement = (ReturnStatementSyntax) statement;
+            var expression = returnStatement.Expression;
+            var arrowClause = SyntaxFactory.ArrowExpressionClause(expression);
+
+            var property = statement.AncestorsAndSelf().OfType<PropertyDeclarationSyntax>().FirstOrDefault();
+            if (property != null)
             {
-                root = root.ReplaceNode(parentProperty, HandleProperty(parentProperty, statement));
+                root = root.ReplaceNode(property, property.RemoveNode(property.AccessorList, SyntaxRemoveOptions.KeepExteriorTrivia)
+                                                          .WithExpressionBody(arrowClause)
+                                                          .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
             }
 
-            var parentMethod = statement.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().FirstOrDefault();
-            if (parentMethod != null)
+            var method = statement.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().FirstOrDefault();
+            if (method != null)
             {
-                root = root.ReplaceNode(parentMethod, HandleMethod(parentMethod, statement));
+                var trailingTrivia = method.Body.Statements.First().GetTrailingTrivia();
+                root = root.ReplaceNode(method, method.RemoveNode(method.Body, SyntaxRemoveOptions.KeepExteriorTrivia)
+                                                      .WithExpressionBody(arrowClause)
+                                                      .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
+                                                      .WithTrailingTrivia(trailingTrivia));
             }
 
             var newDocument = document.WithSyntaxRoot(root);
             return Task.FromResult(newDocument.Project.Solution);
-        }
-
-        private SyntaxNode HandleProperty(PropertyDeclarationSyntax property, SyntaxNode statement)
-        {
-            var returnStatement = (ReturnStatementSyntax) statement;
-            var expression = returnStatement.Expression;
-            var arrowClause = SyntaxFactory.ArrowExpressionClause(expression);
-            return property.RemoveNode(property.AccessorList, SyntaxRemoveOptions.KeepNoTrivia)
-                           .WithExpressionBody(arrowClause)
-                           .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
-        }
-
-        private SyntaxNode HandleMethod(MethodDeclarationSyntax method, SyntaxNode statement)
-        {
-            var returnStatement = (ReturnStatementSyntax) statement;
-            var expression = returnStatement.Expression;
-            var arrowClause = SyntaxFactory.ArrowExpressionClause(expression);
-            return method.RemoveNode(method.Body, SyntaxRemoveOptions.KeepNoTrivia)
-                         .WithExpressionBody(arrowClause)
-                         .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
         }
     }
 }
