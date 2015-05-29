@@ -49,12 +49,12 @@ namespace ConsoleApplication1
             var expectedDiagnostic = new DiagnosticResult
             {
                 Id = OnPropertyChangedWithoutNameOfOperatorAnalyzer.DiagnosticId,
-                Message = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Message,
+                Message = string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Message, "IsEnabled"),
                 Severity = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Severity,
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 12, 30)
+                        new DiagnosticResultLocation("Test0.cs", 17, 35)
                     }
             };
 
@@ -101,12 +101,12 @@ namespace ConsoleApplication1
             var expectedDiagnostic = new DiagnosticResult
             {
                 Id = OnPropertyChangedWithoutNameOfOperatorAnalyzer.DiagnosticId,
-                Message = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Message,
+                Message = string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Message, "IsEnabled"),
                 Severity = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Severity,
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 12, 30)
+                        new DiagnosticResultLocation("Test0.cs", 17, 35)
                     }
             };
 
@@ -183,7 +183,7 @@ namespace ConsoleApplication1
             set
             {
                 _anotherBoolean = value;
-                OnPropertyChanged(""IsAnotherBoolean"");
+                OnPropertyChanged(nameof(IsAnotherBoolean));
             }
         }
 
@@ -204,16 +204,56 @@ namespace ConsoleApplication1
             var expectedDiagnostic = new DiagnosticResult
             {
                 Id = OnPropertyChangedWithoutNameOfOperatorAnalyzer.DiagnosticId,
-                Message = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Message,
+                Message = string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Message, "IsAnotherBoolean"),
                 Severity = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Severity,
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 12, 30)
+                        new DiagnosticResultLocation("Test0.cs", 17, 35)
                     }
             };
 
             VerifyCSharpDiagnostic(original, expectedDiagnostic);
+        }
+
+        [TestMethod]
+        public void OnPropertyChangedWithoutNameOfOperator_WithNameOfOperator_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+using System.ComponentModel;
+
+namespace ConsoleApplication1
+{
+    class MyClass : INotifyPropertyChanged
+    {
+        private bool _isEnabled;
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            set
+            {
+                _isEnabled = value;
+                OnPropertyChanged(nameof(IsEnabled));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            if(handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }                
+    }
+}";
+
+            VerifyCSharpDiagnostic(original);
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()

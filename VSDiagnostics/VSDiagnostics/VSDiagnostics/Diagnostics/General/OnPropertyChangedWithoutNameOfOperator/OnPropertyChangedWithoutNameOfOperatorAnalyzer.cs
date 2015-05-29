@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperator
@@ -28,7 +26,46 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            throw new NotImplementedException();
+            var invocation = context.Node as InvocationExpressionSyntax;
+            if (invocation == null)
+            {
+                return;
+            }
+
+            var identifierExpression = invocation.Expression as IdentifierNameSyntax;
+            if (identifierExpression == null)
+            {
+                return;
+            }
+
+            var identifier = identifierExpression.Identifier;
+            if (identifier.ValueText != "OnPropertyChanged")
+            {
+                return;
+            }
+
+            var invokedProperty = invocation.ArgumentList.Arguments.FirstOrDefault();
+            if (invokedProperty == null)
+            {
+                return;
+            }
+
+            var argumentLiteralExpression = invokedProperty.Expression as LiteralExpressionSyntax;
+            if (argumentLiteralExpression == null)
+            {
+                return;
+            }
+
+            var invocationArgument = argumentLiteralExpression.Token.ValueText;
+
+            var properties = invocation.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault().ChildNodes().OfType<PropertyDeclarationSyntax>();
+            foreach (var property in properties)
+            {
+                if (string.Equals(property.Identifier.ValueText, invocationArgument, StringComparison.OrdinalIgnoreCase))
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, invokedProperty.GetLocation(), property.Identifier.ValueText));
+                }
+            }
         }
     }
 }
