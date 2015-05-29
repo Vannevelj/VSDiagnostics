@@ -33,6 +33,7 @@ Currently these diagnostics are implemented:
 | General | CompareBooleanToTrueLiteral | A boolean expression doesn't have to be compared to true. | Yes | Yes |
 | General | TypeToVar | Use `var` instead of an explicit type. | Yes | Yes |
 | General | OnPropertyChangedWithoutNameOfOperator | Use the `nameof()` operator in conjunction with `OnPropertyChanged` | Yes | Yes |
+| General | SimplifyExpressionBodiedMember | Simplify the expression using an expression-bodied member. | Yes | Yes |
 
 ## How do I use this?
 
