@@ -337,6 +337,23 @@ namespace ConsoleApplication1
             VerifyCSharpFix(original, expected);
         }
 
+        [TestMethod]
+        public void SimplifyExpressionBodiedMemberAnalyzer_WithPropertyWithGetAndSet_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int MyProperty { get; set; }
+    }
+}";
+            VerifyCSharpDiagnostic(original);
+        }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new SimplifyExpressionBodiedMemberAnalyzer();
