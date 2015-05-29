@@ -123,10 +123,22 @@
     <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0-rc2\tools\analyzers\C#\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>if exist Diagnostic.nuspec if exist "$(SolutionDir)\packages\NuGet.CommandLine.2.8.2\tools\NuGet.exe" "$(SolutionDir)\packages\NuGet.CommandLine.2.8.2\tools\NuGet.exe" pack Diagnostic.nuspec -OutputDirectory "C:\Users\jeroen\Google Drive\NugetLocal\VSDiagnostics"</PostBuildEvent>
-    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
-  </PropertyGroup>
+
+  <Choose>
+    <When Condition=" $(NUGETLOCAL) != '' ">
+      <PropertyGroup>
+        <PostBuildEvent>if exist Diagnostic.nuspec if exist "$(SolutionDir)\packages\NuGet.CommandLine.2.8.2\tools\NuGet.exe" "$(SolutionDir)\packages\NuGet.CommandLine.2.8.2\tools\NuGet.exe" pack Diagnostic.nuspec -OutputDirectory $(NUGETLOCAL)</PostBuildEvent>
+        <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <PostBuildEvent>if exist Diagnostic.nuspec if exist "$(SolutionDir)\packages\NuGet.CommandLine.2.8.2\tools\NuGet.exe" "$(SolutionDir)\packages\NuGet.CommandLine.2.8.2\tools\NuGet.exe" pack Diagnostic.nuspec -OutputDirectory .</PostBuildEvent>
+        <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
