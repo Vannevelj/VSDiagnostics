@@ -49,6 +49,8 @@
     <Compile Include="Diagnostics\General\IfStatementWithoutBraces\IfStatementWithoutBracesCodeFix.cs" />
     <Compile Include="Diagnostics\General\NullableToShorthand\NullableToShorthandAnalyzer.cs" />
     <Compile Include="Diagnostics\General\NullableToShorthand\NullableToShorthandCodeFix.cs" />
+    <Compile Include="Diagnostics\General\OnPropertyChangedWithoutNameOfOperator\OnPropertyChangedWithoutNameOfOperatorAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\OnPropertyChangedWithoutNameOfOperator\OnPropertyChangedWithoutNameOfOperatorCodeFix.cs" />
     <Compile Include="Diagnostics\General\TypeToVar\TypeToVarAnalyzer.cs" />
     <Compile Include="Diagnostics\General\TypeToVar\TypeToVarCodeFix.cs" />
     <Compile Include="Diagnostics\Strings\ReplaceEmptyStringWithStringDotEmpty\ReplaceEmptyStringWithStringDotEmptyAnalyzer.cs" />
@@ -123,7 +125,6 @@
     <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0-rc2\tools\analyzers\C#\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-
   <Choose>
     <When Condition=" $(NUGETLOCAL) != '' ">
       <PropertyGroup>
@@ -138,7 +139,6 @@
       </PropertyGroup>
     </Otherwise>
   </Choose>
-
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
