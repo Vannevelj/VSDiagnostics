@@ -51,4 +51,6 @@ Every diagnostic can be turned off for a single line or for the entire project. 
 
 Definitely! Take a look at the open issues and see if there's anything that interests you. Submit your pull request and we'll take a look at it as soon as possible.
 
-If you think you're going to make larger changes than a single implementation then we would ask you to get in contact with us first so we can discuss it and prevent unneeded work. 
+If you think you're going to make larger changes than a single implementation then we would ask you to get in contact with us first so we can discuss it and prevent unneeded work.
+
+You'll need the [Visual Studio 2015 Release Candidate](https://www.visualstudio.com/en-us/downloads/visual-studio-2015-downloads-vs.aspx) and [the SDK](https://www.microsoft.com/en-us/download/details.aspx?id=46850) to get started.
