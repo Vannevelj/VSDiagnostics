@@ -38,6 +38,7 @@
     <Compile Include="Diagnostics\Exceptions\ArgumentExceptionWithNameofOperator\ArgumentExceptionWithNameofOperatorCodeFix.cs" />
     <Compile Include="Diagnostics\Exceptions\CatchNullReferenceException\CatchNullReferenceExceptionAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\EmptyArgumentException\EmptyArgumentExceptionAnalyzer.cs" />
+    <Compile Include="Diagnostics\Exceptions\EmptyCatchClause\EmptyCatchClauseAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\RethrowExceptionWithoutLosingStacktrace\RethrowExceptionWithoutLosingStacktraceAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\RethrowExceptionWithoutLosingStacktrace\RethrowExceptionWithoutLosingStacktraceCodeFix.cs" />
     <Compile Include="Diagnostics\Exceptions\SingleGeneralException\SingleGeneralExceptionAnalyzer.cs" />
