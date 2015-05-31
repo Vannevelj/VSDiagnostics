@@ -115,6 +115,7 @@
     <Compile Include="Tests\Exceptions\ArgumentExceptionWithNameofOperatorAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\CatchNullReferenceExceptionAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\EmptyArgumentExceptionAnalyzerTests.cs" />
+    <Compile Include="Tests\Exceptions\EmptyCatchClauseAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\RethrowExceptionWithoutLosingStracktraceAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\SingleGeneralExceptionAnalyzerTests.cs" />
     <Compile Include="Tests\General\CompareBooleanToTrueLiteralAnalyzerTests.cs" />
