@@ -546,7 +546,7 @@ namespace ConsoleApplication1
     {   
         void Method()
         {
-            Dictionary<Dictionary<int, Nullable<int>, int> myVar = null;
+            Dictionary<Dictionary<int, Nullable<int>>, int> myVar = null;
         }
     }
 }";
@@ -574,7 +574,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 11, 44)
+                        new DiagnosticResultLocation("Test0.cs", 11, 40)
                     }
             };
 
