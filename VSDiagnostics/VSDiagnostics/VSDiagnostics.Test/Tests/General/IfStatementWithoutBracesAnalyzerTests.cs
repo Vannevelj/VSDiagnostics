@@ -338,6 +338,77 @@ namespace ConsoleApplication1
             VerifyCSharpDiagnostic(original);
         }
 
+        [TestMethod]
+        public void IfStatementWithoutBracesAnalyzer_IfAndElseWithoutBraces_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            if(true)
+                Console.WriteLine(""true"");
+            else
+                Console.WriteLine(""false"");
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            if(true)
+            {
+                Console.WriteLine(""true"");
+            }
+            else
+            {
+                Console.WriteLine(""false"");
+            }
+        }
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
+                Message = IfStatementWithoutBracesAnalyzer.Message,
+                Severity = IfStatementWithoutBracesAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 11, 13)
+                    }
+            };
+
+            var expectedDiagnostic2 = new DiagnosticResult
+            {
+                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
+                Message = IfStatementWithoutBracesAnalyzer.Message,
+                Severity = IfStatementWithoutBracesAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 13, 13)
+                    }
+            };
+
+            VerifyCSharpDiagnostic(original, expectedDiagnostic, expectedDiagnostic2);
+            VerifyCSharpFix(original, result);
+        }
+
         protected override CodeFixProvider GetCSharpCodeFixProvider()
         {
             return new IfStatementWithoutBracesCodeFix();
