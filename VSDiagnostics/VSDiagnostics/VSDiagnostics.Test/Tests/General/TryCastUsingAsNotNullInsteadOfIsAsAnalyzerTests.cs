@@ -2,14 +2,17 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
-using RoslynTester.Helpers;
+using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull;
 
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class TryCastUsingAsNotNullInsteadOfIsAsAnalyzerTests : CodeFixVerifier
+    public class TryCastUsingAsNotNullInsteadOfIsAsAnalyzerTests : CSharpCodeFixVerifier
     {
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new TryCastWithoutUsingAsNotNullAnalyzer();
+        protected override CodeFixProvider CodeFixProvider => new TryCastWithoutUsingAsNotNullCodeFix();
+
         [TestMethod]
         public void TryCastWithoutUsingAsNotNullAnalyzer_WithIsAs_AndReferenceType_InvokesWarning()
         {
@@ -63,8 +66,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, expected);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, expected);
         }
 
         [TestMethod]
@@ -121,8 +124,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, expected);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, expected);
         }
 
         [TestMethod]
@@ -180,8 +183,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, expected);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, expected);
         }
 
         [TestMethod]
@@ -235,8 +238,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, expected);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, expected);
         }
 
         [TestMethod]
@@ -300,8 +303,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, expected);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, expected);
         }
 
         [TestMethod]
@@ -361,8 +364,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, expected);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, expected);
         }
 
         [TestMethod]
@@ -399,7 +402,7 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, expectedDiagnostic);
         }
 
         [TestMethod]
@@ -425,7 +428,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -483,18 +486,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, expected);
-        }
-
-        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
-        {
-            return new TryCastWithoutUsingAsNotNullAnalyzer();
-        }
-
-        protected override CodeFixProvider GetCSharpCodeFixProvider()
-        {
-            return new TryCastWithoutUsingAsNotNullCodeFix();
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, expected);
         }
     }
 }

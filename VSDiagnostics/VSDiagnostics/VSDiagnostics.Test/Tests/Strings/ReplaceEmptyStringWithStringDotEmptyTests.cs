@@ -2,14 +2,17 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
-using RoslynTester.Helpers;
+using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty;
 
 namespace VSDiagnostics.Test.Tests.Strings
 {
     [TestClass]
-    public class ReplaceEmptyStringWithStringDotEmptyTests : CodeFixVerifier
+    public class ReplaceEmptyStringWithStringDotEmptyTests : CSharpCodeFixVerifier
     {
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new ReplaceEmptyStringWithStringDotEmptyAnalyzer();
+        protected override CodeFixProvider CodeFixProvider => new ReplaceEmptyStringWithStringDotEmptyCodeFix();
+
         [TestMethod]
         public void ReplaceEmptyStringsWithStringDotEmpty_WithLocalEmptyStringLiteral_InvokesWarning()
         {
@@ -55,8 +58,8 @@ namespace VSDiagnostics.Test.Tests.Strings
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -77,7 +80,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
     }";
 
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -98,7 +101,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
     }";
 
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -156,8 +159,8 @@ namespace VSDiagnostics.Test.Tests.Strings
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -178,17 +181,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
     }";
 
-            VerifyCSharpDiagnostic(original);
-        }
-
-        protected override CodeFixProvider GetCSharpCodeFixProvider()
-        {
-            return new ReplaceEmptyStringWithStringDotEmptyCodeFix();
-        }
-
-        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
-        {
-            return new ReplaceEmptyStringWithStringDotEmptyAnalyzer();
+            VerifyDiagnostic(original);
         }
     }
 }

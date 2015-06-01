@@ -2,14 +2,17 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
-using RoslynTester.Helpers;
+using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.TypeToVar;
 
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class TypeToVarAnalyzerTests : CodeFixVerifier
+    public class TypeToVarAnalyzerTests : CSharpCodeFixVerifier
     {
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new TypeToVarAnalyzer();
+        protected override CodeFixProvider CodeFixProvider => new TypeToVarCodeFix();
+
         [TestMethod]
         public void TypeToVarAnalyzer_WithLocalPredefinedType_InvokesWarning()
         {
@@ -54,8 +57,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, newSource);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, newSource);
         }
 
         [TestMethod]
@@ -112,8 +115,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, newSource);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, newSource);
         }
 
         [TestMethod]
@@ -133,7 +136,7 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -181,8 +184,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, newSource);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, newSource);
         }
 
         [TestMethod]
@@ -204,7 +207,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -222,7 +225,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -243,7 +246,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -269,17 +272,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyCSharpDiagnostic(original);
-        }
-
-        protected override CodeFixProvider GetCSharpCodeFixProvider()
-        {
-            return new TypeToVarCodeFix();
-        }
-
-        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
-        {
-            return new TypeToVarAnalyzer();
+            VerifyDiagnostic(original);
         }
     }
 }

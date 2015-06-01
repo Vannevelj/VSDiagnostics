@@ -13,7 +13,6 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
     public class TypeToVarCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(TypeToVarAnalyzer.DiagnosticId);
-
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
         public override async Task RegisterCodeFixesAsync(CodeFixContext context)

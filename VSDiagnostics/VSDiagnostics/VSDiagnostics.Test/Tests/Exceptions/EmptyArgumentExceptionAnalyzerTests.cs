@@ -1,14 +1,16 @@
 ﻿using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
-using RoslynTester.Helpers;
+using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentException;
 
 namespace VSDiagnostics.Test.Tests.Exceptions
 {
     [TestClass]
-    public class EmptyArgumentExceptionAnalyzerTests : DiagnosticVerifier
+    public class EmptyArgumentExceptionAnalyzerTests : CSharpDiagnosticVerifier
     {
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new EmptyArgumentExceptionAnalyzer();
+
         [TestMethod]
         public void EmptyArgumentExceptionAnalyzer_WithEmptyArgument_InvokesWarning()
         {
@@ -39,7 +41,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
                     }
             };
 
-            VerifyCSharpDiagnostic(test, expectedDiagnostic);
+            VerifyDiagnostic(test, expectedDiagnostic);
         }
 
         [TestMethod]
@@ -72,7 +74,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
                     }
             };
 
-            VerifyCSharpDiagnostic(test, expectedDiagnostic);
+            VerifyDiagnostic(test, expectedDiagnostic);
         }
 
         [TestMethod]
@@ -92,7 +94,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
             }
         }
     }";
-            VerifyCSharpDiagnostic(test);
+            VerifyDiagnostic(test);
         }
 
         [TestMethod]
@@ -114,7 +116,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            VerifyCSharpDiagnostic(test);
+            VerifyDiagnostic(test);
         }
 
         [TestMethod]
@@ -136,12 +138,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            VerifyCSharpDiagnostic(test);
-        }
-
-        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
-        {
-            return new EmptyArgumentExceptionAnalyzer();
+            VerifyDiagnostic(test);
         }
     }
 }

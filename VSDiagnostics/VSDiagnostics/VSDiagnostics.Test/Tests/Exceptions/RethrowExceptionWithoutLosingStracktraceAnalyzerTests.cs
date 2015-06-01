@@ -2,14 +2,17 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
-using RoslynTester.Helpers;
+using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStacktrace;
 
 namespace VSDiagnostics.Test.Tests.Exceptions
 {
     [TestClass]
-    public class RethrowExceptionWithoutLosingStracktraceAnalyzerTests : CodeFixVerifier
+    public class RethrowExceptionWithoutLosingStracktraceAnalyzerTests : CSharpCodeFixVerifier
     {
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new RethrowExceptionWithoutLosingStacktraceAnalyzer();
+        protected override CodeFixProvider CodeFixProvider => new RethrowExceptionWithoutLosingStacktraceCodeFix();
+
         [TestMethod]
         public void RethrowExceptionWithoutLosingStracktraceAnalyzer_WithRethrowArgument_InvokesWarning()
         {
@@ -69,8 +72,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true); // Removing the argument will remove all usages of the e parameter. This will cause a CS0168 warning.
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true); // Removing the argument will remove all usages of the e parameter. This will cause a CS0168 warning.
         }
 
         [TestMethod]
@@ -98,7 +101,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -126,7 +129,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -155,7 +158,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -176,7 +179,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -204,7 +207,7 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -231,17 +234,7 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyCSharpDiagnostic(original);
-        }
-
-        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
-        {
-            return new RethrowExceptionWithoutLosingStacktraceAnalyzer();
-        }
-
-        protected override CodeFixProvider GetCSharpCodeFixProvider()
-        {
-            return new RethrowExceptionWithoutLosingStacktraceCodeFix();
+            VerifyDiagnostic(original);
         }
     }
 }
