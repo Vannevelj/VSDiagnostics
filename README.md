@@ -35,6 +35,7 @@ Currently these diagnostics are implemented:
 | General | TypeToVar | Use `var` instead of an explicit type. | Yes | Yes |
 | General | OnPropertyChangedWithoutNameOfOperator | Use the `nameof()` operator in conjunction with `OnPropertyChanged` | Yes | Yes |
 | General | SimplifyExpressionBodiedMember | Simplify the expression using an expression-bodied member. | Yes | Yes |
+| General | TryCastWithoutUsingAsNotNull | A conversion can be done using `as` + a `null` comparison | Yes | Yes |
 
 ## How do I use this?
 
