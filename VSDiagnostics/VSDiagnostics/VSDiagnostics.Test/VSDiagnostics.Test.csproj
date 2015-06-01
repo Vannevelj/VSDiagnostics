@@ -121,6 +121,7 @@
     <Compile Include="Tests\General\CompareBooleanToTrueLiteralAnalyzerTests.cs" />
     <Compile Include="Tests\General\ConditionalOperatorReturnsDefaultOptionsAnalyzerTests.cs" />
     <Compile Include="Tests\General\IfStatementWithoutBracesAnalyzerTests.cs" />
+    <Compile Include="Tests\General\NonEncapsulatedOrMutableFieldAnalyzerTests.cs" />
     <Compile Include="Tests\General\NullableToShorthandAnalyzerTests.cs" />
     <Compile Include="Tests\General\OnPropertyChangedWithoutNameOfOperatorAnalyzerTests.cs" />
     <Compile Include="Tests\General\SimplifyExpressionBodiedMemberAnalyzerTests.cs" />
