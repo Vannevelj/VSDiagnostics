@@ -38,22 +38,40 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 
             foreach (var asExpression in asExpressions)
             {
-                var asIdentifier = ((IdentifierNameSyntax) asExpression.Left).Identifier.ValueText;
-                if (string.Equals(isIdentifier, asIdentifier))
+                var isIdentifierInAsContext = ((IdentifierNameSyntax) asExpression.Left).Identifier.ValueText;
+                if (string.Equals(isIdentifier, isIdentifierInAsContext))
                 {
                     // Move the as statement before the if block
                     // Change the if-condition to "NewAsIdentifier != null"
 
                     var variableDeclarator = asExpression.AncestorsAndSelf().OfType<VariableDeclaratorSyntax>().First();
-                    var newAsIdentifier = variableDeclarator.Identifier.ValueText;
-                    var newCondition = SyntaxFactory.ParseExpression($"{newAsIdentifier} != null");
-
+                    var asIdentifier = variableDeclarator.Identifier.ValueText;
                     var variableDeclaration = asExpression.AncestorsAndSelf().OfType<LocalDeclarationStatementSyntax>().First();
 
                     var editor = await DocumentEditor.CreateAsync(document);
-                    editor.RemoveNode(variableDeclaration);
+
+                    var newCondition = SyntaxFactory.ParseExpression($"{asIdentifier} != null");
                     editor.ReplaceNode(ifStatement.Condition, newCondition);
-                    editor.InsertBefore(ifStatement, new[] { variableDeclaration.WithAdditionalAnnotations(Formatter.Annotation) });
+
+                    if (variableDeclaration.Declaration.Variables.Count > 1) // Split variable declaration
+                    {
+                        // Extract the relevant variable and copy it outside the if-body
+                        var extractedDeclarator = variableDeclaration.Declaration.Variables.First(x => x.Identifier.ValueText == asIdentifier);
+                        var newDeclaration = SyntaxFactory.VariableDeclaration(extractedDeclarator.AncestorsAndSelf().OfType<VariableDeclarationSyntax>().First().Type, SyntaxFactory.SeparatedList(new[] { extractedDeclarator }));
+                        var newStatement = SyntaxFactory.LocalDeclarationStatement(SyntaxFactory.TokenList(), newDeclaration, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+                        editor.InsertBefore(ifStatement, new[] { newStatement.WithAdditionalAnnotations(Formatter.Annotation) });
+
+                        // Rewrite the variable declaration inside the if-body to remove the one we just copied
+                        var newVariables = variableDeclaration.Declaration.WithVariables(SyntaxFactory.SeparatedList(variableDeclaration.Declaration.Variables.Except(new[] { extractedDeclarator })));
+                        var newBodyStatement = SyntaxFactory.LocalDeclarationStatement(SyntaxFactory.TokenList(), newVariables, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+                        editor.ReplaceNode(variableDeclaration, newBodyStatement);
+
+                    }
+                    else // Move declaration outside if-body
+                    {  
+                        editor.RemoveNode(variableDeclaration);
+                        editor.InsertBefore(ifStatement, new[] { variableDeclaration.WithAdditionalAnnotations(Formatter.Annotation) });   
+                    }
 
                     var newDocument = editor.GetChangedDocument();
                     return newDocument.Project.Solution;

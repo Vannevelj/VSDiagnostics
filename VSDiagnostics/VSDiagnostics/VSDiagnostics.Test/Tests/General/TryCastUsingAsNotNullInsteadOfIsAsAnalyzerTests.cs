@@ -461,7 +461,7 @@ namespace ConsoleApplication1
         void Method()
         {
             object o = 5;
-            int oAsInt = o as int?;
+            int? oAsInt = o as int?;
             if (oAsInt != null)
             {
                 int? x = 10;
