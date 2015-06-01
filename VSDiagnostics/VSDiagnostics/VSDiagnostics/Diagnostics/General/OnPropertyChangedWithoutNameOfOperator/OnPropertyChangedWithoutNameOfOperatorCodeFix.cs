@@ -15,7 +15,6 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
     public class OnPropertyChangedWithoutNameOfOperatorCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(OnPropertyChangedWithoutNameOfOperatorAnalyzer.DiagnosticId);
-
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
         public override async Task RegisterCodeFixesAsync(CodeFixContext context)

@@ -2,14 +2,17 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
-using RoslynTester.Helpers;
+using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember;
 
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class SimplifyExpressionBodiedMemberAnalyzerTests : CodeFixVerifier
+    public class SimplifyExpressionBodiedMemberAnalyzerTests : CSharpCodeFixVerifier
     {
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new SimplifyExpressionBodiedMemberAnalyzer();
+        protected override CodeFixProvider CodeFixProvider => new SimplifyExpressionBodiedMemberCodeFix();
+
         [TestMethod]
         public void SimplifyExpressionBodiedMemberAnalyzer_WithSimpleReturnMethod_InvokesWarning()
         {
@@ -52,8 +55,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, expected);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, expected);
         }
 
         [TestMethod]
@@ -95,8 +98,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, expected);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, expected);
         }
 
         [TestMethod]
@@ -144,8 +147,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, expected);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, expected);
         }
 
         [TestMethod]
@@ -169,7 +172,7 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -190,7 +193,7 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -210,7 +213,7 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -233,7 +236,7 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -250,7 +253,7 @@ namespace ConsoleApplication1
         int MyMethod() => 5;
     }
 }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -267,7 +270,7 @@ namespace ConsoleApplication1
         int MyProperty => 5;
     }
 }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -288,7 +291,7 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -333,8 +336,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, expected);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, expected);
         }
 
         [TestMethod]
@@ -351,17 +354,7 @@ namespace ConsoleApplication1
         int MyProperty { get; set; }
     }
 }";
-            VerifyCSharpDiagnostic(original);
-        }
-
-        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
-        {
-            return new SimplifyExpressionBodiedMemberAnalyzer();
-        }
-
-        protected override CodeFixProvider GetCSharpCodeFixProvider()
-        {
-            return new SimplifyExpressionBodiedMemberCodeFix();
+            VerifyDiagnostic(original);
         }
     }
 }

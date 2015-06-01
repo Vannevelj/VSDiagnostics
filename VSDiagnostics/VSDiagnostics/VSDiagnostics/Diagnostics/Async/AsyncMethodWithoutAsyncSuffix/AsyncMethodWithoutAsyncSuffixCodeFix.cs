@@ -16,7 +16,6 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
     public class AsyncMethodWithoutAsyncSuffixCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(AsyncMethodWithoutAsyncSuffixAnalyzer.DiagnosticId);
-
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
         public override async Task RegisterCodeFixesAsync(CodeFixContext context)

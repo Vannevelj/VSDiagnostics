@@ -2,14 +2,17 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
-using RoslynTester.Helpers;
+using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.IfStatementWithoutBraces;
 
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class IfStatementWithoutBracesAnalyzerTests : CodeFixVerifier
+    public class IfStatementWithoutBracesAnalyzerTests : CSharpCodeFixVerifier
     {
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new IfStatementWithoutBracesAnalyzer();
+        protected override CodeFixProvider CodeFixProvider => new IfStatementWithoutBracesCodeFix();
+
         [TestMethod]
         public void IfStatementWithoutBracesAnalyzer_WithoutBraces_OnSameLine_InvokesWarning()
         {
@@ -58,8 +61,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -110,8 +113,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -163,8 +166,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -187,7 +190,7 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -246,8 +249,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -307,8 +310,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -335,7 +338,7 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -405,18 +408,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic, expectedDiagnostic2);
-            VerifyCSharpFix(original, result);
-        }
-
-        protected override CodeFixProvider GetCSharpCodeFixProvider()
-        {
-            return new IfStatementWithoutBracesCodeFix();
-        }
-
-        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
-        {
-            return new IfStatementWithoutBracesAnalyzer();
+            VerifyDiagnostic(original, expectedDiagnostic, expectedDiagnostic2);
+            VerifyFix(original, result);
         }
     }
 }

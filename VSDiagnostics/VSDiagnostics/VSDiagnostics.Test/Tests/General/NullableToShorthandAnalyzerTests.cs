@@ -2,14 +2,17 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
-using RoslynTester.Helpers;
+using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.NullableToShorthand;
 
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class NullableToShorthandAnalyzerTests : CodeFixVerifier
+    public class NullableToShorthandAnalyzerTests : CSharpCodeFixVerifier
     {
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new NullableToShorthandAnalyzer();
+        protected override CodeFixProvider CodeFixProvider => new NullableToShorthandCodeFix();
+
         [TestMethod]
         public void NullableToShorthandAnalyzer_WithNullableLocal_InvokesWarning()
         {
@@ -55,8 +58,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         [TestMethod]
@@ -106,8 +109,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         [TestMethod]
@@ -155,8 +158,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         [TestMethod]
@@ -204,8 +207,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         [TestMethod]
@@ -255,8 +258,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         [TestMethod]
@@ -281,7 +284,7 @@ namespace ConsoleApplication1
 
         }
     }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -302,7 +305,7 @@ namespace ConsoleApplication1
             }
         }
     }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -322,7 +325,7 @@ namespace ConsoleApplication1
             }
         }
     }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -370,8 +373,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         [TestMethod]
@@ -419,8 +422,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         [TestMethod]
@@ -480,8 +483,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic1, expectedDiagnostic2);
-            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
+            VerifyDiagnostic(original, expectedDiagnostic1, expectedDiagnostic2);
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         [TestMethod]
@@ -529,8 +532,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         [TestMethod]
@@ -578,8 +581,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
         [TestMethod]
@@ -627,18 +630,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result, allowNewCompilerDiagnostics: true);
-        }
-
-        protected override CodeFixProvider GetCSharpCodeFixProvider()
-        {
-            return new NullableToShorthandCodeFix();
-        }
-
-        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
-        {
-            return new NullableToShorthandAnalyzer();
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
     }
 }

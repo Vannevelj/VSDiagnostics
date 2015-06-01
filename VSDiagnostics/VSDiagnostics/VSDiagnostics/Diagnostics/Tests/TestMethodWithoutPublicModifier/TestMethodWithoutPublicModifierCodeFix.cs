@@ -14,7 +14,6 @@ namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
     public class TestMethodWithoutPublicModifierCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(TestMethodWithoutPublicModifierAnalyzer.DiagnosticId);
-
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
         public override async Task RegisterCodeFixesAsync(CodeFixContext context)

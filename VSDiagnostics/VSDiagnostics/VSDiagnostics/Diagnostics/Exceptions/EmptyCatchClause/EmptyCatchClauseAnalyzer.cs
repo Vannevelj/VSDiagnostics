@@ -1,8 +1,8 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Immutable;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using System.Collections.Immutable;
 
 namespace VSDiagnostics.Diagnostics.Exceptions.EmptyCatchClause
 {
@@ -35,7 +35,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.EmptyCatchClause
             {
                 return;
             }
-            
+
             context.ReportDiagnostic(Diagnostic.Create(Rule, catchClause.CatchKeyword.GetLocation()));
         }
     }

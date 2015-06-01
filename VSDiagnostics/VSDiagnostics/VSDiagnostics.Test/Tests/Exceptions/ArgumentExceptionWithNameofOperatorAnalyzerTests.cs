@@ -2,14 +2,17 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
-using RoslynTester.Helpers;
+using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithNameofOperator;
 
 namespace VSDiagnostics.Test.Tests.Exceptions
 {
     [TestClass]
-    public class ArgumentExceptionWithNameofOperatorAnalyzerTests : CodeFixVerifier
+    public class ArgumentExceptionWithNameofOperatorAnalyzerTests : CSharpCodeFixVerifier
     {
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new ArgumentExceptionWithNameofOperatorAnalyzer();
+        protected override CodeFixProvider CodeFixProvider => new ArgumentExceptionWithNameofOperatorCodeFix();
+
         [TestMethod]
         public void ArgumentExceptionWithNameofOperatorAnalyzer_WithArgumentException_WithoutCorrespondingParameter_InvokesWarning()
         {
@@ -55,8 +58,8 @@ namespace VSDiagnostics.Test.Tests.Exceptions
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -104,8 +107,8 @@ namespace VSDiagnostics.Test.Tests.Exceptions
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -153,8 +156,8 @@ namespace VSDiagnostics.Test.Tests.Exceptions
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -202,8 +205,8 @@ namespace VSDiagnostics.Test.Tests.Exceptions
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -251,8 +254,8 @@ namespace VSDiagnostics.Test.Tests.Exceptions
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -273,7 +276,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -294,7 +297,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -317,7 +320,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -385,8 +388,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic, secondExpectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic, secondExpectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -434,8 +437,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -483,18 +486,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
-        }
-
-        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
-        {
-            return new ArgumentExceptionWithNameofOperatorAnalyzer();
-        }
-
-        protected override CodeFixProvider GetCSharpCodeFixProvider()
-        {
-            return new ArgumentExceptionWithNameofOperatorCodeFix();
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
     }
 }

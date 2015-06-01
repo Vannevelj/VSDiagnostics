@@ -2,14 +2,17 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
-using RoslynTester.Helpers;
+using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral;
 
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class CompareBooleanToTrueLiteralAnalyzerTests : CodeFixVerifier
+    public class CompareBooleanToTrueLiteralAnalyzerTests : CSharpCodeFixVerifier
     {
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new CompareBooleanToTrueLiteralAnalyzer();
+        protected override CodeFixProvider CodeFixProvider => new CompareBooleanToTrueLiteralCodeFix();
+
         [TestMethod]
         public void CompareBooleanToTrueLiteralAnalyzer_WithSimpleTrueLiteralComparison_InvokesWarning()
         {
@@ -63,8 +66,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -114,8 +117,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -179,8 +182,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -200,7 +203,7 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -221,7 +224,7 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -244,7 +247,7 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -296,8 +299,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -321,17 +324,7 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyCSharpDiagnostic(original);
-        }
-
-        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
-        {
-            return new CompareBooleanToTrueLiteralAnalyzer();
-        }
-
-        protected override CodeFixProvider GetCSharpCodeFixProvider()
-        {
-            return new CompareBooleanToTrueLiteralCodeFix();
+            VerifyDiagnostic(original);
         }
     }
 }

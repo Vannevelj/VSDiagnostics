@@ -1,14 +1,16 @@
 ﻿using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
-using RoslynTester.Helpers;
+using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Exceptions.EmptyCatchClause;
 
 namespace VSDiagnostics.Test.Tests.Exceptions
 {
     [TestClass]
-    public class EmptyCatchClauseAnalyzerTests : DiagnosticVerifier
+    public class EmptyCatchClauseAnalyzerTests : CSharpDiagnosticVerifier
     {
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new EmptyCatchClauseAnalyzer();
+
         [TestMethod]
         public void EmptyCatchClauseAnalyzer_WithSingleEmptyCatchBlock_InvokesWarning()
         {
@@ -43,7 +45,7 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, expectedDiagnostic);
         }
 
         [TestMethod]
@@ -84,7 +86,7 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, expectedDiagnostic);
         }
 
         [TestMethod]
@@ -153,7 +155,7 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, 
+            VerifyDiagnostic(original,
                 expectedDiagnosticInvalidCastException,
                 expectedDiagnosticArgumentNullException,
                 expectedDiagnosticArgumentException);
@@ -182,12 +184,7 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyCSharpDiagnostic(original);
-        }
-        
-        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
-        {
-            return new EmptyCatchClauseAnalyzer();
+            VerifyDiagnostic(original);
         }
     }
 }
