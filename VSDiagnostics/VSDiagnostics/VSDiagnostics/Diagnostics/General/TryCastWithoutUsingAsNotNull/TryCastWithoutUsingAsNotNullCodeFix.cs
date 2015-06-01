@@ -57,20 +57,27 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                     {
                         // Extract the relevant variable and copy it outside the if-body
                         var extractedDeclarator = variableDeclaration.Declaration.Variables.First(x => x.Identifier.ValueText == asIdentifier);
-                        var newDeclaration = SyntaxFactory.VariableDeclaration(extractedDeclarator.AncestorsAndSelf().OfType<VariableDeclarationSyntax>().First().Type, SyntaxFactory.SeparatedList(new[] { extractedDeclarator }));
-                        var newStatement = SyntaxFactory.LocalDeclarationStatement(SyntaxFactory.TokenList(), newDeclaration, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+                        var newDeclaration = SyntaxFactory.VariableDeclaration(
+                            extractedDeclarator.AncestorsAndSelf().OfType<VariableDeclarationSyntax>().First().Type,
+                            SyntaxFactory.SeparatedList(new[] { extractedDeclarator }));
+                        var newStatement = SyntaxFactory.LocalDeclarationStatement(
+                            SyntaxFactory.TokenList(),
+                            newDeclaration,
+                            SyntaxFactory.Token(SyntaxKind.SemicolonToken));
                         editor.InsertBefore(ifStatement, new[] { newStatement.WithAdditionalAnnotations(Formatter.Annotation) });
 
                         // Rewrite the variable declaration inside the if-body to remove the one we just copied
                         var newVariables = variableDeclaration.Declaration.WithVariables(SyntaxFactory.SeparatedList(variableDeclaration.Declaration.Variables.Except(new[] { extractedDeclarator })));
-                        var newBodyStatement = SyntaxFactory.LocalDeclarationStatement(SyntaxFactory.TokenList(), newVariables, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+                        var newBodyStatement = SyntaxFactory.LocalDeclarationStatement(
+                            SyntaxFactory.TokenList(),
+                            newVariables,
+                            SyntaxFactory.Token(SyntaxKind.SemicolonToken));
                         editor.ReplaceNode(variableDeclaration, newBodyStatement);
-
                     }
                     else // Move declaration outside if-body
-                    {  
+                    {
                         editor.RemoveNode(variableDeclaration);
-                        editor.InsertBefore(ifStatement, new[] { variableDeclaration.WithAdditionalAnnotations(Formatter.Annotation) });   
+                        editor.InsertBefore(ifStatement, new[] { variableDeclaration.WithAdditionalAnnotations(Formatter.Annotation) });
                     }
 
                     var newDocument = editor.GetChangedDocument();
