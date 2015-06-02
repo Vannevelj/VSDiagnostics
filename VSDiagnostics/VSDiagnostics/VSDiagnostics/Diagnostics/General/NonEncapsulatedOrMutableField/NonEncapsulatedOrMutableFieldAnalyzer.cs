@@ -45,11 +45,6 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
 
             foreach (var variable in fieldDeclaration.Declaration.Variables)
             {
-                // Create a new property
-                // Using property naming conventions
-                // Including possible initializers
-                // And attributes
-
                 context.ReportDiagnostic(Diagnostic.Create(Rule, variable.Identifier.GetLocation(), variable.Identifier.ValueText));
             }
         }
