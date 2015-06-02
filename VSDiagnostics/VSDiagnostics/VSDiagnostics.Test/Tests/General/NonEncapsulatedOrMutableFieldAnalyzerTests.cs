@@ -43,12 +43,12 @@ namespace ConsoleApplication1
             var expectedDiagnostic = new DiagnosticResult
             {
                 Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
-                Message = NonEncapsulatedOrMutableFieldAnalyzer.Message,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "x"),
                 Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 0, 0)
+                        new DiagnosticResultLocation("Test0.cs", 9, 22)
                     }
             };
 
@@ -57,7 +57,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableFieldAnalyzer_WithPublicField_AndInlineInitialization_InvokesWarning()
+        public void NonEncapsulatedOrMutableFieldAnalyzer_WithInlineInitialization_InvokesWarning()
         {
             var original = @"
 using System;
@@ -86,12 +86,12 @@ namespace ConsoleApplication1
             var expectedDiagnostic = new DiagnosticResult
             {
                 Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
-                Message = NonEncapsulatedOrMutableFieldAnalyzer.Message,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "x"),
                 Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 0, 0)
+                        new DiagnosticResultLocation("Test0.cs", 9, 20)
                     }
             };
 
@@ -129,12 +129,12 @@ namespace ConsoleApplication1
             var expectedDiagnostic = new DiagnosticResult
             {
                 Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
-                Message = NonEncapsulatedOrMutableFieldAnalyzer.Message,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "x"),
                 Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 0, 0)
+                        new DiagnosticResultLocation("Test0.cs", 9, 20)
                     }
             };
 
@@ -190,12 +190,12 @@ namespace ConsoleApplication1
             var expectedDiagnostic = new DiagnosticResult
             {
                 Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
-                Message = NonEncapsulatedOrMutableFieldAnalyzer.Message,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "x"),
                 Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 0, 0)
+                        new DiagnosticResultLocation("Test0.cs", 9, 32)
                     }
             };
 
@@ -237,6 +237,186 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void NonEncapsulatedOrMutableFieldAnalyzer_WithMultipleDeclarators_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        internal int x, y;
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        internal int X { get; set; };
+        internal int Y { get; set; };
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "x"),
+                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 9, 22)
+                    }
+            };
+
+            var expectedDiagnostic2 = new DiagnosticResult
+            {
+                Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "y"),
+                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 9, 25)
+                    }
+            };
+
+            VerifyDiagnostic(original, expectedDiagnostic, expectedDiagnostic2);
+            //VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void NonEncapsulatedOrMutableFieldAnalyzer_WithMultipleDeclaratorsAndInlineInitialization_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        internal int x = 5, y;
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        internal int X { get; set; } = 5;
+        internal int Y { get; set; };
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "x"),
+                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 9, 22)
+                    }
+            };
+
+            var expectedDiagnostic2 = new DiagnosticResult
+            {
+                Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "y"),
+                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 9, 29)
+                    }
+            };
+
+            VerifyDiagnostic(original, expectedDiagnostic, expectedDiagnostic2);
+            //VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void NonEncapsulatedOrMutableFieldAnalyzer_WithAttribute_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        [MyAttribute]
+        public int x, y;
+    }
+
+    class MyAttribute : Attribute
+    {
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        [MyAttribute]
+        public int X { get; set; }
+        
+        [MyAttribute]
+        public int Y { get; set; }
+    }
+
+    class MyAttribute : Attribute
+    {
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "x"),
+                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 10, 20)
+                    }
+            };
+
+            var expectedDiagnostic2 = new DiagnosticResult
+            {
+                Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "y"),
+                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 10, 23)
+                    }
+            };
+
+            VerifyDiagnostic(original, expectedDiagnostic, expectedDiagnostic2);
+            //VerifyFix(original, result);
         }
     }
 }

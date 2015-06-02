@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
@@ -24,7 +25,33 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            throw new NotImplementedException();
+            var fieldDeclaration = context.Node as FieldDeclarationSyntax;
+            if (fieldDeclaration == null)
+            {
+                return;
+            }
+
+            // Don't handle (semi-)immutable fields
+            if (fieldDeclaration.Modifiers.Any(x => x.IsKind(SyntaxKind.ConstKeyword) || x.IsKind(SyntaxKind.ReadOnlyKeyword)))
+            {
+                return;
+            }
+
+            // Only handle public, internal and protected internal fields
+            if (!fieldDeclaration.Modifiers.Any(x => x.IsKind(SyntaxKind.PublicKeyword) || x.IsKind(SyntaxKind.InternalKeyword)))
+            {
+                return;
+            }
+
+            foreach (var variable in fieldDeclaration.Declaration.Variables)
+            {
+                // Create a new property
+                // Using property naming conventions
+                // Including possible initializers
+                // And attributes
+
+                context.ReportDiagnostic(Diagnostic.Create(Rule, variable.Identifier.GetLocation(), variable.Identifier.ValueText));
+            }
         }
     }
 }
