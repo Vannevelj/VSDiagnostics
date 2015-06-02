@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace VSDiagnostics.Utilities
 {
@@ -23,6 +26,57 @@ namespace VSDiagnostics.Utilities
             }
 
             return false;
+        }
+
+        public static IdentifierNameSyntax WithConvention(this IdentifierNameSyntax identifier, NamingConvention namingConvention)
+        {
+            // int @class = 5;
+            if(identifier.Identifier.IsVerbatimIdentifier())
+            {
+                return identifier;
+            }
+
+            // int cl\u0061ss = 5;
+            if (identifier.Identifier.Text.Contains("\\"))
+            {
+                return identifier;
+            }
+
+            var originalValue = identifier.Identifier.ValueText;
+            string newValue;
+
+            switch (namingConvention)
+            {
+                case NamingConvention.LowerCamelCase:
+                    newValue = GetLowerCamelCaseIdentifier(originalValue);
+                    break;
+                case NamingConvention.UpperCamelCase:
+                    newValue = GetUpperCamelCaseIdentifier(originalValue);
+                    break;
+                case NamingConvention.UnderscoreLowerCamelCase:
+                    newValue = GetUnderscoreLowerCamelCaseIdentifier(originalValue);
+                    break;
+                default:
+                    throw new ArgumentException(nameof(namingConvention));
+            }
+
+            var newIdentifier = SyntaxFactory.Identifier(identifier.GetLeadingTrivia(), newValue, identifier.GetTrailingTrivia());
+            return SyntaxFactory.IdentifierName(newIdentifier);
+        }
+
+        private static string GetLowerCamelCaseIdentifier(string identifier)
+        {
+            return identifier[0].ToString().ToLower() + identifier.Substring(1);  
+        }
+
+        private static string GetUpperCamelCaseIdentifier(string identifier)
+        {
+            return identifier[0].ToString().ToUpper() + identifier.Substring(1);
+        }
+
+        private static string GetUnderscoreLowerCamelCaseIdentifier(string identifier)
+        {
+            return "_" + identifier[0].ToString().ToLower() + identifier.Substring(1);
         }
     }
 }
