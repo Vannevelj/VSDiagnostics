@@ -28,21 +28,21 @@ namespace VSDiagnostics.Utilities
             return false;
         }
 
-        public static IdentifierNameSyntax WithConvention(this IdentifierNameSyntax identifier, NamingConvention namingConvention)
+        public static SyntaxToken WithConvention(this SyntaxToken identifier, NamingConvention namingConvention)
         {
             // int @class = 5;
-            if(identifier.Identifier.IsVerbatimIdentifier())
+            if(identifier.IsVerbatimIdentifier())
             {
                 return identifier;
             }
 
             // int cl\u0061ss = 5;
-            if (identifier.Identifier.Text.Contains("\\"))
+            if (identifier.Text.Contains("\\"))
             {
                 return identifier;
             }
 
-            var originalValue = identifier.Identifier.ValueText;
+            var originalValue = identifier.ValueText;
             string newValue;
 
             switch (namingConvention)
@@ -60,8 +60,7 @@ namespace VSDiagnostics.Utilities
                     throw new ArgumentException(nameof(namingConvention));
             }
 
-            var newIdentifier = SyntaxFactory.Identifier(identifier.GetLeadingTrivia(), newValue, identifier.GetTrailingTrivia());
-            return SyntaxFactory.IdentifierName(newIdentifier);
+            return SyntaxFactory.Identifier(identifier.LeadingTrivia, newValue, identifier.TrailingTrivia);
         }
 
         private static string GetLowerCamelCaseIdentifier(string identifier)

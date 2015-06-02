@@ -11,6 +11,7 @@ namespace VSDiagnostics.Utilities
     {
         UpperCamelCase,
         LowerCamelCase,
-        UnderscoreLowerCamelCase
+        UnderscoreLowerCamelCase,
+        InterfacePrefixUpperCamelCase
     }
 }

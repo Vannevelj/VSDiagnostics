@@ -48,7 +48,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 12, 30)
+                        new DiagnosticResultLocation("Test0.cs", 9, 21)
                     }
             };
 
@@ -91,7 +91,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 12, 30)
+                        new DiagnosticResultLocation("Test0.cs", 12, 20)
                     }
             };
 
@@ -134,7 +134,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 12, 30)
+                        new DiagnosticResultLocation("Test0.cs", 9, 20)
                     }
             };
 
@@ -177,7 +177,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 12, 30)
+                        new DiagnosticResultLocation("Test0.cs", 9, 23)
                     }
             };
 
@@ -220,7 +220,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 12, 30)
+                        new DiagnosticResultLocation("Test0.cs", 9, 22)
                     }
             };
 
@@ -263,7 +263,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 12, 30)
+                        new DiagnosticResultLocation("Test0.cs", 9, 32)
                     }
             };
 
@@ -306,7 +306,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 12, 30)
+                        new DiagnosticResultLocation("Test0.cs", 9, 20)
                     }
             };
 
@@ -353,7 +353,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 12, 30)
+                        new DiagnosticResultLocation("Test0.cs", 9, 14)
                     }
             };
 
@@ -394,7 +394,7 @@ namespace ConsoleApplication1
                 Locations =
                     new[]
                     {
-                        new DiagnosticResultLocation("Test0.cs", 12, 30)
+                        new DiagnosticResultLocation("Test0.cs", 7, 11)
                     }
             };
 
@@ -612,6 +612,422 @@ namespace ConsoleApplication1
             };
 
             VerifyDiagnostic(original, expectedDiagnostic);
+            //VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithMultipleFields_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int X, Y;
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int _x, _y;
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = NamingConventionsAnalyzer.DiagnosticId,
+                Message = string.Format(NamingConventionsAnalyzer.Message, "field", "X", "_x"),
+                Severity = NamingConventionsAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 9, 21)
+                    }
+            };
+
+            var expectedDiagnostic2 = new DiagnosticResult
+            {
+                Id = NamingConventionsAnalyzer.DiagnosticId,
+                Message = string.Format(NamingConventionsAnalyzer.Message, "field", "Y", "_y"),
+                Severity = NamingConventionsAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 9, 24)
+                    }
+            };
+
+            VerifyDiagnostic(original, expectedDiagnostic, expectedDiagnostic2);
+            //VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithPrivateField_FollowingConventions_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int _x;
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithProtectedField_FollowingConventions_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        protected int X;
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithInternalField_FollowingConventions_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        internal int X;
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithPublicField_FollowingConventions_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public int X;
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithInternalProtectedField_FollowingConventions_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        internal protected int X;
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithProperty_FollowingConventions_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int X { get; set; }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithMethod_FollowingConventions_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithClass_FollowingConventions_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithInterface_FollowingConventions_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    interface ISomething
+    {
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithLocalVariable_FollowingConventions_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            string myVar = string.Empty;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithParameter_FollowingConventions_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(string param)
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithVerbatimIdentifier_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public int @class;
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithEscapedIdentifier_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public int \u0061ss;
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithMultipleDifferentTypes_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        internal int x;
+        
+        void method()
+        {
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        internal int X;
+        
+        void Method()
+        {
+        }
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = NamingConventionsAnalyzer.DiagnosticId,
+                Message = string.Format(NamingConventionsAnalyzer.Message, "field", "x", "X"),
+                Severity = NamingConventionsAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 9, 22)
+                    }
+            };
+
+            var expectedDiagnostic2 = new DiagnosticResult
+            {
+                Id = NamingConventionsAnalyzer.DiagnosticId,
+                Message = string.Format(NamingConventionsAnalyzer.Message, "method", "method", "Method"),
+                Severity = NamingConventionsAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 11, 14)
+                    }
+            };
+
+            VerifyDiagnostic(original, expectedDiagnostic, expectedDiagnostic2);
+            //VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithMultipleSimilarTypes_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int X, Y;
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int x, y;
+        }
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = NamingConventionsAnalyzer.DiagnosticId,
+                Message = string.Format(NamingConventionsAnalyzer.Message, "local", "X", "x"),
+                Severity = NamingConventionsAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 11, 17)
+                    }
+            };
+
+            var expectedDiagnostic2 = new DiagnosticResult
+            {
+                Id = NamingConventionsAnalyzer.DiagnosticId,
+                Message = string.Format(NamingConventionsAnalyzer.Message, "local", "Y", "y"),
+                Severity = NamingConventionsAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 11, 20)
+                    }
+            };
+
+            VerifyDiagnostic(original, expectedDiagnostic, expectedDiagnostic2);
             //VerifyFix(original, result);
         }
     }
