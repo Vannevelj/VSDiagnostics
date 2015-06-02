@@ -134,7 +134,7 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             var nodeAsParameter = context.Node as ParameterSyntax;
             if (nodeAsParameter != null)
             {
-                var conventionedIdentifier = nodeAsParameter.Identifier.WithConvention(NamingConvention.InterfacePrefixUpperCamelCase);
+                var conventionedIdentifier = nodeAsParameter.Identifier.WithConvention(NamingConvention.LowerCamelCase);
                 if (conventionedIdentifier.Text != nodeAsParameter.Identifier.Text)
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, nodeAsParameter.Identifier.GetLocation(), "parameter", nodeAsParameter.Identifier.Text, conventionedIdentifier.Text));
