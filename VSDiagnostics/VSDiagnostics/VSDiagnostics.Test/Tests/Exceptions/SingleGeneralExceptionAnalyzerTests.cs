@@ -1,14 +1,16 @@
 ﻿using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
-using RoslynTester.Helpers;
+using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Exceptions.SingleGeneralException;
 
 namespace VSDiagnostics.Test.Tests.Exceptions
 {
     [TestClass]
-    public class SingleGeneralExceptionAnalyzerTests : DiagnosticVerifier
+    public class SingleGeneralExceptionAnalyzerTests : CSharpDiagnosticVerifier
     {
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new SingleGeneralExceptionAnalyzer();
+
         [TestMethod]
         public void SingleGeneralExceptionAnalyzer_WithSingleGeneralException_InvokesWarning()
         {
@@ -44,7 +46,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
                 }
             };
 
-            VerifyCSharpDiagnostic(test, expectedDiagnostic);
+            VerifyDiagnostic(test, expectedDiagnostic);
         }
 
         [TestMethod]
@@ -71,7 +73,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            VerifyCSharpDiagnostic(test);
+            VerifyDiagnostic(test);
         }
 
         [TestMethod]
@@ -98,7 +100,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            VerifyCSharpDiagnostic(test);
+            VerifyDiagnostic(test);
         }
 
         [TestMethod]
@@ -129,12 +131,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            VerifyCSharpDiagnostic(test);
-        }
-
-        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
-        {
-            return new SingleGeneralExceptionAnalyzer();
+            VerifyDiagnostic(test);
         }
     }
 }

@@ -19,36 +19,42 @@ namespace VSDiagnostics.Diagnostics.General.IfStatementWithoutBraces
 
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.IfStatement);
+            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.IfStatement, SyntaxKind.ElseClause);
         }
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var ifStatement = context.Node as IfStatementSyntax;
-            if (ifStatement == null)
+            if (ifStatement != null)
             {
-                return;
+                HandleIf(context, ifStatement);
             }
 
-            var hasElseStatement = ifStatement.Else != null;
-
-            if (ifStatement.Statement is BlockSyntax && !hasElseStatement)
+            var elseClause = context.Node as ElseClauseSyntax;
+            if (elseClause != null)
             {
-                return; // If is correct and there's no else
+                HandleElse(context, elseClause);
             }
+        }
 
-            if (ifStatement.Statement is BlockSyntax && ifStatement.Else.Statement is BlockSyntax)
-            {
-                return; // Both are a block
-            }
-
+        private void HandleIf(SyntaxNodeAnalysisContext context, IfStatementSyntax ifStatement)
+        {
             if (ifStatement.Statement is BlockSyntax)
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, ifStatement.Else.ElseKeyword.GetLocation()));
                 return;
             }
 
             context.ReportDiagnostic(Diagnostic.Create(Rule, ifStatement.IfKeyword.GetLocation()));
+        }
+
+        private void HandleElse(SyntaxNodeAnalysisContext context, ElseClauseSyntax elseClause)
+        {
+            if (elseClause.Statement is BlockSyntax)
+            {
+                return;
+            }
+
+            context.ReportDiagnostic(Diagnostic.Create(Rule, elseClause.ElseKeyword.GetLocation()));
         }
     }
 }

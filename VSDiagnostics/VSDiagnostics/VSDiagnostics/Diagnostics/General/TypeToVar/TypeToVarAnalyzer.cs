@@ -25,26 +25,35 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var localDeclaration = context.Node as LocalDeclarationStatementSyntax;
+            if (localDeclaration == null)
+            {
+                return;
+            }
 
-            if (localDeclaration == null || localDeclaration.Declaration.Type.IsVar)
+            if (localDeclaration.Declaration == null)
+            {
+                return;
+            }
+
+            var declaredType = localDeclaration.Declaration.Type;
+            if (declaredType.IsVar)
             {
                 return;
             }
 
             // can't have more than one implicitly-typed variable in a statement
             var variable = localDeclaration.Declaration.Variables.FirstOrDefault();
-
             if (variable == null || variable.Initializer == null)
             {
                 return;
             }
 
-            var variableType = context.SemanticModel.GetTypeInfo(localDeclaration.Declaration.Type).Type;
+            var variableType = context.SemanticModel.GetTypeInfo(declaredType).Type;
             var initializerType = context.SemanticModel.GetTypeInfo(variable.Initializer.Value).Type;
 
             if (Equals(variableType, initializerType))
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, localDeclaration.Declaration.Type.GetLocation()));
+                context.ReportDiagnostic(Diagnostic.Create(Rule, declaredType.GetLocation()));
             }
         }
     }

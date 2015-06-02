@@ -2,14 +2,17 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
-using RoslynTester.Helpers;
+using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.IfStatementWithoutBraces;
 
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class IfStatementWithoutBracesAnalyzerTests : CodeFixVerifier
+    public class IfStatementWithoutBracesAnalyzerTests : CSharpCodeFixVerifier
     {
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new IfStatementWithoutBracesAnalyzer();
+        protected override CodeFixProvider CodeFixProvider => new IfStatementWithoutBracesCodeFix();
+
         [TestMethod]
         public void IfStatementWithoutBracesAnalyzer_WithoutBraces_OnSameLine_InvokesWarning()
         {
@@ -58,8 +61,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -110,8 +113,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -163,8 +166,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -187,7 +190,7 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -246,8 +249,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -307,8 +310,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -335,17 +338,78 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider()
+        [TestMethod]
+        public void IfStatementWithoutBracesAnalyzer_IfAndElseWithoutBraces_InvokesWarning()
         {
-            return new IfStatementWithoutBracesCodeFix();
-        }
+            var original = @"
+using System;
+using System.Text;
 
-        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
         {
-            return new IfStatementWithoutBracesAnalyzer();
+            if(true)
+                Console.WriteLine(""true"");
+            else
+                Console.WriteLine(""false"");
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            if(true)
+            {
+                Console.WriteLine(""true"");
+            }
+            else
+            {
+                Console.WriteLine(""false"");
+            }
+        }
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
+                Message = IfStatementWithoutBracesAnalyzer.Message,
+                Severity = IfStatementWithoutBracesAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 11, 13)
+                    }
+            };
+
+            var expectedDiagnostic2 = new DiagnosticResult
+            {
+                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
+                Message = IfStatementWithoutBracesAnalyzer.Message,
+                Severity = IfStatementWithoutBracesAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 13, 13)
+                    }
+            };
+
+            VerifyDiagnostic(original, expectedDiagnostic, expectedDiagnostic2);
+            VerifyFix(original, result);
         }
     }
 }

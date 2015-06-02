@@ -71,7 +71,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="RoslynTester, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\RoslynTester.1.0.0-rc2\lib\RoslynTester.dll</HintPath>
+      <HintPath>..\..\packages\RoslynTester.1.1.0-rc2\lib\RoslynTester.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -115,6 +115,7 @@
     <Compile Include="Tests\Exceptions\ArgumentExceptionWithNameofOperatorAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\CatchNullReferenceExceptionAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\EmptyArgumentExceptionAnalyzerTests.cs" />
+    <Compile Include="Tests\Exceptions\EmptyCatchClauseAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\RethrowExceptionWithoutLosingStracktraceAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\SingleGeneralExceptionAnalyzerTests.cs" />
     <Compile Include="Tests\General\PrivateSetAutoPropertyCanUseReadOnlyAutoPropertyTests.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Tests\General\NullableToShorthandAnalyzerTests.cs" />
     <Compile Include="Tests\General\OnPropertyChangedWithoutNameOfOperatorAnalyzerTests.cs" />
     <Compile Include="Tests\General\SimplifyExpressionBodiedMemberAnalyzerTests.cs" />
+    <Compile Include="Tests\General\TryCastUsingAsNotNullInsteadOfIsAsAnalyzerTests.cs" />
     <Compile Include="Tests\General\TypeToVarAnalyzerTests.cs" />
     <Compile Include="Tests\Strings\ReplaceEmptyStringWithStringDotEmptyTests.cs" />
     <Compile Include="Tests\Tests\TestMethodWithoutPublicModifierAnalyzerTests.cs" />

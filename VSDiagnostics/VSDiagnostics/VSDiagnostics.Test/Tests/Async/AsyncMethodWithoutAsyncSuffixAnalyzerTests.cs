@@ -2,15 +2,18 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
-using RoslynTester.Helpers;
+using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix;
 using VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentException;
 
 namespace VSDiagnostics.Test.Tests.Async
 {
     [TestClass]
-    public class AsyncMethodWithoutAsyncSuffixAnalyzerTests : CodeFixVerifier
+    public class AsyncMethodWithoutAsyncSuffixAnalyzerTests : CSharpCodeFixVerifier
     {
+        protected override CodeFixProvider CodeFixProvider => new AsyncMethodWithoutAsyncSuffixCodeFix();
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new AsyncMethodWithoutAsyncSuffixAnalyzer();
+
         [TestMethod]
         public void AsyncMethodWithoutAsyncSuffixAnalyzer_WithAsyncKeywordAndNoSuffix_InvokesWarning()
         {
@@ -58,8 +61,8 @@ namespace VSDiagnostics.Test.Tests.Async
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, result);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -80,7 +83,7 @@ namespace VSDiagnostics.Test.Tests.Async
             }
         }
     }";
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -101,17 +104,7 @@ namespace VSDiagnostics.Test.Tests.Async
             }
         }
     }";
-            VerifyCSharpDiagnostic(original);
-        }
-
-        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
-        {
-            return new AsyncMethodWithoutAsyncSuffixAnalyzer();
-        }
-
-        protected override CodeFixProvider GetCSharpCodeFixProvider()
-        {
-            return new AsyncMethodWithoutAsyncSuffixCodeFix();
+            VerifyDiagnostic(original);
         }
     }
 }

@@ -1,14 +1,16 @@
 ﻿using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
-using RoslynTester.Helpers;
+using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Exceptions.CatchNullReferenceException;
 
 namespace VSDiagnostics.Test.Tests.Exceptions
 {
     [TestClass]
-    public class CatchNullReferenceExceptionAnalyzerTests : DiagnosticVerifier
+    public class CatchNullReferenceExceptionAnalyzerTests : CSharpDiagnosticVerifier
     {
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new CatchNullReferenceExceptionAnalyzer();
+
         [TestMethod]
         public void CatchNullReferenceExceptionAnalyzer_WithNullReferenceCatchClause_InvokesWarning()
         {
@@ -44,7 +46,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
                 }
             };
 
-            VerifyCSharpDiagnostic(test, expectedDiagnostic);
+            VerifyDiagnostic(test, expectedDiagnostic);
         }
 
         [TestMethod]
@@ -71,7 +73,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            VerifyCSharpDiagnostic(test);
+            VerifyDiagnostic(test);
         }
 
         [TestMethod]
@@ -98,12 +100,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            VerifyCSharpDiagnostic(test);
-        }
-
-        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
-        {
-            return new CatchNullReferenceExceptionAnalyzer();
+            VerifyDiagnostic(test);
         }
     }
 }

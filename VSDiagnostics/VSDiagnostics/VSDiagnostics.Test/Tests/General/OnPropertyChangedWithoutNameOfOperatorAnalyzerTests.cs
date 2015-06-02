@@ -2,14 +2,17 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.DiagnosticResults;
-using RoslynTester.Helpers;
+using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperator;
 
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class OnPropertyChangedWithoutNameOfOperatorAnalyzerTests : CodeFixVerifier
+    public class OnPropertyChangedWithoutNameOfOperatorAnalyzerTests : CSharpCodeFixVerifier
     {
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new OnPropertyChangedWithoutNameOfOperatorAnalyzer();
+        protected override CodeFixProvider CodeFixProvider => new OnPropertyChangedWithoutNameOfOperatorCodeFix();
+
         [TestMethod]
         public void OnPropertyChangedWithoutNameOfOperator_WithIdenticalString_InvokesWarning()
         {
@@ -93,8 +96,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, expected);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, expected);
         }
 
         [TestMethod]
@@ -180,8 +183,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, expected);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, expected);
         }
 
         [TestMethod]
@@ -221,7 +224,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -329,8 +332,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, expected);
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, expected);
         }
 
         [TestMethod]
@@ -370,7 +373,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyCSharpDiagnostic(original);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -456,18 +459,8 @@ namespace ConsoleApplication1
                     }
             };
 
-            VerifyCSharpDiagnostic(original, expectedDiagnostic);
-            VerifyCSharpFix(original, expected);
-        }
-
-        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
-        {
-            return new OnPropertyChangedWithoutNameOfOperatorAnalyzer();
-        }
-
-        protected override CodeFixProvider GetCSharpCodeFixProvider()
-        {
-            return new OnPropertyChangedWithoutNameOfOperatorCodeFix();
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, expected);
         }
     }
 }

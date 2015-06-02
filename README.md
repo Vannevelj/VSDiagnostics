@@ -24,6 +24,7 @@ Currently these diagnostics are implemented:
 | Exceptions  | CatchNullReferenceException  | Guards against catching a NullReferenceException.  | Yes   | No   |
 | Exceptions | ArgumentExceptionWithNameofOperator | `ArgumentException` and its subclasses should use `nameof()` when they refer to a method parameter. | Yes | Yes |
 | Exceptions | RethrowExceptionWithoutLosingStacktrace | Warns when an exception is rethrown in a way that it loses the stacktrace. | Yes | Yes |
+| Exceptions | EmptyCatchClause | Warns when an exception catch block is empty. | Yes | No |
 | Async | AsyncMethodWithoutAsyncSuffix | Asynchronous methods should end with -Async. | Yes | Yes |
 | Strings | ReplaceEmptyStringWithStringDotEmpty | Use `string.Empty` instead of `""`. | Yes | Yes |
 | Tests | TestMethodWithoutPublicModifier | Change the access modifier to `public` for all methods annotated as test. Supports NUnit, MSTest and xUnit.net. | Yes | Yes |
@@ -34,6 +35,7 @@ Currently these diagnostics are implemented:
 | General | TypeToVar | Use `var` instead of an explicit type. | Yes | Yes |
 | General | OnPropertyChangedWithoutNameOfOperator | Use the `nameof()` operator in conjunction with `OnPropertyChanged` | Yes | Yes |
 | General | SimplifyExpressionBodiedMember | Simplify the expression using an expression-bodied member. | Yes | Yes |
+| General | TryCastWithoutUsingAsNotNull | A conversion can be done using `as` + a `null` comparison | Yes | Yes |
 
 ## How do I use this?
 
