@@ -4,6 +4,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
 
 
 namespace VSDiagnostics.Diagnostics.General.PrivateSetAutoPropertyCanBeReadOnlyAutoProperty
@@ -19,9 +21,11 @@ namespace VSDiagnostics.Diagnostics.General.PrivateSetAutoPropertyCanBeReadOnlyA
         internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
+        private List<SyntaxToken> _tokens = new List<SyntaxToken>();
+
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.PropertyDeclaration, SyntaxKind.ConstructorDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.PropertyDeclaration);
         }
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
@@ -34,40 +38,41 @@ namespace VSDiagnostics.Diagnostics.General.PrivateSetAutoPropertyCanBeReadOnlyA
                 diagnostic = HandleProperty(asProperty);
             }
 
-            var asConstructor = context.Node as ConstructorDeclarationSyntax;
-            if (asConstructor != null)
-            {
-                diagnostic = HandleConstructor(asConstructor);
-            }
-
-            //var asMethod = context.Node as MethodDeclarationSyntax;
-            //if (asMethod != null)
-            //{
-            //    diagnostic = HandleMethod(asMethod);
-            //}
-
             if (diagnostic != null)
             {
                 context.ReportDiagnostic(diagnostic);
             }
         }
 
-        private Diagnostic HandleConstructor(ConstructorDeclarationSyntax asConstructor)
+        private Diagnostic HandleProperty(PropertyDeclarationSyntax propertyDeclaration)
         {
-            // throw new NotImplementedException();
+    
+            var setter = propertyDeclaration.AccessorList.Accessors.FirstOrDefault(s => s.IsKind(SyntaxKind.SetAccessorDeclaration) 
+                                                                                    && s.Modifiers.Any(m => m.IsKind(SyntaxKind.PrivateKeyword)));
+            if (setter != null)
+            {
+                if ( !TreeHasMethodsThatSetProperty(propertyDeclaration) )
+                {
+                    return Diagnostic.Create(Rule, setter.GetLocation(), "Property Setter", propertyDeclaration.Identifier);
+                }
+            }
+
             return null;
         }
 
-        private Diagnostic HandleProperty(PropertyDeclarationSyntax propertyDeclaration)
+        private static bool TreeHasMethodsThatSetProperty(PropertyDeclarationSyntax propertyDeclaration)
         {
-            if (propertyDeclaration.ExpressionBody != null)
-            {
-                return null;
-            }
-
-            var setter = propertyDeclaration.AccessorList.Accessors;
-
-            return null;
+            var root = propertyDeclaration.SyntaxTree.GetRoot();
+            var assignments = root.DescendantNodes().OfType<AssignmentExpressionSyntax>();
+                                
+            return assignments.Select(a => a.Left)
+                                .Cast<MemberAccessExpressionSyntax>()
+                                .Select(l => l.Name.Identifier)
+                                .Any
+                                (
+                                    i => i.Text == propertyDeclaration.Identifier.Text
+                                    && i.Parent.Ancestors().All(anc => anc.GetType() != typeof(ConstructorDeclarationSyntax))
+                                );
         }
     }
 }
