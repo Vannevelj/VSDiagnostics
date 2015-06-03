@@ -57,4 +57,8 @@ Definitely! Take a look at the open issues and see if there's anything that inte
 
 If you think you're going to make larger changes than a single implementation then we would ask you to get in contact with us first so we can discuss it and prevent unneeded work.
 
-You'll need the [Visual Studio 2015 Release Candidate](https://www.visualstudio.com/en-us/downloads/visual-studio-2015-downloads-vs.aspx) and [the SDK](https://www.microsoft.com/en-us/download/details.aspx?id=46850) to get started.
+You'll need the [Visual Studio 2015 Release Candidate](https://www.visualstudio.com/en-us/downloads/visual-studio-2015-downloads-vs.aspx) and [the SDK](https://www.microsoft.com/en-us/download/details.aspx?id=46850) to get started. 
+
+In order to build the project, make sure you add the Roslyn Nightly builds as a NuGet package source or it won't be able to pull the RC3 versions of packages we use.
+
+https://www.myget.org/gallery/roslyn-nightly
