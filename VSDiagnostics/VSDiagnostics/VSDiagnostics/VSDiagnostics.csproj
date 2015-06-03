@@ -48,6 +48,7 @@
     <Compile Include="Diagnostics\General\ConditionalOperatorReturnsDefaultOptions\ConditionalOperatorReturnsDefaultOptionsCodeFix.cs" />
     <Compile Include="Diagnostics\General\IfStatementWithoutBraces\IfStatementWithoutBracesAnalyzer.cs" />
     <Compile Include="Diagnostics\General\IfStatementWithoutBraces\IfStatementWithoutBracesCodeFix.cs" />
+    <Compile Include="Diagnostics\General\NamingConventions\NamingConventionExtensions.cs" />
     <Compile Include="Diagnostics\General\NonEncapsulatedOrMutableField\NonEncapsulatedOrMutableFieldAnalyzer.cs" />
     <Compile Include="Diagnostics\General\NonEncapsulatedOrMutableField\NonEncapsulatedOrMutableFieldCodeFix.cs" />
     <Compile Include="Diagnostics\General\NamingConventions\NamingConventionsAnalyzer.cs" />

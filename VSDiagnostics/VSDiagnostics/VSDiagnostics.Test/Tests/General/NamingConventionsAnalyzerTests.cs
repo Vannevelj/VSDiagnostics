@@ -403,7 +403,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithInterface_WithoutPrefix_InvokesWarning()
+        public void NamingConventionsAnalyzer_WithInterface_WithoutPrefix_AndLowerFirstLetter_InvokesWarning()
         {
             var original = @"
 using System;
@@ -513,6 +513,170 @@ namespace ConsoleApplication1
             {
                 Id = NamingConventionsAnalyzer.DiagnosticId,
                 Message = string.Format(NamingConventionsAnalyzer.Message, "interface", "iSomething", "ISomething"),
+                Severity = NamingConventionsAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 7, 15)
+                    }
+            };
+
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithInterface_WithoutPrefix_AndCapitalFirstLetter_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    interface Something
+    {
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    interface ISomething
+    {
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = NamingConventionsAnalyzer.DiagnosticId,
+                Message = string.Format(NamingConventionsAnalyzer.Message, "interface", "Something", "ISomething"),
+                Severity = NamingConventionsAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 7, 15)
+                    }
+            };
+
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithInterface_WithUnderscore_InMiddle_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    interface Cow_milker
+    {
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    interface ICowMilker
+    {
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = NamingConventionsAnalyzer.DiagnosticId,
+                Message = string.Format(NamingConventionsAnalyzer.Message, "interface", "Cow_milker", "ICowMilker"),
+                Severity = NamingConventionsAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 7, 15)
+                    }
+            };
+
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithInterface_WithUnderscore_AtFront_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    interface _Something
+    {
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    interface ISomething
+    {
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = NamingConventionsAnalyzer.DiagnosticId,
+                Message = string.Format(NamingConventionsAnalyzer.Message, "interface", "_Something", "ISomething"),
+                Severity = NamingConventionsAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 7, 15)
+                    }
+            };
+
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithInterface_WithUnderscore_AtBack_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    interface Something_
+    {
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    interface ISomething
+    {
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = NamingConventionsAnalyzer.DiagnosticId,
+                Message = string.Format(NamingConventionsAnalyzer.Message, "interface", "Something_", "ISomething"),
                 Severity = NamingConventionsAnalyzer.Severity,
                 Locations =
                     new[]

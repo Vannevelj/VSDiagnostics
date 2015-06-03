@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
+using VSDiagnostics.Diagnostics.General.NamingConventions;
 using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
