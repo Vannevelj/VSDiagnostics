@@ -26,10 +26,10 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Use property", x => UseProperty(context.Document, root, statement)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Use property", x => UsePropertyAsync(context.Document, root, statement)), diagnostic);
         }
 
-        private async Task<Solution> UseProperty(Document document, SyntaxNode root, SyntaxNode statement)
+        private async Task<Solution> UsePropertyAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             // Create a new property
             // Using property naming conventions

@@ -25,10 +25,10 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Use as", x => UseAs(context.Document, root, statement)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Use as", x => UseAsAsync(context.Document, root, statement)), diagnostic);
         }
 
-        private async Task<Solution> UseAs(Document document, SyntaxNode root, SyntaxNode statement)
+        private async Task<Solution> UseAsAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var isExpression = (BinaryExpressionSyntax) statement;
             var ifStatement = statement.AncestorsAndSelf().OfType<IfStatementSyntax>().First();

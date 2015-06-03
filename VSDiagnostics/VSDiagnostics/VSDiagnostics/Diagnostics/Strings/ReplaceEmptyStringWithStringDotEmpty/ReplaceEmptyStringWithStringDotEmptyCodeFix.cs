@@ -23,10 +23,10 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var literalDeclaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<LiteralExpressionSyntax>().First();
-            context.RegisterCodeFix(CodeAction.Create("Use string.Empty", x => UseStringDotEmpty(context.Document, root, literalDeclaration)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Use string.Empty", x => UseStringDotEmptyAsync(context.Document, root, literalDeclaration)), diagnostic);
         }
 
-        private static Task<Solution> UseStringDotEmpty(Document document, SyntaxNode root, LiteralExpressionSyntax literalDeclaration)
+        private static Task<Solution> UseStringDotEmptyAsync(Document document, SyntaxNode root, LiteralExpressionSyntax literalDeclaration)
         {
             var stringDotEmptyInvocation = SyntaxFactory.ParseExpression("string.Empty");
             var newRoot = root.ReplaceNode(literalDeclaration, stringDotEmptyInvocation);

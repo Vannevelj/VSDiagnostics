@@ -24,10 +24,10 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var argumentDeclaration = root.FindNode(diagnosticSpan).AncestorsAndSelf().OfType<ArgumentSyntax>().FirstOrDefault();
-            context.RegisterCodeFix(CodeAction.Create("Use nameof", x => UseNameOf(context.Document, root, argumentDeclaration)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Use nameof", x => UseNameOfAsync(context.Document, root, argumentDeclaration)), diagnostic);
         }
 
-        private Task<Solution> UseNameOf(Document document, SyntaxNode root, ArgumentSyntax argumentDeclaration)
+        private Task<Solution> UseNameOfAsync(Document document, SyntaxNode root, ArgumentSyntax argumentDeclaration)
         {
             var properties = argumentDeclaration.Ancestors().OfType<ClassDeclarationSyntax>().First().ChildNodes().OfType<PropertyDeclarationSyntax>();
             foreach (var property in properties)

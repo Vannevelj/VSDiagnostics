@@ -24,10 +24,10 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var declaration = root.FindToken(diagnosticSpan.Start);
-            context.RegisterCodeFix(CodeAction.Create("Use shorthand notation", x => UseShorthandNotation(context.Document, root, declaration)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Use shorthand notation", x => UseShorthandNotationAsync(context.Document, root, declaration)), diagnostic);
         }
 
-        private static async Task<Solution> UseShorthandNotation(Document document, SyntaxNode root, SyntaxToken declaration)
+        private static async Task<Solution> UseShorthandNotationAsync(Document document, SyntaxNode root, SyntaxToken declaration)
         {
             var node = root.FindNode(declaration.Span);
             var typeNode = (GenericNameSyntax) node;

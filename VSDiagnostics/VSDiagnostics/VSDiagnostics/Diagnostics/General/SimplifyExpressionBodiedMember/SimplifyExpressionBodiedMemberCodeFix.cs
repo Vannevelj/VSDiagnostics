@@ -23,10 +23,10 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Use expression bodied member", x => UseExpressionBodiedMember(context.Document, root, statement)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Use expression bodied member", x => UseExpressionBodiedMemberAsync(context.Document, root, statement)), diagnostic);
         }
 
-        private Task<Solution> UseExpressionBodiedMember(Document document, SyntaxNode root, SyntaxNode statement)
+        private Task<Solution> UseExpressionBodiedMemberAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var returnStatement = (ReturnStatementSyntax) statement;
             var expression = returnStatement.Expression;
