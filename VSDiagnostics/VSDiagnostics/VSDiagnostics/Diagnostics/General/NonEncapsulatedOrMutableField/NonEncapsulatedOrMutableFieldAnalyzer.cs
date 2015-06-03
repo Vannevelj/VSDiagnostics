@@ -45,7 +45,8 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
 
             foreach (var variable in fieldDeclaration.Declaration.Variables)
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, variable.Identifier.GetLocation(), variable.Identifier.ValueText));
+                // Using .Text instead of .ValueText so verbatim and unicode-escaped identifiers would display as such rather than having it stripped out.
+                context.ReportDiagnostic(Diagnostic.Create(Rule, variable.Identifier.GetLocation(), variable.Identifier.Text));
             }
         }
     }

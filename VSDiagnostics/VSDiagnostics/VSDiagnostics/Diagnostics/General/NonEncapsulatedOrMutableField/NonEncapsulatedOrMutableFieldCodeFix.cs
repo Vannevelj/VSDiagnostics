@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
 {
@@ -39,9 +40,7 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
             var fieldStatement = variableDeclarator.AncestorsAndSelf().OfType<FieldDeclarationSyntax>().First();
             var variableDeclaration = variableDeclarator.AncestorsAndSelf().OfType<VariableDeclarationSyntax>().First();
 
-            // TODO: update identifier
-
-            var newProperty = SyntaxFactory.PropertyDeclaration(variableDeclaration.Type, variableDeclarator.Identifier)
+            var newProperty = SyntaxFactory.PropertyDeclaration(variableDeclaration.Type, variableDeclarator.Identifier.WithConvention(NamingConvention.UpperCamelCase))
                                            .WithAttributeLists(fieldStatement.AttributeLists)
                                            .WithModifiers(fieldStatement.Modifiers)
                                            .WithAdditionalAnnotations(Formatter.Annotation)

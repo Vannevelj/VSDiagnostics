@@ -183,7 +183,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        protected internal int X { get; set; };
+        protected internal int X { get; set; }
     }
 }";
 
@@ -262,8 +262,9 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        internal int X { get; set; };
-        internal int Y { get; set; };
+        internal int X { get; set; }
+
+        internal int Y { get; set; }
     }
 }";
 
@@ -319,7 +320,8 @@ namespace ConsoleApplication1
     class MyClass
     {
         internal int X { get; set; } = 5;
-        internal int Y { get; set; };
+
+        internal int Y { get; set; }
     }
 }";
 
@@ -381,7 +383,7 @@ namespace ConsoleApplication1
     {
         [MyAttribute]
         public int X { get; set; }
-        
+
         [MyAttribute]
         public int Y { get; set; }
     }
@@ -449,7 +451,7 @@ namespace ConsoleApplication1
             var expectedDiagnostic = new DiagnosticResult
             {
                 Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "x"),
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "@class"),
                 Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
                 Locations =
                     new[]
@@ -492,7 +494,7 @@ namespace ConsoleApplication1
             var expectedDiagnostic = new DiagnosticResult
             {
                 Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "x"),
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "\\u0061ss"),
                 Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
                 Locations =
                     new[]
