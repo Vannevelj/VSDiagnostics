@@ -59,16 +59,7 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
 
             var editor = await DocumentEditor.CreateAsync(document);
             editor.InsertAfter(statement, newProperty);
-
-            if (variableDeclaration.Variables.Count == 1)
-            {
-                editor.RemoveNode(fieldStatement);
-            }
-            else
-            {
-                editor.RemoveNode(variableDeclarator);
-            }
-
+            editor.RemoveNode(variableDeclarator);
             return editor.GetChangedDocument().Project.Solution;
         }
     }
