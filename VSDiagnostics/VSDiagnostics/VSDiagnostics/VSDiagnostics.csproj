@@ -57,6 +57,7 @@
     <Compile Include="Diagnostics\General\NullableToShorthand\NullableToShorthandCodeFix.cs" />
     <Compile Include="Diagnostics\General\OnPropertyChangedWithoutNameOfOperator\OnPropertyChangedWithoutNameOfOperatorAnalyzer.cs" />
     <Compile Include="Diagnostics\General\OnPropertyChangedWithoutNameOfOperator\OnPropertyChangedWithoutNameOfOperatorCodeFix.cs" />
+    <Compile Include="Diagnostics\General\PrivateSetAutoPropertyCanBeReadOnlyAutoProperty\PrivateSetAutoPropertyCanBeReadOnlyAutoPropertyAnalyzer.cs" />
     <Compile Include="Diagnostics\General\SimplifyExpressionBodiedMember\SimplifyExpressionBodiedMemberAnalyzer.cs" />
     <Compile Include="Diagnostics\General\SimplifyExpressionBodiedMember\SimplifyExpressionBodiedMemberCodeFix.cs" />
     <Compile Include="Diagnostics\General\TryCastWithoutUsingAsNotNull\TryCastWithoutUsingAsNotNullAnalyzer.cs" />

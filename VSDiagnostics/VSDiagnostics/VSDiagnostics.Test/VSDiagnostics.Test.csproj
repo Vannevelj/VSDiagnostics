@@ -118,6 +118,7 @@
     <Compile Include="Tests\Exceptions\EmptyCatchClauseAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\RethrowExceptionWithoutLosingStracktraceAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\SingleGeneralExceptionAnalyzerTests.cs" />
+    <Compile Include="Tests\General\PrivateSetAutoPropertyCanUseReadOnlyAutoPropertyTests.cs" />
     <Compile Include="Tests\General\CompareBooleanToTrueLiteralAnalyzerTests.cs" />
     <Compile Include="Tests\General\ConditionalOperatorReturnsDefaultOptionsAnalyzerTests.cs" />
     <Compile Include="Tests\General\IfStatementWithoutBracesAnalyzerTests.cs" />
