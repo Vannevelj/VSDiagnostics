@@ -3,7 +3,7 @@
 <package>
   <metadata>
     <id>VSDiagnostics</id>
-    <version>1.5.0-rc2</version>
+    <version>1.6.0-rc2</version>
     <title>VSDiagnostics</title>
     <authors>Jeroen Vannevel</authors>
     <owners>Jeroen Vannevel</owners>
@@ -11,7 +11,7 @@
     <projectUrl>https://github.com/Vannevelj/VSDiagnostics</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A collection of code-quality analyzers based on the new Roslyn platform. This project aims to ensure code-quality as you type it in your editor rather than having to do this as a separate build-step.</description>
-    <releaseNotes>For the latest releasenotes, see the Github release: https://github.com/Vannevelj/VSDiagnostics/releases/tag/v1.5.0-rc2 </releaseNotes>
+    <releaseNotes>For the latest releasenotes, see the Github release: https://github.com/Vannevelj/VSDiagnostics/releases/tag/v1.6.0-rc2 </releaseNotes>
     <copyright>Jeroen Vannevel</copyright>
     <tags>Visual Studio, Roslyn, Diagnostics, Analyzers</tags>
     <frameworkAssemblies>
