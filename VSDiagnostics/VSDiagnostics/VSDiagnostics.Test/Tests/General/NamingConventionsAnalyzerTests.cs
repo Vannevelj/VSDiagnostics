@@ -1139,5 +1139,63 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, expectedDiagnostic);
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithStruct_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    struct myStruct
+    {
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    struct MyStruct
+    {
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = NamingConventionsAnalyzer.DiagnosticId,
+                Message = string.Format(NamingConventionsAnalyzer.Message, "struct", "myStruct", "MyStruct"),
+                Severity = NamingConventionsAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 7, 12)
+                    }
+            };
+
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithStruct_FollowingConventions_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    struct MyStruct
+    {
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }

@@ -47,7 +47,10 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
                     break;
                 }
 
-                if (identifierParent is PropertyDeclarationSyntax || identifierParent is MethodDeclarationSyntax || identifierParent is ClassDeclarationSyntax)
+                if (identifierParent is PropertyDeclarationSyntax ||
+                    identifierParent is MethodDeclarationSyntax ||
+                    identifierParent is ClassDeclarationSyntax ||
+                    identifierParent is StructDeclarationSyntax)
                 {
                     newIdentifier = identifier.WithConvention(NamingConvention.UpperCamelCase);
                     break;

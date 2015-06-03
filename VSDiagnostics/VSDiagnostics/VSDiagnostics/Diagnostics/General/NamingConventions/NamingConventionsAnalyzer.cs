@@ -28,7 +28,8 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
                 SyntaxKind.ClassDeclaration,
                 SyntaxKind.InterfaceDeclaration,
                 SyntaxKind.LocalDeclarationStatement,
-                SyntaxKind.Parameter);
+                SyntaxKind.Parameter,
+                SyntaxKind.StructDeclaration);
         }
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
@@ -104,6 +105,13 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             if (nodeAsParameter != null)
             {
                 CheckNaming(nodeAsParameter.Identifier, "parameter", NamingConvention.LowerCamelCase, context);
+                return;
+            }
+
+            var nodeAsStruct = context.Node as StructDeclarationSyntax;
+            if (nodeAsStruct != null)
+            {
+                CheckNaming(nodeAsStruct.Identifier, "struct", NamingConvention.UpperCamelCase, context);
             }
         }
 
