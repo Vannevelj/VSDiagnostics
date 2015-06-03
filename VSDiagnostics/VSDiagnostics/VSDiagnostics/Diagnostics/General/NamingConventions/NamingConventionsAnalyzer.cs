@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -44,11 +43,16 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
 
                 foreach (var variable in nodeAsField.Declaration.Variables)
                 {
-                    if (nodeAsField.Modifiers.Any(x => new[] { "internal", "protected", "public" }.Contains(x.Text)))
+                    var modifiers = nodeAsField.Modifiers;
+
+                    if (modifiers.Any(SyntaxKind.InternalKeyword) ||
+                        modifiers.Any(SyntaxKind.ProtectedKeyword) ||
+                        modifiers.Any(SyntaxKind.PublicKeyword))
                     {
                         CheckNaming(variable.Identifier, "field", NamingConvention.UpperCamelCase, context);
                     }
-                    else if (nodeAsField.Modifiers.Any(x => x.Text == "private") || nodeAsField.Modifiers.Count == 0 /* no access modifier defaults to private */)
+                    else if (modifiers.Any(SyntaxKind.PrivateKeyword) ||
+                             nodeAsField.Modifiers.Count == 0 /* no access modifier defaults to private */)
                     {
                         CheckNaming(variable.Identifier, "field", NamingConvention.UnderscoreLowerCamelCase, context);
                     }
