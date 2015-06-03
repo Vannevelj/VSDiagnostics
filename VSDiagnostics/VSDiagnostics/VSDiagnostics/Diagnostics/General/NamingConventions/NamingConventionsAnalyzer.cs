@@ -43,24 +43,17 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
 
                 foreach (var variable in nodeAsField.Declaration.Variables)
                 {
-                    SyntaxToken conventionedIdentifier;
-
                     if (nodeAsField.Modifiers.Any(x => new[] { "internal", "protected", "public" }.Contains(x.Text)))
                     {
-                        conventionedIdentifier = variable.Identifier.WithConvention(NamingConvention.UpperCamelCase);
+                        CheckNaming(variable.Identifier, "field", NamingConvention.UpperCamelCase, context);
                     }
-                    else if (nodeAsField.Modifiers.Any(x => x.Text == "private"))
+                    else if (nodeAsField.Modifiers.Any(x => x.Text == "private") || nodeAsField.Modifiers.Count == 0 /* no access modifier defaults to private */)
                     {
-                        conventionedIdentifier = variable.Identifier.WithConvention(NamingConvention.UnderscoreLowerCamelCase);
+                        CheckNaming(variable.Identifier, "field", NamingConvention.UnderscoreLowerCamelCase, context);
                     }
                     else
                     {
-                        return; // Code is in incomplete state
-                    }
-
-                    if (conventionedIdentifier.Text != variable.Identifier.Text)
-                    {
-                        context.ReportDiagnostic(Diagnostic.Create(Rule, variable.Identifier.GetLocation(), "field", variable.Identifier.Text, conventionedIdentifier.Text));
+                        return; // Code is in an incomplete state
                     }
                 }
 
@@ -70,45 +63,25 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             var nodeAsProperty = context.Node as PropertyDeclarationSyntax;
             if (nodeAsProperty != null)
             {
-                var conventionedIdentifier = nodeAsProperty.Identifier.WithConvention(NamingConvention.UpperCamelCase);
-                if (conventionedIdentifier.Text != nodeAsProperty.Identifier.Text)
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, nodeAsProperty.Identifier.GetLocation(), "property", nodeAsProperty.Identifier.Text, conventionedIdentifier.Text));
-                }
-                return;
+                CheckNaming(nodeAsProperty.Identifier, "property", NamingConvention.UpperCamelCase, context);
             }
 
             var nodeAsMethod = context.Node as MethodDeclarationSyntax;
             if (nodeAsMethod != null)
             {
-                var conventionedIdentifier = nodeAsMethod.Identifier.WithConvention(NamingConvention.UpperCamelCase);
-                if (conventionedIdentifier.Text != nodeAsMethod.Identifier.Text)
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, nodeAsMethod.Identifier.GetLocation(), "method", nodeAsMethod.Identifier.Text, conventionedIdentifier.Text));
-                }
-                return;
+                CheckNaming(nodeAsMethod.Identifier, "method", NamingConvention.UpperCamelCase, context);
             }
 
             var nodeAsClass = context.Node as ClassDeclarationSyntax;
             if (nodeAsClass != null)
             {
-                var conventionedIdentifier = nodeAsClass.Identifier.WithConvention(NamingConvention.UpperCamelCase);
-                if (conventionedIdentifier.Text != nodeAsClass.Identifier.Text)
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, nodeAsClass.Identifier.GetLocation(), "class", nodeAsClass.Identifier.Text, conventionedIdentifier.Text));
-                }
-                return;
+                CheckNaming(nodeAsClass.Identifier, "class", NamingConvention.UpperCamelCase, context);
             }
 
             var nodeAsInterface = context.Node as InterfaceDeclarationSyntax;
             if (nodeAsInterface != null)
             {
-                var conventionedIdentifier = nodeAsInterface.Identifier.WithConvention(NamingConvention.InterfacePrefixUpperCamelCase);
-                if (conventionedIdentifier.Text != nodeAsInterface.Identifier.Text)
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, nodeAsInterface.Identifier.GetLocation(), "interface", nodeAsInterface.Identifier.Text, conventionedIdentifier.Text));
-                }
-                return;
+                CheckNaming(nodeAsInterface.Identifier, "interface", NamingConvention.InterfacePrefixUpperCamelCase, context);
             }
 
             var nodeAsLocal = context.Node as LocalDeclarationStatementSyntax;
@@ -121,11 +94,7 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
 
                 foreach (var variable in nodeAsLocal.Declaration.Variables)
                 {
-                    var conventionedIdentifier = variable.Identifier.WithConvention(NamingConvention.LowerCamelCase);
-                    if (conventionedIdentifier.Text != variable.Identifier.Text)
-                    {
-                        context.ReportDiagnostic(Diagnostic.Create(Rule, variable.Identifier.GetLocation(), "local", variable.Identifier.Text, conventionedIdentifier.Text));
-                    }
+                    CheckNaming(variable.Identifier, "local", NamingConvention.LowerCamelCase, context);
                 }
 
                 return;
@@ -134,11 +103,16 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             var nodeAsParameter = context.Node as ParameterSyntax;
             if (nodeAsParameter != null)
             {
-                var conventionedIdentifier = nodeAsParameter.Identifier.WithConvention(NamingConvention.LowerCamelCase);
-                if (conventionedIdentifier.Text != nodeAsParameter.Identifier.Text)
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, nodeAsParameter.Identifier.GetLocation(), "parameter", nodeAsParameter.Identifier.Text, conventionedIdentifier.Text));
-                }
+                CheckNaming(nodeAsParameter.Identifier, "parameter", NamingConvention.LowerCamelCase, context);
+            }
+        }
+
+        private void CheckNaming(SyntaxToken currentIdentifier, string memberType, NamingConvention convention, SyntaxNodeAnalysisContext context)
+        {
+            var conventionedIdentifier = currentIdentifier.WithConvention(convention);
+            if (conventionedIdentifier.Text != currentIdentifier.Text)
+            {
+                context.ReportDiagnostic(Diagnostic.Create(Rule, currentIdentifier.GetLocation(), memberType, currentIdentifier.Text, conventionedIdentifier.Text));
             }
         }
     }

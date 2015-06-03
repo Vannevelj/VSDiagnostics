@@ -113,17 +113,6 @@ namespace VSDiagnostics.Utilities
                 return identifier;
             }
 
-            if (normalizedString.Length == 1)
-            {
-                return "_" + char.ToLower(normalizedString[0]);
-            }
-
-            // _Var
-            if (normalizedString[0] == '_' && char.IsUpper(normalizedString[1]))
-            {
-                return "_" + char.ToLower(normalizedString[1]) + normalizedString.Substring(2);
-            }
-
             // Var
             if (char.IsUpper(normalizedString[0]))
             {

@@ -1096,5 +1096,48 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, expectedDiagnostic);
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void NamingConventionsAnalyzer_WithPrivateField_WithoutAccessModifier_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int X;
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int _x;
+    }
+}";
+
+            var expectedDiagnostic = new DiagnosticResult
+            {
+                Id = NamingConventionsAnalyzer.DiagnosticId,
+                Message = string.Format(NamingConventionsAnalyzer.Message, "field", "X", "_x"),
+                Severity = NamingConventionsAnalyzer.Severity,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", 9, 13)
+                    }
+            };
+
+            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyFix(original, result);
+        }
     }
 }
