@@ -183,5 +183,33 @@ namespace VSDiagnostics.Test.Tests.Strings
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void ReplaceEmptyStringsWithStringDotEmpty_WithEmptyStringAsAttributeArgument_DoesNotInvokeWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {
+            [MyAttribute(Test = """")]
+            void Method()
+            {
+
+            }
+        }
+
+        [AttributeUsage(AttributeTargets.All)]
+        public class MyAttribute : Attribute
+        {
+	        public string Test { get; set; }
+        }
+    }";
+
+            VerifyDiagnostic(original);
+        }
     }
 }

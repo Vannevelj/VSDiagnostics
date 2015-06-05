@@ -25,6 +25,11 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
+            if (context.Node.AncestorsAndSelf().OfType<AttributeArgumentSyntax>().Any())
+            {
+                return;
+            }
+
             var stringLiteral = context.Node as LiteralExpressionSyntax;
             if (stringLiteral == null)
             {
