@@ -79,7 +79,7 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
-            if (methodDeclaration.Body.Statements.Count != 1)
+            if (methodDeclaration.Body?.Statements.Count != 1)
             {
                 return null;
             }
