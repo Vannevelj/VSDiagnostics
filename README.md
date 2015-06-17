@@ -5,6 +5,9 @@ A collection of code-quality analyzers based on the new Roslyn platform. This pr
 
 [Get it from NuGet!](https://www.nuget.org/packages/VSDiagnostics/)
 
+[![Build status](https://ci.appveyor.com/api/projects/status/c5f15ckfb5wv91ma?svg=true)](https://ci.appveyor.com/project/Vannevelj/vsdiagnostics)
+[![Test status](http://teststatusbadge.azurewebsites.net/api/status/Vannevelj/vsdiagnostics)](https://ci.appveyor.com/project/Vannevelj/vsdiagnostics)
+
 Keep in mind that this project is under active development. If you encounter bugs, let us know!
 
 ## What is an analyzer exactly?
