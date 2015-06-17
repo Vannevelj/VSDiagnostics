@@ -1,0 +1,31 @@
+version: 1.6.{build}
+os: Visual Studio 2015 RC
+init:
+- git config --global core.autocrlf true
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+environment:
+  PATH: C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
+cache: packages -> **\packages.config
+nuget:
+  account_feed: true
+  project_feed: true
+before_build:
+- nuget restore VSDiagnostics/VSDiagnostics.sln
+build:
+  publish_nuget: true
+  publish_nuget_symbols: true
+  include_nuget_references: true
+  verbosity: minimal
+notifications:
+- provider: Webhook
+  url: http://stats.zomis.net:8081/hooks/appveyor?roomId=14929
+  headers:
+    X-Duga-Event: duga42
+  on_build_success: true
+  on_build_failure: true
+  on_build_status_changed: true
