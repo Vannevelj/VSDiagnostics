@@ -5,6 +5,8 @@ A collection of code-quality analyzers based on the new Roslyn platform. This pr
 
 [Get it from NuGet!](https://www.nuget.org/packages/VSDiagnostics/)
 
+Keep in mind that this project is under active development. If you encounter bugs, let us know!
+
 ## What is an analyzer exactly?
 
 > With the release of Visual Studio 2015 RC, we also received the pretty much final implementation of the Diagnostics implementation. This SDK allows us to create our own diagnostics to help us write proper code that’s being verified against those rules in real-time: you don’t have to perform the verification at a separate build-step. What’s more is that we can combine that with a code fix: a shortcut integrated in Visual Studio that provides us a solution to what we determine to be a problem.
@@ -57,8 +59,4 @@ Definitely! Take a look at the open issues and see if there's anything that inte
 
 If you think you're going to make larger changes than a single implementation then we would ask you to get in contact with us first so we can discuss it and prevent unneeded work.
 
-You'll need the [Visual Studio 2015 Release Candidate](https://www.visualstudio.com/en-us/downloads/visual-studio-2015-downloads-vs.aspx) and [the SDK](https://www.microsoft.com/en-us/download/details.aspx?id=46850) to get started. 
-
-In order to build the project, make sure you add the Roslyn Nightly builds as a NuGet package source or it won't be able to pull the RC3 versions of packages we use.
-
-https://www.myget.org/gallery/roslyn-nightly
+You'll need the [Visual Studio 2015 Release Candidate](https://www.visualstudio.com/en-us/downloads/visual-studio-2015-downloads-vs.aspx) and [the SDK](https://www.microsoft.com/en-us/download/details.aspx?id=46850) to get started.
