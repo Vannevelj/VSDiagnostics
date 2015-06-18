@@ -39,10 +39,21 @@ namespace VSDiagnostics.Utilities
                 SyntaxKind.EndOfDocumentationCommentToken,
                 SyntaxKind.XmlComment,
                 SyntaxKind.XmlCommentEndToken,
-                SyntaxKind.XmlCommentStartToken,
+                SyntaxKind.XmlCommentStartToken
             };
 
             return commentTrivias.Any(x => trivia.IsKind(x));
+        }
+
+        public static bool IsWhitespaceTrivia(this SyntaxTrivia trivia)
+        {
+            var whitespaceTrivia = new[]
+            {
+                SyntaxKind.WhitespaceTrivia,
+                SyntaxKind.EndOfLineTrivia
+            };
+
+            return whitespaceTrivia.Any(x => trivia.IsKind(x));
         }
     }
 }
