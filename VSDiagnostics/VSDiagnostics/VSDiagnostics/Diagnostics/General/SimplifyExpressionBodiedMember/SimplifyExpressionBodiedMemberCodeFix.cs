@@ -35,23 +35,23 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
             var property = statement.AncestorsAndSelf().OfType<PropertyDeclarationSyntax>().FirstOrDefault();
             if (property != null)
             {
-                root = root.ReplaceNode(property, property.RemoveNode(property.AccessorList, SyntaxRemoveOptions.KeepExteriorTrivia)
-                                                          .WithExpressionBody(arrowClause)
-                                                          .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
+                var newProperty = property.RemoveNode(property.AccessorList, SyntaxRemoveOptions.KeepNoTrivia)
+                                          .WithExpressionBody(arrowClause)
+                                          .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+
+
+                root = root.ReplaceNode(property, newProperty);
             }
 
             var method = statement.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().FirstOrDefault();
             if (method != null)
             {
-                var trailingTrivia = method.Body.Statements.First().GetTrailingTrivia();
-                root = root.ReplaceNode(method, method.RemoveNode(method.Body, SyntaxRemoveOptions.KeepExteriorTrivia)
+                root = root.ReplaceNode(method, method.RemoveNode(method.Body, SyntaxRemoveOptions.KeepNoTrivia)
                                                       .WithExpressionBody(arrowClause)
-                                                      .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
-                                                      .WithTrailingTrivia(trailingTrivia));
+                                                      .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
             }
 
-            var newDocument = document.WithSyntaxRoot(root);
-            return Task.FromResult(newDocument.Project.Solution);
+            return Task.FromResult(document.WithSyntaxRoot(root).Project.Solution);
         }
     }
 }

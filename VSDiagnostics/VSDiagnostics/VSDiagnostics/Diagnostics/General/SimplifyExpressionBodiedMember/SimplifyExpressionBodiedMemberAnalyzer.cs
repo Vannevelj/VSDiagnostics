@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
 {
@@ -52,18 +53,23 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
+            if (propertyDeclaration.DescendantNodesAndTokensAndSelf().Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
+            {
+                return null;
+            }
+
             var getter = propertyDeclaration.AccessorList.Accessors.FirstOrDefault(x => x.Keyword.ValueText == "get");
             if (getter == null)
             {
                 return null;
             }
 
-            if (getter.Body == null)
+            if (getter.AttributeLists.Any(x => x.Attributes.Any()))
             {
                 return null;
             }
 
-            if (getter.Body.Statements.Count != 1)
+            if (getter.Body?.Statements.Count != 1)
             {
                 return null;
             }
@@ -79,18 +85,18 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
+            if (methodDeclaration.DescendantNodesAndTokensAndSelf().Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
+            {
+                return null;
+            }
+
             if (methodDeclaration.Body?.Statements.Count != 1)
             {
                 return null;
             }
 
             var statement = methodDeclaration.Body.Statements.FirstOrDefault();
-            if (statement == null)
-            {
-                return null;
-            }
-
-            var returnStatement = statement.DescendantNodesAndSelf().OfType<ReturnStatementSyntax>().FirstOrDefault();
+            var returnStatement = statement?.DescendantNodesAndSelf().OfType<ReturnStatementSyntax>().FirstOrDefault();
             if (returnStatement == null)
             {
                 return null;
