@@ -58,12 +58,12 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
-            if (getter.Body == null)
+            if (getter.AttributeLists.Any(x => x.Attributes.Any()))
             {
                 return null;
             }
 
-            if (getter.Body.Statements.Count != 1)
+            if (getter.Body?.Statements.Count != 1)
             {
                 return null;
             }
@@ -85,12 +85,7 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
             }
 
             var statement = methodDeclaration.Body.Statements.FirstOrDefault();
-            if (statement == null)
-            {
-                return null;
-            }
-
-            var returnStatement = statement.DescendantNodesAndSelf().OfType<ReturnStatementSyntax>().FirstOrDefault();
+            var returnStatement = statement?.DescendantNodesAndSelf().OfType<ReturnStatementSyntax>().FirstOrDefault();
             if (returnStatement == null)
             {
                 return null;

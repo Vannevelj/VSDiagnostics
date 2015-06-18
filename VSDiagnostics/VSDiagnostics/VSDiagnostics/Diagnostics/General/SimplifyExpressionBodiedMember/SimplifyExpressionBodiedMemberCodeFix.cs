@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
 {
@@ -30,24 +31,38 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
         {
             var returnStatement = (ReturnStatementSyntax) statement;
             var expression = returnStatement.Expression;
-            var arrowClause = SyntaxFactory.ArrowExpressionClause(expression);
 
             var property = statement.AncestorsAndSelf().OfType<PropertyDeclarationSyntax>().FirstOrDefault();
             if (property != null)
             {
-                root = root.ReplaceNode(property, property.RemoveNode(property.AccessorList, SyntaxRemoveOptions.KeepExteriorTrivia)
+                var getter = property.AccessorList.Accessors.First();
+                expression = expression.WithLeadingTrivia(
+                    property.AccessorList.GetLeadingTrivia().Where(x => x.IsCommentTrivia()).Concat(
+                        property.AccessorList.OpenBraceToken.TrailingTrivia.Where(x => x.IsCommentTrivia())));
+
+                var arrowClause = SyntaxFactory.ArrowExpressionClause(expression)
+                                               .WithTrailingTrivia(getter.GetTrailingTrivia().Where(x => x.IsCommentTrivia()));
+
+                root = root.ReplaceNode(property, property.RemoveNode(property.AccessorList, SyntaxRemoveOptions.KeepNoTrivia)
                                                           .WithExpressionBody(arrowClause)
-                                                          .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
+                                                          .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)
+                                                                                           /*.WithTrailingTrivia(property.GetTrailingTrivia().Where(x => x.IsCommentTrivia()))*/));
             }
 
             var method = statement.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().FirstOrDefault();
             if (method != null)
             {
-                var trailingTrivia = method.Body.Statements.First().GetTrailingTrivia();
-                root = root.ReplaceNode(method, method.RemoveNode(method.Body, SyntaxRemoveOptions.KeepExteriorTrivia)
+                var body = method.Body.Statements.First();
+                expression = expression
+                    .WithLeadingTrivia(body.GetLeadingTrivia().Where(x => x.IsCommentTrivia()));
+
+                var arrowClause = SyntaxFactory.ArrowExpressionClause(expression);
+
+                root = root.ReplaceNode(method, method.RemoveNode(method.Body, SyntaxRemoveOptions.KeepNoTrivia)
                                                       .WithExpressionBody(arrowClause)
                                                       .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
-                                                      .WithTrailingTrivia(trailingTrivia));
+                                                      .WithTrailingTrivia(body.GetTrailingTrivia().Where(x => x.IsCommentTrivia()).Concat(
+                                                          method.Body.CloseBraceToken.LeadingTrivia.Where(x => x.IsCommentTrivia()))));
             }
 
             var newDocument = document.WithSyntaxRoot(root);
