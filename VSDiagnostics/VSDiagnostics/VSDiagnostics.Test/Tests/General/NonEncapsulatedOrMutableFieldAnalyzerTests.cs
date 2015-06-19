@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField;
 
@@ -41,19 +40,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 22)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"));
             VerifyFix(original, result);
         }
 
@@ -84,19 +71,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 20)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"));
             VerifyFix(original, result);
         }
 
@@ -127,19 +102,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 20)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"));
             VerifyFix(original, result);
         }
 
@@ -188,19 +151,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 32)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"));
             VerifyFix(original, result);
         }
 
@@ -269,31 +220,9 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 22)
-                    }
-            };
-
-            var expectedDiagnostic2 = new DiagnosticResult
-            {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "y"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 25)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic, expectedDiagnostic2);
+            VerifyDiagnostic(original,
+                string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"),
+                string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "y"));
             VerifyFix(original, result);
         }
 
@@ -326,31 +255,9 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 22)
-                    }
-            };
-
-            var expectedDiagnostic2 = new DiagnosticResult
-            {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "y"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 29)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic, expectedDiagnostic2);
+            VerifyDiagnostic(original,
+                string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"),
+                string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "y"));
             VerifyFix(original, result);
         }
 
@@ -394,31 +301,9 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 10, 20)
-                    }
-            };
-
-            var expectedDiagnostic2 = new DiagnosticResult
-            {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "y"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 10, 23)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic, expectedDiagnostic2);
+            VerifyDiagnostic(original,
+                string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"),
+                string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "y"));
             VerifyFix(original, result);
         }
 
@@ -449,19 +334,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "@class"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 20)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "@class"));
             VerifyFix(original, result);
         }
 
@@ -492,19 +365,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "\\u0061ss"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 20)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "\\u0061ss"));
             VerifyFix(original, result);
         }
     }

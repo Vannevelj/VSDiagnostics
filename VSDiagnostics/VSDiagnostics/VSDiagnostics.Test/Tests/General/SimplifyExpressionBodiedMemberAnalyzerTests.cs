@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember;
 
@@ -44,19 +43,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = SimplifyExpressionBodiedMemberAnalyzer.Rule.Id,
-                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Method", "MyMethod"),
-                Severity = SimplifyExpressionBodiedMemberAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 13)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Method", "MyMethod"));
             VerifyFix(original, expected);
         }
 
@@ -87,19 +74,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = SimplifyExpressionBodiedMemberAnalyzer.Rule.Id,
-                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Property", "MyProperty"),
-                Severity = SimplifyExpressionBodiedMemberAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 35)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Property", "MyProperty"));
             VerifyFix(original, expected);
         }
 
@@ -136,19 +111,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = SimplifyExpressionBodiedMemberAnalyzer.Rule.Id,
-                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Property", "MyProperty"),
-                Severity = SimplifyExpressionBodiedMemberAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 13, 17)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Property", "MyProperty"));
             VerifyFix(original, expected);
         }
 
@@ -362,31 +325,9 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = SimplifyExpressionBodiedMemberAnalyzer.Rule.Id,
-                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Property", "MyProperty"),
-                Severity = SimplifyExpressionBodiedMemberAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 32)
-                    }
-            };
-
-            var expectedDiagnostic2 = new DiagnosticResult
-            {
-                Id = SimplifyExpressionBodiedMemberAnalyzer.Rule.Id,
-                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Property", "MyProperty2"),
-                Severity = SimplifyExpressionBodiedMemberAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 10, 33)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic, expectedDiagnostic2);
+            VerifyDiagnostic(original,
+                string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Property", "MyProperty"),
+                string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Property", "MyProperty2"));
             VerifyFix(original, expected);
         }
 

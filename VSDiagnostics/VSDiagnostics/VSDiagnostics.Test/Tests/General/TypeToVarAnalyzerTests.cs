@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.TypeToVar;
 
@@ -46,19 +45,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = TypeToVarAnalyzer.Rule.Id,
-                Message = TypeToVarAnalyzer.Rule.MessageFormat.ToString(),
-                Severity = TypeToVarAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 13)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, TypeToVarAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, newSource);
         }
 
@@ -104,19 +91,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = TypeToVarAnalyzer.Rule.Id,
-                Message = TypeToVarAnalyzer.Rule.MessageFormat.ToString(),
-                Severity = TypeToVarAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 13)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, TypeToVarAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, newSource);
         }
 
@@ -173,19 +148,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = TypeToVarAnalyzer.Rule.Id,
-                Message = TypeToVarAnalyzer.Rule.MessageFormat.ToString(),
-                Severity = TypeToVarAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 13)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, TypeToVarAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, newSource);
         }
 

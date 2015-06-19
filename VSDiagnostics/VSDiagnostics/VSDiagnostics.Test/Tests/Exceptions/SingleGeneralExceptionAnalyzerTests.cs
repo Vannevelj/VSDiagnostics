@@ -1,6 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Exceptions.SingleGeneralException;
 
@@ -35,18 +34,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = SingleGeneralExceptionAnalyzer.Rule.Id,
-                Message = SingleGeneralExceptionAnalyzer.Rule.MessageFormat.ToString(),
-                Severity = SingleGeneralExceptionAnalyzer.Rule.DefaultSeverity,
-                Locations = new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 14, 23)
-                }
-            };
-
-            VerifyDiagnostic(test, expectedDiagnostic);
+            VerifyDiagnostic(test, SingleGeneralExceptionAnalyzer.Rule.MessageFormat.ToString());
         }
 
         [TestMethod]

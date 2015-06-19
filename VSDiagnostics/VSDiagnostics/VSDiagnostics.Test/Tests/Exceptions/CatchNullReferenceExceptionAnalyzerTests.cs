@@ -1,6 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Exceptions.CatchNullReferenceException;
 
@@ -35,18 +34,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = CatchNullReferenceExceptionAnalyzer.Rule.Id,
-                Message = CatchNullReferenceExceptionAnalyzer.Rule.MessageFormat.ToString(),
-                Severity = CatchNullReferenceExceptionAnalyzer.Rule.DefaultSeverity,
-                Locations = new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 14, 22)
-                }
-            };
-
-            VerifyDiagnostic(test, expectedDiagnostic);
+            VerifyDiagnostic(test, CatchNullReferenceExceptionAnalyzer.Rule.MessageFormat.ToString());
         }
 
         [TestMethod]
