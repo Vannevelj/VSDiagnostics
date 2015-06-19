@@ -2,7 +2,6 @@
 using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
@@ -15,7 +14,8 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithNameofOperat
     [ExportCodeFixProvider("ArgumentExceptionWithNameofOperator", LanguageNames.CSharp), Shared]
     public class ArgumentExceptionWithNameofOperatorCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(ArgumentExceptionWithNameofOperatorAnalyzer.DiagnosticId);
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id);
+
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
         public override async Task RegisterCodeFixesAsync(CodeFixContext context)
@@ -25,10 +25,10 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithNameofOperat
             var diagnosticSpan = diagnostic.Location.SourceSpan;
             var objectCreationExpression = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<ObjectCreationExpressionSyntax>().First();
 
-            context.RegisterCodeFix(CodeAction.Create("Use nameof", x => UseNameofAsync(context.Document, root, objectCreationExpression, context.CancellationToken)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Use nameof", x => UseNameofAsync(context.Document, root, objectCreationExpression)), diagnostic);
         }
 
-        private Task<Solution> UseNameofAsync(Document document, SyntaxNode root, ObjectCreationExpressionSyntax objectCreationExpression, CancellationToken cancellationToken)
+        private Task<Solution> UseNameofAsync(Document document, SyntaxNode root, ObjectCreationExpressionSyntax objectCreationExpression)
         {
             var method = objectCreationExpression.Ancestors().OfType<MethodDeclarationSyntax>().First();
             var methodParameters = method.ParameterList.Parameters;

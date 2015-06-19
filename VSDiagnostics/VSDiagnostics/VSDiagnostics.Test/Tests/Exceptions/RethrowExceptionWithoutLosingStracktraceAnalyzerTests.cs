@@ -11,6 +11,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
     public class RethrowExceptionWithoutLosingStracktraceAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new RethrowExceptionWithoutLosingStacktraceAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new RethrowExceptionWithoutLosingStacktraceCodeFix();
 
         [TestMethod]
@@ -62,9 +63,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = RethrowExceptionWithoutLosingStacktraceAnalyzer.DiagnosticId,
-                Message = RethrowExceptionWithoutLosingStacktraceAnalyzer.Message,
-                Severity = RethrowExceptionWithoutLosingStacktraceAnalyzer.Severity,
+                Id = RethrowExceptionWithoutLosingStacktraceAnalyzer.Rule.Id,
+                Message = RethrowExceptionWithoutLosingStacktraceAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = RethrowExceptionWithoutLosingStacktraceAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {

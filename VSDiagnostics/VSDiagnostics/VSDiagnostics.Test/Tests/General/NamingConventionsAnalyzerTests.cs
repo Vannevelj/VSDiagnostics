@@ -11,6 +11,7 @@ namespace VSDiagnostics.Test.Tests.General
     public class NamingConventionsAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new NamingConventionsAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new NamingConventionsCodeFix();
 
         [TestMethod]
@@ -42,9 +43,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "field", "X", "_x"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "X", "_x"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -85,9 +86,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "field", "_X", "_x"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "_X", "_x"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -128,9 +129,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "field", "x", "X"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "X"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -171,9 +172,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "field", "x", "X"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "X"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -214,9 +215,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "field", "x", "X"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "X"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -257,9 +258,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "field", "x", "X"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "X"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -300,9 +301,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "property", "x", "X"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "property", "x", "X"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -347,9 +348,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "method", "method", "Method"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "method", "method", "Method"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -388,9 +389,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "class", "myClass", "MyClass"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "class", "myClass", "MyClass"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -429,9 +430,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "interface", "something", "ISomething"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "something", "ISomething"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -470,9 +471,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "interface", "Isomething", "ISomething"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "Isomething", "ISomething"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -511,9 +512,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "interface", "iSomething", "ISomething"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "iSomething", "ISomething"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -552,9 +553,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "interface", "Something", "ISomething"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "Something", "ISomething"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -593,9 +594,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "interface", "Cow_milker", "ICowMilker"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "Cow_milker", "ICowMilker"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -634,9 +635,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "interface", "_Something", "ISomething"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "_Something", "ISomething"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -675,9 +676,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "interface", "Something_", "ISomething"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "Something_", "ISomething"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -724,9 +725,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "local", "MyVar", "myVar"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "local", "MyVar", "myVar"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -771,9 +772,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "parameter", "Param", "param"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "parameter", "Param", "param"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -814,9 +815,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "field", "X", "_x"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "X", "_x"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -826,9 +827,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic2 = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "field", "Y", "_y"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "Y", "_y"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -1114,9 +1115,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "field", "x", "X"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "X"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -1126,9 +1127,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic2 = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "method", "method", "Method"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "method", "method", "Method"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -1175,9 +1176,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "local", "X", "x"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "local", "X", "x"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -1187,9 +1188,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic2 = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "local", "Y", "y"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "local", "Y", "y"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -1247,9 +1248,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "field", "x", "_x"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "_x"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -1290,9 +1291,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "field", "X", "_x"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "X", "_x"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -1331,9 +1332,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NamingConventionsAnalyzer.DiagnosticId,
-                Message = string.Format(NamingConventionsAnalyzer.Message, "struct", "myStruct", "MyStruct"),
-                Severity = NamingConventionsAnalyzer.Severity,
+                Id = NamingConventionsAnalyzer.Rule.Id,
+                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "struct", "myStruct", "MyStruct"),
+                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {

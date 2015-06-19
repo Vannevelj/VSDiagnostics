@@ -11,6 +11,7 @@ namespace VSDiagnostics.Test.Tests.General
     public class TypeToVarAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new TypeToVarAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new TypeToVarCodeFix();
 
         [TestMethod]
@@ -47,9 +48,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = TypeToVarAnalyzer.DiagnosticId,
-                Message = TypeToVarAnalyzer.Message,
-                Severity = TypeToVarAnalyzer.Severity,
+                Id = TypeToVarAnalyzer.Rule.Id,
+                Message = TypeToVarAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = TypeToVarAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -105,9 +106,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = TypeToVarAnalyzer.DiagnosticId,
-                Message = TypeToVarAnalyzer.Message,
-                Severity = TypeToVarAnalyzer.Severity,
+                Id = TypeToVarAnalyzer.Rule.Id,
+                Message = TypeToVarAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = TypeToVarAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -174,9 +175,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = TypeToVarAnalyzer.DiagnosticId,
-                Message = TypeToVarAnalyzer.Message,
-                Severity = TypeToVarAnalyzer.Severity,
+                Id = TypeToVarAnalyzer.Rule.Id,
+                Message = TypeToVarAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = TypeToVarAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {

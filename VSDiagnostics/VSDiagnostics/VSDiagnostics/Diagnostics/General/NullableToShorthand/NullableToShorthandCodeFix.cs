@@ -14,7 +14,8 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
     [ExportCodeFixProvider("NullableToShorthand", LanguageNames.CSharp), Shared]
     public class NullableToShorthandCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(NullableToShorthandAnalyzer.DiagnosticId);
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(NullableToShorthandAnalyzer.Rule.Id);
+
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
         public override async Task RegisterCodeFixesAsync(CodeFixContext context)

@@ -9,12 +9,14 @@ namespace VSDiagnostics.Diagnostics.General.IfStatementWithoutBraces
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class IfStatementWithoutBracesAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = nameof(IfStatementWithoutBracesAnalyzer);
-        internal const string Title = "If blocks should use braces to denote start and end.";
-        internal const string Message = "An if-statement should be written using braces.";
-        internal const string Category = "General";
-        internal const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private const string Category = "General";
+        private const string DiagnosticId = nameof(IfStatementWithoutBracesAnalyzer);
+        private const string Message = "An if-statement should be written using braces.";
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+        private const string Title = "If blocks should use braces to denote start and end.";
+
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)

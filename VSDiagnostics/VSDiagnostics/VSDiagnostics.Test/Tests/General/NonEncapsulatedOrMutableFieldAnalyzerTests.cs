@@ -11,6 +11,7 @@ namespace VSDiagnostics.Test.Tests.General
     public class NonEncapsulatedOrMutableFieldAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new NonEncapsulatedOrMutableFieldAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new NonEncapsulatedOrMutableFieldCodeFix();
 
         [TestMethod]
@@ -42,9 +43,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "x"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
+                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"),
+                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -85,9 +86,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "x"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
+                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"),
+                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -128,9 +129,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "x"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
+                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"),
+                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -189,9 +190,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "x"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
+                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"),
+                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -270,9 +271,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "x"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
+                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"),
+                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -282,9 +283,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic2 = new DiagnosticResult
             {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "y"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
+                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "y"),
+                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -327,9 +328,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "x"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
+                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"),
+                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -339,9 +340,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic2 = new DiagnosticResult
             {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "y"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
+                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "y"),
+                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -395,9 +396,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "x"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
+                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "x"),
+                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -407,9 +408,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic2 = new DiagnosticResult
             {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "y"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
+                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "y"),
+                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -450,9 +451,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "@class"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
+                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "@class"),
+                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -493,9 +494,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId,
-                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Message, "\\u0061ss"),
-                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Severity,
+                Id = NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id,
+                Message = string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "\\u0061ss"),
+                Severity = NonEncapsulatedOrMutableFieldAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {

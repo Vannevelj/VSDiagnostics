@@ -12,12 +12,14 @@ namespace VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentException
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class EmptyArgumentExceptionAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = nameof(EmptyArgumentExceptionAnalyzer);
-        internal const string Title = "Verifies whether an ArgumentException is thrown with a message.";
-        internal const string Message = "ArgumentException is thrown without a message.";
-        internal const string Category = "Exceptions";
-        internal const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private const string Category = "Exceptions";
+        private const string DiagnosticId = nameof(EmptyArgumentExceptionAnalyzer);
+        private const string Message = "ArgumentException is thrown without a message.";
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+        private const string Title = "Verifies whether an ArgumentException is thrown with a message.";
+
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)
@@ -28,12 +30,8 @@ namespace VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentException
         private static void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
             var throwStatement = context.Node as ThrowStatementSyntax;
-            if (throwStatement == null)
-            {
-                return;
-            }
 
-            var expression = throwStatement.Expression as ObjectCreationExpressionSyntax;
+            var expression = throwStatement?.Expression as ObjectCreationExpressionSyntax;
             if (expression == null)
             {
                 return;

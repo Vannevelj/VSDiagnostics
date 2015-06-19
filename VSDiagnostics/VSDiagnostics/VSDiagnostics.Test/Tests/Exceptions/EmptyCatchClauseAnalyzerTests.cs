@@ -35,9 +35,9 @@ namespace ConsoleApplication1
 }";
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = EmptyCatchClauseAnalyzer.DiagnosticId,
-                Message = EmptyCatchClauseAnalyzer.Message,
-                Severity = EmptyCatchClauseAnalyzer.Severity,
+                Id = EmptyCatchClauseAnalyzer.Rule.Id,
+                Message = EmptyCatchClauseAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = EmptyCatchClauseAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -76,9 +76,9 @@ namespace ConsoleApplication1
 }";
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = EmptyCatchClauseAnalyzer.DiagnosticId,
-                Message = EmptyCatchClauseAnalyzer.Message,
-                Severity = EmptyCatchClauseAnalyzer.Severity,
+                Id = EmptyCatchClauseAnalyzer.Rule.Id,
+                Message = EmptyCatchClauseAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = EmptyCatchClauseAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -123,9 +123,9 @@ namespace ConsoleApplication1
 }";
             var expectedDiagnosticInvalidCastException = new DiagnosticResult
             {
-                Id = EmptyCatchClauseAnalyzer.DiagnosticId,
-                Message = EmptyCatchClauseAnalyzer.Message,
-                Severity = EmptyCatchClauseAnalyzer.Severity,
+                Id = EmptyCatchClauseAnalyzer.Rule.Id,
+                Message = EmptyCatchClauseAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = EmptyCatchClauseAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -134,9 +134,9 @@ namespace ConsoleApplication1
             };
             var expectedDiagnosticArgumentNullException = new DiagnosticResult
             {
-                Id = EmptyCatchClauseAnalyzer.DiagnosticId,
-                Message = EmptyCatchClauseAnalyzer.Message,
-                Severity = EmptyCatchClauseAnalyzer.Severity,
+                Id = EmptyCatchClauseAnalyzer.Rule.Id,
+                Message = EmptyCatchClauseAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = EmptyCatchClauseAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -145,9 +145,9 @@ namespace ConsoleApplication1
             };
             var expectedDiagnosticArgumentException = new DiagnosticResult
             {
-                Id = EmptyCatchClauseAnalyzer.DiagnosticId,
-                Message = EmptyCatchClauseAnalyzer.Message,
-                Severity = EmptyCatchClauseAnalyzer.Severity,
+                Id = EmptyCatchClauseAnalyzer.Rule.Id,
+                Message = EmptyCatchClauseAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = EmptyCatchClauseAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {

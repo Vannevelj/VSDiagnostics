@@ -11,6 +11,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
     public class ArgumentExceptionWithNameofOperatorAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new ArgumentExceptionWithNameofOperatorAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new ArgumentExceptionWithNameofOperatorCodeFix();
 
         [TestMethod]
@@ -48,9 +49,9 @@ namespace VSDiagnostics.Test.Tests.Exceptions
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.DiagnosticId,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Message, "input"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Severity,
+                Id = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id,
+                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"),
+                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -97,9 +98,9 @@ namespace VSDiagnostics.Test.Tests.Exceptions
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.DiagnosticId,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Message, "input"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Severity,
+                Id = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id,
+                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"),
+                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -146,9 +147,9 @@ namespace VSDiagnostics.Test.Tests.Exceptions
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.DiagnosticId,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Message, "input"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Severity,
+                Id = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id,
+                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"),
+                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -195,9 +196,9 @@ namespace VSDiagnostics.Test.Tests.Exceptions
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.DiagnosticId,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Message, "input"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Severity,
+                Id = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id,
+                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"),
+                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -244,9 +245,9 @@ namespace VSDiagnostics.Test.Tests.Exceptions
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.DiagnosticId,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Message, "input"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Severity,
+                Id = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id,
+                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"),
+                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -366,9 +367,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.DiagnosticId,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Message, "input"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Severity,
+                Id = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id,
+                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"),
+                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -378,9 +379,9 @@ namespace ConsoleApplication1
 
             var secondExpectedDiagnostic = new DiagnosticResult
             {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.DiagnosticId,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Message, "otherInput"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Severity,
+                Id = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id,
+                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "otherInput"),
+                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -427,9 +428,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.DiagnosticId,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Message, "input"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Severity,
+                Id = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id,
+                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"),
+                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -476,9 +477,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.DiagnosticId,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Message, "input"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Severity,
+                Id = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id,
+                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"),
+                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {

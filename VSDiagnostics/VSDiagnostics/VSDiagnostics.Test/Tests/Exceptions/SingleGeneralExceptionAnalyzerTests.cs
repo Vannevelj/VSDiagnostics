@@ -37,9 +37,9 @@ namespace VSDiagnostics.Test.Tests.Exceptions
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = SingleGeneralExceptionAnalyzer.DiagnosticId,
-                Message = SingleGeneralExceptionAnalyzer.Message,
-                Severity = SingleGeneralExceptionAnalyzer.Severity,
+                Id = SingleGeneralExceptionAnalyzer.Rule.Id,
+                Message = SingleGeneralExceptionAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = SingleGeneralExceptionAnalyzer.Rule.DefaultSeverity,
                 Locations = new[]
                 {
                     new DiagnosticResultLocation("Test0.cs", 14, 23)

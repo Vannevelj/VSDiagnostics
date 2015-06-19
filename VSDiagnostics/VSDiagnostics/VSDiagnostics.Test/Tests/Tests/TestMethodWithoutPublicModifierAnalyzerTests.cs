@@ -11,6 +11,7 @@ namespace VSDiagnostics.Test.Tests.Tests
     public class TestMethodWithoutPublicModifierAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new TestMethodWithoutPublicModifierAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new TestMethodWithoutPublicModifierCodeFix();
 
         [TestMethod]
@@ -120,9 +121,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = TestMethodWithoutPublicModifierAnalyzer.DiagnosticId,
-                Message = string.Format(TestMethodWithoutPublicModifierAnalyzer.Message, "Method"),
-                Severity = TestMethodWithoutPublicModifierAnalyzer.Severity,
+                Id = TestMethodWithoutPublicModifierAnalyzer.Rule.Id,
+                Message = string.Format(TestMethodWithoutPublicModifierAnalyzer.Rule.MessageFormat.ToString(), "Method"),
+                Severity = TestMethodWithoutPublicModifierAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -173,9 +174,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = TestMethodWithoutPublicModifierAnalyzer.DiagnosticId,
-                Message = string.Format(TestMethodWithoutPublicModifierAnalyzer.Message, "Method"),
-                Severity = TestMethodWithoutPublicModifierAnalyzer.Severity,
+                Id = TestMethodWithoutPublicModifierAnalyzer.Rule.Id,
+                Message = string.Format(TestMethodWithoutPublicModifierAnalyzer.Rule.MessageFormat.ToString(), "Method"),
+                Severity = TestMethodWithoutPublicModifierAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -224,9 +225,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = TestMethodWithoutPublicModifierAnalyzer.DiagnosticId,
-                Message = string.Format(TestMethodWithoutPublicModifierAnalyzer.Message, "Method"),
-                Severity = TestMethodWithoutPublicModifierAnalyzer.Severity,
+                Id = TestMethodWithoutPublicModifierAnalyzer.Rule.Id,
+                Message = string.Format(TestMethodWithoutPublicModifierAnalyzer.Rule.MessageFormat.ToString(), "Method"),
+                Severity = TestMethodWithoutPublicModifierAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -301,9 +302,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = TestMethodWithoutPublicModifierAnalyzer.DiagnosticId,
-                Message = string.Format(TestMethodWithoutPublicModifierAnalyzer.Message, "Method"),
-                Severity = TestMethodWithoutPublicModifierAnalyzer.Severity,
+                Id = TestMethodWithoutPublicModifierAnalyzer.Rule.Id,
+                Message = string.Format(TestMethodWithoutPublicModifierAnalyzer.Rule.MessageFormat.ToString(), "Method"),
+                Severity = TestMethodWithoutPublicModifierAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -354,9 +355,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = TestMethodWithoutPublicModifierAnalyzer.DiagnosticId,
-                Message = string.Format(TestMethodWithoutPublicModifierAnalyzer.Message, "Method"),
-                Severity = TestMethodWithoutPublicModifierAnalyzer.Severity,
+                Id = TestMethodWithoutPublicModifierAnalyzer.Rule.Id,
+                Message = string.Format(TestMethodWithoutPublicModifierAnalyzer.Rule.MessageFormat.ToString(), "Method"),
+                Severity = TestMethodWithoutPublicModifierAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -407,9 +408,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = TestMethodWithoutPublicModifierAnalyzer.DiagnosticId,
-                Message = string.Format(TestMethodWithoutPublicModifierAnalyzer.Message, "Method"),
-                Severity = TestMethodWithoutPublicModifierAnalyzer.Severity,
+                Id = TestMethodWithoutPublicModifierAnalyzer.Rule.Id,
+                Message = string.Format(TestMethodWithoutPublicModifierAnalyzer.Rule.MessageFormat.ToString(), "Method"),
+                Severity = TestMethodWithoutPublicModifierAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {

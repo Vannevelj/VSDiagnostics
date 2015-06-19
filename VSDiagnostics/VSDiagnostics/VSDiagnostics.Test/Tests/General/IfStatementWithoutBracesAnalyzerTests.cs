@@ -11,6 +11,7 @@ namespace VSDiagnostics.Test.Tests.General
     public class IfStatementWithoutBracesAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new IfStatementWithoutBracesAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new IfStatementWithoutBracesCodeFix();
 
         [TestMethod]
@@ -51,9 +52,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
-                Message = IfStatementWithoutBracesAnalyzer.Message,
-                Severity = IfStatementWithoutBracesAnalyzer.Severity,
+                Id = IfStatementWithoutBracesAnalyzer.Rule.Id,
+                Message = IfStatementWithoutBracesAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = IfStatementWithoutBracesAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -103,9 +104,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
-                Message = IfStatementWithoutBracesAnalyzer.Message,
-                Severity = IfStatementWithoutBracesAnalyzer.Severity,
+                Id = IfStatementWithoutBracesAnalyzer.Rule.Id,
+                Message = IfStatementWithoutBracesAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = IfStatementWithoutBracesAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -156,9 +157,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
-                Message = IfStatementWithoutBracesAnalyzer.Message,
-                Severity = IfStatementWithoutBracesAnalyzer.Severity,
+                Id = IfStatementWithoutBracesAnalyzer.Rule.Id,
+                Message = IfStatementWithoutBracesAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = IfStatementWithoutBracesAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -239,9 +240,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
-                Message = IfStatementWithoutBracesAnalyzer.Message,
-                Severity = IfStatementWithoutBracesAnalyzer.Severity,
+                Id = IfStatementWithoutBracesAnalyzer.Rule.Id,
+                Message = IfStatementWithoutBracesAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = IfStatementWithoutBracesAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -300,9 +301,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
-                Message = IfStatementWithoutBracesAnalyzer.Message,
-                Severity = IfStatementWithoutBracesAnalyzer.Severity,
+                Id = IfStatementWithoutBracesAnalyzer.Rule.Id,
+                Message = IfStatementWithoutBracesAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = IfStatementWithoutBracesAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -386,9 +387,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
-                Message = IfStatementWithoutBracesAnalyzer.Message,
-                Severity = IfStatementWithoutBracesAnalyzer.Severity,
+                Id = IfStatementWithoutBracesAnalyzer.Rule.Id,
+                Message = IfStatementWithoutBracesAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = IfStatementWithoutBracesAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -398,9 +399,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic2 = new DiagnosticResult
             {
-                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
-                Message = IfStatementWithoutBracesAnalyzer.Message,
-                Severity = IfStatementWithoutBracesAnalyzer.Severity,
+                Id = IfStatementWithoutBracesAnalyzer.Rule.Id,
+                Message = IfStatementWithoutBracesAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = IfStatementWithoutBracesAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
