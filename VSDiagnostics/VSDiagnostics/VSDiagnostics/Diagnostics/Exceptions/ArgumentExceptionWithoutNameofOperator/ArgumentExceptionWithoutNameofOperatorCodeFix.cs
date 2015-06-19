@@ -9,12 +9,12 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithNameofOperator
+namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOperator
 {
-    [ExportCodeFixProvider("ArgumentExceptionWithNameofOperator", LanguageNames.CSharp), Shared]
-    public class ArgumentExceptionWithNameofOperatorCodeFix : CodeFixProvider
+    [ExportCodeFixProvider("ArgumentExceptionWithoutNameofOperator", LanguageNames.CSharp), Shared]
+    public class ArgumentExceptionWithoutNameofOperatorCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(ArgumentExceptionWithoutNameofOperatorAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 

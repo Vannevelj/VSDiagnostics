@@ -7,13 +7,13 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
 
-namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithNameofOperator
+namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOperator
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class ArgumentExceptionWithNameofOperatorAnalyzer : DiagnosticAnalyzer
+    public class ArgumentExceptionWithoutNameofOperatorAnalyzer : DiagnosticAnalyzer
     {
         private const string Category = "Exceptions";
-        private const string DiagnosticId = nameof(ArgumentExceptionWithNameofOperatorAnalyzer);
+        private const string DiagnosticId = nameof(ArgumentExceptionWithoutNameofOperatorAnalyzer);
         private const string Message = "The field {0} is used in an ArgumentException as string. Consider using the nameof operator instead.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
         private const string Title = "Suggest using the nameof operator in an ArgumentException.";
