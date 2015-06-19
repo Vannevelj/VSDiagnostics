@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithNameofOperator;
 
@@ -47,19 +46,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 45)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"));
             VerifyFix(original, result);
         }
 
@@ -96,19 +83,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 45)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"));
             VerifyFix(original, result);
         }
 
@@ -145,19 +120,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 45)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"));
             VerifyFix(original, result);
         }
 
@@ -194,19 +157,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 45)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"));
             VerifyFix(original, result);
         }
 
@@ -243,19 +194,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 49)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"));
             VerifyFix(original, result);
         }
 
@@ -365,31 +304,9 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 12, 45)
-                    }
-            };
-
-            var secondExpectedDiagnostic = new DiagnosticResult
-            {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "otherInput"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 15, 45)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic, secondExpectedDiagnostic);
+            VerifyDiagnostic(original,
+                string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"),
+                string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "otherInput"));
             VerifyFix(original, result);
         }
 
@@ -426,19 +343,7 @@ namespace ConsoleApplication1
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 45)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"));
             VerifyFix(original, result);
         }
 
@@ -475,19 +380,7 @@ namespace ConsoleApplication1
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.Id,
-                Message = string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"),
-                Severity = ArgumentExceptionWithNameofOperatorAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 45)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(ArgumentExceptionWithNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"));
             VerifyFix(original, result);
         }
     }

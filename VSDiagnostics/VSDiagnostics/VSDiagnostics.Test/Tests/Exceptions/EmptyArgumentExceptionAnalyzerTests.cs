@@ -1,6 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentException;
 
@@ -29,19 +28,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = EmptyArgumentExceptionAnalyzer.Rule.Id,
-                Message = EmptyArgumentExceptionAnalyzer.Rule.MessageFormat.ToString(),
-                Severity = EmptyArgumentExceptionAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 23)
-                    }
-            };
-
-            VerifyDiagnostic(test, expectedDiagnostic);
+            VerifyDiagnostic(test, EmptyArgumentExceptionAnalyzer.Rule.MessageFormat.ToString());
         }
 
         [TestMethod]
@@ -62,19 +49,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = EmptyArgumentExceptionAnalyzer.Rule.Id,
-                Message = EmptyArgumentExceptionAnalyzer.Rule.MessageFormat.ToString(),
-                Severity = EmptyArgumentExceptionAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 23)
-                    }
-            };
-
-            VerifyDiagnostic(test, expectedDiagnostic);
+            VerifyDiagnostic(test, EmptyArgumentExceptionAnalyzer.Rule.MessageFormat.ToString());
         }
 
         [TestMethod]

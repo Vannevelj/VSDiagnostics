@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty;
 
@@ -47,19 +46,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.Id,
-                Message = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.MessageFormat.ToString(),
-                Severity = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 28)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 
@@ -148,19 +135,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.Id,
-                Message = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.MessageFormat.ToString(),
-                Severity = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 25)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 

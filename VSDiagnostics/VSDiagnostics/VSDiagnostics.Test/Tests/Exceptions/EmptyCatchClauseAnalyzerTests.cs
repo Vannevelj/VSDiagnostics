@@ -1,6 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Exceptions.EmptyCatchClause;
 
@@ -33,19 +32,8 @@ namespace ConsoleApplication1
         }
     }
 }";
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = EmptyCatchClauseAnalyzer.Rule.Id,
-                Message = EmptyCatchClauseAnalyzer.Rule.MessageFormat.ToString(),
-                Severity = EmptyCatchClauseAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 14, 13)
-                    }
-            };
 
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, EmptyCatchClauseAnalyzer.Rule.MessageFormat.ToString());
         }
 
         [TestMethod]
@@ -74,19 +62,8 @@ namespace ConsoleApplication1
         }
     }
 }";
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = EmptyCatchClauseAnalyzer.Rule.Id,
-                Message = EmptyCatchClauseAnalyzer.Rule.MessageFormat.ToString(),
-                Severity = EmptyCatchClauseAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 14, 13)
-                    }
-            };
 
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, EmptyCatchClauseAnalyzer.Rule.MessageFormat.ToString());
         }
 
         [TestMethod]
@@ -121,44 +98,11 @@ namespace ConsoleApplication1
         }
     }
 }";
-            var expectedDiagnosticInvalidCastException = new DiagnosticResult
-            {
-                Id = EmptyCatchClauseAnalyzer.Rule.Id,
-                Message = EmptyCatchClauseAnalyzer.Rule.MessageFormat.ToString(),
-                Severity = EmptyCatchClauseAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 14, 13)
-                    }
-            };
-            var expectedDiagnosticArgumentNullException = new DiagnosticResult
-            {
-                Id = EmptyCatchClauseAnalyzer.Rule.Id,
-                Message = EmptyCatchClauseAnalyzer.Rule.MessageFormat.ToString(),
-                Severity = EmptyCatchClauseAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 17, 13)
-                    }
-            };
-            var expectedDiagnosticArgumentException = new DiagnosticResult
-            {
-                Id = EmptyCatchClauseAnalyzer.Rule.Id,
-                Message = EmptyCatchClauseAnalyzer.Rule.MessageFormat.ToString(),
-                Severity = EmptyCatchClauseAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 20, 13)
-                    }
-            };
 
             VerifyDiagnostic(original,
-                expectedDiagnosticInvalidCastException,
-                expectedDiagnosticArgumentNullException,
-                expectedDiagnosticArgumentException);
+                EmptyCatchClauseAnalyzer.Rule.MessageFormat.ToString(),
+                EmptyCatchClauseAnalyzer.Rule.MessageFormat.ToString(),
+                EmptyCatchClauseAnalyzer.Rule.MessageFormat.ToString());
         }
 
         [TestMethod]

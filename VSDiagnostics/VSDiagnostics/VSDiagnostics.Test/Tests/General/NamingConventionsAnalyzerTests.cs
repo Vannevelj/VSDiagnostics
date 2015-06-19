@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.NamingConventions;
 
@@ -41,19 +40,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "X", "_x"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 21)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "X", "_x"));
             VerifyFix(original, result);
         }
 
@@ -84,19 +71,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "_X", "_x"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 21)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "_X", "_x"));
             VerifyFix(original, result);
         }
 
@@ -127,19 +102,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "X"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 20)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "X"));
             VerifyFix(original, result);
         }
 
@@ -170,19 +133,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "X"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 23)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "X"));
             VerifyFix(original, result);
         }
 
@@ -213,19 +164,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "X"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 22)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "X"));
             VerifyFix(original, result);
         }
 
@@ -256,19 +195,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "X"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 32)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "X"));
             VerifyFix(original, result);
         }
 
@@ -299,19 +226,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "property", "x", "X"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 20)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "property", "x", "X"));
             VerifyFix(original, result);
         }
 
@@ -346,19 +261,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "method", "method", "Method"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 14)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "method", "method", "Method"));
             VerifyFix(original, result);
         }
 
@@ -387,19 +290,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "class", "myClass", "MyClass"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 7, 11)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "class", "myClass", "MyClass"));
             VerifyFix(original, result);
         }
 
@@ -428,19 +319,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "something", "ISomething"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 7, 15)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "something", "ISomething"));
             VerifyFix(original, result);
         }
 
@@ -469,19 +348,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "Isomething", "ISomething"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 7, 15)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "Isomething", "ISomething"));
             VerifyFix(original, result);
         }
 
@@ -510,19 +377,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "iSomething", "ISomething"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 7, 15)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "iSomething", "ISomething"));
             VerifyFix(original, result);
         }
 
@@ -551,19 +406,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "Something", "ISomething"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 7, 15)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "Something", "ISomething"));
             VerifyFix(original, result);
         }
 
@@ -592,19 +435,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "Cow_milker", "ICowMilker"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 7, 15)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "Cow_milker", "ICowMilker"));
             VerifyFix(original, result);
         }
 
@@ -633,19 +464,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "_Something", "ISomething"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 7, 15)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "_Something", "ISomething"));
             VerifyFix(original, result);
         }
 
@@ -674,19 +493,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "Something_", "ISomething"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 7, 15)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "Something_", "ISomething"));
             VerifyFix(original, result);
         }
 
@@ -723,19 +530,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "local", "MyVar", "myVar"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 17)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "local", "MyVar", "myVar"));
             VerifyFix(original, result);
         }
 
@@ -770,19 +565,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "parameter", "Param", "param"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 28)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "parameter", "Param", "param"));
             VerifyFix(original, result);
         }
 
@@ -813,31 +596,9 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "X", "_x"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 21)
-                    }
-            };
-
-            var expectedDiagnostic2 = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "Y", "_y"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 24)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic, expectedDiagnostic2);
+            VerifyDiagnostic(original,
+                string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "X", "_x"),
+                string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "Y", "_y"));
             VerifyFix(original, result);
         }
 
@@ -1113,31 +874,9 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "X"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 22)
-                    }
-            };
-
-            var expectedDiagnostic2 = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "method", "method", "Method"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 14)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic, expectedDiagnostic2);
+            VerifyDiagnostic(original,
+                string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "X"),
+                string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "method", "method", "Method"));
             VerifyFix(original, result);
         }
 
@@ -1174,31 +913,9 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "local", "X", "x"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 17)
-                    }
-            };
-
-            var expectedDiagnostic2 = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "local", "Y", "y"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 20)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic, expectedDiagnostic2);
+            VerifyDiagnostic(original,
+                string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "local", "X", "x"),
+                string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "local", "Y", "y"));
             VerifyFix(original, result);
         }
 
@@ -1246,19 +963,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "_x"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 21)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "_x"));
             VerifyFix(original, result);
         }
 
@@ -1289,19 +994,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "X", "_x"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 13)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "X", "_x"));
             VerifyFix(original, result);
         }
 
@@ -1330,19 +1023,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NamingConventionsAnalyzer.Rule.Id,
-                Message = string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "struct", "myStruct", "MyStruct"),
-                Severity = NamingConventionsAnalyzer.Rule.DefaultSeverity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 7, 12)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "struct", "myStruct", "MyStruct"));
             VerifyFix(original, result);
         }
 
