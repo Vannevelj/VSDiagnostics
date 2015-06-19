@@ -11,6 +11,7 @@ namespace VSDiagnostics.Test.Tests.General
     public class TryCastUsingAsNotNullInsteadOfIsAsAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new TryCastWithoutUsingAsNotNullAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new TryCastWithoutUsingAsNotNullCodeFix();
 
         [TestMethod]
@@ -56,9 +57,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = TryCastWithoutUsingAsNotNullAnalyzer.DiagnosticId,
-                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Message, "o"),
-                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Severity,
+                Id = TryCastWithoutUsingAsNotNullAnalyzer.Rule.Id,
+                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"),
+                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -114,9 +115,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = TryCastWithoutUsingAsNotNullAnalyzer.DiagnosticId,
-                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Message, "o"),
-                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Severity,
+                Id = TryCastWithoutUsingAsNotNullAnalyzer.Rule.Id,
+                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"),
+                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -173,9 +174,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = TryCastWithoutUsingAsNotNullAnalyzer.DiagnosticId,
-                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Message, "o"),
-                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Severity,
+                Id = TryCastWithoutUsingAsNotNullAnalyzer.Rule.Id,
+                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"),
+                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -228,9 +229,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = TryCastWithoutUsingAsNotNullAnalyzer.DiagnosticId,
-                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Message, "o"),
-                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Severity,
+                Id = TryCastWithoutUsingAsNotNullAnalyzer.Rule.Id,
+                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"),
+                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -293,9 +294,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = TryCastWithoutUsingAsNotNullAnalyzer.DiagnosticId,
-                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Message, "o"),
-                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Severity,
+                Id = TryCastWithoutUsingAsNotNullAnalyzer.Rule.Id,
+                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"),
+                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -354,9 +355,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = TryCastWithoutUsingAsNotNullAnalyzer.DiagnosticId,
-                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Message, "o"),
-                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Severity,
+                Id = TryCastWithoutUsingAsNotNullAnalyzer.Rule.Id,
+                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"),
+                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -392,9 +393,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = TryCastWithoutUsingAsNotNullAnalyzer.DiagnosticId,
-                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Message, "o"),
-                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Severity,
+                Id = TryCastWithoutUsingAsNotNullAnalyzer.Rule.Id,
+                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"),
+                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -476,9 +477,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = TryCastWithoutUsingAsNotNullAnalyzer.DiagnosticId,
-                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Message, "o"),
-                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Severity,
+                Id = TryCastWithoutUsingAsNotNullAnalyzer.Rule.Id,
+                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"),
+                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {

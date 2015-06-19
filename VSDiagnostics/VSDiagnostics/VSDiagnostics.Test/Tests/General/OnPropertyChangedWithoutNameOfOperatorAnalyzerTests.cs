@@ -11,6 +11,7 @@ namespace VSDiagnostics.Test.Tests.General
     public class OnPropertyChangedWithoutNameOfOperatorAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new OnPropertyChangedWithoutNameOfOperatorAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new OnPropertyChangedWithoutNameOfOperatorCodeFix();
 
         [TestMethod]
@@ -86,9 +87,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = OnPropertyChangedWithoutNameOfOperatorAnalyzer.DiagnosticId,
-                Message = string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Message, "IsEnabled"),
-                Severity = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Severity,
+                Id = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.Id,
+                Message = string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.MessageFormat.ToString(), "IsEnabled"),
+                Severity = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -173,9 +174,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = OnPropertyChangedWithoutNameOfOperatorAnalyzer.DiagnosticId,
-                Message = string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Message, "IsEnabled"),
-                Severity = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Severity,
+                Id = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.Id,
+                Message = string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.MessageFormat.ToString(), "IsEnabled"),
+                Severity = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -322,9 +323,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = OnPropertyChangedWithoutNameOfOperatorAnalyzer.DiagnosticId,
-                Message = string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Message, "IsAnotherBoolean"),
-                Severity = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Severity,
+                Id = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.Id,
+                Message = string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.MessageFormat.ToString(), "IsAnotherBoolean"),
+                Severity = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -449,9 +450,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = OnPropertyChangedWithoutNameOfOperatorAnalyzer.DiagnosticId,
-                Message = string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Message, "IsEnabled"),
-                Severity = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Severity,
+                Id = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.Id,
+                Message = string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.MessageFormat.ToString(), "IsEnabled"),
+                Severity = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {

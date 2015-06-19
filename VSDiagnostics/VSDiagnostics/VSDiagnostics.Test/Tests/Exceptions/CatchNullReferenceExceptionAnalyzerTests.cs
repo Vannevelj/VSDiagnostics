@@ -37,9 +37,9 @@ namespace VSDiagnostics.Test.Tests.Exceptions
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = CatchNullReferenceExceptionAnalyzer.DiagnosticId,
-                Message = CatchNullReferenceExceptionAnalyzer.Message,
-                Severity = CatchNullReferenceExceptionAnalyzer.Severity,
+                Id = CatchNullReferenceExceptionAnalyzer.Rule.Id,
+                Message = CatchNullReferenceExceptionAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = CatchNullReferenceExceptionAnalyzer.Rule.DefaultSeverity,
                 Locations = new[]
                 {
                     new DiagnosticResultLocation("Test0.cs", 14, 22)

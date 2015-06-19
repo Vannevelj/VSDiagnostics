@@ -12,6 +12,7 @@ namespace VSDiagnostics.Test.Tests.Async
     public class AsyncMethodWithoutAsyncSuffixAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override CodeFixProvider CodeFixProvider => new AsyncMethodWithoutAsyncSuffixCodeFix();
+
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new AsyncMethodWithoutAsyncSuffixAnalyzer();
 
         [TestMethod]
@@ -51,9 +52,9 @@ namespace VSDiagnostics.Test.Tests.Async
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.DiagnosticId,
-                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Message, "Method"),
-                Severity = EmptyArgumentExceptionAnalyzer.Severity,
+                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
+                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "Method"),
+                Severity = EmptyArgumentExceptionAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {

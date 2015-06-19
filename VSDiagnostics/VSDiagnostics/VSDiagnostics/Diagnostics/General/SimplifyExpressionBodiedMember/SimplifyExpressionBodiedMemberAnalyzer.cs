@@ -11,12 +11,14 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class SimplifyExpressionBodiedMemberAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = nameof(SimplifyExpressionBodiedMemberAnalyzer);
-        internal const string Title = "Simplify the expression using an expression-bodied member.";
-        internal const string Message = "{0} {1} can be written using an expression-bodied member";
-        internal const string Category = "General";
-        internal const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private const string Category = "General";
+        private const string DiagnosticId = nameof(SimplifyExpressionBodiedMemberAnalyzer);
+        private const string Message = "{0} {1} can be written using an expression-bodied member";
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+        private const string Title = "Simplify the expression using an expression-bodied member.";
+
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)

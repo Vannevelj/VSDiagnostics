@@ -11,6 +11,7 @@ namespace VSDiagnostics.Test.Tests.General
     public class NullableToShorthandAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new NullableToShorthandAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new NullableToShorthandCodeFix();
 
         [TestMethod]
@@ -48,9 +49,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
+                Id = NullableToShorthandAnalyzer.Rule.Id,
+                Message = string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"),
+                Severity = NullableToShorthandAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -99,9 +100,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
+                Id = NullableToShorthandAnalyzer.Rule.Id,
+                Message = string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"),
+                Severity = NullableToShorthandAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -148,9 +149,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
+                Id = NullableToShorthandAnalyzer.Rule.Id,
+                Message = string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"),
+                Severity = NullableToShorthandAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -197,9 +198,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
+                Id = NullableToShorthandAnalyzer.Rule.Id,
+                Message = string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"),
+                Severity = NullableToShorthandAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -248,9 +249,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
+                Id = NullableToShorthandAnalyzer.Rule.Id,
+                Message = string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"),
+                Severity = NullableToShorthandAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -363,9 +364,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
+                Id = NullableToShorthandAnalyzer.Rule.Id,
+                Message = string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"),
+                Severity = NullableToShorthandAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -412,9 +413,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
+                Id = NullableToShorthandAnalyzer.Rule.Id,
+                Message = string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"),
+                Severity = NullableToShorthandAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -461,9 +462,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic1 = new DiagnosticResult
             {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
+                Id = NullableToShorthandAnalyzer.Rule.Id,
+                Message = string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"),
+                Severity = NullableToShorthandAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -473,9 +474,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic2 = new DiagnosticResult
             {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
+                Id = NullableToShorthandAnalyzer.Rule.Id,
+                Message = string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"),
+                Severity = NullableToShorthandAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -522,9 +523,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "Unnamed variable"),
-                Severity = NullableToShorthandAnalyzer.Severity,
+                Id = NullableToShorthandAnalyzer.Rule.Id,
+                Message = string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "Unnamed variable"),
+                Severity = NullableToShorthandAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -571,9 +572,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
+                Id = NullableToShorthandAnalyzer.Rule.Id,
+                Message = string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"),
+                Severity = NullableToShorthandAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -620,9 +621,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "Return statement"),
-                Severity = NullableToShorthandAnalyzer.Severity,
+                Id = NullableToShorthandAnalyzer.Rule.Id,
+                Message = string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "Return statement"),
+                Severity = NullableToShorthandAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {

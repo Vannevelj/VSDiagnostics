@@ -13,7 +13,8 @@ namespace VSDiagnostics.Diagnostics.General.IfStatementWithoutBraces
     [ExportCodeFixProvider("IfStatementWithoutBraces", LanguageNames.CSharp), Shared]
     public class IfStatementWithoutBracesCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(IfStatementWithoutBracesAnalyzer.DiagnosticId);
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(IfStatementWithoutBracesAnalyzer.Rule.Id);
+
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
         public override async Task RegisterCodeFixesAsync(CodeFixContext context)

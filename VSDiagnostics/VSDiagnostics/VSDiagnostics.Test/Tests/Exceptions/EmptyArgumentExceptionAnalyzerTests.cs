@@ -31,9 +31,9 @@ namespace VSDiagnostics.Test.Tests.Exceptions
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = EmptyArgumentExceptionAnalyzer.DiagnosticId,
-                Message = EmptyArgumentExceptionAnalyzer.Message,
-                Severity = EmptyArgumentExceptionAnalyzer.Severity,
+                Id = EmptyArgumentExceptionAnalyzer.Rule.Id,
+                Message = EmptyArgumentExceptionAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = EmptyArgumentExceptionAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -64,9 +64,9 @@ namespace VSDiagnostics.Test.Tests.Exceptions
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = EmptyArgumentExceptionAnalyzer.DiagnosticId,
-                Message = EmptyArgumentExceptionAnalyzer.Message,
-                Severity = EmptyArgumentExceptionAnalyzer.Severity,
+                Id = EmptyArgumentExceptionAnalyzer.Rule.Id,
+                Message = EmptyArgumentExceptionAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = EmptyArgumentExceptionAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {

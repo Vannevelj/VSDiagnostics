@@ -11,6 +11,7 @@ namespace VSDiagnostics.Test.Tests.General
     public class CompareBooleanToTrueLiteralAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new CompareBooleanToTrueLiteralAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new CompareBooleanToTrueLiteralCodeFix();
 
         [TestMethod]
@@ -56,9 +57,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = CompareBooleanToTrueLiteralAnalyzer.DiagnosticId,
-                Message = CompareBooleanToTrueLiteralAnalyzer.Message,
-                Severity = CompareBooleanToTrueLiteralAnalyzer.Severity,
+                Id = CompareBooleanToTrueLiteralAnalyzer.Rule.Id,
+                Message = CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = CompareBooleanToTrueLiteralAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -107,9 +108,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = CompareBooleanToTrueLiteralAnalyzer.DiagnosticId,
-                Message = CompareBooleanToTrueLiteralAnalyzer.Message,
-                Severity = CompareBooleanToTrueLiteralAnalyzer.Severity,
+                Id = CompareBooleanToTrueLiteralAnalyzer.Rule.Id,
+                Message = CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = CompareBooleanToTrueLiteralAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -172,9 +173,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = CompareBooleanToTrueLiteralAnalyzer.DiagnosticId,
-                Message = CompareBooleanToTrueLiteralAnalyzer.Message,
-                Severity = CompareBooleanToTrueLiteralAnalyzer.Severity,
+                Id = CompareBooleanToTrueLiteralAnalyzer.Rule.Id,
+                Message = CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = CompareBooleanToTrueLiteralAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -289,9 +290,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = CompareBooleanToTrueLiteralAnalyzer.DiagnosticId,
-                Message = CompareBooleanToTrueLiteralAnalyzer.Message,
-                Severity = CompareBooleanToTrueLiteralAnalyzer.Severity,
+                Id = CompareBooleanToTrueLiteralAnalyzer.Rule.Id,
+                Message = CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = CompareBooleanToTrueLiteralAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {

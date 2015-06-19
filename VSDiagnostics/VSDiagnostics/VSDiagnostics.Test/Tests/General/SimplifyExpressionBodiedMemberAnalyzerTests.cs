@@ -11,6 +11,7 @@ namespace VSDiagnostics.Test.Tests.General
     public class SimplifyExpressionBodiedMemberAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new SimplifyExpressionBodiedMemberAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new SimplifyExpressionBodiedMemberCodeFix();
 
         [TestMethod]
@@ -45,9 +46,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = SimplifyExpressionBodiedMemberAnalyzer.DiagnosticId,
-                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Message, "Method", "MyMethod"),
-                Severity = SimplifyExpressionBodiedMemberAnalyzer.Severity,
+                Id = SimplifyExpressionBodiedMemberAnalyzer.Rule.Id,
+                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Method", "MyMethod"),
+                Severity = SimplifyExpressionBodiedMemberAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -88,9 +89,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = SimplifyExpressionBodiedMemberAnalyzer.DiagnosticId,
-                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Message, "Property", "MyProperty"),
-                Severity = SimplifyExpressionBodiedMemberAnalyzer.Severity,
+                Id = SimplifyExpressionBodiedMemberAnalyzer.Rule.Id,
+                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Property", "MyProperty"),
+                Severity = SimplifyExpressionBodiedMemberAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -137,9 +138,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = SimplifyExpressionBodiedMemberAnalyzer.DiagnosticId,
-                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Message, "Property", "MyProperty"),
-                Severity = SimplifyExpressionBodiedMemberAnalyzer.Severity,
+                Id = SimplifyExpressionBodiedMemberAnalyzer.Rule.Id,
+                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Property", "MyProperty"),
+                Severity = SimplifyExpressionBodiedMemberAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -363,9 +364,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = SimplifyExpressionBodiedMemberAnalyzer.DiagnosticId,
-                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Message, "Property", "MyProperty"),
-                Severity = SimplifyExpressionBodiedMemberAnalyzer.Severity,
+                Id = SimplifyExpressionBodiedMemberAnalyzer.Rule.Id,
+                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Property", "MyProperty"),
+                Severity = SimplifyExpressionBodiedMemberAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -375,9 +376,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic2 = new DiagnosticResult
             {
-                Id = SimplifyExpressionBodiedMemberAnalyzer.DiagnosticId,
-                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Message, "Property", "MyProperty2"),
-                Severity = SimplifyExpressionBodiedMemberAnalyzer.Severity,
+                Id = SimplifyExpressionBodiedMemberAnalyzer.Rule.Id,
+                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Property", "MyProperty2"),
+                Severity = SimplifyExpressionBodiedMemberAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {

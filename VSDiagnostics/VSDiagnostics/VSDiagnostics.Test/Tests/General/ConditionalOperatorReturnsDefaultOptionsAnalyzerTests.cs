@@ -11,6 +11,7 @@ namespace VSDiagnostics.Test.Tests.General
     public class ConditionalOperatorReturnsDefaultOptionsAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new ConditionalOperatorReturnsDefaultOptionsAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new ConditionalOperatorReturnsDefaultOptionsCodeFix();
 
         [TestMethod]
@@ -52,9 +53,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = ConditionalOperatorReturnsDefaultOptionsAnalyzer.DiagnosticId,
-                Message = ConditionalOperatorReturnsDefaultOptionsAnalyzer.Message,
-                Severity = ConditionalOperatorReturnsDefaultOptionsAnalyzer.Severity,
+                Id = ConditionalOperatorReturnsDefaultOptionsAnalyzer.Rule.Id,
+                Message = ConditionalOperatorReturnsDefaultOptionsAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = ConditionalOperatorReturnsDefaultOptionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -153,9 +154,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = ConditionalOperatorReturnsDefaultOptionsAnalyzer.DiagnosticId,
-                Message = ConditionalOperatorReturnsDefaultOptionsAnalyzer.Message,
-                Severity = ConditionalOperatorReturnsDefaultOptionsAnalyzer.Severity,
+                Id = ConditionalOperatorReturnsDefaultOptionsAnalyzer.Rule.Id,
+                Message = ConditionalOperatorReturnsDefaultOptionsAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = ConditionalOperatorReturnsDefaultOptionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -229,9 +230,9 @@ namespace ConsoleApplication1
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = ConditionalOperatorReturnsDefaultOptionsAnalyzer.DiagnosticId,
-                Message = ConditionalOperatorReturnsDefaultOptionsAnalyzer.Message,
-                Severity = ConditionalOperatorReturnsDefaultOptionsAnalyzer.Severity,
+                Id = ConditionalOperatorReturnsDefaultOptionsAnalyzer.Rule.Id,
+                Message = ConditionalOperatorReturnsDefaultOptionsAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = ConditionalOperatorReturnsDefaultOptionsAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {

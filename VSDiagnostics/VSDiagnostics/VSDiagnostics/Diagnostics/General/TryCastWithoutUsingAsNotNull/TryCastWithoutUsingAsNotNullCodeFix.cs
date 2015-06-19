@@ -15,7 +15,8 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
     [ExportCodeFixProvider("TryCastWithoutUsingAsNotNull", LanguageNames.CSharp), Shared]
     public class TryCastWithoutUsingAsNotNullCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(TryCastWithoutUsingAsNotNullAnalyzer.DiagnosticId);
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(TryCastWithoutUsingAsNotNullAnalyzer.Rule.Id);
+
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
         public override async Task RegisterCodeFixesAsync(CodeFixContext context)
@@ -25,10 +26,10 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Use as", x => UseAsAsync(context.Document, root, statement)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Use as", x => UseAsAsync(context.Document, statement)), diagnostic);
         }
 
-        private async Task<Solution> UseAsAsync(Document document, SyntaxNode root, SyntaxNode statement)
+        private async Task<Solution> UseAsAsync(Document document, SyntaxNode statement)
         {
             var isExpression = (BinaryExpressionSyntax) statement;
             var ifStatement = statement.AncestorsAndSelf().OfType<IfStatementSyntax>().First();

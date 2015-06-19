@@ -10,12 +10,14 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class NonEncapsulatedOrMutableFieldAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = nameof(NonEncapsulatedOrMutableFieldAnalyzer);
-        internal const string Title = "Internal or public fields should be immutable or a property.";
-        internal const string Message = "Field {0} should be turned into a property.";
-        internal const string Category = "General";
-        internal const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private const string Category = "General";
+        private const string DiagnosticId = nameof(NonEncapsulatedOrMutableFieldAnalyzer);
+        private const string Message = "Field {0} should be turned into a property.";
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+        private const string Title = "Internal or public fields should be immutable or a property.";
+
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)

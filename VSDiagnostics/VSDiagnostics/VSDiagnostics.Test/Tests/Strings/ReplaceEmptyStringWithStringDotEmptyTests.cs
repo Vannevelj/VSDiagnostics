@@ -11,6 +11,7 @@ namespace VSDiagnostics.Test.Tests.Strings
     public class ReplaceEmptyStringWithStringDotEmptyTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new ReplaceEmptyStringWithStringDotEmptyAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new ReplaceEmptyStringWithStringDotEmptyCodeFix();
 
         [TestMethod]
@@ -48,9 +49,9 @@ namespace VSDiagnostics.Test.Tests.Strings
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = ReplaceEmptyStringWithStringDotEmptyAnalyzer.DiagnosticId,
-                Message = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Message,
-                Severity = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Severity,
+                Id = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.Id,
+                Message = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {
@@ -149,9 +150,9 @@ namespace VSDiagnostics.Test.Tests.Strings
 
             var expectedDiagnostic = new DiagnosticResult
             {
-                Id = ReplaceEmptyStringWithStringDotEmptyAnalyzer.DiagnosticId,
-                Message = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Message,
-                Severity = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Severity,
+                Id = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.Id,
+                Message = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.MessageFormat.ToString(),
+                Severity = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.DefaultSeverity,
                 Locations =
                     new[]
                     {

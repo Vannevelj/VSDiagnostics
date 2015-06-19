@@ -11,12 +11,14 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class OnPropertyChangedWithoutNameOfOperatorAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = nameof(OnPropertyChangedWithoutNameOfOperatorAnalyzer);
-        internal const string Title = "Use the nameof() operator in conjunection with OnPropertyChanged";
-        internal const string Message = "OnPropertyChanged({0}) can use the nameof() operator.";
-        internal const string Category = "General";
-        internal const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private const string Category = "General";
+        private const string DiagnosticId = nameof(OnPropertyChangedWithoutNameOfOperatorAnalyzer);
+        private const string Message = "OnPropertyChanged({0}) can use the nameof() operator.";
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+        private const string Title = "Use the nameof() operator in conjunection with OnPropertyChanged";
+
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)
@@ -27,12 +29,8 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var invocation = context.Node as InvocationExpressionSyntax;
-            if (invocation == null)
-            {
-                return;
-            }
 
-            var identifierExpression = invocation.Expression as IdentifierNameSyntax;
+            var identifierExpression = invocation?.Expression as IdentifierNameSyntax;
             if (identifierExpression == null)
             {
                 return;
@@ -45,12 +43,8 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
             }
 
             var invokedProperty = invocation.ArgumentList.Arguments.FirstOrDefault();
-            if (invokedProperty == null)
-            {
-                return;
-            }
 
-            var argumentLiteralExpression = invokedProperty.Expression as LiteralExpressionSyntax;
+            var argumentLiteralExpression = invokedProperty?.Expression as LiteralExpressionSyntax;
             if (argumentLiteralExpression == null)
             {
                 return;
