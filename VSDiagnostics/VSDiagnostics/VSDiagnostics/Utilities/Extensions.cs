@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace VSDiagnostics.Utilities
 {
@@ -23,6 +25,35 @@ namespace VSDiagnostics.Utilities
             }
 
             return false;
+        }
+
+        public static bool IsCommentTrivia(this SyntaxTrivia trivia)
+        {
+            var commentTrivias = new[]
+            {
+                SyntaxKind.SingleLineCommentTrivia,
+                SyntaxKind.MultiLineCommentTrivia,
+                SyntaxKind.DocumentationCommentExteriorTrivia,
+                SyntaxKind.SingleLineDocumentationCommentTrivia,
+                SyntaxKind.MultiLineDocumentationCommentTrivia,
+                SyntaxKind.EndOfDocumentationCommentToken,
+                SyntaxKind.XmlComment,
+                SyntaxKind.XmlCommentEndToken,
+                SyntaxKind.XmlCommentStartToken
+            };
+
+            return commentTrivias.Any(x => trivia.IsKind(x));
+        }
+
+        public static bool IsWhitespaceTrivia(this SyntaxTrivia trivia)
+        {
+            var whitespaceTrivia = new[]
+            {
+                SyntaxKind.WhitespaceTrivia,
+                SyntaxKind.EndOfLineTrivia
+            };
+
+            return whitespaceTrivia.Any(x => trivia.IsKind(x));
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.IfStatementWithoutBraces;
 
@@ -11,6 +10,7 @@ namespace VSDiagnostics.Test.Tests.General
     public class IfStatementWithoutBracesAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new IfStatementWithoutBracesAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new IfStatementWithoutBracesCodeFix();
 
         [TestMethod]
@@ -49,19 +49,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
-                Message = IfStatementWithoutBracesAnalyzer.Message,
-                Severity = IfStatementWithoutBracesAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 13)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, IfStatementWithoutBracesAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 
@@ -101,19 +89,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
-                Message = IfStatementWithoutBracesAnalyzer.Message,
-                Severity = IfStatementWithoutBracesAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 13)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, IfStatementWithoutBracesAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 
@@ -154,19 +130,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
-                Message = IfStatementWithoutBracesAnalyzer.Message,
-                Severity = IfStatementWithoutBracesAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 13)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, IfStatementWithoutBracesAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 
@@ -237,19 +201,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
-                Message = IfStatementWithoutBracesAnalyzer.Message,
-                Severity = IfStatementWithoutBracesAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 15, 13)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, IfStatementWithoutBracesAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 
@@ -298,19 +250,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
-                Message = IfStatementWithoutBracesAnalyzer.Message,
-                Severity = IfStatementWithoutBracesAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 15, 13)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, IfStatementWithoutBracesAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 
@@ -384,31 +324,9 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
-                Message = IfStatementWithoutBracesAnalyzer.Message,
-                Severity = IfStatementWithoutBracesAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 13)
-                    }
-            };
-
-            var expectedDiagnostic2 = new DiagnosticResult
-            {
-                Id = IfStatementWithoutBracesAnalyzer.DiagnosticId,
-                Message = IfStatementWithoutBracesAnalyzer.Message,
-                Severity = IfStatementWithoutBracesAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 13, 13)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic, expectedDiagnostic2);
+            VerifyDiagnostic(original,
+                IfStatementWithoutBracesAnalyzer.Rule.MessageFormat.ToString(),
+                IfStatementWithoutBracesAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
     }

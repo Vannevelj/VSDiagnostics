@@ -9,7 +9,7 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
 {
     internal static class NamingConventionExtensions
     {
-        public static SyntaxToken WithConvention(this SyntaxToken identifier, NamingConvention namingConvention)
+        internal static SyntaxToken WithConvention(this SyntaxToken identifier, NamingConvention namingConvention)
         {
             // int @class = 5;
             if (identifier.IsVerbatimIdentifier())

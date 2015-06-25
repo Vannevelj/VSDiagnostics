@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral;
 
@@ -11,6 +10,7 @@ namespace VSDiagnostics.Test.Tests.General
     public class CompareBooleanToTrueLiteralAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new CompareBooleanToTrueLiteralAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new CompareBooleanToTrueLiteralCodeFix();
 
         [TestMethod]
@@ -54,19 +54,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = CompareBooleanToTrueLiteralAnalyzer.DiagnosticId,
-                Message = CompareBooleanToTrueLiteralAnalyzer.Message,
-                Severity = CompareBooleanToTrueLiteralAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 12, 30)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 
@@ -105,19 +93,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = CompareBooleanToTrueLiteralAnalyzer.DiagnosticId,
-                Message = CompareBooleanToTrueLiteralAnalyzer.Message,
-                Severity = CompareBooleanToTrueLiteralAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 12, 33)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 
@@ -170,19 +146,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = CompareBooleanToTrueLiteralAnalyzer.DiagnosticId,
-                Message = CompareBooleanToTrueLiteralAnalyzer.Message,
-                Severity = CompareBooleanToTrueLiteralAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 12, 81)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 
@@ -287,19 +251,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = CompareBooleanToTrueLiteralAnalyzer.DiagnosticId,
-                Message = CompareBooleanToTrueLiteralAnalyzer.Message,
-                Severity = CompareBooleanToTrueLiteralAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 13, 20)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 

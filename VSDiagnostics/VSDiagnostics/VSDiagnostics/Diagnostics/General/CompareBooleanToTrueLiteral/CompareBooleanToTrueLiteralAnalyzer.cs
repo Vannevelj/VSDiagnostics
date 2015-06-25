@@ -9,12 +9,14 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class CompareBooleanToTrueLiteralAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = nameof(CompareBooleanToTrueLiteralAnalyzer);
-        internal const string Title = "A boolean expression doesn't have to be compared to true.";
-        internal const string Message = "A boolean expression can be simplified.";
-        internal const string Category = "General";
-        internal const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private const string Category = "General";
+        private const string DiagnosticId = nameof(CompareBooleanToTrueLiteralAnalyzer);
+        private const string Message = "A boolean expression can be simplified.";
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+        private const string Title = "A boolean expression doesn't have to be compared to true.";
+
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)

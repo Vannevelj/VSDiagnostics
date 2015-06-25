@@ -10,12 +10,14 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class NamingConventionsAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = nameof(NamingConventionsAnalyzer);
-        internal const string Title = "A member does not follow naming conventions.";
-        internal const string Message = "The {0} {1} does not follow naming conventions. Should be {2}.";
-        internal const string Category = "General";
-        internal const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private const string Category = "General";
+        private const string DiagnosticId = nameof(NamingConventionsAnalyzer);
+        private const string Message = "The {0} {1} does not follow naming conventions. Should be {2}.";
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+        private const string Title = "A member does not follow naming conventions.";
+
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)
@@ -54,7 +56,13 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
                     else if (modifiers.Any(SyntaxKind.PrivateKeyword) ||
                              nodeAsField.Modifiers.Count == 0 /* no access modifier defaults to private */)
                     {
-                        CheckNaming(variable.Identifier, "field", NamingConvention.UnderscoreLowerCamelCase, context);
+                        if(modifiers.Any(SyntaxKind.StaticKeyword) || modifiers.Any(SyntaxKind.ConstKeyword))
+                        {
+                            CheckNaming(variable.Identifier, "field", NamingConvention.UpperCamelCase, context);
+                        } else
+                        {
+                            CheckNaming(variable.Identifier, "field", NamingConvention.UnderscoreLowerCamelCase, context);
+                        }                        
                     }
                     else
                     {

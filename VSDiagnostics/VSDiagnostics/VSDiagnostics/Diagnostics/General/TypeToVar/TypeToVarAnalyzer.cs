@@ -9,12 +9,14 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class TypeToVarAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = nameof(TypeToVarAnalyzer);
-        internal const string Title = "Use var instead of type.";
-        internal const string Message = "Actual type can be replaced with 'var'.";
-        internal const string Category = "General";
-        internal const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private const string Category = "General";
+        private const string DiagnosticId = nameof(TypeToVarAnalyzer);
+        private const string Message = "Actual type can be replaced with 'var'.";
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+        private const string Title = "Use var instead of type.";
+
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)
@@ -25,12 +27,8 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var localDeclaration = context.Node as LocalDeclarationStatementSyntax;
-            if (localDeclaration == null)
-            {
-                return;
-            }
 
-            if (localDeclaration.Declaration == null)
+            if (localDeclaration?.Declaration == null)
             {
                 return;
             }
@@ -43,7 +41,7 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
 
             // can't have more than one implicitly-typed variable in a statement
             var variable = localDeclaration.Declaration.Variables.FirstOrDefault();
-            if (variable == null || variable.Initializer == null)
+            if (variable?.Initializer == null)
             {
                 return;
             }

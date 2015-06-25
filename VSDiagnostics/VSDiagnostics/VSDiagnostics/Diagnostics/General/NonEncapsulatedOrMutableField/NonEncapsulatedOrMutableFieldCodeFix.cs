@@ -17,7 +17,8 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
     [ExportCodeFixProvider("NonEncapsulatedOrMutableField", LanguageNames.CSharp), Shared]
     public class NonEncapsulatedOrMutableFieldCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(NonEncapsulatedOrMutableFieldAnalyzer.DiagnosticId);
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id);
+
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
         public override async Task RegisterCodeFixesAsync(CodeFixContext context)
@@ -27,10 +28,10 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Use property", x => UsePropertyAsync(context.Document, root, statement)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Use property", x => UsePropertyAsync(context.Document, statement)), diagnostic);
         }
 
-        private async Task<Solution> UsePropertyAsync(Document document, SyntaxNode root, SyntaxNode statement)
+        private async Task<Solution> UsePropertyAsync(Document document, SyntaxNode statement)
         {
             // Create a new property
             // Using property naming conventions

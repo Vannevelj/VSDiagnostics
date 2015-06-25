@@ -1,10 +1,8 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix;
-using VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentException;
 
 namespace VSDiagnostics.Test.Tests.Async
 {
@@ -12,6 +10,7 @@ namespace VSDiagnostics.Test.Tests.Async
     public class AsyncMethodWithoutAsyncSuffixAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override CodeFixProvider CodeFixProvider => new AsyncMethodWithoutAsyncSuffixCodeFix();
+
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new AsyncMethodWithoutAsyncSuffixAnalyzer();
 
         [TestMethod]
@@ -49,19 +48,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.DiagnosticId,
-                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Message, "Method"),
-                Severity = EmptyArgumentExceptionAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 10, 24)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "Method"));
             VerifyFix(original, result);
         }
 

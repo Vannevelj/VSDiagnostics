@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using VSDiagnostics.Utilities;
 
@@ -13,7 +14,8 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
     [ExportCodeFixProvider("NamingConventions", LanguageNames.CSharp), Shared]
     public class NamingConventionsCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(NamingConventionsAnalyzer.DiagnosticId);
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(NamingConventionsAnalyzer.Rule.Id);
+
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
         public override async Task RegisterCodeFixesAsync(CodeFixContext context)
@@ -36,7 +38,7 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
                 var parentAsField = identifierParent as FieldDeclarationSyntax;
                 if (parentAsField != null)
                 {
-                    if (parentAsField.Modifiers.Any(x => new[] { "internal", "protected", "public" }.Contains(x.Text)))
+                    if (parentAsField.Modifiers.Any(x => new[] { SyntaxKind.InternalKeyword, SyntaxKind.ProtectedKeyword, SyntaxKind.PublicKeyword }.Any(keyword => x.IsKind(keyword))))
                     {
                         newIdentifier = identifier.WithConvention(NamingConvention.UpperCamelCase);
                     }

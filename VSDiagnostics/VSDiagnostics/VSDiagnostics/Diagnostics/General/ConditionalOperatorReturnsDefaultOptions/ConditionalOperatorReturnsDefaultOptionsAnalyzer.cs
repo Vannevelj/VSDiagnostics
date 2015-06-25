@@ -9,12 +9,14 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsDefaultOpt
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ConditionalOperatorReturnsDefaultOptionsAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = nameof(ConditionalOperatorReturnsDefaultOptionsAnalyzer);
-        internal const string Title = "The conditional operator shouldn't return redundant true and false literals.";
-        internal const string Message = "A conditional operator can be omitted.";
-        internal const string Category = "General";
-        internal const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private const string Category = "General";
+        private const string DiagnosticId = nameof(ConditionalOperatorReturnsDefaultOptionsAnalyzer);
+        private const string Message = "A conditional operator can be omitted.";
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+        private const string Title = "The conditional operator shouldn't return redundant true and false literals.";
+
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)
@@ -25,12 +27,8 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsDefaultOpt
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var conditionalExpression = context.Node as ConditionalExpressionSyntax;
-            if (conditionalExpression == null)
-            {
-                return;
-            }
 
-            var trueExpression = conditionalExpression.WhenTrue as LiteralExpressionSyntax;
+            var trueExpression = conditionalExpression?.WhenTrue as LiteralExpressionSyntax;
             if (trueExpression == null)
             {
                 return;

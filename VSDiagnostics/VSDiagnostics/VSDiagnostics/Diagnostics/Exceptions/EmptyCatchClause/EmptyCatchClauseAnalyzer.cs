@@ -9,12 +9,14 @@ namespace VSDiagnostics.Diagnostics.Exceptions.EmptyCatchClause
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class EmptyCatchClauseAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = nameof(EmptyCatchClause);
-        internal const string Title = "Warns when an exception catch block is empty.";
-        internal const string Message = "Empty catch block detected.";
-        internal const string Category = "Exceptions";
-        internal const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private const string Category = "Exceptions";
+        private const string DiagnosticId = nameof(EmptyCatchClause);
+        private const string Message = "Empty catch block detected.";
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+        private const string Title = "Warns when an exception catch block is empty.";
+
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)

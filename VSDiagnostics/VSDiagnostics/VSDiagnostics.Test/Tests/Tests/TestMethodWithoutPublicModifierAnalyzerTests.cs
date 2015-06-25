@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier;
 
@@ -11,6 +10,7 @@ namespace VSDiagnostics.Test.Tests.Tests
     public class TestMethodWithoutPublicModifierAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new TestMethodWithoutPublicModifierAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new TestMethodWithoutPublicModifierCodeFix();
 
         [TestMethod]
@@ -118,19 +118,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = TestMethodWithoutPublicModifierAnalyzer.DiagnosticId,
-                Message = string.Format(TestMethodWithoutPublicModifierAnalyzer.Message, "Method"),
-                Severity = TestMethodWithoutPublicModifierAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 23)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(TestMethodWithoutPublicModifierAnalyzer.Rule.MessageFormat.ToString(), "Method"));
             VerifyFix(original, result);
         }
 
@@ -171,19 +159,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = TestMethodWithoutPublicModifierAnalyzer.DiagnosticId,
-                Message = string.Format(TestMethodWithoutPublicModifierAnalyzer.Message, "Method"),
-                Severity = TestMethodWithoutPublicModifierAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 23)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(TestMethodWithoutPublicModifierAnalyzer.Rule.MessageFormat.ToString(), "Method"));
             VerifyFix(original, result);
         }
 
@@ -222,19 +198,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = TestMethodWithoutPublicModifierAnalyzer.DiagnosticId,
-                Message = string.Format(TestMethodWithoutPublicModifierAnalyzer.Message, "Method"),
-                Severity = TestMethodWithoutPublicModifierAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 10, 23)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(TestMethodWithoutPublicModifierAnalyzer.Rule.MessageFormat.ToString(), "Method"));
             VerifyFix(original, result);
         }
 
@@ -299,19 +263,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = TestMethodWithoutPublicModifierAnalyzer.DiagnosticId,
-                Message = string.Format(TestMethodWithoutPublicModifierAnalyzer.Message, "Method"),
-                Severity = TestMethodWithoutPublicModifierAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 41)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(TestMethodWithoutPublicModifierAnalyzer.Rule.MessageFormat.ToString(), "Method"));
             VerifyFix(original, result);
         }
 
@@ -352,19 +304,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = TestMethodWithoutPublicModifierAnalyzer.DiagnosticId,
-                Message = string.Format(TestMethodWithoutPublicModifierAnalyzer.Message, "Method"),
-                Severity = TestMethodWithoutPublicModifierAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 31)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(TestMethodWithoutPublicModifierAnalyzer.Rule.MessageFormat.ToString(), "Method"));
             VerifyFix(original, result);
         }
 
@@ -405,19 +345,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = TestMethodWithoutPublicModifierAnalyzer.DiagnosticId,
-                Message = string.Format(TestMethodWithoutPublicModifierAnalyzer.Message, "Method"),
-                Severity = TestMethodWithoutPublicModifierAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 14)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(TestMethodWithoutPublicModifierAnalyzer.Rule.MessageFormat.ToString(), "Method"));
             VerifyFix(original, result);
         }
 

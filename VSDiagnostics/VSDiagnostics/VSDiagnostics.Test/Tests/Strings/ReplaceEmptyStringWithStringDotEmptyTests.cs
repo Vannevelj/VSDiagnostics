@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty;
 
@@ -11,6 +10,7 @@ namespace VSDiagnostics.Test.Tests.Strings
     public class ReplaceEmptyStringWithStringDotEmptyTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new ReplaceEmptyStringWithStringDotEmptyAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new ReplaceEmptyStringWithStringDotEmptyCodeFix();
 
         [TestMethod]
@@ -46,19 +46,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = ReplaceEmptyStringWithStringDotEmptyAnalyzer.DiagnosticId,
-                Message = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Message,
-                Severity = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 28)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 
@@ -147,19 +135,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = ReplaceEmptyStringWithStringDotEmptyAnalyzer.DiagnosticId,
-                Message = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Message,
-                Severity = ReplaceEmptyStringWithStringDotEmptyAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 25)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 
@@ -178,6 +154,34 @@ namespace VSDiagnostics.Test.Tests.Strings
             {
                 string s = string.Empty;
             }
+        }
+    }";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ReplaceEmptyStringsWithStringDotEmpty_WithEmptyStringAsAttributeArgument_DoesNotInvokeWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {
+            [MyAttribute(Test = """")]
+            void Method()
+            {
+
+            }
+        }
+
+        [AttributeUsage(AttributeTargets.All)]
+        public class MyAttribute : Attribute
+        {
+	        public string Test { get; set; }
         }
     }";
 

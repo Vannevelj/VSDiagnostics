@@ -4,18 +4,21 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class SimplifyExpressionBodiedMemberAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = nameof(SimplifyExpressionBodiedMemberAnalyzer);
-        internal const string Title = "Simplify the expression using an expression-bodied member.";
-        internal const string Message = "{0} {1} can be written using an expression-bodied member";
-        internal const string Category = "General";
-        internal const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private const string Category = "General";
+        private const string DiagnosticId = nameof(SimplifyExpressionBodiedMemberAnalyzer);
+        private const string Message = "{0} {1} can be written using an expression-bodied member";
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+        private const string Title = "Simplify the expression using an expression-bodied member.";
+
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)
@@ -52,18 +55,23 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
+            if (propertyDeclaration.DescendantNodesAndTokensAndSelf().Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
+            {
+                return null;
+            }
+
             var getter = propertyDeclaration.AccessorList.Accessors.FirstOrDefault(x => x.Keyword.ValueText == "get");
             if (getter == null)
             {
                 return null;
             }
 
-            if (getter.Body == null)
+            if (getter.AttributeLists.Any(x => x.Attributes.Any()))
             {
                 return null;
             }
 
-            if (getter.Body.Statements.Count != 1)
+            if (getter.Body?.Statements.Count != 1)
             {
                 return null;
             }
@@ -79,18 +87,18 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
-            if (methodDeclaration.Body.Statements.Count != 1)
+            if (methodDeclaration.DescendantNodesAndTokensAndSelf().Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
+            {
+                return null;
+            }
+
+            if (methodDeclaration.Body?.Statements.Count != 1)
             {
                 return null;
             }
 
             var statement = methodDeclaration.Body.Statements.FirstOrDefault();
-            if (statement == null)
-            {
-                return null;
-            }
-
-            var returnStatement = statement.DescendantNodesAndSelf().OfType<ReturnStatementSyntax>().FirstOrDefault();
+            var returnStatement = statement?.DescendantNodesAndSelf().OfType<ReturnStatementSyntax>().FirstOrDefault();
             if (returnStatement == null)
             {
                 return null;

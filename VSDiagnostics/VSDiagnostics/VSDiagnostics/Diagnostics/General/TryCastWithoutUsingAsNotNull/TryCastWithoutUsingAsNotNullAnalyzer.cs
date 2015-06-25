@@ -10,12 +10,14 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class TryCastWithoutUsingAsNotNullAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = nameof(TryCastWithoutUsingAsNotNullAnalyzer);
-        internal const string Title = "The conversion can be performed without casting twice.";
-        internal const string Message = "Variable {0} can be casted using as/null.";
-        internal const string Category = "General";
-        internal const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private const string Category = "General";
+        private const string DiagnosticId = nameof(TryCastWithoutUsingAsNotNullAnalyzer);
+        private const string Message = "Variable {0} can be casted using as/null.";
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+        private const string Title = "The conversion can be performed without casting twice.";
+
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)
@@ -26,12 +28,8 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var isExpression = context.Node as BinaryExpressionSyntax;
-            if (isExpression == null)
-            {
-                return;
-            }
 
-            var isIdentifierExpression = isExpression.Left as IdentifierNameSyntax;
+            var isIdentifierExpression = isExpression?.Left as IdentifierNameSyntax;
             if (isIdentifierExpression == null)
             {
                 return;
