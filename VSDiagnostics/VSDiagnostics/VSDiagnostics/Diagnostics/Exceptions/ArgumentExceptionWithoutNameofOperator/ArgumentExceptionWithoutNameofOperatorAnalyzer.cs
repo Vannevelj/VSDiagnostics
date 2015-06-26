@@ -7,17 +7,19 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
 
-namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithNameofOperator
+namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOperator
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class ArgumentExceptionWithNameofOperatorAnalyzer : DiagnosticAnalyzer
+    public class ArgumentExceptionWithoutNameofOperatorAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = nameof(ArgumentExceptionWithNameofOperatorAnalyzer);
-        internal const string Title = "Suggest using the nameof operator in an ArgumentException.";
-        internal const string Message = "The field {0} is used in an ArgumentException as string. Consider using the nameof operator instead.";
-        internal const string Category = "Exceptions";
-        internal const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private const string Category = "Exceptions";
+        private const string DiagnosticId = nameof(ArgumentExceptionWithoutNameofOperatorAnalyzer);
+        private const string Message = "The field {0} is used in an ArgumentException as string. Consider using the nameof operator instead.";
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+        private const string Title = "Suggest using the nameof operator in an ArgumentException.";
+
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)

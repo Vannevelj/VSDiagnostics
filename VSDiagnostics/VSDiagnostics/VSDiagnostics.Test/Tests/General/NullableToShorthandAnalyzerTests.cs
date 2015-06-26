@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.NullableToShorthand;
 
@@ -11,6 +10,7 @@ namespace VSDiagnostics.Test.Tests.General
     public class NullableToShorthandAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new NullableToShorthandAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new NullableToShorthandCodeFix();
 
         [TestMethod]
@@ -46,19 +46,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 13)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
@@ -97,19 +85,7 @@ namespace ConsoleApplication1
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 21)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
@@ -146,19 +122,7 @@ namespace ConsoleApplication1
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 25)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
@@ -195,19 +159,7 @@ namespace ConsoleApplication1
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 41)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
@@ -246,19 +198,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 16)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
@@ -361,19 +301,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 13)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
@@ -410,19 +338,7 @@ namespace ConsoleApplication1
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 25)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
@@ -459,31 +375,9 @@ namespace ConsoleApplication1
         }
     }";
 
-            var expectedDiagnostic1 = new DiagnosticResult
-            {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 28)
-                    }
-            };
-
-            var expectedDiagnostic2 = new DiagnosticResult
-            {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 43)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic1, expectedDiagnostic2);
+            VerifyDiagnostic(original,
+                string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"),
+                string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
@@ -520,19 +414,7 @@ namespace ConsoleApplication1
         }
     }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "Unnamed variable"),
-                Severity = NullableToShorthandAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 29)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "Unnamed variable"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
@@ -569,19 +451,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "myVar"),
-                Severity = NullableToShorthandAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 40)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
@@ -618,19 +488,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = NullableToShorthandAnalyzer.DiagnosticId,
-                Message = string.Format(NullableToShorthandAnalyzer.Message, "Return statement"),
-                Severity = NullableToShorthandAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 9)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "Return statement"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
     }

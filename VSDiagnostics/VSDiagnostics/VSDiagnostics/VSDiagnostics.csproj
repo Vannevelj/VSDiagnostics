@@ -34,8 +34,8 @@
   <ItemGroup>
     <Compile Include="Diagnostics\Async\AsyncMethodWithoutAsyncSuffix\AsyncMethodWithoutAsyncSuffixAnalyzer.cs" />
     <Compile Include="Diagnostics\Async\AsyncMethodWithoutAsyncSuffix\AsyncMethodWithoutAsyncSuffixCodeFix.cs" />
-    <Compile Include="Diagnostics\Exceptions\ArgumentExceptionWithNameofOperator\ArgumentExceptionWithNameofOperatorAnalyzer.cs" />
-    <Compile Include="Diagnostics\Exceptions\ArgumentExceptionWithNameofOperator\ArgumentExceptionWithNameofOperatorCodeFix.cs" />
+    <Compile Include="Diagnostics\Exceptions\ArgumentExceptionWithoutNameofOperator\ArgumentExceptionWithoutNameofOperatorAnalyzer.cs" />
+    <Compile Include="Diagnostics\Exceptions\ArgumentExceptionWithoutNameofOperator\ArgumentExceptionWithoutNameofOperatorCodeFix.cs" />
     <Compile Include="Diagnostics\Exceptions\CatchNullReferenceException\CatchNullReferenceExceptionAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\EmptyArgumentException\EmptyArgumentExceptionAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\EmptyCatchClause\EmptyCatchClauseAnalyzer.cs" />
@@ -134,7 +134,6 @@
     <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0-rc2\tools\analyzers\C#\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0-rc2\tools\analyzers\C#\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Choose>
     <When Condition=" $(NUGETLOCAL) != '' ">

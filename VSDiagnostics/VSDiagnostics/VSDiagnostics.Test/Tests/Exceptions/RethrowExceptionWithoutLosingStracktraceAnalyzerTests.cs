@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStacktrace;
 
@@ -11,6 +10,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
     public class RethrowExceptionWithoutLosingStracktraceAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new RethrowExceptionWithoutLosingStacktraceAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new RethrowExceptionWithoutLosingStacktraceCodeFix();
 
         [TestMethod]
@@ -60,19 +60,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = RethrowExceptionWithoutLosingStacktraceAnalyzer.DiagnosticId,
-                Message = RethrowExceptionWithoutLosingStacktraceAnalyzer.Message,
-                Severity = RethrowExceptionWithoutLosingStacktraceAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 17, 17)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, RethrowExceptionWithoutLosingStacktraceAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result, allowNewCompilerDiagnostics: true); // Removing the argument will remove all usages of the e parameter. This will cause a CS0168 warning.
         }
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember;
 
@@ -11,6 +10,7 @@ namespace VSDiagnostics.Test.Tests.General
     public class SimplifyExpressionBodiedMemberAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new SimplifyExpressionBodiedMemberAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new SimplifyExpressionBodiedMemberCodeFix();
 
         [TestMethod]
@@ -43,19 +43,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = SimplifyExpressionBodiedMemberAnalyzer.DiagnosticId,
-                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Message, "Method", "MyMethod"),
-                Severity = SimplifyExpressionBodiedMemberAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 13)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Method", "MyMethod"));
             VerifyFix(original, expected);
         }
 
@@ -86,19 +74,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = SimplifyExpressionBodiedMemberAnalyzer.DiagnosticId,
-                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Message, "Property", "MyProperty"),
-                Severity = SimplifyExpressionBodiedMemberAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 9, 35)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Property", "MyProperty"));
             VerifyFix(original, expected);
         }
 
@@ -135,19 +111,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = SimplifyExpressionBodiedMemberAnalyzer.DiagnosticId,
-                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Message, "Property", "MyProperty"),
-                Severity = SimplifyExpressionBodiedMemberAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 13, 17)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Property", "MyProperty"));
             VerifyFix(original, expected);
         }
 
@@ -295,7 +259,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMemberAnalyzer_WithMethodAndTrailingComments_InvokesWarning()
+        public void SimplifyExpressionBodiedMemberAnalyzer_WithMethodAndTrailingComments_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -311,33 +275,7 @@ namespace ConsoleApplication1
         }
     }
 }";
-
-            var expected = @"
-using System;
-using System.Text;
-
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        int MyMethod() => 5; /* comments */
-    }
-}";
-
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = SimplifyExpressionBodiedMemberAnalyzer.DiagnosticId,
-                Message = string.Format(SimplifyExpressionBodiedMemberAnalyzer.Message, "Method", "MyMethod"),
-                Severity = SimplifyExpressionBodiedMemberAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 13)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
-            VerifyFix(original, expected);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -354,6 +292,122 @@ namespace ConsoleApplication1
         int MyProperty { get; set; }
     }
 }";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMemberAnalyzer_WithMultipleProperties_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int MyProperty { get { return 5; } }
+        int MyProperty2 { get { return 6; } }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int MyProperty => 5;
+
+        int MyProperty2 => 6;
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Property", "MyProperty"),
+                string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Property", "MyProperty2"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMemberAnalyzer_WithTrivia_AsProperty_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int MyProperty { /* test */ get { return 5; } /* more test */ }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMemberAnalyzer_WithTrivia_AsMethod_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int MyMethod() 
+        { 
+            /* test */ 
+            return 5;
+            /* more test */
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMemberAnalyzer_WithTrailingPropertyTrivia_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int MyProperty { get { return 5; }} // lala
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMemberAnalyzer_WithAttribute_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int MyProperty { [MyAttribute] get { return 5; }} 
+    }
+
+    [AttributeUsage(AttributeTargets.All)]
+    class MyAttribute : Attribute
+    {   
+    }
+}";
+
             VerifyDiagnostic(original);
         }
     }

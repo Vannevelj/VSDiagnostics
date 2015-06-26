@@ -13,7 +13,8 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsDefaultOpt
     [ExportCodeFixProvider("ConditionalOperatorReturnsDefaultOptions", LanguageNames.CSharp), Shared]
     public class ConditionalOperatorReturnsDefaultOptionsCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(ConditionalOperatorReturnsDefaultOptionsAnalyzer.DiagnosticId);
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(ConditionalOperatorReturnsDefaultOptionsAnalyzer.Rule.Id);
+
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
         public override async Task RegisterCodeFixesAsync(CodeFixContext context)

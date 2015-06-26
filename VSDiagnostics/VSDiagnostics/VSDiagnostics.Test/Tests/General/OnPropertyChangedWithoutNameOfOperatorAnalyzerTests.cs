@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperator;
 
@@ -11,6 +10,7 @@ namespace VSDiagnostics.Test.Tests.General
     public class OnPropertyChangedWithoutNameOfOperatorAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new OnPropertyChangedWithoutNameOfOperatorAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new OnPropertyChangedWithoutNameOfOperatorCodeFix();
 
         [TestMethod]
@@ -84,19 +84,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = OnPropertyChangedWithoutNameOfOperatorAnalyzer.DiagnosticId,
-                Message = string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Message, "IsEnabled"),
-                Severity = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 17, 35)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.MessageFormat.ToString(), "IsEnabled"));
             VerifyFix(original, expected);
         }
 
@@ -171,19 +159,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = OnPropertyChangedWithoutNameOfOperatorAnalyzer.DiagnosticId,
-                Message = string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Message, "IsEnabled"),
-                Severity = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 17, 35)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.MessageFormat.ToString(), "IsEnabled"));
             VerifyFix(original, expected);
         }
 
@@ -320,19 +296,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = OnPropertyChangedWithoutNameOfOperatorAnalyzer.DiagnosticId,
-                Message = string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Message, "IsAnotherBoolean"),
-                Severity = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 17, 35)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.MessageFormat.ToString(), "IsAnotherBoolean"));
             VerifyFix(original, expected);
         }
 
@@ -447,19 +411,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = OnPropertyChangedWithoutNameOfOperatorAnalyzer.DiagnosticId,
-                Message = string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Message, "IsEnabled"),
-                Severity = OnPropertyChangedWithoutNameOfOperatorAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 17, 35)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.MessageFormat.ToString(), "IsEnabled"));
             VerifyFix(original, expected);
         }
     }

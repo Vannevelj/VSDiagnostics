@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull;
 
@@ -11,6 +10,7 @@ namespace VSDiagnostics.Test.Tests.General
     public class TryCastUsingAsNotNullInsteadOfIsAsAnalyzerTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new TryCastWithoutUsingAsNotNullAnalyzer();
+
         protected override CodeFixProvider CodeFixProvider => new TryCastWithoutUsingAsNotNullCodeFix();
 
         [TestMethod]
@@ -54,19 +54,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = TryCastWithoutUsingAsNotNullAnalyzer.DiagnosticId,
-                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Message, "o"),
-                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 12, 17)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
             VerifyFix(original, expected);
         }
 
@@ -111,20 +99,7 @@ namespace ConsoleApplication1
     }
 }";
 
-
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = TryCastWithoutUsingAsNotNullAnalyzer.DiagnosticId,
-                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Message, "o"),
-                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 12, 17)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
             VerifyFix(original, expected);
         }
 
@@ -171,19 +146,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = TryCastWithoutUsingAsNotNullAnalyzer.DiagnosticId,
-                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Message, "o"),
-                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 13, 17)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
             VerifyFix(original, expected);
         }
 
@@ -226,19 +189,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = TryCastWithoutUsingAsNotNullAnalyzer.DiagnosticId,
-                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Message, "o"),
-                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 17)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
             VerifyFix(original, expected);
         }
 
@@ -291,19 +242,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = TryCastWithoutUsingAsNotNullAnalyzer.DiagnosticId,
-                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Message, "o"),
-                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 12, 17)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
             VerifyFix(original, expected);
         }
 
@@ -352,19 +291,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = TryCastWithoutUsingAsNotNullAnalyzer.DiagnosticId,
-                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Message, "o"),
-                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 12, 17)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
             VerifyFix(original, expected);
         }
 
@@ -390,19 +317,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = TryCastWithoutUsingAsNotNullAnalyzer.DiagnosticId,
-                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Message, "o"),
-                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 12, 17)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
         }
 
         [TestMethod]
@@ -473,20 +388,7 @@ namespace ConsoleApplication1
     }
 }";
 
-
-            var expectedDiagnostic = new DiagnosticResult
-            {
-                Id = TryCastWithoutUsingAsNotNullAnalyzer.DiagnosticId,
-                Message = string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Message, "o"),
-                Severity = TryCastWithoutUsingAsNotNullAnalyzer.Severity,
-                Locations =
-                    new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 12, 17)
-                    }
-            };
-
-            VerifyDiagnostic(original, expectedDiagnostic);
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
             VerifyFix(original, expected);
         }
     }

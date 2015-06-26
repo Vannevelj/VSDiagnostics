@@ -11,12 +11,14 @@ namespace VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStac
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class RethrowExceptionWithoutLosingStacktraceAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = nameof(RethrowExceptionWithoutLosingStacktraceAnalyzer);
-        internal const string Title = "Warns when an exception is rethrown in a way that it loses the stacktrace.";
-        internal const string Message = "Rethrown exception loses the stacktrace.";
-        internal const string Category = "Exceptions";
-        internal const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private const string Category = "Exceptions";
+        private const string DiagnosticId = nameof(RethrowExceptionWithoutLosingStacktraceAnalyzer);
+        private const string Message = "Rethrown exception loses the stacktrace.";
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+        private const string Title = "Warns when an exception is rethrown in a way that it loses the stacktrace.";
+
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)
@@ -27,25 +29,17 @@ namespace VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStac
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             var throwStatement = context.Node as ThrowStatementSyntax;
-            if (throwStatement == null)
-            {
-                return;
-            }
 
-            var throwIdentifierSyntax = throwStatement.Expression as IdentifierNameSyntax;
+            var throwIdentifierSyntax = throwStatement?.Expression as IdentifierNameSyntax;
             if (throwIdentifierSyntax == null)
             {
                 return;
             }
 
             var catchClause = throwStatement.Ancestors().OfType<CatchClauseSyntax>().FirstOrDefault();
-            if (catchClause == null)
-            {
-                return;
-            }
 
             // Code is in an incomplete state (user is typing the catch clause but hasn't typed the identifier yet)
-            var exceptionIdentifier = catchClause.Declaration?.Identifier;
+            var exceptionIdentifier = catchClause?.Declaration?.Identifier;
             if (exceptionIdentifier == null)
             {
                 return;
