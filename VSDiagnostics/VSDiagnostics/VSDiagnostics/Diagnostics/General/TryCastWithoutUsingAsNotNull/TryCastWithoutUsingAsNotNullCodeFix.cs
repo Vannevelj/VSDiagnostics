@@ -26,7 +26,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Use as", x => UseAsAsync(context.Document, statement)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Use as", x => UseAsAsync(context.Document, statement), nameof(TryCastWithoutUsingAsNotNullAnalyzer)), diagnostic);
         }
 
         private async Task<Solution> UseAsAsync(Document document, SyntaxNode statement)
@@ -65,7 +65,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                             SyntaxFactory.TokenList(),
                             newDeclaration,
                             SyntaxFactory.Token(SyntaxKind.SemicolonToken));
-                        editor.InsertBefore(ifStatement, new[] { newStatement.WithAdditionalAnnotations(Formatter.Annotation) });
+                        editor.InsertBefore(ifStatement, newStatement.WithAdditionalAnnotations(Formatter.Annotation));
 
                         // Rewrite the variable declaration inside the if-body to remove the one we just copied
                         var newVariables = variableDeclaration.Declaration.WithVariables(SyntaxFactory.SeparatedList(variableDeclaration.Declaration.Variables.Except(new[] { extractedDeclarator })));
@@ -78,7 +78,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                     else // Move declaration outside if-body
                     {
                         editor.RemoveNode(variableDeclaration);
-                        editor.InsertBefore(ifStatement, new[] { variableDeclaration.WithAdditionalAnnotations(Formatter.Annotation) });
+                        editor.InsertBefore(ifStatement, variableDeclaration.WithAdditionalAnnotations(Formatter.Annotation));
                     }
 
                     var newDocument = editor.GetChangedDocument();

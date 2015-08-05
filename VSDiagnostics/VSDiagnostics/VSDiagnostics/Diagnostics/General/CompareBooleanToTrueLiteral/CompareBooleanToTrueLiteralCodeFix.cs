@@ -24,7 +24,7 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Simplify expression", x => SimplifyExpressionAsync(context.Document, root, statement)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Simplify expression", x => SimplifyExpressionAsync(context.Document, root, statement), nameof(CompareBooleanToTrueLiteralAnalyzer)), diagnostic);
         }
 
         private Task<Solution> SimplifyExpressionAsync(Document document, SyntaxNode root, SyntaxNode statement)

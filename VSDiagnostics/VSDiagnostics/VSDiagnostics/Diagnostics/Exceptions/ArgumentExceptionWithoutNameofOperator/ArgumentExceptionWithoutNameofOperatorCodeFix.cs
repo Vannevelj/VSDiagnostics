@@ -25,7 +25,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOpe
             var diagnosticSpan = diagnostic.Location.SourceSpan;
             var objectCreationExpression = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<ObjectCreationExpressionSyntax>().First();
 
-            context.RegisterCodeFix(CodeAction.Create("Use nameof", x => UseNameofAsync(context.Document, root, objectCreationExpression)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Use nameof", x => UseNameofAsync(context.Document, root, objectCreationExpression), nameof(ArgumentExceptionWithoutNameofOperatorAnalyzer)), diagnostic);
         }
 
         private Task<Solution> UseNameofAsync(Document document, SyntaxNode root, ObjectCreationExpressionSyntax objectCreationExpression)
