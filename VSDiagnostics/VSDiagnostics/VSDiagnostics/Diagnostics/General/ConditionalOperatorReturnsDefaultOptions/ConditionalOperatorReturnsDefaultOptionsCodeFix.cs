@@ -24,7 +24,7 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsDefaultOpt
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Remove conditional", x => RemoveConditionalAsync(context.Document, root, statement)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Remove conditional", x => RemoveConditionalAsync(context.Document, root, statement), nameof(ConditionalOperatorReturnsDefaultOptionsAnalyzer)), diagnostic);
         }
 
         private Task<Solution> RemoveConditionalAsync(Document document, SyntaxNode root, SyntaxNode statement)

@@ -25,7 +25,7 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var argumentDeclaration = root.FindNode(diagnosticSpan).AncestorsAndSelf().OfType<ArgumentSyntax>().FirstOrDefault();
-            context.RegisterCodeFix(CodeAction.Create("Use nameof", x => UseNameOfAsync(context.Document, root, argumentDeclaration)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Use nameof", x => UseNameOfAsync(context.Document, root, argumentDeclaration), nameof(OnPropertyChangedWithoutNameOfOperatorAnalyzer)), diagnostic);
         }
 
         private Task<Solution> UseNameOfAsync(Document document, SyntaxNode root, ArgumentSyntax argumentDeclaration)
