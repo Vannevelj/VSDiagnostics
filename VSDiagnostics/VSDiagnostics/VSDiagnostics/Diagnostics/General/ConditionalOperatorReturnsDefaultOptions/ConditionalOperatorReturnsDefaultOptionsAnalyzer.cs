@@ -40,8 +40,8 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsDefaultOpt
                 return;
             }
 
-            var hasTrueLiteral = trueExpression.Token.ValueText == "true" && trueExpression.Token.Value is bool;
-            var hasFalseLiteral = falseExpression.Token.ValueText == "false" && trueExpression.Token.Value is bool;
+            var hasTrueLiteral = trueExpression.Token.IsKind(SyntaxKind.TrueKeyword) && trueExpression.Token.Value is bool;
+            var hasFalseLiteral = falseExpression.Token.IsKind(SyntaxKind.FalseKeyword) && falseExpression.Token.Value is bool;
 
             if (hasTrueLiteral && hasFalseLiteral)
             {
