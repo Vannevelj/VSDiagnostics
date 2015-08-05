@@ -1,8 +1,10 @@
 ﻿using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
 {
@@ -51,8 +53,7 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
             }
 
             // ctor must not contain comments
-            if (ctorExpression.Body.CloseBraceToken.LeadingTrivia.Any(SyntaxKind.SingleLineCommentTrivia) ||
-                ctorExpression.Body.CloseBraceToken.LeadingTrivia.Any(SyntaxKind.MultiLineCommentTrivia))
+            if (ctorExpression.Body.CloseBraceToken.LeadingTrivia.Any(t => t.IsCommentTrivia()))
             {
                 return;
             }
