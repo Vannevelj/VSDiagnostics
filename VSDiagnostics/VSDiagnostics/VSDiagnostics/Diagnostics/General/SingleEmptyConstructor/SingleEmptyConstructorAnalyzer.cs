@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,7 +11,7 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
     {
         private const string Category = "General";
         private const string DiagnosticId = nameof(SingleEmptyConstructorAnalyzer);
-        private const string Message = "Use default constructor.";
+        private const string Message = "Type \"{0}\" has a redundant default constructor.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
         private const string Title = "Your constructor is the same as a default constructor and can be removed.";
 
@@ -34,7 +33,7 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
             }
             
             // ctor must be public
-            if (ctorExpression.Modifiers.ToImmutableList().All(m => m.Text != "public"))
+            if (!ctorExpression.Modifiers.Any(SyntaxKind.PublicKeyword))
             {
                 return;
             }
@@ -51,14 +50,20 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
                 return;
             }
 
-            // ctor must not have comment - ignore empty brace pairs
-            var text = ctorExpression.Body.GetText().ToString().ToCharArray();
-            if (text.Any(ch => !char.IsWhiteSpace(ch) && ch != '{' && ch != '}'))
+            // ctor must not contain comments
+            if (ctorExpression.Body.CloseBraceToken.LeadingTrivia.Any(SyntaxKind.SingleLineCommentTrivia) ||
+                ctorExpression.Body.CloseBraceToken.LeadingTrivia.Any(SyntaxKind.MultiLineCommentTrivia))
             {
                 return;
             }
 
-            context.ReportDiagnostic(Diagnostic.Create(Rule, ctorExpression.GetLocation()));
+            // ctor must not have attributes
+            if (ctorExpression.AttributeLists.Any())
+            {
+                return;
+            }
+
+            context.ReportDiagnostic(Diagnostic.Create(Rule, ctorExpression.GetLocation(), ctorExpression.Identifier));
         }
     }
 }

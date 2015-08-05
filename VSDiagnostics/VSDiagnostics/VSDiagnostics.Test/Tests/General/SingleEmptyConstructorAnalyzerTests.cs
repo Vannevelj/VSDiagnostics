@@ -34,13 +34,13 @@ namespace ConsoleApplication1
     {
     }
 }";
-
-            VerifyDiagnostic (original, SingleEmptyConstructorAnalyzer.Rule.MessageFormat.ToString());
+            
+            VerifyDiagnostic (original, string.Format(SingleEmptyConstructorAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
             VerifyFix(original, result);
         }
 
         [TestMethod]
-        public void SingleEmptyConstructorAnalyzer_WithCommentInConstructor_DoesNotInvokeWarning ()
+        public void SingleEmptyConstructorAnalyzer_WithSingleLineCommentInConstructor_DoesNotInvokeWarning ()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -50,6 +50,25 @@ namespace ConsoleApplication1
         public MyClass()
         {
             // ctor has comment
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SingleEmptyConstructorAnalyzer_WithMultiLineCommentInConstructor_DoesNotInvokeWarning ()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public class MyClass
+    {
+        public MyClass()
+        {
+            /* ctor has comment
+               ctor has multiline comment */
         }
     }
 }";
@@ -127,6 +146,26 @@ namespace ConsoleApplication1
         internal MyClass()
         {
             Foo = 0;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SingleEmptyConstructorAnalyzer_ConstructorHasAttributes_DoesNotInvokeWarning ()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class MyClass
+    {
+        [Obsolete]
+        public MyClass()
+        {
         }
     }
 }";
