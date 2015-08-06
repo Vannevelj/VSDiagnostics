@@ -122,6 +122,7 @@
     <Compile Include="Tests\General\NullableToShorthandAnalyzerTests.cs" />
     <Compile Include="Tests\General\OnPropertyChangedWithoutNameOfOperatorAnalyzerTests.cs" />
     <Compile Include="Tests\General\SimplifyExpressionBodiedMemberAnalyzerTests.cs" />
+    <Compile Include="Tests\General\SingleEmptyConstructorAnalyzerTests.cs" />
     <Compile Include="Tests\General\TryCastUsingAsNotNullInsteadOfIsAsAnalyzerTests.cs" />
     <Compile Include="Tests\General\TypeToVarAnalyzerTests.cs" />
     <Compile Include="Tests\Strings\ReplaceEmptyStringWithStringDotEmptyTests.cs" />

@@ -32,7 +32,7 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
                 return;
             }
 
-            if (!(equalsExpression.Token.ValueText == "true" && equalsExpression.Token.Value is bool))
+            if (!(equalsExpression.Token.IsKind(SyntaxKind.TrueKeyword) && equalsExpression.Token.Value is bool))
             {
                 return;
             }
@@ -43,7 +43,7 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
                 return;
             }
 
-            if (parentExpression.OperatorToken.ValueText != "==")
+            if (!parentExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken))
             {
                 return;
             }
