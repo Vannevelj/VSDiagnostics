@@ -43,7 +43,7 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToFalseLiteral
                 return;
             }
 
-            if (parentExpression.OperatorToken.ValueText != "==")
+            if (!parentExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken))
             {
                 return;
             }
