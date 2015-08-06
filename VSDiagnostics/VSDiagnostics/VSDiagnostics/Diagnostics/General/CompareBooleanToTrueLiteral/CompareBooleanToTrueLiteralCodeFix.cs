@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
 
@@ -31,15 +32,35 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
         {
             var trueLiteralExpression = (LiteralExpressionSyntax) statement;
             var binaryExpression = (BinaryExpressionSyntax) trueLiteralExpression.Parent;
-            SyntaxNode newRoot;
-            if (binaryExpression.Left == trueLiteralExpression)
+
+            ExpressionSyntax newExpression;
+
+            if (binaryExpression.Left is BinaryExpressionSyntax || binaryExpression.Right is BinaryExpressionSyntax)
             {
-                newRoot = root.ReplaceNode(binaryExpression, binaryExpression.Right).WithAdditionalAnnotations(Formatter.Annotation);
+                var internalBinaryExpression = binaryExpression.Left is BinaryExpressionSyntax
+                    ? (BinaryExpressionSyntax)binaryExpression.Left
+                    : (BinaryExpressionSyntax)binaryExpression.Right;
+
+                var newExpressionType = internalBinaryExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken) ^ binaryExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken)
+                    ? SyntaxKind.NotEqualsExpression
+                    : SyntaxKind.EqualsExpression;
+
+                newExpression = SyntaxFactory.BinaryExpression(newExpressionType, internalBinaryExpression.Left, internalBinaryExpression.Right);
             }
             else
             {
-                newRoot = root.ReplaceNode(binaryExpression, binaryExpression.Left).WithAdditionalAnnotations(Formatter.Annotation);
+                newExpression = binaryExpression.Left == trueLiteralExpression
+                    ? binaryExpression.Right
+                    : binaryExpression.Left;
+
+                if (binaryExpression.OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken))
+                {
+                    newExpression = SyntaxFactory.PrefixUnaryExpression(SyntaxKind.LogicalNotExpression,
+                        newExpression);
+                }
             }
+
+            var newRoot = root.ReplaceNode(binaryExpression, newExpression).WithAdditionalAnnotations(Formatter.Annotation);
 
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);

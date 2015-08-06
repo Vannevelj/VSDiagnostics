@@ -43,11 +43,6 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToFalseLiteral
                 return;
             }
 
-            if (!parentExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken))
-            {
-                return;
-            }
-
             context.ReportDiagnostic(Diagnostic.Create(Rule, equalsExpression.GetLocation()));
         }
     }

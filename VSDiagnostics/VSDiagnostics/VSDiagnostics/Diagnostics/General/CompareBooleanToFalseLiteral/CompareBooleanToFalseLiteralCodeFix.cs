@@ -32,33 +32,35 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToFalseLiteral
         {
             var falseLiteralExpression = (LiteralExpressionSyntax) statement;
             var binaryExpression = (BinaryExpressionSyntax) falseLiteralExpression.Parent;
-            SyntaxNode newRoot;
 
-            if (binaryExpression.Left is BinaryExpressionSyntax)
+            ExpressionSyntax newExpression;
+
+            if (binaryExpression.Left is BinaryExpressionSyntax || binaryExpression.Right is BinaryExpressionSyntax)
             {
-                var internalBinaryExpression = (BinaryExpressionSyntax) binaryExpression.Left;
+                var internalBinaryExpression = binaryExpression.Left is BinaryExpressionSyntax
+                    ? (BinaryExpressionSyntax) binaryExpression.Left
+                    : (BinaryExpressionSyntax) binaryExpression.Right;
 
-                var newExpression = SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, internalBinaryExpression.Left, internalBinaryExpression.Right);
+                var newExpressionType = internalBinaryExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken) ^ binaryExpression.OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken)
+                    ? SyntaxKind.NotEqualsExpression
+                    : SyntaxKind.EqualsExpression;
 
-                newRoot = root.ReplaceNode(binaryExpression, newExpression).WithAdditionalAnnotations(Formatter.Annotation);
-            }
-            else if (binaryExpression.Right is BinaryExpressionSyntax)
-            {
-                var internalBinaryExpression = (BinaryExpressionSyntax) binaryExpression.Right;
-
-                var newExpression = SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, internalBinaryExpression.Left, internalBinaryExpression.Right);
-
-                newRoot = root.ReplaceNode(binaryExpression, newExpression).WithAdditionalAnnotations(Formatter.Annotation);
+                newExpression = SyntaxFactory.BinaryExpression(newExpressionType, internalBinaryExpression.Left, internalBinaryExpression.Right);
             }
             else
             {
-                var expressionToKeep = binaryExpression.Left == falseLiteralExpression
+                newExpression = binaryExpression.Left == falseLiteralExpression
                     ? binaryExpression.Right
                     : binaryExpression.Left;
 
-                var newExpression = SyntaxFactory.PrefixUnaryExpression(SyntaxKind.LogicalNotExpression, expressionToKeep);
-                newRoot = root.ReplaceNode(binaryExpression, newExpression).WithAdditionalAnnotations(Formatter.Annotation);
+                if (binaryExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken))
+                {
+                    newExpression = SyntaxFactory.PrefixUnaryExpression(SyntaxKind.LogicalNotExpression,
+                        newExpression);
+                }
             }
+
+            var newRoot = root.ReplaceNode(binaryExpression, newExpression).WithAdditionalAnnotations(Formatter.Annotation);
 
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);
