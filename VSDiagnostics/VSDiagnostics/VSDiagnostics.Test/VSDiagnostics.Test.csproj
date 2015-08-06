@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tests\Async\AsyncMethodWithoutAsyncSuffixAnalyzerTests.cs" />
+    <Compile Include="Tests\Attributes\AttributeWithEmptyArgumentListAnalyzerTests.cs" />
     <Compile Include="Tests\Attributes\ObsoleteAttributeWithoutReasonAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\ArgumentExceptionWithoutNameofOperatorAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\CatchNullReferenceExceptionAnalyzerTests.cs" />
