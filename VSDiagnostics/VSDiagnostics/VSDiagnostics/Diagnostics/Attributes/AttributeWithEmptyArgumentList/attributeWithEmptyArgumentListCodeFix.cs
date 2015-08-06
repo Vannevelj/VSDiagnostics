@@ -23,7 +23,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Remove Parenthesis", x => RemoveConstructorAsync(context.Document, root, statement), nameof(AttributeWithEmptyArgumentListAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Remove Parentheses", x => RemoveConstructorAsync(context.Document, root, statement), nameof(AttributeWithEmptyArgumentListAnalyzer)), diagnostic);
         }
 
         private Task<Solution> RemoveConstructorAsync(Document document, SyntaxNode root, SyntaxNode statement)
