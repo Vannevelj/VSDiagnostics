@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -42,7 +43,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.SingleGeneralException
             var symbol = context.SemanticModel.GetSymbolInfo(declaredException).Symbol;
             if (symbol != null)
             {
-                if (symbol.MetadataName == "Exception")
+                if (symbol.MetadataName == typeof(Exception).Name)
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declaredException.GetLocation()));
                 }
