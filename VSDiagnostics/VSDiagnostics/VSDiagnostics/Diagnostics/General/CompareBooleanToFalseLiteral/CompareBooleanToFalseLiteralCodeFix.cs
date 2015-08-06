@@ -36,7 +36,7 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToFalseLiteral
 
             if (binaryExpression.Left is BinaryExpressionSyntax)
             {
-                var internalBinaryExpression = binaryExpression.Left as BinaryExpressionSyntax;
+                var internalBinaryExpression = (BinaryExpressionSyntax) binaryExpression.Left;
 
                 var newExpression = SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, internalBinaryExpression.Left, internalBinaryExpression.Right);
 
@@ -44,7 +44,7 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToFalseLiteral
             }
             else if (binaryExpression.Right is BinaryExpressionSyntax)
             {
-                var internalBinaryExpression = binaryExpression.Right as BinaryExpressionSyntax;
+                var internalBinaryExpression = (BinaryExpressionSyntax) binaryExpression.Right;
 
                 var newExpression = SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, internalBinaryExpression.Left, internalBinaryExpression.Right);
 
