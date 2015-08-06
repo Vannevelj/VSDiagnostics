@@ -12,7 +12,7 @@ namespace VSDiagnostics.Diagnostics.General.CastToAs
         private const string Category = "General";
         private const string DiagnosticId = nameof(CastToAsAnalyzer);
         private const string Message = "Use as instead of a cast.";
-        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Hidden;
         private const string Title = "You can use as instead of a cast.";
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
