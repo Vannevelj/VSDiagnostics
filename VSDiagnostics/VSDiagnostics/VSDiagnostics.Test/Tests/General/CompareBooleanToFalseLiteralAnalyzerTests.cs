@@ -2,327 +2,29 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.Helpers.CSharp;
-using VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral;
+using VSDiagnostics.Diagnostics.General.CompareBooleanToFalseLiteral;
 
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class CompareBooleanToTrueLiteralAnalyzerTests : CSharpCodeFixVerifier
+    public class CompareBooleanToFalseLiteralAnalyzerTests : CSharpCodeFixVerifier
     {
-        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new CompareBooleanToTrueLiteralAnalyzer();
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new CompareBooleanToFalseLiteralAnalyzer();
 
-        protected override CodeFixProvider CodeFixProvider => new CompareBooleanToTrueLiteralCodeFix();
+        protected override CodeFixProvider CodeFixProvider => new CompareBooleanToFalseLiteralCodeFix();
 
         [TestMethod]
-        public void CompareBooleanToTrueLiteralAnalyzer_WithSimpleTrueLiteralComparison_EqualsOperator_InvokesWarning ()
+        public void CompareBooleanToFalseLiteralAnalyzer_WithSimpleFalseLiteralComparison_InvokesWarning ()
         {
             var original = @"
-using System;
-using System.Text;
-
 namespace ConsoleApplication1
 {
     class MyClass
     {
         void Method()
-        {
-            bool isAwesome = true;
-            if (isAwesome == true)
-            {
-                Console.WriteLine(""awesome"");
-            }
-        }
-    }
-}";
-
-            var result = @"
-using System;
-using System.Text;
-
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        void Method()
-        {
-            bool isAwesome = true;
-            if (isAwesome)
-            {
-                Console.WriteLine(""awesome"");
-            }
-        }
-    }
-}";
-
-            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
-            VerifyFix(original, result);
-        }
-
-        [TestMethod]
-        public void CompareBooleanToTrueLiteralAnalyzer_WithSimpleTrueLiteralComparisonAsReturnValue_EqualsOperator_InvokesWarning ()
-        {
-            var original = @"
-using System;
-using System.Text;
-
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        bool Method()
-        {
-            bool isAwesome = true;
-            return isAwesome == true;
-        }
-    }
-}";
-
-            var result = @"
-using System;
-using System.Text;
-
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        bool Method()
-        {
-            bool isAwesome = true;
-            return isAwesome;
-        }
-    }
-}";
-
-            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
-            VerifyFix(original, result);
-        }
-
-        [TestMethod]
-        public void CompareBooleanToTrueLiteralAnalyzer_WithComplicatedTrueLiteralComparison_EqualsOperator_FirstComparisonIsEquals_InvokesWarning ()
-        {
-            var original = @"
-using System;
-using System.Text;
-using System.Collections.Generic;
-
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        Student[] Method()
-        {
-            var students = new List<Student>().Where(x => x.Name == ""Jeroen"" == true).ToArray();
-            return students;
-        }
-    }
-
-    class Student
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
-}";
-
-            var result = @"
-using System;
-using System.Text;
-using System.Collections.Generic;
-
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        Student[] Method()
-        {
-            var students = new List<Student>().Where(x => x.Name == ""Jeroen"").ToArray();
-            return students;
-        }
-    }
-
-    class Student
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
-}";
-
-            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
-            VerifyFix(original, result);
-        }
-
-        [TestMethod]
-        public void CompareBooleanToTrueLiteralAnalyzer_WithComplicatedTrueLiteralComparison_EqualsOperator_FirstComparisonIsNotEquals_InvokesWarning ()
-        {
-            var original = @"
-using System;
-using System.Text;
-using System.Collections.Generic;
-
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        Student[] Method()
-        {
-            var students = new List<Student>().Where(x => x.Name != ""Jeroen"" == true).ToArray();
-            return students;
-        }
-    }
-
-    class Student
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
-}";
-
-            var result = @"
-using System;
-using System.Text;
-using System.Collections.Generic;
-
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        Student[] Method()
-        {
-            var students = new List<Student>().Where(x => x.Name != ""Jeroen"").ToArray();
-            return students;
-        }
-    }
-
-    class Student
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
-}";
-
-            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
-            VerifyFix(original, result);
-        }
-
-        [TestMethod]
-        public void CompareBooleanToTrueLiteralAnalyzer_WithUnrelatedTrueLiteral_EqualsOperator_DoesNotInvokeWarning ()
-        {
-            var original = @"
-using System;
-using System.Text;
-
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        void Method()
-        {
-            bool isAwesome = true;
-        }
-    }
-}";
-            VerifyDiagnostic(original);
-        }
-
-        [TestMethod]
-        public void CompareBooleanToTrueLiteralAnalyzer_WithSimplifiedExpression_EqualsOperator_DoesNotInvokeWarning ()
-        {
-            var original = @"
-using System;
-using System.Text;
-
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        bool Method()
-        {
-            bool isAwesome = true;
-            return isAwesome;
-        }
-    }
-}";
-            VerifyDiagnostic(original);
-        }
-
-        [TestMethod]
-        public void CompareBooleanToTrueLiteralAnalyzer_ComparedToBooleanAsString_EqualsOperator_DoesNotInvokeWarning ()
-        {
-            var original = @"
-using System;
-using System.Text;
-
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        bool Method()
-        {
-            if (""someString"" == ""true"")
-            {
-
-            }
-        }
-    }
-}";
-            VerifyDiagnostic(original);
-        }
-
-        [TestMethod]
-        public void CompareBooleanToTrueLiteralAnalyzer_WithTrueLiteralAsLefthandValue_EqualsOperator_InvokesWarning ()
-        {
-            var original = @"
-using System;
-using System.Text;
-using System.Collections.Generic;
-
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        bool Method()
         {
             bool isAwesome = false;
-            return true == isAwesome;
-        }
-    }
-}";
-
-            var result = @"
-using System;
-using System.Text;
-using System.Collections.Generic;
-
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        bool Method()
-        {
-            bool isAwesome = false;
-            return isAwesome;
-        }
-    }
-}";
-
-            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
-            VerifyFix(original, result);
-        }
-
-        [TestMethod]
-        public void CompareBooleanToTrueLiteralAnalyzer_WithSimpleTrueLiteralComparison_NotEqualsOperator_InvokesWarning ()
-        {
-            var original = @"
-using System;
-using System.Text;
-
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        void Method()
-        {
-            bool isAwesome = true;
-            if (isAwesome != true)
+            if (isAwesome == false)
             {
                 Console.WriteLine(""awesome"");
             }
@@ -331,16 +33,13 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
-using System;
-using System.Text;
-
 namespace ConsoleApplication1
 {
     class MyClass
     {
         void Method()
         {
-            bool isAwesome = true;
+            bool isAwesome = false;
             if (!isAwesome)
             {
                 Console.WriteLine(""awesome"");
@@ -349,55 +48,47 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, CompareBooleanToFalseLiteralAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 
         [TestMethod]
-        public void CompareBooleanToTrueLiteralAnalyzer_WithSimpleTrueLiteralComparisonAsReturnValue_NotEqualsOperator_InvokesWarning ()
+        public void CompareBooleanToFalseLiteralAnalyzer_WithSimpleFalseLiteralComparisonAsReturnValue_InvokesWarning()
         {
             var original = @"
-using System;
-using System.Text;
-
 namespace ConsoleApplication1
 {
     class MyClass
     {
         bool Method()
         {
-            bool isAwesome = true;
-            return isAwesome != true;
+            bool isAwesome = false;
+            return isAwesome == false;
         }
     }
 }";
 
             var result = @"
-using System;
-using System.Text;
-
 namespace ConsoleApplication1
 {
     class MyClass
     {
         bool Method()
         {
-            bool isAwesome = true;
+            bool isAwesome = false;
             return !isAwesome;
         }
     }
 }";
 
-            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, CompareBooleanToFalseLiteralAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 
         [TestMethod]
-        public void CompareBooleanToTrueLiteralAnalyzer_WithComplicatedTrueLiteralComparison_NotEqualsOperator_FirstComparisonIsEquals_InvokesWarning ()
+        public void CompareBooleanToFalseLiteralAnalyzer_WithComplicatedFalseLiteralComparison_FirstComparisonIsEquals_InvokesWarning ()
         {
             var original = @"
-using System;
-using System.Text;
 using System.Collections.Generic;
 
 namespace ConsoleApplication1
@@ -406,7 +97,7 @@ namespace ConsoleApplication1
     {
         Student[] Method()
         {
-            var students = new List<Student>().Where(x => x.Name == ""Jeroen"" != true).ToArray();
+            var students = new List<Student>().Where(x => x.Name == ""Jeroen"" == false).ToArray();
             return students;
         }
     }
@@ -419,8 +110,6 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
-using System;
-using System.Text;
 using System.Collections.Generic;
 
 namespace ConsoleApplication1
@@ -441,16 +130,14 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, CompareBooleanToFalseLiteralAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 
         [TestMethod]
-        public void CompareBooleanToTrueLiteralAnalyzer_WithComplicatedTrueLiteralComparison_NotEqualsOperator_FirstComparisonIsNotEquals_InvokesWarning ()
+        public void CompareBooleanToFalseLiteralAnalyzer_WithComplicatedFalseLiteralComparison_FirstComparisonIsNotEquals_InvokesWarning ()
         {
             var original = @"
-using System;
-using System.Text;
 using System.Collections.Generic;
 
 namespace ConsoleApplication1
@@ -459,7 +146,7 @@ namespace ConsoleApplication1
     {
         Student[] Method()
         {
-            var students = new List<Student>().Where(x => x.Name != ""Jeroen"" != true).ToArray();
+            var students = new List<Student>().Where(x => x.Name != ""Jeroen"" == false).ToArray();
             return students;
         }
     }
@@ -472,8 +159,6 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
-using System;
-using System.Text;
 using System.Collections.Generic;
 
 namespace ConsoleApplication1
@@ -494,24 +179,38 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, CompareBooleanToFalseLiteralAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 
         [TestMethod]
-        public void CompareBooleanToTrueLiteralAnalyzer_WithSimplifiedExpression_NotEqualsOperator_DoesNotInvokeWarning ()
+        public void CompareBooleanToFalseLiteralAnalyzer_WithUnrelatedFalseLiteral_DoesNotInvokeWarning()
         {
             var original = @"
-using System;
-using System.Text;
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            bool isAwesome = False;
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
 
+        [TestMethod]
+        public void CompareBooleanToFalseLiteralAnalyzer_WithSimplifiedExpression_DoesNotInvokeWarning()
+        {
+            var original = @"
 namespace ConsoleApplication1
 {
     class MyClass
     {
         bool Method()
         {
-            bool isAwesome = true;
+            bool isAwesome = false;
             return !isAwesome;
         }
     }
@@ -520,19 +219,16 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CompareBooleanToTrueLiteralAnalyzer_ComparedToBooleanAsString_NotEqualsOperator_DoesNotInvokeWarning ()
+        public void CompareBooleanToFalseLiteralAnalyzer_ComparedToBooleanAsString_DoesNotInvokeWarning()
         {
             var original = @"
-using System;
-using System.Text;
-
 namespace ConsoleApplication1
 {
     class MyClass
     {
         bool Method()
         {
-            if (""someString"" != ""true"")
+            if (""someString"" == ""false"")
             {
 
             }
@@ -543,30 +239,81 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CompareBooleanToTrueLiteralAnalyzer_WithTrueLiteralAsLefthandValue_NotEqualsOperator_InvokesWarning ()
+        public void CompareBooleanToFalseLiteralAnalyzer_WithFalseLiteralAsLefthandValue_InvokesWarning()
         {
             var original = @"
-using System;
-using System.Text;
-using System.Collections.Generic;
-
 namespace ConsoleApplication1
 {
     class MyClass
     {
         bool Method()
         {
-            bool isAwesome = false;
-            return true != isAwesome;
+            bool isAwesome = False;
+            return false == isAwesome;
         }
     }
 }";
 
             var result = @"
-using System;
-using System.Text;
-using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        bool Method()
+        {
+            bool isAwesome = False;
+            return !isAwesome;
+        }
+    }
+}";
 
+            VerifyDiagnostic(original, CompareBooleanToFalseLiteralAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void CompareBooleanToFalseLiteralAnalyzer_WithSimpleFalseLiteralComparison_NotEqualsOperator_InvokesWarning ()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            bool isAwesome = false;
+            if (isAwesome != false)
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            bool isAwesome = false;
+            if (isAwesome)
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, CompareBooleanToFalseLiteralAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void CompareBooleanToFalseLiteralAnalyzer_WithSimpleFalseLiteralComparisonAsReturnValue_NotEqualsOperator_InvokesWarning ()
+        {
+            var original = @"
 namespace ConsoleApplication1
 {
     class MyClass
@@ -574,12 +321,176 @@ namespace ConsoleApplication1
         bool Method()
         {
             bool isAwesome = false;
-            return !isAwesome;
+            return isAwesome != false;
         }
     }
 }";
 
-            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        bool Method()
+        {
+            bool isAwesome = false;
+            return isAwesome;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, CompareBooleanToFalseLiteralAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void CompareBooleanToFalseLiteralAnalyzer_WithComplicatedFalseLiteralComparison_NotEqualsOperator_FirstComparisonIsEquals_InvokesWarning ()
+        {
+            var original = @"
+using System.Collections.Generic;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        Student[] Method()
+        {
+            var students = new List<Student>().Where(x => x.Name == ""Jeroen"" != false).ToArray();
+            return students;
+        }
+    }
+
+    class Student
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+}";
+
+            var result = @"
+using System.Collections.Generic;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        Student[] Method()
+        {
+            var students = new List<Student>().Where(x => x.Name == ""Jeroen"").ToArray();
+            return students;
+        }
+    }
+
+    class Student
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+}";
+
+            VerifyDiagnostic(original, CompareBooleanToFalseLiteralAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void CompareBooleanToFalseLiteralAnalyzer_WithComplicatedFalseLiteralComparison_NotEqualsOperator_FirstComparisonIsNotEquals_InvokesWarning ()
+        {
+            var original = @"
+using System.Collections.Generic;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        Student[] Method()
+        {
+            var students = new List<Student>().Where(x => x.Name != ""Jeroen"" == false).ToArray();
+            return students;
+        }
+    }
+
+    class Student
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+}";
+
+            var result = @"
+using System.Collections.Generic;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        Student[] Method()
+        {
+            var students = new List<Student>().Where(x => x.Name == ""Jeroen"").ToArray();
+            return students;
+        }
+    }
+
+    class Student
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+}";
+
+            VerifyDiagnostic(original, CompareBooleanToFalseLiteralAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void CompareBooleanToFalseLiteralAnalyzer_ComparedToBooleanAsString_NotEqualsOperator_DoesNotInvokeWarning ()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        bool Method()
+        {
+            if (""someString"" != ""false"")
+            {
+
+            }
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void CompareBooleanToFalseLiteralAnalyzer_WithFalseLiteralAsLefthandValue_NotEqualsOperator_InvokesWarning ()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        bool Method()
+        {
+            bool isAwesome = False;
+            return false != isAwesome;
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        bool Method()
+        {
+            bool isAwesome = False;
+            return isAwesome;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, CompareBooleanToFalseLiteralAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
     }

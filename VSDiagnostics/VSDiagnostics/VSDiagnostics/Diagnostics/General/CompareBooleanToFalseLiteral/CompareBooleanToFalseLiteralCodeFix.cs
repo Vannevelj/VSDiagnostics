@@ -9,12 +9,12 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
 
-namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
+namespace VSDiagnostics.Diagnostics.General.CompareBooleanToFalseLiteral
 {
     [ExportCodeFixProvider("CompareBooleanToTrueLiteral", LanguageNames.CSharp), Shared]
-    public class CompareBooleanToTrueLiteralCodeFix : CodeFixProvider
+    public class CompareBooleanToFalseLiteralCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(CompareBooleanToTrueLiteralAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(CompareBooleanToFalseLiteralAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -25,23 +25,23 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Simplify expression", x => SimplifyExpressionAsync(context.Document, root, statement), nameof(CompareBooleanToTrueLiteralAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Simplify expression", x => SimplifyExpressionAsync(context.Document, root, statement), nameof(CompareBooleanToFalseLiteralAnalyzer)), diagnostic);
         }
 
         private Task<Solution> SimplifyExpressionAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
-            var trueLiteralExpression = (LiteralExpressionSyntax) statement;
-            var binaryExpression = (BinaryExpressionSyntax) trueLiteralExpression.Parent;
+            var falseLiteralExpression = (LiteralExpressionSyntax) statement;
+            var binaryExpression = (BinaryExpressionSyntax) falseLiteralExpression.Parent;
 
             ExpressionSyntax newExpression;
 
             if (binaryExpression.Left is BinaryExpressionSyntax || binaryExpression.Right is BinaryExpressionSyntax)
             {
                 var internalBinaryExpression = binaryExpression.Left is BinaryExpressionSyntax
-                    ? (BinaryExpressionSyntax)binaryExpression.Left
-                    : (BinaryExpressionSyntax)binaryExpression.Right;
+                    ? (BinaryExpressionSyntax) binaryExpression.Left
+                    : (BinaryExpressionSyntax) binaryExpression.Right;
 
-                var newExpressionType = internalBinaryExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken) ^ binaryExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken)
+                var newExpressionType = internalBinaryExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken) ^ binaryExpression.OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken)
                     ? SyntaxKind.NotEqualsExpression
                     : SyntaxKind.EqualsExpression;
 
@@ -49,11 +49,11 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
             }
             else
             {
-                newExpression = binaryExpression.Left == trueLiteralExpression
+                newExpression = binaryExpression.Left == falseLiteralExpression
                     ? binaryExpression.Right
                     : binaryExpression.Left;
 
-                if (binaryExpression.OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken))
+                if (binaryExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken))
                 {
                     newExpression = SyntaxFactory.PrefixUnaryExpression(SyntaxKind.LogicalNotExpression,
                         newExpression);

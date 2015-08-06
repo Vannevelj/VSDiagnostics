@@ -34,6 +34,7 @@
   <ItemGroup>
     <Compile Include="Diagnostics\Async\AsyncMethodWithoutAsyncSuffix\AsyncMethodWithoutAsyncSuffixAnalyzer.cs" />
     <Compile Include="Diagnostics\Async\AsyncMethodWithoutAsyncSuffix\AsyncMethodWithoutAsyncSuffixCodeFix.cs" />
+    <Compile Include="Diagnostics\Attributes\ObsoleteAttributeWithoutReason\ObsoleteAttributeWithoutReasonAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\ArgumentExceptionWithoutNameofOperator\ArgumentExceptionWithoutNameofOperatorAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\ArgumentExceptionWithoutNameofOperator\ArgumentExceptionWithoutNameofOperatorCodeFix.cs" />
     <Compile Include="Diagnostics\Exceptions\CatchNullReferenceException\CatchNullReferenceExceptionAnalyzer.cs" />
@@ -42,6 +43,8 @@
     <Compile Include="Diagnostics\Exceptions\RethrowExceptionWithoutLosingStacktrace\RethrowExceptionWithoutLosingStacktraceAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\RethrowExceptionWithoutLosingStacktrace\RethrowExceptionWithoutLosingStacktraceCodeFix.cs" />
     <Compile Include="Diagnostics\Exceptions\SingleGeneralException\SingleGeneralExceptionAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\CompareBooleanToFalseLiteral\CompareBooleanToFalseLiteralAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\CompareBooleanToFalseLiteral\CompareBooleanToFalseLiteralCodeFix.cs" />
     <Compile Include="Diagnostics\General\CompareBooleanToTrueLiteral\CompareBooleanToTrueLiteralAnalyzer.cs" />
     <Compile Include="Diagnostics\General\CompareBooleanToTrueLiteral\CompareBooleanToTrueLiteralCodeFix.cs" />
     <Compile Include="Diagnostics\General\ConditionalOperatorReturnsDefaultOptions\ConditionalOperatorReturnsDefaultOptionsAnalyzer.cs" />
@@ -59,6 +62,8 @@
     <Compile Include="Diagnostics\General\OnPropertyChangedWithoutNameOfOperator\OnPropertyChangedWithoutNameOfOperatorCodeFix.cs" />
     <Compile Include="Diagnostics\General\SimplifyExpressionBodiedMember\SimplifyExpressionBodiedMemberAnalyzer.cs" />
     <Compile Include="Diagnostics\General\SimplifyExpressionBodiedMember\SimplifyExpressionBodiedMemberCodeFix.cs" />
+    <Compile Include="Diagnostics\General\SingleEmptyConstructor\SingleEmptyConstructorAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\SingleEmptyConstructor\SingleEmptyConstructorCodeFix.cs" />
     <Compile Include="Diagnostics\General\TryCastWithoutUsingAsNotNull\TryCastWithoutUsingAsNotNullAnalyzer.cs" />
     <Compile Include="Diagnostics\General\TryCastWithoutUsingAsNotNull\TryCastWithoutUsingAsNotNullCodeFix.cs" />
     <Compile Include="Diagnostics\General\TypeToVar\TypeToVarAnalyzer.cs" />

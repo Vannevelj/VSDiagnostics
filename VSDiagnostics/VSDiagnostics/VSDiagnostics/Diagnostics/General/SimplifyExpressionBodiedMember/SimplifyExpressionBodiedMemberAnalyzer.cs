@@ -60,7 +60,7 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
-            var getter = propertyDeclaration.AccessorList.Accessors.FirstOrDefault(x => x.Keyword.ValueText == "get");
+            var getter = propertyDeclaration.AccessorList.Accessors.FirstOrDefault(x => x.Keyword.IsKind(SyntaxKind.GetKeyword));
             if (getter == null)
             {
                 return null;
