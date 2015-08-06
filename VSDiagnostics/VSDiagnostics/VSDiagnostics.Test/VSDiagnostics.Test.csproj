@@ -116,6 +116,8 @@
     <Compile Include="Tests\Exceptions\EmptyCatchClauseAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\RethrowExceptionWithoutLosingStracktraceAnalyzerTests.cs" />
     <Compile Include="Tests\Exceptions\SingleGeneralExceptionAnalyzerTests.cs" />
+    <Compile Include="Tests\General\AsToCastAnalyzerTests.cs" />
+    <Compile Include="Tests\General\CastToAsAnalyzerTests.cs" />
     <Compile Include="Tests\General\CompareBooleanToFalseLiteralAnalyzerTests.cs" />
     <Compile Include="Tests\General\CompareBooleanToTrueLiteralAnalyzerTests.cs" />
     <Compile Include="Tests\General\ConditionalOperatorReturnsDefaultOptionsAnalyzerTests.cs" />
