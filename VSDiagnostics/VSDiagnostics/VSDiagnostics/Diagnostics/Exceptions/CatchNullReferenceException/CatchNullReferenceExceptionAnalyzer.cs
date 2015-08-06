@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -37,7 +38,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.CatchNullReferenceException
             var catchSymbol = context.SemanticModel.GetSymbolInfo(catchType).Symbol;
             if (catchSymbol != null)
             {
-                if (catchSymbol.MetadataName == "NullReferenceException")
+                if (catchSymbol.MetadataName == typeof(NullReferenceException).Name)
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, catchDeclaration.GetLocation()));
                 }
