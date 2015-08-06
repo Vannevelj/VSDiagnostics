@@ -32,7 +32,7 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToFalseLiteral
                 return;
             }
 
-            if (!(equalsExpression.Token.Kind() == SyntaxKind.FalseKeyword && equalsExpression.Token.Value is bool))
+            if (!(equalsExpression.Token.IsKind(SyntaxKind.FalseKeyword) && equalsExpression.Token.Value is bool))
             {
                 return;
             }
