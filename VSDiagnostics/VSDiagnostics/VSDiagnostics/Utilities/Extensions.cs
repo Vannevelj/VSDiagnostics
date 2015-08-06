@@ -55,5 +55,10 @@ namespace VSDiagnostics.Utilities
 
             return whitespaceTrivia.Any(x => trivia.IsKind(x));
         }
+
+        public static bool IsNullable(this ITypeSymbol typeSymbol)
+        {
+            return typeSymbol.IsValueType && typeSymbol.MetadataName.StartsWith(typeof (Nullable).Name);
+        }
     }
 }
