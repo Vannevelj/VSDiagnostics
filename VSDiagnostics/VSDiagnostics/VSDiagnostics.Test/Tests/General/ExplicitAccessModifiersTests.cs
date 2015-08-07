@@ -20,7 +20,7 @@ namespace VSDiagnostics.Test.Tests.General
             var original = @"
 namespace ConsoleApplication1
 {
-    static class MyClass
+    class MyClass
     {
     }
 }";
@@ -34,7 +34,44 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword));
-            //VerifyFix(original, result);
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_ClassDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    static class MyClass
+    {
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    static internal class MyClass
+    {
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_ClassDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public class MyClass
+    {
+    }
+}";
+
+            VerifyDiagnostic(original);
         }
     }
 }

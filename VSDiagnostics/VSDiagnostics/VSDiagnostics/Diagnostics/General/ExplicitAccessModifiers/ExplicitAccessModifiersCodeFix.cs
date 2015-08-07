@@ -7,7 +7,6 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
 {
@@ -34,12 +33,17 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             SyntaxNode newParent = null;
 
             var classExpression = identifierParent as ClassDeclarationSyntax;
-            if (classExpression != null && !classExpression.Modifiers.Any())
+            if (classExpression != null)
             {
-                var token = SyntaxFactory.Token(SyntaxKind.InternalKeyword);
-                classExpression.Modifiers.Add(token);
+                var internalKeywordToken = SyntaxFactory.Token(SyntaxKind.InternalKeyword);
 
-                newParent = identifierParent.ReplaceNode(identifierParent, classExpression);
+                var newClass = SyntaxFactory.ClassDeclaration(classExpression.AttributeLists,
+                    classExpression.Modifiers.Add(internalKeywordToken), classExpression.Keyword, classExpression.Identifier,
+                    classExpression.TypeParameterList, classExpression.BaseList, classExpression.ConstraintClauses,
+                    classExpression.OpenBraceToken, classExpression.Members, classExpression.CloseBraceToken,
+                    SyntaxFactory.Token(SyntaxKind.None));
+
+                newParent = identifierParent.ReplaceNode(identifierParent, newClass);
             }
 
             var newRoot = newParent == null ? root : root.ReplaceNode(identifierParent, newParent);
