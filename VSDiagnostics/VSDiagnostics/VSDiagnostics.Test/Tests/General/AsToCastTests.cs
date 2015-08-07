@@ -47,6 +47,47 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void AsToCast_MethodCall_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Main()
+        {
+            bool? b = GetBoxedType() as bool?;
+        }
+
+        object GetBoxedType()
+        {
+            return true;
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Main()
+        {
+            bool? b = (bool?)GetBoxedType();
+        }
+
+        object GetBoxedType()
+        {
+            return true;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, AsToCastAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+            [TestMethod]
         public void AsToCast_CustomType_InvokesWarning()
         {
             var original = @"

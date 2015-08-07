@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new CastToAsCodeFix();
 
         [TestMethod]
-        public void CastToAs_PredefinedType_InvokesWarning()
+        public void CastToAs_ValueType_DoesNotInvokeWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -30,6 +30,41 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void CastToAs_ValueType_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            bool b = true;
+            object o = b;
+            bool? b2 = (bool?)o;
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            bool b = true;
+            object o = b;
+            bool? b2 = o as bool?;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, CastToAsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -73,6 +108,47 @@ namespace ConsoleApplication1
         {
             P variable = new Program();
             var i = ch as Program;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, CastToAsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void CastToAs_MethodCall_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Main()
+        {
+            bool? b = (bool?)GetBoxedType();
+        }
+
+        object GetBoxedType()
+        {
+            return true;
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Main()
+        {
+            bool? b = GetBoxedType() as bool?;
+        }
+
+        object GetBoxedType()
+        {
+            return true;
         }
     }
 }";

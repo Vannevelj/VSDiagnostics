@@ -32,7 +32,7 @@ namespace VSDiagnostics.Diagnostics.General.CastToAs
                 return;
             }
 
-            if (context.SemanticModel.GetTypeInfo(literalExpression.Type).ConvertedType.IsValueType)
+            if (context.SemanticModel.GetTypeInfo(literalExpression.Expression).ConvertedType.IsValueType)
             {
                 return;
             }
