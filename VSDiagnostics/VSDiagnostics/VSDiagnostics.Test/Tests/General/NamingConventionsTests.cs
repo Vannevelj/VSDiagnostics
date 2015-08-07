@@ -7,14 +7,14 @@ using VSDiagnostics.Diagnostics.General.NamingConventions;
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class NamingConventionsAnalyzerTests : CSharpCodeFixVerifier
+    public class NamingConventionsTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new NamingConventionsAnalyzer();
 
         protected override CodeFixProvider CodeFixProvider => new NamingConventionsCodeFix();
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithPrivateField_AndCapitalStart_InvokesWarning()
+        public void NamingConventions_WithPrivateField_AndCapitalStart_InvokesWarning()
         {
             var original = @"
 using System;
@@ -45,7 +45,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithPrivateField_AndCapitalStartWithUnderscore_InvokesWarning()
+        public void NamingConventions_WithPrivateField_AndCapitalStartWithUnderscore_InvokesWarning()
         {
             var original = @"
 using System;
@@ -76,7 +76,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithPublicField_InvokesWarning()
+        public void NamingConventions_WithPublicField_InvokesWarning()
         {
             var original = @"
 using System;
@@ -107,7 +107,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithProtectedField_InvokesWarning()
+        public void NamingConventions_WithProtectedField_InvokesWarning()
         {
             var original = @"
 using System;
@@ -138,7 +138,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithInternalField_InvokesWarning()
+        public void NamingConventions_WithInternalField_InvokesWarning()
         {
             var original = @"
 using System;
@@ -169,7 +169,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithProtectedInternalField_InvokesWarning()
+        public void NamingConventions_WithProtectedInternalField_InvokesWarning()
         {
             var original = @"
 using System;
@@ -200,7 +200,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithProperty_InvokesWarning()
+        public void NamingConventions_WithProperty_InvokesWarning()
         {
             var original = @"
 using System;
@@ -231,7 +231,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithMethod_InvokesWarning()
+        public void NamingConventions_WithMethod_InvokesWarning()
         {
             var original = @"
 using System;
@@ -266,7 +266,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithClass_InvokesWarning()
+        public void NamingConventions_WithClass_InvokesWarning()
         {
             var original = @"
 using System;
@@ -295,7 +295,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithInterface_WithoutPrefix_AndLowerFirstLetter_InvokesWarning()
+        public void NamingConventions_WithInterface_WithoutPrefix_AndLowerFirstLetter_InvokesWarning()
         {
             var original = @"
 using System;
@@ -324,7 +324,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithInterface_WithPrefix_AndLowerSecondLetter_InvokesWarning()
+        public void NamingConventions_WithInterface_WithPrefix_AndLowerSecondLetter_InvokesWarning()
         {
             var original = @"
 using System;
@@ -353,7 +353,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithInterface_WithlowerPrefix_AndCapitalSecondLetter_InvokesWarning()
+        public void NamingConventions_WithInterface_WithlowerPrefix_AndCapitalSecondLetter_InvokesWarning()
         {
             var original = @"
 using System;
@@ -382,7 +382,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithInterface_WithoutPrefix_AndCapitalFirstLetter_InvokesWarning()
+        public void NamingConventions_WithInterface_WithoutPrefix_AndCapitalFirstLetter_InvokesWarning()
         {
             var original = @"
 using System;
@@ -411,7 +411,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithInterface_WithUnderscore_InMiddle_InvokesWarning()
+        public void NamingConventions_WithInterface_WithUnderscore_InMiddle_InvokesWarning()
         {
             var original = @"
 using System;
@@ -440,7 +440,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithInterface_WithUnderscore_AtFront_InvokesWarning()
+        public void NamingConventions_WithInterface_WithUnderscore_AtFront_InvokesWarning()
         {
             var original = @"
 using System;
@@ -469,7 +469,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithInterface_WithUnderscore_AtBack_InvokesWarning()
+        public void NamingConventions_WithInterface_WithUnderscore_AtBack_InvokesWarning()
         {
             var original = @"
 using System;
@@ -498,7 +498,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithLocalVariable_InvokesWarning()
+        public void NamingConventions_WithLocalVariable_InvokesWarning()
         {
             var original = @"
 using System;
@@ -535,7 +535,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithParameter_InvokesWarning()
+        public void NamingConventions_WithParameter_InvokesWarning()
         {
             var original = @"
 using System;
@@ -570,7 +570,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithMultipleFields_InvokesWarning()
+        public void NamingConventions_WithMultipleFields_InvokesWarning()
         {
             var original = @"
 using System;
@@ -603,7 +603,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithPrivateField_FollowingConventions_DoesNotInvokeWarning()
+        public void NamingConventions_WithPrivateField_FollowingConventions_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -621,7 +621,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithProtectedField_FollowingConventions_DoesNotInvokeWarning()
+        public void NamingConventions_WithProtectedField_FollowingConventions_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -639,7 +639,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithInternalField_FollowingConventions_DoesNotInvokeWarning()
+        public void NamingConventions_WithInternalField_FollowingConventions_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -657,7 +657,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithPublicField_FollowingConventions_DoesNotInvokeWarning()
+        public void NamingConventions_WithPublicField_FollowingConventions_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -675,7 +675,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithInternalProtectedField_FollowingConventions_DoesNotInvokeWarning()
+        public void NamingConventions_WithInternalProtectedField_FollowingConventions_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -693,7 +693,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithProperty_FollowingConventions_DoesNotInvokeWarning()
+        public void NamingConventions_WithProperty_FollowingConventions_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -711,7 +711,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithMethod_FollowingConventions_DoesNotInvokeWarning()
+        public void NamingConventions_WithMethod_FollowingConventions_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -731,7 +731,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithClass_FollowingConventions_DoesNotInvokeWarning()
+        public void NamingConventions_WithClass_FollowingConventions_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -748,7 +748,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithInterface_FollowingConventions_DoesNotInvokeWarning()
+        public void NamingConventions_WithInterface_FollowingConventions_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -765,7 +765,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithLocalVariable_FollowingConventions_DoesNotInvokeWarning()
+        public void NamingConventions_WithLocalVariable_FollowingConventions_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -786,7 +786,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithParameter_FollowingConventions_DoesNotInvokeWarning()
+        public void NamingConventions_WithParameter_FollowingConventions_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -806,7 +806,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithVerbatimIdentifier_DoesNotInvokeWarning()
+        public void NamingConventions_WithVerbatimIdentifier_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -823,7 +823,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithEscapedIdentifier_DoesNotInvokeWarning()
+        public void NamingConventions_WithEscapedIdentifier_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -840,7 +840,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithMultipleDifferentTypes_InvokesWarning()
+        public void NamingConventions_WithMultipleDifferentTypes_InvokesWarning()
         {
             var original = @"
 using System;
@@ -881,7 +881,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithMultipleSimilarTypes_InvokesWarning()
+        public void NamingConventions_WithMultipleSimilarTypes_InvokesWarning()
         {
             var original = @"
 using System;
@@ -920,7 +920,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithExclusivelySpecialCharacters_DoesNotInvokeWarning()
+        public void NamingConventions_WithExclusivelySpecialCharacters_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -937,7 +937,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithOneLetterPrivateVariable_InvokesWarning()
+        public void NamingConventions_WithOneLetterPrivateVariable_InvokesWarning()
         {
             var original = @"
 using System;
@@ -968,7 +968,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithPrivateField_WithoutAccessModifier_InvokesWarning()
+        public void NamingConventions_WithPrivateField_WithoutAccessModifier_InvokesWarning()
         {
             var original = @"
 using System;
@@ -999,7 +999,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithStruct_InvokesWarning()
+        public void NamingConventions_WithStruct_InvokesWarning()
         {
             var original = @"
 using System;
@@ -1028,7 +1028,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithStruct_FollowingConventions_InvokesWarning()
+        public void NamingConventions_WithStruct_FollowingConventions_InvokesWarning()
         {
             var original = @"
 using System;
@@ -1045,7 +1045,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithPrivateField_AsConstant_FollowingConventions_DoesNotInvokeWarning()
+        public void NamingConventions_WithPrivateField_AsConstant_FollowingConventions_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -1063,7 +1063,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithPrivateField_AsStatic_FollowingConventions_DoesNotInvokeWarning()
+        public void NamingConventions_WithPrivateField_AsStatic_FollowingConventions_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -1081,7 +1081,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventionsAnalyzer_WithPrivateField_AsReadonly_InvokesWarning()
+        public void NamingConventions_WithPrivateField_AsReadonly_InvokesWarning()
         {
             var original = @"
 using System;

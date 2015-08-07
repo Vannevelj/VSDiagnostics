@@ -7,14 +7,14 @@ using VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull;
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class TryCastUsingAsNotNullInsteadOfIsAsAnalyzerTests : CSharpCodeFixVerifier
+    public class TryCastUsingAsNotNullInsteadOfIsAsTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new TryCastWithoutUsingAsNotNullAnalyzer();
 
         protected override CodeFixProvider CodeFixProvider => new TryCastWithoutUsingAsNotNullCodeFix();
 
         [TestMethod]
-        public void TryCastWithoutUsingAsNotNullAnalyzer_WithIsAs_AndReferenceType_InvokesWarning()
+        public void TryCastWithoutUsingAsNotNull_WithIsAs_AndReferenceType_InvokesWarning()
         {
             var original = @"
 using System;
@@ -59,7 +59,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TryCastWithoutUsingAsNotNullAnalyzer_WithIsAs_AndValueType_InvokesWarning()
+        public void TryCastWithoutUsingAsNotNull_WithIsAs_AndValueType_InvokesWarning()
         {
             var original = @"
 using System;
@@ -104,7 +104,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TryCastWithoutUsingAsNotNullAnalyzer_WithIsAs_AndObjectIsUsedBeforeIs_InvokesWarning()
+        public void TryCastWithoutUsingAsNotNull_WithIsAs_AndObjectIsUsedBeforeIs_InvokesWarning()
         {
             var original = @"
 using System;
@@ -151,7 +151,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TryCastWithoutUsingAsNotNullAnalyzer_WithIsAs_AndObjectIsMethodParameter_InvokesWarning()
+        public void TryCastWithoutUsingAsNotNull_WithIsAs_AndObjectIsMethodParameter_InvokesWarning()
         {
             var original = @"
 using System;
@@ -194,7 +194,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TryCastWithoutUsingAsNotNullAnalyzer_WithIsAs_AndElseClause_InvokesWarning()
+        public void TryCastWithoutUsingAsNotNull_WithIsAs_AndElseClause_InvokesWarning()
         {
             var original = @"
 using System;
@@ -247,7 +247,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TryCastWithoutUsingAsNotNullAnalyzer_WithMultipleCasts_InvokesWarning()
+        public void TryCastWithoutUsingAsNotNull_WithMultipleCasts_InvokesWarning()
         {
             var original = @"
 using System;
@@ -296,7 +296,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TryCastWithoutUsingAsNotNullAnalyzer_WithDirectCast_InvokesWarning()
+        public void TryCastWithoutUsingAsNotNull_WithDirectCast_InvokesWarning()
         {
             var original = @"
 using System;
@@ -321,7 +321,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TryCastWithoutUsingAsNotNullAnalyzer_WithoutCorrespondingCast_DoesNotInvokeWarning()
+        public void TryCastWithoutUsingAsNotNull_WithoutCorrespondingCast_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -347,7 +347,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TryCastWithoutUsingAsNotNullAnalyzer_WithChainedVariableDeclaration_InvokesWarning()
+        public void TryCastWithoutUsingAsNotNull_WithChainedVariableDeclaration_InvokesWarning()
         {
             var original = @"
 using System;

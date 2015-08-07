@@ -7,14 +7,14 @@ using VSDiagnostics.Diagnostics.General.CompareBooleanToFalseLiteral;
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class CompareBooleanToFalseLiteralAnalyzerTests : CSharpCodeFixVerifier
+    public class CompareBooleanToFalseLiteralTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new CompareBooleanToFalseLiteralAnalyzer();
 
         protected override CodeFixProvider CodeFixProvider => new CompareBooleanToFalseLiteralCodeFix();
 
         [TestMethod]
-        public void CompareBooleanToFalseLiteralAnalyzer_WithSimpleFalseLiteralComparison_InvokesWarning()
+        public void CompareBooleanToFalseLiteral_WithSimpleFalseLiteralComparison_InvokesWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -53,7 +53,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CompareBooleanToFalseLiteralAnalyzer_WithSimpleFalseLiteralComparisonAsReturnValue_InvokesWarning()
+        public void CompareBooleanToFalseLiteral_WithSimpleFalseLiteralComparisonAsReturnValue_InvokesWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -86,7 +86,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CompareBooleanToFalseLiteralAnalyzer_WithComplicatedFalseLiteralComparison_FirstComparisonIsEquals_InvokesWarning()
+        public void CompareBooleanToFalseLiteral_WithComplicatedFalseLiteralComparison_FirstComparisonIsEquals_InvokesWarning()
         {
             var original = @"
 using System.Collections.Generic;
@@ -135,7 +135,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CompareBooleanToFalseLiteralAnalyzer_WithComplicatedFalseLiteralComparison_FirstComparisonIsNotEquals_InvokesWarning()
+        public void CompareBooleanToFalseLiteral_WithComplicatedFalseLiteralComparison_FirstComparisonIsNotEquals_InvokesWarning()
         {
             var original = @"
 using System.Collections.Generic;
@@ -184,7 +184,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CompareBooleanToFalseLiteralAnalyzer_WithUnrelatedFalseLiteral_DoesNotInvokeWarning()
+        public void CompareBooleanToFalseLiteral_WithUnrelatedFalseLiteral_DoesNotInvokeWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -201,7 +201,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CompareBooleanToFalseLiteralAnalyzer_WithSimplifiedExpression_DoesNotInvokeWarning()
+        public void CompareBooleanToFalseLiteral_WithSimplifiedExpression_DoesNotInvokeWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -219,7 +219,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CompareBooleanToFalseLiteralAnalyzer_ComparedToBooleanAsString_DoesNotInvokeWarning()
+        public void CompareBooleanToFalseLiteral_ComparedToBooleanAsString_DoesNotInvokeWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -239,7 +239,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CompareBooleanToFalseLiteralAnalyzer_WithFalseLiteralAsLefthandValue_InvokesWarning()
+        public void CompareBooleanToFalseLiteral_WithFalseLiteralAsLefthandValue_InvokesWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -272,7 +272,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CompareBooleanToFalseLiteralAnalyzer_WithSimpleFalseLiteralComparison_NotEqualsOperator_InvokesWarning()
+        public void CompareBooleanToFalseLiteral_WithSimpleFalseLiteralComparison_NotEqualsOperator_InvokesWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -311,7 +311,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CompareBooleanToFalseLiteralAnalyzer_WithSimpleFalseLiteralComparisonAsReturnValue_NotEqualsOperator_InvokesWarning()
+        public void CompareBooleanToFalseLiteral_WithSimpleFalseLiteralComparisonAsReturnValue_NotEqualsOperator_InvokesWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -344,7 +344,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CompareBooleanToFalseLiteralAnalyzer_WithComplicatedFalseLiteralComparison_NotEqualsOperator_FirstComparisonIsEquals_InvokesWarning()
+        public void CompareBooleanToFalseLiteral_WithComplicatedFalseLiteralComparison_NotEqualsOperator_FirstComparisonIsEquals_InvokesWarning()
         {
             var original = @"
 using System.Collections.Generic;
@@ -393,7 +393,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CompareBooleanToFalseLiteralAnalyzer_WithComplicatedFalseLiteralComparison_NotEqualsOperator_FirstComparisonIsNotEquals_InvokesWarning()
+        public void CompareBooleanToFalseLiteral_WithComplicatedFalseLiteralComparison_NotEqualsOperator_FirstComparisonIsNotEquals_InvokesWarning()
         {
             var original = @"
 using System.Collections.Generic;
@@ -442,7 +442,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CompareBooleanToFalseLiteralAnalyzer_ComparedToBooleanAsString_NotEqualsOperator_DoesNotInvokeWarning()
+        public void CompareBooleanToFalseLiteral_ComparedToBooleanAsString_NotEqualsOperator_DoesNotInvokeWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -462,7 +462,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CompareBooleanToFalseLiteralAnalyzer_WithFalseLiteralAsLefthandValue_NotEqualsOperator_InvokesWarning()
+        public void CompareBooleanToFalseLiteral_WithFalseLiteralAsLefthandValue_NotEqualsOperator_InvokesWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -495,7 +495,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CompareBooleanToFalseLiteralAnalyzer_WithNullableBool_DoesNotInvokeWarning()
+        public void CompareBooleanToFalseLiteral_WithNullableBool_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -519,7 +519,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CompareBooleanToFalseLiteralAnalyzer_WithNullableBool_AsMethodInvocation_DoesNotInvokeWarning()
+        public void CompareBooleanToFalseLiteral_WithNullableBool_AsMethodInvocation_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -547,7 +547,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CompareBooleanToFalseLiteralAnalyzer_AsMethodInvocation_InvokesWarning()
+        public void CompareBooleanToFalseLiteral_AsMethodInvocation_InvokesWarning()
         {
             var original = @"
 using System;

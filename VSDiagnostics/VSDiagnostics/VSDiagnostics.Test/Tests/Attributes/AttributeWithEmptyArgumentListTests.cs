@@ -7,14 +7,14 @@ using VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList;
 namespace VSDiagnostics.Test.Tests.Attributes
 {
     [TestClass]
-    public class AttributeWithEmptyArgumentListAnalyzerTests : CSharpCodeFixVerifier
+    public class AttributeWithEmptyArgumentListTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new AttributeWithEmptyArgumentListAnalyzer();
 
         protected override CodeFixProvider CodeFixProvider => new AttributeWithEmptyArgumentListCodeFix();
 
         [TestMethod]
-        public void AttributeWithEmptyArgumentListAnalyzer_AttributeWithEmptyArgumentList_InvokesWarning()
+        public void AttributeWithEmptyArgumentList_AttributeWithEmptyArgumentList_InvokesWarning()
         {
             var original = @"
 using System;
@@ -49,7 +49,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void AttributeWithEmptyArgumentListAnalyzer_WithoutArgumentList_DoesNotInvokeWarning()
+        public void AttributeWithEmptyArgumentList_WithoutArgumentList_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -69,7 +69,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void AttributeWithEmptyArgumentListAnalyzer_WithArgumentList_DoesNotInvokeWarning()
+        public void AttributeWithEmptyArgumentList_WithArgumentList_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -90,7 +90,7 @@ namespace ConsoleApplication1
 
         // make sure it works on other attributes besides [Obsolete]
         [TestMethod]
-        public void AttributeWithEmptyArgumentListAnalyzer_AttributeWithEmptyArgumentList_FlagsAttribute_InvokesWarning()
+        public void AttributeWithEmptyArgumentList_AttributeWithEmptyArgumentList_FlagsAttribute_InvokesWarning()
         {
             var original = @"
 using System;
@@ -128,7 +128,7 @@ namespace ConsoleApplication1
 
         // make sure it works on other attributes besides [Obsolete]
         [TestMethod]
-        public void AttributeWithEmptyArgumentListAnalyzer_WithoutArgumentList_FlagsAttribute_DoesNotInvokeWarning()
+        public void AttributeWithEmptyArgumentList_WithoutArgumentList_FlagsAttribute_DoesNotInvokeWarning()
         {
             var original = @"
 using System;

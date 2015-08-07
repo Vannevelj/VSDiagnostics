@@ -7,14 +7,14 @@ using VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember;
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class SimplifyExpressionBodiedMemberAnalyzerTests : CSharpCodeFixVerifier
+    public class SimplifyExpressionBodiedMemberTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new SimplifyExpressionBodiedMemberAnalyzer();
 
         protected override CodeFixProvider CodeFixProvider => new SimplifyExpressionBodiedMemberCodeFix();
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMemberAnalyzer_WithSimpleReturnMethod_InvokesWarning()
+        public void SimplifyExpressionBodiedMember_WithSimpleReturnMethod_InvokesWarning()
         {
             var original = @"
 using System;
@@ -48,7 +48,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMemberAnalyzer_WithSimpleGetterOnlyProperty_InvokesWarning()
+        public void SimplifyExpressionBodiedMember_WithSimpleGetterOnlyProperty_InvokesWarning()
         {
             var original = @"
 using System;
@@ -79,7 +79,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMemberAnalyzer_WithMultiLineGetterOnlyProperty_InvokesWarning()
+        public void SimplifyExpressionBodiedMember_WithMultiLineGetterOnlyProperty_InvokesWarning()
         {
             var original = @"
 using System;
@@ -116,7 +116,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMemberAnalyzer_WithMultiStatementGetterOnlyProperty_DoesNotInvokeWarning()
+        public void SimplifyExpressionBodiedMember_WithMultiStatementGetterOnlyProperty_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -140,7 +140,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMemberAnalyzer_WithMultiStatementMethod_DoesNotInvokeWarning()
+        public void SimplifyExpressionBodiedMember_WithMultiStatementMethod_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -161,7 +161,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMemberAnalyzer_WithMethodWithVoidReturn_DoesNotInvokeWarning()
+        public void SimplifyExpressionBodiedMember_WithMethodWithVoidReturn_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -181,7 +181,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMemberAnalyzer_WithMethodWithoutReturn_DoesNotInvokeWarning()
+        public void SimplifyExpressionBodiedMember_WithMethodWithoutReturn_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -204,7 +204,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMemberAnalyzer_WithMethodWithExpressionBody_DoesNotInvokeWarning()
+        public void SimplifyExpressionBodiedMember_WithMethodWithExpressionBody_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -221,7 +221,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMemberAnalyzer_WithPropertyWithExpressionBody_DoesNotInvokeWarning()
+        public void SimplifyExpressionBodiedMember_WithPropertyWithExpressionBody_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -238,7 +238,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMemberAnalyzer_WithMethodWithUnreachableCode_DoesNotInvokeWarning()
+        public void SimplifyExpressionBodiedMember_WithMethodWithUnreachableCode_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -259,7 +259,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMemberAnalyzer_WithMethodAndTrailingComments_DoesNotInvokeWarning()
+        public void SimplifyExpressionBodiedMember_WithMethodAndTrailingComments_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -279,7 +279,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMemberAnalyzer_WithPropertyWithGetAndSet_DoesNotInvokeWarning()
+        public void SimplifyExpressionBodiedMember_WithPropertyWithGetAndSet_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -296,7 +296,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMemberAnalyzer_WithMultipleProperties_InvokesWarning()
+        public void SimplifyExpressionBodiedMember_WithMultipleProperties_InvokesWarning()
         {
             var original = @"
 using System;
@@ -332,7 +332,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMemberAnalyzer_WithTrivia_AsProperty_DoesNotInvokeWarning()
+        public void SimplifyExpressionBodiedMember_WithTrivia_AsProperty_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -349,7 +349,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMemberAnalyzer_WithTrivia_AsMethod_DoesNotInvokeWarning()
+        public void SimplifyExpressionBodiedMember_WithTrivia_AsMethod_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -371,7 +371,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMemberAnalyzer_WithTrailingPropertyTrivia_DoesNotInvokeWarning()
+        public void SimplifyExpressionBodiedMember_WithTrailingPropertyTrivia_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -389,7 +389,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMemberAnalyzer_WithAttribute_DoesNotInvokeWarning()
+        public void SimplifyExpressionBodiedMember_WithAttribute_DoesNotInvokeWarning()
         {
             var original = @"
 using System;

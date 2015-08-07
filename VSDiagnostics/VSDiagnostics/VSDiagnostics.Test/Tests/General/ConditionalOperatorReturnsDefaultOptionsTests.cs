@@ -7,14 +7,14 @@ using VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsDefaultOptions
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class ConditionalOperatorReturnsDefaultOptionsAnalyzerTests : CSharpCodeFixVerifier
+    public class ConditionalOperatorReturnsDefaultOptionsTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new ConditionalOperatorReturnsDefaultOptionsAnalyzer();
 
         protected override CodeFixProvider CodeFixProvider => new ConditionalOperatorReturnsDefaultOptionsCodeFix();
 
         [TestMethod]
-        public void ConditionalOperatorReturnsDefaultOptionsAnalyzer_WithOnlyLiterals_InvokesWarning()
+        public void ConditionalOperatorReturnsDefaultOptions_WithOnlyLiterals_InvokesWarning()
         {
             var original = @"
 using System;
@@ -55,7 +55,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ConditionalOperatorReturnsDefaultOptionsAnalyzer_WithTrueConditionAsLiteral_DoesNotInvokeWarning()
+        public void ConditionalOperatorReturnsDefaultOptions_WithTrueConditionAsLiteral_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -79,7 +79,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ConditionalOperatorReturnsDefaultOptionsAnalyzer_WithFalseConditionAsLiteral_DoesNotInvokeWarning()
+        public void ConditionalOperatorReturnsDefaultOptions_WithFalseConditionAsLiteral_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -103,7 +103,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ConditionalOperatorReturnsDefaultOptionsAnalyzer_WithOnlyLiterals_AsReturnStatement_InvokesWarning()
+        public void ConditionalOperatorReturnsDefaultOptions_WithOnlyLiterals_AsReturnStatement_InvokesWarning()
         {
             var original = @"
 using System;
@@ -144,7 +144,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ConditionalOperatorReturnsDefaultOptionsAnalyzer_WithStrings_DoesNotInvokeWarning()
+        public void ConditionalOperatorReturnsDefaultOptions_WithStrings_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -167,7 +167,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ConditionalOperatorReturnsDefaultOptionsAnalyzer_WithMoreComplicatedCondition_InvokesWarning()
+        public void ConditionalOperatorReturnsDefaultOptions_WithMoreComplicatedCondition_InvokesWarning()
         {
             var original = @"
 using System;
@@ -208,7 +208,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ConditionalOperatorReturnsDefaultOptionsAnalyzer_WithInvertedBooleanLiterals_DoesNotInvokeWarning()
+        public void ConditionalOperatorReturnsDefaultOptions_WithInvertedBooleanLiterals_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -231,7 +231,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ConditionalOperatorReturnsDefaultOptionsAnalyzer_WithLiteralsAsString_DoesNotInvokeWarning()
+        public void ConditionalOperatorReturnsDefaultOptions_WithLiteralsAsString_DoesNotInvokeWarning()
         {
             var original = @"
 using System;

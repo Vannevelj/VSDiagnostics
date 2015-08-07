@@ -7,7 +7,7 @@ using VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperator;
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class OnPropertyChangedWithoutNameOfOperatorAnalyzerTests : CSharpCodeFixVerifier
+    public class OnPropertyChangedWithoutNameOfOperatorTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new OnPropertyChangedWithoutNameOfOperatorAnalyzer();
 

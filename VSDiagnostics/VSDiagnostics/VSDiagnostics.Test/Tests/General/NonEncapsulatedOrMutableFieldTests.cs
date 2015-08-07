@@ -7,14 +7,14 @@ using VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField;
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class NonEncapsulatedOrMutableFieldAnalyzerTests : CSharpCodeFixVerifier
+    public class NonEncapsulatedOrMutableFieldTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new NonEncapsulatedOrMutableFieldAnalyzer();
 
         protected override CodeFixProvider CodeFixProvider => new NonEncapsulatedOrMutableFieldCodeFix();
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableFieldAnalyzer_WithInternalField_AndInlineInitialization_InvokesWarning()
+        public void NonEncapsulatedOrMutableField_WithInternalField_AndInlineInitialization_InvokesWarning()
         {
             var original = @"
 using System;
@@ -45,7 +45,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableFieldAnalyzer_WithInlineInitialization_InvokesWarning()
+        public void NonEncapsulatedOrMutableField_WithInlineInitialization_InvokesWarning()
         {
             var original = @"
 using System;
@@ -76,7 +76,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableFieldAnalyzer_WithPublicField_InvokesWarning()
+        public void NonEncapsulatedOrMutableField_WithPublicField_InvokesWarning()
         {
             var original = @"
 using System;
@@ -107,7 +107,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableFieldAnalyzer_WithPrivateField_DoesNotInvokeWarning()
+        public void NonEncapsulatedOrMutableField_WithPrivateField_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -125,7 +125,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableFieldAnalyzer_WithProtectedInternalField_InvokesWarning()
+        public void NonEncapsulatedOrMutableField_WithProtectedInternalField_InvokesWarning()
         {
             var original = @"
 using System;
@@ -156,7 +156,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableFieldAnalyzer_WithConstField_DoesNotInvokeWarning()
+        public void NonEncapsulatedOrMutableField_WithConstField_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -174,7 +174,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableFieldAnalyzer_WithReadOnlyField_DoesNotInvokeWarning()
+        public void NonEncapsulatedOrMutableField_WithReadOnlyField_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -192,7 +192,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableFieldAnalyzer_WithMultipleDeclarators_InvokesWarning()
+        public void NonEncapsulatedOrMutableField_WithMultipleDeclarators_InvokesWarning()
         {
             var original = @"
 using System;
@@ -227,7 +227,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableFieldAnalyzer_WithMultipleDeclaratorsAndInlineInitialization_InvokesWarning()
+        public void NonEncapsulatedOrMutableField_WithMultipleDeclaratorsAndInlineInitialization_InvokesWarning()
         {
             var original = @"
 using System;
@@ -262,7 +262,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableFieldAnalyzer_WithAttribute_InvokesWarning()
+        public void NonEncapsulatedOrMutableField_WithAttribute_InvokesWarning()
         {
             var original = @"
 using System;
@@ -308,7 +308,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableFieldAnalyzer_WithVerbatimIdentifier_InvokesWarning()
+        public void NonEncapsulatedOrMutableField_WithVerbatimIdentifier_InvokesWarning()
         {
             var original = @"
 using System;
@@ -339,7 +339,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableFieldAnalyzer_WithEscapedIdentifier_InvokesWarning()
+        public void NonEncapsulatedOrMutableField_WithEscapedIdentifier_InvokesWarning()
         {
             var original = @"
 using System;

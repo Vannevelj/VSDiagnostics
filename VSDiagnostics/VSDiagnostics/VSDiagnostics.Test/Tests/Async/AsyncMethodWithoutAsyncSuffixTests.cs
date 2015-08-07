@@ -7,14 +7,14 @@ using VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix;
 namespace VSDiagnostics.Test.Tests.Async
 {
     [TestClass]
-    public class AsyncMethodWithoutAsyncSuffixAnalyzerTests : CSharpCodeFixVerifier
+    public class AsyncMethodWithoutAsyncSuffixTests : CSharpCodeFixVerifier
     {
         protected override CodeFixProvider CodeFixProvider => new AsyncMethodWithoutAsyncSuffixCodeFix();
 
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new AsyncMethodWithoutAsyncSuffixAnalyzer();
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffixAnalyzer_WithAsyncKeywordAndNoSuffix_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_WithAsyncKeywordAndNoSuffix_InvokesWarning()
         {
             var original = @"
     using System;
@@ -53,7 +53,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffixAnalyzer_WithAsyncKeywordAndSuffix_DoesNotDisplayWarning()
+        public void AsyncMethodWithoutAsyncSuffix_WithAsyncKeywordAndSuffix_DoesNotDisplayWarning()
         {
             var original = @"
     using System;
@@ -74,7 +74,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffixAnalyzer_WithoutAsyncKeywordAndSuffix_DoesNotDisplayWarning()
+        public void AsyncMethodWithoutAsyncSuffix_WithoutAsyncKeywordAndSuffix_DoesNotDisplayWarning()
         {
             var original = @"
     using System;
