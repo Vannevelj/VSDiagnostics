@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -42,13 +43,19 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var literalExpression = context.Node as BinaryExpressionSyntax;
-            if (literalExpression == null)
+            var declarationExpression = context.Node as ClassDeclarationSyntax;
+            if (declarationExpression != null && !declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
             {
-                return;
+                context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), SyntaxKind.InternalKeyword));
             }
-
-            context.ReportDiagnostic(Diagnostic.Create(Rule, literalExpression.GetLocation()));
         }
+
+        private readonly SyntaxKind[] _modifierKinds =
+        {
+            SyntaxKind.PublicKeyword,
+            SyntaxKind.ProtectedKeyword,
+            SyntaxKind.InternalKeyword,
+            SyntaxKind.PrivateKeyword
+        };
     }
 }

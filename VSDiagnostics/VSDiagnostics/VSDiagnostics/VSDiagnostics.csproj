@@ -56,6 +56,7 @@
     <Compile Include="Diagnostics\General\ConditionalOperatorReturnsDefaultOptions\ConditionalOperatorReturnsDefaultOptionsAnalyzer.cs" />
     <Compile Include="Diagnostics\General\ConditionalOperatorReturnsDefaultOptions\ConditionalOperatorReturnsDefaultOptionsCodeFix.cs" />
     <Compile Include="Diagnostics\General\ExplicitAccessModifiers\ExplicitAccessModifiersAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\ExplicitAccessModifiers\ExplicitAccessModifiersCodeFix.cs" />
     <Compile Include="Diagnostics\General\GotoDetection\GotoDetectionAnalyzer.cs" />
     <Compile Include="Diagnostics\General\IfStatementWithoutBraces\IfStatementWithoutBracesAnalyzer.cs" />
     <Compile Include="Diagnostics\General\IfStatementWithoutBraces\IfStatementWithoutBracesCodeFix.cs" />
