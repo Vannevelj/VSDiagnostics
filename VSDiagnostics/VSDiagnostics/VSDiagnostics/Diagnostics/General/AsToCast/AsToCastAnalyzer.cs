@@ -12,7 +12,7 @@ namespace VSDiagnostics.Diagnostics.General.AsToCast
         private const string Category = "General";
         private const string DiagnosticId = nameof(AsToCastAnalyzer);
         private const string Message = "Use cast instead of as.";
-        private const DiagnosticSeverity Severity = DiagnosticSeverity.Hidden;
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Info;
         private const string Title = "You can use a cast instead of as.";
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
@@ -26,13 +26,13 @@ namespace VSDiagnostics.Diagnostics.General.AsToCast
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var literalExpression = context.Node as BinaryExpressionSyntax;
-            if (literalExpression == null)
+            var binaryExpression = context.Node as BinaryExpressionSyntax;
+            if (binaryExpression == null)
             {
                 return;
             }
 
-            context.ReportDiagnostic(Diagnostic.Create(Rule, literalExpression.GetLocation()));
+            context.ReportDiagnostic(Diagnostic.Create(Rule, binaryExpression.GetLocation()));
         }
     }
 }

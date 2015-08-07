@@ -12,7 +12,7 @@ namespace VSDiagnostics.Diagnostics.General.CastToAs
         private const string Category = "General";
         private const string DiagnosticId = nameof(CastToAsAnalyzer);
         private const string Message = "Use as instead of a cast.";
-        private const DiagnosticSeverity Severity = DiagnosticSeverity.Hidden;
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Info;
         private const string Title = "You can use as instead of a cast.";
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
@@ -26,18 +26,18 @@ namespace VSDiagnostics.Diagnostics.General.CastToAs
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var literalExpression = context.Node as CastExpressionSyntax;
-            if (literalExpression == null)
+            var castExpression = context.Node as CastExpressionSyntax;
+            if (castExpression == null)
             {
                 return;
             }
 
-            if (context.SemanticModel.GetTypeInfo(literalExpression.Expression).ConvertedType.IsValueType)
+            if (context.SemanticModel.GetTypeInfo(castExpression.Expression).ConvertedType.IsValueType)
             {
                 return;
             }
 
-            context.ReportDiagnostic(Diagnostic.Create(Rule, literalExpression.GetLocation()));
+            context.ReportDiagnostic(Diagnostic.Create(Rule, castExpression.GetLocation()));
         }
     }
 }

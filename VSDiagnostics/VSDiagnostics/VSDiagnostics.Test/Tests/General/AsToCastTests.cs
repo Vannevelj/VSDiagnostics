@@ -24,7 +24,8 @@ namespace ConsoleApplication1
         void Method()
         {
             var ch = 'r';
-            var i = ch as int;
+            object o = ch;
+            var i = o as int?;
         }
     }
 }";
@@ -37,7 +38,8 @@ namespace ConsoleApplication1
         void Method()
         {
             var ch = 'r';
-            var i = (int)ch;
+            object o = ch;
+            var i = (int?)o;
         }
     }
 }";
@@ -87,7 +89,7 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
-            [TestMethod]
+        [TestMethod]
         public void AsToCast_CustomType_InvokesWarning()
         {
             var original = @"

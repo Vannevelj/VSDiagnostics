@@ -24,7 +24,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.ObsoleteAttributeWithoutReason
         {
             context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.Attribute);
         }
-        
+
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var attributeExpression = context.Node as AttributeSyntax;
@@ -35,7 +35,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.ObsoleteAttributeWithoutReason
 
             // attribute type must be of type ObsoleteAttribute
             var type = context.SemanticModel.GetSymbolInfo(attributeExpression).Symbol;
-            if (type.ContainingType.MetadataName != typeof(ObsoleteAttribute).Name)
+            if (type.ContainingType.MetadataName != typeof (ObsoleteAttribute).Name)
             {
                 return;
             }

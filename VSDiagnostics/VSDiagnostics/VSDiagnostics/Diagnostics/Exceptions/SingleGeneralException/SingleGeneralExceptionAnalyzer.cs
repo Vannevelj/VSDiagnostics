@@ -43,7 +43,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.SingleGeneralException
             var symbol = context.SemanticModel.GetSymbolInfo(declaredException).Symbol;
             if (symbol != null)
             {
-                if (symbol.MetadataName == typeof(Exception).Name)
+                if (symbol.MetadataName == typeof (Exception).Name)
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declaredException.GetLocation()));
                 }

@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.General.AsToCast
 {
-    [ExportCodeFixProvider("SingleEmptyConstructorCodeFix", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider("AsToCast", LanguageNames.CSharp), Shared]
     public class AsToCastCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(AsToCastAnalyzer.Rule.Id);
@@ -25,10 +25,10 @@ namespace VSDiagnostics.Diagnostics.General.AsToCast
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Use cast instead of as", x => RemoveConstructorAsync(context.Document, root, statement), nameof(AsToCastAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Use cast instead of as", x => AsToCastAsync(context.Document, root, statement), nameof(AsToCastAnalyzer)), diagnostic);
         }
 
-        private Task<Solution> RemoveConstructorAsync(Document document, SyntaxNode root, SyntaxNode statement)
+        private Task<Solution> AsToCastAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var binaryExpression = (BinaryExpressionSyntax) statement;
             var typeSyntax = SyntaxFactory.ParseTypeName(binaryExpression.Right.GetText().ToString());
