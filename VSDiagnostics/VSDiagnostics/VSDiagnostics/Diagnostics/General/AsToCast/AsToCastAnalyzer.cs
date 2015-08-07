@@ -26,13 +26,13 @@ namespace VSDiagnostics.Diagnostics.General.AsToCast
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var literalExpression = context.Node as BinaryExpressionSyntax;
-            if (literalExpression == null)
+            var binaryExpression = context.Node as BinaryExpressionSyntax;
+            if (binaryExpression == null)
             {
                 return;
             }
 
-            context.ReportDiagnostic(Diagnostic.Create(Rule, literalExpression.GetLocation()));
+            context.ReportDiagnostic(Diagnostic.Create(Rule, binaryExpression.GetLocation()));
         }
     }
 }

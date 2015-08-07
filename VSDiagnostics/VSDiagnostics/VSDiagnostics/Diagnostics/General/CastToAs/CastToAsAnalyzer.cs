@@ -26,18 +26,18 @@ namespace VSDiagnostics.Diagnostics.General.CastToAs
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var literalExpression = context.Node as CastExpressionSyntax;
-            if (literalExpression == null)
+            var castExpression = context.Node as CastExpressionSyntax;
+            if (castExpression == null)
             {
                 return;
             }
 
-            if (context.SemanticModel.GetTypeInfo(literalExpression.Expression).ConvertedType.IsValueType)
+            if (context.SemanticModel.GetTypeInfo(castExpression.Expression).ConvertedType.IsValueType)
             {
                 return;
             }
 
-            context.ReportDiagnostic(Diagnostic.Create(Rule, literalExpression.GetLocation()));
+            context.ReportDiagnostic(Diagnostic.Create(Rule, castExpression.GetLocation()));
         }
     }
 }

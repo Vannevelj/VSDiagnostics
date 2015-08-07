@@ -38,8 +38,8 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
             if (binaryExpression.Left is BinaryExpressionSyntax || binaryExpression.Right is BinaryExpressionSyntax)
             {
                 var internalBinaryExpression = binaryExpression.Left is BinaryExpressionSyntax
-                    ? (BinaryExpressionSyntax)binaryExpression.Left
-                    : (BinaryExpressionSyntax)binaryExpression.Right;
+                    ? (BinaryExpressionSyntax) binaryExpression.Left
+                    : (BinaryExpressionSyntax) binaryExpression.Right;
 
                 var newExpressionType = internalBinaryExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken) ^ binaryExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken)
                     ? SyntaxKind.NotEqualsExpression

@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace VSDiagnostics.Diagnostics.General.GotoDetection
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    class GotoDetectionAnalyzer : DiagnosticAnalyzer
+    internal class GotoDetectionAnalyzer : DiagnosticAnalyzer
     {
         private const string Category = "General";
         private const string DiagnosticId = nameof(GotoDetectionAnalyzer);

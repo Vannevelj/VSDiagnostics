@@ -14,6 +14,41 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new AsToCastCodeFix();
 
         [TestMethod]
+        public void AsToCast_PredefinedType_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var ch = 'r';
+            object o = ch;
+            var i = o as int?;
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var ch = 'r';
+            object o = ch;
+            var i = (int?)o;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, AsToCastAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
         public void AsToCast_MethodCall_InvokesWarning()
         {
             var original = @"

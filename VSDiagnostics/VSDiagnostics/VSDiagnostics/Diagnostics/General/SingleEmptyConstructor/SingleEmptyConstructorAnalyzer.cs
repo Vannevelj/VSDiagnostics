@@ -9,7 +9,7 @@ using VSDiagnostics.Utilities;
 namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    class SingleEmptyConstructorAnalyzer : DiagnosticAnalyzer
+    internal class SingleEmptyConstructorAnalyzer : DiagnosticAnalyzer
     {
         private const string Category = "General";
         private const string DiagnosticId = nameof(SingleEmptyConstructorAnalyzer);
@@ -21,50 +21,50 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize (AnalysisContext context)
+        public override void Initialize(AnalysisContext context)
         {
             context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.ConstructorDeclaration);
         }
 
-        private void AnalyzeSymbol (SyntaxNodeAnalysisContext context)
+        private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var ctorExpression = context.Node as ConstructorDeclarationSyntax;
-            if (ctorExpression == null)
+            var constructorDeclaration = context.Node as ConstructorDeclarationSyntax;
+            if (constructorDeclaration == null)
             {
                 return;
             }
-            
+
             // ctor must be public
-            if (!ctorExpression.Modifiers.Any(SyntaxKind.PublicKeyword))
+            if (!constructorDeclaration.Modifiers.Any(SyntaxKind.PublicKeyword))
             {
                 return;
             }
 
             // ctor must not have parameters
-            if (ctorExpression.ParameterList.Parameters.Any())
+            if (constructorDeclaration.ParameterList.Parameters.Any())
             {
                 return;
             }
 
             // ctor must have no body statements
-            if (ctorExpression.Body.Statements.Any())
+            if (constructorDeclaration.Body.Statements.Any())
             {
                 return;
             }
 
             // ctor must not contain comments
-            if (ctorExpression.Body.CloseBraceToken.LeadingTrivia.Any(t => t.IsCommentTrivia()))
+            if (constructorDeclaration.Body.CloseBraceToken.LeadingTrivia.Any(t => t.IsCommentTrivia()))
             {
                 return;
             }
 
             // ctor must not have attributes
-            if (ctorExpression.AttributeLists.Any())
+            if (constructorDeclaration.AttributeLists.Any())
             {
                 return;
             }
 
-            context.ReportDiagnostic(Diagnostic.Create(Rule, ctorExpression.GetLocation(), ctorExpression.Identifier));
+            context.ReportDiagnostic(Diagnostic.Create(Rule, constructorDeclaration.GetLocation(), constructorDeclaration.Identifier));
         }
     }
 }

@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new SingleEmptyConstructorCodeFix();
 
         [TestMethod]
-        public void SingleEmptyConstructor_WithEmptyConstructor_InvokesWarning ()
+        public void SingleEmptyConstructor_WithEmptyConstructor_InvokesWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -34,13 +34,13 @@ namespace ConsoleApplication1
     {
     }
 }";
-            
-            VerifyDiagnostic (original, string.Format(SingleEmptyConstructorAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+
+            VerifyDiagnostic(original, string.Format(SingleEmptyConstructorAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
             VerifyFix(original, result);
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_WithSingleLineCommentInConstructor_DoesNotInvokeWarning ()
+        public void SingleEmptyConstructor_WithSingleLineCommentInConstructor_DoesNotInvokeWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -58,7 +58,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_WithMultiLineCommentInConstructor_DoesNotInvokeWarning ()
+        public void SingleEmptyConstructor_WithMultiLineCommentInConstructor_DoesNotInvokeWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -77,7 +77,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_WithConstructorParameters_DoesNotInvokeWarning ()
+        public void SingleEmptyConstructor_WithConstructorParameters_DoesNotInvokeWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -94,7 +94,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_WithConstructorBody_DoesNotInvokeWarning ()
+        public void SingleEmptyConstructor_WithConstructorBody_DoesNotInvokeWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -114,7 +114,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_WithImplicitPrivateConstructor_DoesNotInvokeWarning ()
+        public void SingleEmptyConstructor_WithImplicitPrivateConstructor_DoesNotInvokeWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -134,7 +134,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_WithExplicitInternalConstructor_DoesNotInvokeWarning ()
+        public void SingleEmptyConstructor_WithExplicitInternalConstructor_DoesNotInvokeWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -154,7 +154,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_ConstructorHasAttributes_DoesNotInvokeWarning ()
+        public void SingleEmptyConstructor_ConstructorHasAttributes_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
