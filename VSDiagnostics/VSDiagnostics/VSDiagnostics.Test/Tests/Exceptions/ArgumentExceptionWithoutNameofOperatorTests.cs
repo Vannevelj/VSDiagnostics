@@ -7,14 +7,14 @@ using VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOperato
 namespace VSDiagnostics.Test.Tests.Exceptions
 {
     [TestClass]
-    public class ArgumentExceptionWithoutNameofOperatorAnalyzerTests : CSharpCodeFixVerifier
+    public class ArgumentExceptionWithoutNameofOperatorTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new ArgumentExceptionWithoutNameofOperatorAnalyzer();
 
         protected override CodeFixProvider CodeFixProvider => new ArgumentExceptionWithoutNameofOperatorCodeFix();
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperatorAnalyzer_WithArgumentException_WithoutCorrespondingParameter_InvokesWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithoutCorrespondingParameter_InvokesWarning()
         {
             var original = @"
     using System;
@@ -51,7 +51,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperatorAnalyzer_WithArgumentException_WithoutCorrespondingParameterInDifferentCase_InvokesWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithoutCorrespondingParameterInDifferentCase_InvokesWarning()
         {
             var original = @"
     using System;
@@ -88,7 +88,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperatorAnalyzer_WithArgumentException_WithMultipleArguments_InvokesWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithMultipleArguments_InvokesWarning()
         {
             var original = @"
     using System;
@@ -125,7 +125,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperatorAnalyzer_WithArgumentException_WithMultipleParameters_AndCorrespondingParameter_InvokesWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithMultipleParameters_AndCorrespondingParameter_InvokesWarning()
         {
             var original = @"
     using System;
@@ -162,7 +162,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperatorAnalyzer_WithArgumentNullException_WithCorrespondingParameterAsString_InvokesWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentNullException_WithCorrespondingParameterAsString_InvokesWarning()
         {
             var original = @"
     using System;
@@ -199,7 +199,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperatorAnalyzer_WithArgumentNullException_WithCorrespondingParameterAsNameOf_DoesNotInvokeWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentNullException_WithCorrespondingParameterAsNameOf_DoesNotInvokeWarning()
         {
             var original = @"
     using System;
@@ -220,7 +220,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperatorAnalyzer_WithArgumentNullException_WithoutCorrespondingParameter_DoesNotInvokeWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentNullException_WithoutCorrespondingParameter_DoesNotInvokeWarning()
         {
             var original = @"
     using System;
@@ -241,7 +241,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperatorAnalyzer_WithArgumentNullException_WithoutCorrespondingParameter_ButDefinedOutsideMethodScope_DoesNotInvokeWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentNullException_WithoutCorrespondingParameter_ButDefinedOutsideMethodScope_DoesNotInvokeWarning()
         {
             var original = @"
     using System;
@@ -264,7 +264,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperatorAnalyzer_WithTwoOccurrences_InvokesTwoWarnings()
+        public void ArgumentExceptionWithoutNameofOperator_WithTwoOccurrences_InvokesTwoWarnings()
         {
             var original = @"
 using System;
@@ -311,7 +311,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperatorAnalyzer_WithArgumentException_WithIntType_InvokesWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithIntType_InvokesWarning()
         {
             var original = @"
     using System;
@@ -348,7 +348,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperatorAnalyzer_WithArgumentException_WithDefaultValue_InvokesWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithDefaultValue_InvokesWarning()
         {
             var original = @"
     using System;

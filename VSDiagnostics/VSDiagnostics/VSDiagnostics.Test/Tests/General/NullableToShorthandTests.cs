@@ -7,14 +7,14 @@ using VSDiagnostics.Diagnostics.General.NullableToShorthand;
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class NullableToShorthandAnalyzerTests : CSharpCodeFixVerifier
+    public class NullableToShorthandTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new NullableToShorthandAnalyzer();
 
         protected override CodeFixProvider CodeFixProvider => new NullableToShorthandCodeFix();
 
         [TestMethod]
-        public void NullableToShorthandAnalyzer_WithNullableLocal_InvokesWarning()
+        public void NullableToShorthand_WithNullableLocal_InvokesWarning()
         {
             var original = @"
 using System;
@@ -51,7 +51,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NullableToShorthandAnalyzer_WithNullableField_InvokesWarning()
+        public void NullableToShorthand_WithNullableField_InvokesWarning()
         {
             var original = @"
     using System;
@@ -90,7 +90,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NullableToShorthandAnalyzer_WithNullableParameter_InvokesWarning()
+        public void NullableToShorthand_WithNullableParameter_InvokesWarning()
         {
             var original = @"
     using System;
@@ -127,7 +127,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NullableToShorthandAnalyzer_WithNullableTypeParameter_InvokesWarning()
+        public void NullableToShorthand_WithNullableTypeParameter_InvokesWarning()
         {
             var original = @"
     using System;
@@ -164,7 +164,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NullableToShorthandAnalyzer_WithNullableProperty_InvokesWarning()
+        public void NullableToShorthand_WithNullableProperty_InvokesWarning()
         {
             var original = @"
 using System;
@@ -203,7 +203,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NullableToShorthandAnalyzer_WithNonNullableNestedTypeParameter_DoesNotInvokeWarning()
+        public void NullableToShorthand_WithNonNullableNestedTypeParameter_DoesNotInvokeWarning()
         {
             var original = @"
     using System;
@@ -228,7 +228,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NullableToShorthandAnalyzer_WithShorthandNotation_DoesNotInvokeWarning()
+        public void NullableToShorthand_WithShorthandNotation_DoesNotInvokeWarning()
         {
             var original = @"
     using System;
@@ -249,7 +249,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NullableToShorthandAnalyzer_WithChainedShorthandNotation_DoesNotInvokeWarning()
+        public void NullableToShorthand_WithChainedShorthandNotation_DoesNotInvokeWarning()
         {
             var original = @"
     using System;
@@ -269,7 +269,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NullableToShorthandAnalyzer_WithChainedNullableLocal_InvokesWarning()
+        public void NullableToShorthand_WithChainedNullableLocal_InvokesWarning()
         {
             var original = @"
 using System;
@@ -306,7 +306,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NullableToShorthandAnalyzer_WithNullableDefaultParameter_InvokesWarning()
+        public void NullableToShorthand_WithNullableDefaultParameter_InvokesWarning()
         {
             var original = @"
     using System;
@@ -343,7 +343,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NullableToShorthandAnalyzer_WithMultipleNullablesAsGenericParameters_InvokesWarning()
+        public void NullableToShorthand_WithMultipleNullablesAsGenericParameters_InvokesWarning()
         {
             var original = @"
     using System;
@@ -382,7 +382,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NullableToShorthandAnalyzer_WithUnassignedNullableAsLocalVariable_InvokesWarning()
+        public void NullableToShorthand_WithUnassignedNullableAsLocalVariable_InvokesWarning()
         {
             var original = @"
     using System;
@@ -419,7 +419,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NullableToShorthandAnalyzer_WithNullableTypeAsTypeParameterForNestedDictionaries_InvokesWarning()
+        public void NullableToShorthand_WithNullableTypeAsTypeParameterForNestedDictionaries_InvokesWarning()
         {
             var original = @"
 using System;
@@ -456,7 +456,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NullableToShorthandAnalyzer_WithNullableTypeAsReturnType_InvokesWarning()
+        public void NullableToShorthand_WithNullableTypeAsReturnType_InvokesWarning()
         {
             var original = @"
 using System;

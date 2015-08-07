@@ -1,17 +1,17 @@
 ﻿using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.Helpers.CSharp;
-using VSDiagnostics.Diagnostics.Exceptions.CatchNullReferenceException;
+using VSDiagnostics.Diagnostics.Exceptions.SingleGeneralException;
 
 namespace VSDiagnostics.Test.Tests.Exceptions
 {
     [TestClass]
-    public class CatchNullReferenceExceptionAnalyzerTests : CSharpDiagnosticVerifier
+    public class SingleGeneralExceptionTests : CSharpDiagnosticVerifier
     {
-        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new CatchNullReferenceExceptionAnalyzer();
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new SingleGeneralExceptionAnalyzer();
 
         [TestMethod]
-        public void CatchNullReferenceExceptionAnalyzer_WithNullReferenceCatchClause_InvokesWarning()
+        public void SingleGeneralException_WithSingleGeneralException_InvokesWarning()
         {
             var test = @"
     using System;
@@ -26,7 +26,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
                 try 
                 {
                 }
-                catch(NullReferenceException e)
+                catch(Exception e)
                 {
 
                 }
@@ -34,11 +34,11 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            VerifyDiagnostic(test, CatchNullReferenceExceptionAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(test, SingleGeneralExceptionAnalyzer.Rule.MessageFormat.ToString());
         }
 
         [TestMethod]
-        public void CatchNullReferenceExceptionAnalyzer_WithoutNullReferenceCatchClause_DoesNotInvokeWarning()
+        public void SingleGeneralException_WithSingleSpecificException_DoesNotInvokeWarning()
         {
             var test = @"
     using System;
@@ -65,7 +65,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void CatchNullReferenceExceptionAnalyzer_WithEmptyCatchClause_DoesNotInvokeWarning()
+        public void SingleGeneralException_WithoutNamedCatchClauses_DoesNotInvokeWarning()
         {
             var test = @"
     using System;
@@ -81,6 +81,37 @@ namespace VSDiagnostics.Test.Tests.Exceptions
                 {
                 }
                 catch
+                {
+
+                }
+            }
+        }
+    }";
+
+            VerifyDiagnostic(test);
+        }
+
+        [TestMethod]
+        public void SingleGeneralException_WithMultipleCatchClauses_DoesNotInvokeWarning()
+        {
+            var test = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            void Method(string input)
+            {
+                try 
+                {
+                }
+                catch(ArgumentException e)
+                {
+
+                }
+                catch(Exception e)
                 {
 
                 }

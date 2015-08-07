@@ -6,12 +6,12 @@ using VSDiagnostics.Diagnostics.Exceptions.EmptyCatchClause;
 namespace VSDiagnostics.Test.Tests.Exceptions
 {
     [TestClass]
-    public class EmptyCatchClauseAnalyzerTests : CSharpDiagnosticVerifier
+    public class EmptyCatchClauseTests : CSharpDiagnosticVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new EmptyCatchClauseAnalyzer();
 
         [TestMethod]
-        public void EmptyCatchClauseAnalyzer_WithSingleEmptyCatchBlock_InvokesWarning()
+        public void EmptyCatchClause_WithSingleEmptyCatchBlock_InvokesWarning()
         {
             var original = @"
 using System;
@@ -37,7 +37,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void EmptyCatchClauseAnalyzer_WithOnlyTriviaInCatchBlock_InvokesWarning()
+        public void EmptyCatchClause_WithOnlyTriviaInCatchBlock_InvokesWarning()
         {
             var original = @"
 using System;
@@ -67,7 +67,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void EmptyCatchClauseAnalyzer_WithMixOfEmptyAndNonEmptyCatchBlocks_InvokesWarning()
+        public void EmptyCatchClause_WithMixOfEmptyAndNonEmptyCatchBlocks_InvokesWarning()
         {
             var original = @"
 using System;
@@ -106,7 +106,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void EmptyCatchClauseAnalyzer_WithNonEmptyCatchBlock_DoesNotInvokeWarning()
+        public void EmptyCatchClause_WithNonEmptyCatchBlock_DoesNotInvokeWarning()
         {
             var original = @"
 using System;

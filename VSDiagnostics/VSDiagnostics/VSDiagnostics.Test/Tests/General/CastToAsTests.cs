@@ -2,19 +2,19 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.Helpers.CSharp;
-using VSDiagnostics.Diagnostics.General.AsToCast;
+using VSDiagnostics.Diagnostics.General.CastToAs;
 
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class AsToCastAnalyzerTests : CSharpCodeFixVerifier
+    public class CastToAsTests : CSharpCodeFixVerifier
     {
-        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new AsToCastAnalyzer();
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new CastToAsAnalyzer();
 
-        protected override CodeFixProvider CodeFixProvider => new AsToCastCodeFix();
+        protected override CodeFixProvider CodeFixProvider => new CastToAsCodeFix();
 
         [TestMethod]
-        public void AsToCastAnalyzer_PredefinedType_InvokesWarning()
+        public void CastToAs_PredefinedType_InvokesWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -24,32 +24,39 @@ namespace ConsoleApplication1
         void Method()
         {
             var ch = 'r';
-            var i = ch as int;
+            var i = (int) ch;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void CastToAs_CustomType_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    interface P
+    {
+    }
+
+    class Program : P
+    {
+    }
+
+    class MyClass
+    {
+        void Method()
+        {
+            P variable = new Program();
+            var i = (Program) ch;
         }
     }
 }";
 
             var result = @"
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        void Method()
-        {
-            var ch = 'r';
-            var i = (int)ch;
-        }
-    }
-}";
-
-            VerifyDiagnostic(original, AsToCastAnalyzer.Rule.MessageFormat.ToString());
-            VerifyFix(original, result);
-        }
-
-        [TestMethod]
-        public void AsToCastAnalyzer_CustomType_InvokesWarning()
-        {
-            var original = @"
 namespace ConsoleApplication1
 {
     interface P
@@ -70,28 +77,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var result = @"
-namespace ConsoleApplication1
-{
-    interface P
-    {
-    }
-
-    class Program : P
-    {
-    }
-
-    class MyClass
-    {
-        void Method()
-        {
-            P variable = new Program();
-            var i = (Program)ch;
-        }
-    }
-}";
-
-            VerifyDiagnostic(original, AsToCastAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, CastToAsAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
     }

@@ -7,14 +7,14 @@ using VSDiagnostics.Diagnostics.General.TypeToVar;
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class TypeToVarAnalyzerTests : CSharpCodeFixVerifier
+    public class TypeToVarTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new TypeToVarAnalyzer();
 
         protected override CodeFixProvider CodeFixProvider => new TypeToVarCodeFix();
 
         [TestMethod]
-        public void TypeToVarAnalyzer_WithLocalPredefinedType_InvokesWarning()
+        public void TypeToVar_WithLocalPredefinedType_InvokesWarning()
         {
             var original = @"
 using System;
@@ -50,7 +50,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TypeToVarAnalyzer_WithLocalPredefinedTypeInitializedFromMethod_InvokesWarning()
+        public void TypeToVar_WithLocalPredefinedTypeInitializedFromMethod_InvokesWarning()
         {
             var original = @"
 using System;
@@ -96,7 +96,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TypeToVarAnalyzer_WithLocalDefinedWithVar_DoesNotInvokeWarning()
+        public void TypeToVar_WithLocalDefinedWithVar_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -116,7 +116,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TypeToVarAnalyzer_WithLocalAssignedUsingExplicitConversion_InvokesWarning()
+        public void TypeToVar_WithLocalAssignedUsingExplicitConversion_InvokesWarning()
         {
             var original = @"
 using System;
@@ -153,7 +153,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TypeToVarAnalyzer_WithLocalAssignedUsingImplicitConversion_DoesNotInvokeWarning()
+        public void TypeToVar_WithLocalAssignedUsingImplicitConversion_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -175,7 +175,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TypeToVarAnalyzer_WithFieldDeclaration_DoesNotInvokeWarning()
+        public void TypeToVar_WithFieldDeclaration_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -193,7 +193,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TypeToVarAnalyzer_WithLocalUninitialized_DoesNotInvokeWarning()
+        public void TypeToVar_WithLocalUninitialized_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -214,7 +214,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TypeToVarAnalyzer_WithLocalBaseClassTypeInitializedWithDerivedType_DoesNotInvokeWarning()
+        public void TypeToVar_WithLocalBaseClassTypeInitializedWithDerivedType_DoesNotInvokeWarning()
         {
             var original = @"
 using System;

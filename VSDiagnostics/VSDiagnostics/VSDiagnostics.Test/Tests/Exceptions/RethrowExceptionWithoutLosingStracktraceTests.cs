@@ -7,14 +7,14 @@ using VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStacktra
 namespace VSDiagnostics.Test.Tests.Exceptions
 {
     [TestClass]
-    public class RethrowExceptionWithoutLosingStracktraceAnalyzerTests : CSharpCodeFixVerifier
+    public class RethrowExceptionWithoutLosingStracktraceTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new RethrowExceptionWithoutLosingStacktraceAnalyzer();
 
         protected override CodeFixProvider CodeFixProvider => new RethrowExceptionWithoutLosingStacktraceCodeFix();
 
         [TestMethod]
-        public void RethrowExceptionWithoutLosingStracktraceAnalyzer_WithRethrowArgument_InvokesWarning()
+        public void RethrowExceptionWithoutLosingStracktrace_WithRethrowArgument_InvokesWarning()
         {
             var original = @"
 using System;
@@ -65,7 +65,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void RethrowExceptionWithoutLosingStracktraceAnalyzer_ThrowsANewException_DoesNotInvokeWarning()
+        public void RethrowExceptionWithoutLosingStracktrace_ThrowsANewException_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -93,7 +93,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void RethrowExceptionWithoutLosingStracktraceAnalyzer_WithRethrows_DoesNotInvokeWarning()
+        public void RethrowExceptionWithoutLosingStracktrace_WithRethrows_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -121,7 +121,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void RethrowExceptionWithoutLosingStracktraceAnalyzer_ThrowingANewPredefinedException_DoesNotInvokeWarning()
+        public void RethrowExceptionWithoutLosingStracktrace_ThrowingANewPredefinedException_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -150,7 +150,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void RethrowExceptionWithoutLosingStracktraceAnalyzer_WithThrowStatementOutsideCatchClause_DoesNotInvokeWarning()
+        public void RethrowExceptionWithoutLosingStracktrace_WithThrowStatementOutsideCatchClause_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -171,7 +171,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void RethrowExceptionWithoutLosingStracktraceAnalyzer_WithRethrowArgument_AndNoIdentifier_DoesNotInvokeWarning()
+        public void RethrowExceptionWithoutLosingStracktrace_WithRethrowArgument_AndNoIdentifier_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -199,7 +199,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void RethrowExceptionWithoutLosingStracktraceAnalyzer_WithRethrow_AndNoIdentifier_DoesNotInvokeWarning()
+        public void RethrowExceptionWithoutLosingStracktrace_WithRethrow_AndNoIdentifier_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
