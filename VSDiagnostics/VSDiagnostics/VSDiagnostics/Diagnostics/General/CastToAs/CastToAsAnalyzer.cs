@@ -32,6 +32,11 @@ namespace VSDiagnostics.Diagnostics.General.CastToAs
                 return;
             }
 
+            if (context.SemanticModel.GetTypeInfo(literalExpression.Type).ConvertedType.IsValueType)
+            {
+                return;
+            }
+
             context.ReportDiagnostic(Diagnostic.Create(Rule, literalExpression.GetLocation()));
         }
     }

@@ -29,21 +29,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var result = @"
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        void Method()
-        {
-            var ch = 'r';
-            var i = ch as int;
-        }
-    }
-}";
-
-            VerifyDiagnostic(original, CastToAsAnalyzer.Rule.MessageFormat.ToString());
-            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
