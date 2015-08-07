@@ -23,30 +23,25 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
-            var identifier = root.FindToken(diagnosticSpan.Start);
-            context.RegisterCodeFix(CodeAction.Create("Add Modifier", x => AddModifier(context.Document, root, identifier), nameof(ExplicitAccessModifiersAnalyzer)), diagnostic);
+            var statement = root.FindNode(diagnosticSpan);
+            context.RegisterCodeFix(CodeAction.Create("Add Modifier", x => AddModifier(context.Document, root, statement), nameof(ExplicitAccessModifiersAnalyzer)), diagnostic);
         }
 
-        private Task<Solution> AddModifier(Document document, SyntaxNode root, SyntaxToken identifier)
+        private Task<Solution> AddModifier(Document document, SyntaxNode root, SyntaxNode statement)
         {
-            var identifierParent = identifier.Parent;
-            SyntaxNode newParent = null;
+            SyntaxNode newStatement = null;
 
-            var classExpression = identifierParent as ClassDeclarationSyntax;
+            var classExpression = statement as ClassDeclarationSyntax;
             if (classExpression != null)
             {
                 var internalKeywordToken = SyntaxFactory.Token(SyntaxKind.InternalKeyword);
 
-                var newClass = SyntaxFactory.ClassDeclaration(classExpression.AttributeLists,
-                    classExpression.Modifiers.Add(internalKeywordToken), classExpression.Keyword, classExpression.Identifier,
-                    classExpression.TypeParameterList, classExpression.BaseList, classExpression.ConstraintClauses,
-                    classExpression.OpenBraceToken, classExpression.Members, classExpression.CloseBraceToken,
-                    SyntaxFactory.Token(SyntaxKind.None));
+                var newClass = classExpression.WithModifiers(classExpression.Modifiers.Add(internalKeywordToken));
 
-                newParent = identifierParent.ReplaceNode(identifierParent, newClass);
+                newStatement = statement.ReplaceNode(statement, newClass);
             }
 
-            var newRoot = newParent == null ? root : root.ReplaceNode(identifierParent, newParent);
+            var newRoot = newStatement == null ? root : root.ReplaceNode(statement, newStatement);
             return Task.FromResult(document.WithSyntaxRoot(newRoot).Project.Solution);
         }
     }
