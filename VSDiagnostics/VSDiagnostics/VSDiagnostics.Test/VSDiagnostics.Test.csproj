@@ -121,6 +121,7 @@
     <Compile Include="Tests\General\CompareBooleanToFalseLiteralTests.cs" />
     <Compile Include="Tests\General\CompareBooleanToTrueLiteralTests.cs" />
     <Compile Include="Tests\General\ConditionalOperatorReturnsDefaultOptionsTests.cs" />
+    <Compile Include="Tests\General\GotoDetectionTests.cs" />
     <Compile Include="Tests\General\IfStatementWithoutBracesTests.cs" />
     <Compile Include="Tests\General\NonEncapsulatedOrMutableFieldTests.cs" />
     <Compile Include="Tests\General\NamingConventionsTests.cs" />

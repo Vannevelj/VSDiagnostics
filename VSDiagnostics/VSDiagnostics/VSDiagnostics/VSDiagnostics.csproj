@@ -55,6 +55,7 @@
     <Compile Include="Diagnostics\General\CompareBooleanToTrueLiteral\CompareBooleanToTrueLiteralCodeFix.cs" />
     <Compile Include="Diagnostics\General\ConditionalOperatorReturnsDefaultOptions\ConditionalOperatorReturnsDefaultOptionsAnalyzer.cs" />
     <Compile Include="Diagnostics\General\ConditionalOperatorReturnsDefaultOptions\ConditionalOperatorReturnsDefaultOptionsCodeFix.cs" />
+    <Compile Include="Diagnostics\General\GotoDetection\GotoDetectionAnalyzer.cs" />
     <Compile Include="Diagnostics\General\IfStatementWithoutBraces\IfStatementWithoutBracesAnalyzer.cs" />
     <Compile Include="Diagnostics\General\IfStatementWithoutBraces\IfStatementWithoutBracesCodeFix.cs" />
     <Compile Include="Diagnostics\General\NamingConventions\NamingConventionExtensions.cs" />
