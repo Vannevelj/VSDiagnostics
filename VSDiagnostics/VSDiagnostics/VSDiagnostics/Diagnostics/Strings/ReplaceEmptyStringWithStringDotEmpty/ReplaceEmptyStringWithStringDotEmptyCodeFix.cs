@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
 {
-    [ExportCodeFixProvider("TestMethodWithoutPublicModifier", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider("ReplaceEmptyStringWithStringDotEmpty", LanguageNames.CSharp), Shared]
     public class ReplaceEmptyStringWithStringDotEmptyCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.Id);

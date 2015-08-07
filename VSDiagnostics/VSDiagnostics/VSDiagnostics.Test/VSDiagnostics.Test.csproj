@@ -128,6 +128,7 @@
     <Compile Include="Tests\General\SingleEmptyConstructorAnalyzerTests.cs" />
     <Compile Include="Tests\General\TryCastUsingAsNotNullInsteadOfIsAsAnalyzerTests.cs" />
     <Compile Include="Tests\General\TypeToVarAnalyzerTests.cs" />
+    <Compile Include="Tests\Strings\StringPlaceholdersInWrongOrderTests.cs" />
     <Compile Include="Tests\Strings\ReplaceEmptyStringWithStringDotEmptyTests.cs" />
     <Compile Include="Tests\Tests\TestMethodWithoutPublicModifierAnalyzerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
