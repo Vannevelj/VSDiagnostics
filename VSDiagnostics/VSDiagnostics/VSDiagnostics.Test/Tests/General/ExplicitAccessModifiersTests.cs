@@ -1,5 +1,4 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.Helpers.CSharp;
@@ -33,7 +32,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword));
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
             VerifyFix(original, result);
         }
 
@@ -56,7 +55,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword));
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
             VerifyFix(original, result);
         }
 
@@ -101,7 +100,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword));
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
             VerifyFix(original, result);
         }
 
@@ -124,7 +123,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword));
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
             VerifyFix(original, result);
         }
 
@@ -147,7 +146,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword));
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
             VerifyFix(original, result);
         }
 
@@ -192,7 +191,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword));
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
             VerifyFix(original, result);
         }
 
@@ -215,7 +214,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword));
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
             VerifyFix(original, result);
         }
 
@@ -238,7 +237,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword));
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
             VerifyFix(original, result);
         }
 
@@ -283,7 +282,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword));
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
             VerifyFix(original, result);
         }
 
@@ -306,7 +305,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword));
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
             VerifyFix(original, result);
         }
 
@@ -329,7 +328,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword));
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
             VerifyFix(original, result);
         }
 
@@ -374,7 +373,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword));
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
             VerifyFix(original, result);
         }
 
@@ -404,8 +403,8 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original,
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword),
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.PrivateKeyword));
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
             VerifyFix(original, result);
         }
 
@@ -435,8 +434,8 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original,
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword),
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.PrivateKeyword));
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
             VerifyFix(original, result);
         }
 
@@ -493,8 +492,8 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original,
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword),
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.PrivateKeyword));
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
             VerifyFix(original, result);
         }
 
@@ -524,8 +523,8 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original,
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword),
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.PrivateKeyword));
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
             VerifyFix(original, result);
         }
 
@@ -555,8 +554,8 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original,
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword),
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.PrivateKeyword));
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
             VerifyFix(original, result);
         }
 
@@ -613,8 +612,8 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original,
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword),
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.PrivateKeyword));
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
             VerifyFix(original, result);
         }
 
@@ -644,8 +643,8 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original,
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword),
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.PrivateKeyword));
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
             VerifyFix(original, result);
         }
 
@@ -702,8 +701,8 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original,
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword),
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.PrivateKeyword));
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
             VerifyFix(original, result);
         }
 
@@ -735,8 +734,8 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original,
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword),
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.PrivateKeyword));
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
             VerifyFix(original, result);
         }
 
@@ -793,8 +792,8 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original,
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.InternalKeyword),
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), SyntaxKind.PrivateKeyword));
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
             VerifyFix(original, result);
         }
     }

@@ -49,9 +49,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-                    var accessibilityKeyword = accessibility == Accessibility.Internal
-                        ? SyntaxKind.InternalKeyword
-                        : SyntaxKind.PrivateKeyword;
+                    var accessibilityKeyword = AccessibilityToString(accessibility);
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
                         accessibilityKeyword));
@@ -64,9 +62,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-                    var accessibilityKeyword = accessibility == Accessibility.Internal
-                        ? SyntaxKind.InternalKeyword
-                        : SyntaxKind.PrivateKeyword;
+                    var accessibilityKeyword = AccessibilityToString(accessibility);
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
                         accessibilityKeyword));
@@ -79,9 +75,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-                    var accessibilityKeyword = accessibility == Accessibility.Internal
-                        ? SyntaxKind.InternalKeyword
-                        : SyntaxKind.PrivateKeyword;
+                    var accessibilityKeyword = AccessibilityToString(accessibility);
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
                         accessibilityKeyword));
@@ -94,9 +88,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-                    var accessibilityKeyword = accessibility == Accessibility.Internal
-                        ? SyntaxKind.InternalKeyword
-                        : SyntaxKind.PrivateKeyword;
+                    var accessibilityKeyword = AccessibilityToString(accessibility);
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
                         accessibilityKeyword));
@@ -111,5 +103,25 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             SyntaxKind.InternalKeyword,
             SyntaxKind.PrivateKeyword
         };
+
+        private string AccessibilityToString(Accessibility accessibility)
+        {
+            switch (accessibility)
+            {
+                case Accessibility.Private:
+                    return "private";
+                case Accessibility.ProtectedAndInternal:
+                    return "protected internal";
+                case Accessibility.Protected:
+                    return "protected";
+                case Accessibility.Internal:
+                    return "internal";
+                case Accessibility.Public:
+                    return "public";
+                default:
+                    // friend has the same value as internal, and not applicable isn't an option here
+                    return "this should never show up";
+            }
+        }
     }
 }
