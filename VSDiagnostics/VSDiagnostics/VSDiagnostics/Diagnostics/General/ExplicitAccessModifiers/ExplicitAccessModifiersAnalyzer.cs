@@ -31,13 +31,11 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 SyntaxKind.EventDeclaration,
                 SyntaxKind.EventFieldDeclaration,
                 SyntaxKind.FieldDeclaration,
-                SyntaxKind.GetAccessorDeclaration,
                 SyntaxKind.IndexerDeclaration,
                 SyntaxKind.InterfaceDeclaration,
                 SyntaxKind.MethodDeclaration,
-                SyntaxKind.OperatorDeclaration,
+                SyntaxKind.OperatorDeclaration, // I don't think we need to do this one because you have to provide the public keyword for it to compile
                 SyntaxKind.PropertyDeclaration,
-                SyntaxKind.SetAccessorDeclaration,
                 SyntaxKind.StructDeclaration);
         }
 
@@ -92,6 +90,26 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
                         accessibilityKeyword));
+                }
+            }
+
+            if (context.Node is FieldDeclarationSyntax)
+            {
+                var declarationExpression = (FieldDeclarationSyntax)context.Node;
+                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
+                        "private"));
+                }
+            }
+
+            if (context.Node is PropertyDeclarationSyntax)
+            {
+                var declarationExpression = (PropertyDeclarationSyntax)context.Node;
+                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
+                        "private"));
                 }
             }
         }

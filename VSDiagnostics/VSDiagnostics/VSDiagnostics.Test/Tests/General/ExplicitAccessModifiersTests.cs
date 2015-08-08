@@ -618,6 +618,37 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void ExplicitAccessModifiers_NestedEnumDeclaration_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        enum MyInternalEnum
+        {
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        private enum MyInternalEnum
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
         public void ExplicitAccessModifiers_NestedEnumDeclaration_ContainsNonAccessModifier_InvokesWarning()
         {
             var original = @"
@@ -706,7 +737,36 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
+        [TestMethod]
+        public void ExplicitAccessModifiers_NestedInterfaceDeclaration_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        interface MyInternalInterface
+        {
+        }
+    }
+}";
 
+            var result = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        private interface MyInternalInterface
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
 
         [TestMethod]
         public void ExplicitAccessModifiers_NestedInterfaceDeclaration_ContainsNonAccessModifier_InvokesWarning()
@@ -788,6 +848,200 @@ namespace ConsoleApplication1
         {
             int Buzz();
         }
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_FieldDeclaration_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int Foo;
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        private int Foo;
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_FieldDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    static class MyClass
+    {
+        static int Foo;
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    static internal class MyClass
+    {
+        static private int Foo;
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_FieldDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public class MyClass
+    {
+        public int Foo;
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_FieldDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int Foo = 9;
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        private int Foo = 9;
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_PropertyDeclaration_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int Foo { get; set; }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        private int Foo { get; set; }
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_PropertyDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    static class MyClass
+    {
+        static int Foo { get; }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    static internal class MyClass
+    {
+        static private int Foo { get; }
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_PropertyDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public class MyClass
+    {
+        public int Foo { get; set; }
+    }
+}";
+            
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_PropertyDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        [Obsolete]
+        int Foo { set; }    // I know this is bad, but we might as well test it
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        [Obsolete]
+        private int Foo { set; }    // I know this is bad, but we might as well test it
     }
 }";
 

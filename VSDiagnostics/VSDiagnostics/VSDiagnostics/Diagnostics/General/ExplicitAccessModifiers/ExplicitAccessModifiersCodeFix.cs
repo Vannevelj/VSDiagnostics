@@ -27,7 +27,8 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             var statement = root.FindNode(diagnosticSpan);
 
             var semanticModel = context.Document.GetSemanticModelAsync().Result;
-            var accessibility = semanticModel.GetDeclaredSymbol(statement).DeclaredAccessibility;
+            var symbol = semanticModel.GetDeclaredSymbol(statement);
+            var accessibility = symbol?.DeclaredAccessibility ?? Accessibility.Private;
 
             context.RegisterCodeFix(CodeAction.Create("Add Modifier", x => AddModifier(context.Document, root, statement, accessibility), nameof(ExplicitAccessModifiersAnalyzer)), diagnostic);
         }
@@ -90,6 +91,24 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
                 var newStruct = interfaceExpression.WithModifiers(interfaceExpression.Modifiers.AddRange(accessModifierTokens));
+                newStatement = statement.ReplaceNode(statement, newStruct);
+            }
+
+            if (statement is FieldDeclarationSyntax)
+            {
+                var fieldExpression = (FieldDeclarationSyntax)statement;
+                var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
+
+                var newStruct = fieldExpression.WithModifiers(fieldExpression.Modifiers.AddRange(accessModifierTokens));
+                newStatement = statement.ReplaceNode(statement, newStruct);
+            }
+
+            if (statement is PropertyDeclarationSyntax)
+            {
+                var fieldExpression = (PropertyDeclarationSyntax)statement;
+                var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
+
+                var newStruct = fieldExpression.WithModifiers(fieldExpression.Modifiers.AddRange(accessModifierTokens));
                 newStatement = statement.ReplaceNode(statement, newStruct);
             }
 
