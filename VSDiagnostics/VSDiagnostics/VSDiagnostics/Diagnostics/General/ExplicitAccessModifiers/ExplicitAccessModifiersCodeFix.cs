@@ -157,6 +157,15 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 newStatement = statement.ReplaceNode(statement, newEvent);
             }
 
+            if (statement is IndexerDeclarationSyntax)
+            {
+                var indexerExpression = (IndexerDeclarationSyntax)statement;
+                var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
+
+                var newIndexer = indexerExpression.WithModifiers(indexerExpression.Modifiers.AddRange(accessModifierTokens));
+                newStatement = statement.ReplaceNode(statement, newIndexer);
+            }
+
             var newRoot = newStatement == null ? root : root.ReplaceNode(statement, newStatement);
             return Task.FromResult(document.WithSyntaxRoot(newRoot).Project.Solution);
         }

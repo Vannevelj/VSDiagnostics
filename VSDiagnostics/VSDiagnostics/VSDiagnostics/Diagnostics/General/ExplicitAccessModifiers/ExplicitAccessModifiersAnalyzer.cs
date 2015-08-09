@@ -176,6 +176,19 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                         accessibilityKeyword));
                 }
             }
+
+            if (context.Node is IndexerDeclarationSyntax)
+            {
+                var declarationExpression = (IndexerDeclarationSyntax)context.Node;
+                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
+                {
+                    var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                    var accessibilityKeyword = AccessibilityToString(accessibility);
+
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
+                        accessibilityKeyword));
+                }
+            }
         }
 
         private readonly SyntaxKind[] _modifierKinds =

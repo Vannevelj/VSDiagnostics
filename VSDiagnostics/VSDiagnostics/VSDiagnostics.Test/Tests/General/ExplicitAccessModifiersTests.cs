@@ -1682,5 +1682,102 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_IndexerDeclaration_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        int this[int index]
+        {
+            get { return index; }
+            set { var foo = value; }
+        }
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        private int this[int index]
+        {
+            get { return index; }
+            set { var foo = value; }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_IndexerDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        protected int this[int index]
+        {
+            get { return index; }
+            set { var foo = value; }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_IndexerDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        [Obsolete]
+        int this[int index]
+        {
+            get { return index; }
+            set { var foo = value; }
+        }
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        [Obsolete]
+        private int this[int index]
+        {
+            get { return index; }
+            set { var foo = value; }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
     }
 }
