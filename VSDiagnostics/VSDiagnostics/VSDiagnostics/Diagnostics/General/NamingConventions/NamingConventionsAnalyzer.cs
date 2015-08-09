@@ -56,13 +56,14 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
                     else if (modifiers.Any(SyntaxKind.PrivateKeyword) ||
                              nodeAsField.Modifiers.Count == 0 /* no access modifier defaults to private */)
                     {
-                        if(modifiers.Any(SyntaxKind.StaticKeyword) || modifiers.Any(SyntaxKind.ConstKeyword))
+                        if (modifiers.Any(SyntaxKind.StaticKeyword) || modifiers.Any(SyntaxKind.ConstKeyword))
                         {
                             CheckNaming(variable.Identifier, "field", NamingConvention.UpperCamelCase, context);
-                        } else
+                        }
+                        else
                         {
                             CheckNaming(variable.Identifier, "field", NamingConvention.UnderscoreLowerCamelCase, context);
-                        }                        
+                        }
                     }
                     else
                     {

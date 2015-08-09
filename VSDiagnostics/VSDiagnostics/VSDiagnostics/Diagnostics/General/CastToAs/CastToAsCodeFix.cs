@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.General.CastToAs
 {
-    [ExportCodeFixProvider("CastToAsCodeFix", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider("CastToAs", LanguageNames.CSharp), Shared]
     public class CastToAsCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(CastToAsAnalyzer.Rule.Id);
@@ -25,10 +25,10 @@ namespace VSDiagnostics.Diagnostics.General.CastToAs
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Use as instead of cast", x => RemoveConstructorAsync(context.Document, root, statement), nameof(CastToAsAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Use as instead of cast", x => CastToAsAsync(context.Document, root, statement), nameof(CastToAsAnalyzer)), diagnostic);
         }
 
-        private Task<Solution> RemoveConstructorAsync(Document document, SyntaxNode root, SyntaxNode statement)
+        private Task<Solution> CastToAsAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var castExpression = (CastExpressionSyntax) statement;
 

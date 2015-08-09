@@ -38,7 +38,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.CatchNullReferenceException
             var catchSymbol = context.SemanticModel.GetSymbolInfo(catchType).Symbol;
             if (catchSymbol != null)
             {
-                if (catchSymbol.MetadataName == typeof(NullReferenceException).Name)
+                if (catchSymbol.MetadataName == typeof (NullReferenceException).Name)
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, catchDeclaration.GetLocation()));
                 }

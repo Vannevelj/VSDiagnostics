@@ -28,7 +28,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
 
         private Task<Solution> RemoveConstructorAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
-            var attributeExpression = (AttributeSyntax)statement;
+            var attributeExpression = (AttributeSyntax) statement;
             var newRoot = root.RemoveNode(attributeExpression.ArgumentList, SyntaxRemoveOptions.KeepNoTrivia);
 
             var newDocument = document.WithSyntaxRoot(newRoot);
