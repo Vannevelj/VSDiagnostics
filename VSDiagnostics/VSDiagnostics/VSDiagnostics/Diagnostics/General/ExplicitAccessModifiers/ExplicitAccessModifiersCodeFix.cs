@@ -114,28 +114,37 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
 
             if (statement is PropertyDeclarationSyntax)
             {
-                var fieldExpression = (PropertyDeclarationSyntax)statement;
+                var propertyExpression = (PropertyDeclarationSyntax)statement;
                 var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
-                var newStruct = fieldExpression.WithModifiers(fieldExpression.Modifiers.AddRange(accessModifierTokens));
+                var newStruct = propertyExpression.WithModifiers(propertyExpression.Modifiers.AddRange(accessModifierTokens));
                 newStatement = statement.ReplaceNode(statement, newStruct);
             }
 
             if (statement is MethodDeclarationSyntax)
             {
-                var fieldExpression = (MethodDeclarationSyntax)statement;
+                var methodExpression = (MethodDeclarationSyntax)statement;
                 var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
-                var newStruct = fieldExpression.WithModifiers(fieldExpression.Modifiers.AddRange(accessModifierTokens));
+                var newStruct = methodExpression.WithModifiers(methodExpression.Modifiers.AddRange(accessModifierTokens));
                 newStatement = statement.ReplaceNode(statement, newStruct);
             }
 
             if (statement is ConstructorDeclarationSyntax)
             {
-                var fieldExpression = (ConstructorDeclarationSyntax)statement;
+                var constructorExpression = (ConstructorDeclarationSyntax)statement;
                 var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
-                var newStruct = fieldExpression.WithModifiers(fieldExpression.Modifiers.AddRange(accessModifierTokens));
+                var newStruct = constructorExpression.WithModifiers(constructorExpression.Modifiers.AddRange(accessModifierTokens));
+                newStatement = statement.ReplaceNode(statement, newStruct);
+            }
+
+            if (statement is EventFieldDeclarationSyntax)
+            {
+                var eventFieldExpression = (EventFieldDeclarationSyntax)statement;
+                var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
+
+                var newStruct = eventFieldExpression.WithModifiers(eventFieldExpression.Modifiers.AddRange(accessModifierTokens));
                 newStatement = statement.ReplaceNode(statement, newStruct);
             }
 

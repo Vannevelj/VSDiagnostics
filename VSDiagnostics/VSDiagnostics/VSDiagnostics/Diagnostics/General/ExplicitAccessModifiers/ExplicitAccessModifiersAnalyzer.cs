@@ -29,7 +29,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 SyntaxKind.DelegateDeclaration,//
                 SyntaxKind.EnumDeclaration,//
                 SyntaxKind.EventDeclaration,
-                SyntaxKind.EventFieldDeclaration,
+                SyntaxKind.EventFieldDeclaration,//
                 SyntaxKind.FieldDeclaration,//
                 SyntaxKind.IndexerDeclaration,
                 SyntaxKind.InterfaceDeclaration,//
@@ -151,6 +151,16 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
                         accessibilityKeyword));
+                }
+            }
+
+            if (context.Node is EventFieldDeclarationSyntax)
+            {
+                var declarationExpression = (EventFieldDeclarationSyntax)context.Node;
+                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
+                        "private"));
                 }
             }
         }

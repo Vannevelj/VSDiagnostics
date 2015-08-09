@@ -1320,7 +1320,6 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
-
         [TestMethod]
         public void ExplicitAccessModifiers_ClassConstructorDeclaration_InvokesWarning()
         {
@@ -1437,6 +1436,112 @@ namespace ConsoleApplication1
     public class MyClass
     {
         private MyClass() { }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_EventDeclaration_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        event EventHandler show;
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        private event EventHandler show;
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_EventDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        static event EventHandler show;
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        static private event EventHandler show;
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_EventDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        public event EventHandler show;
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_EventDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        [Obsolete]
+        event EventHandler<int> show;
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        [Obsolete]
+        private event EventHandler<int> show;
     }
 }";
 
