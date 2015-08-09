@@ -129,6 +129,16 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 var newStruct = fieldExpression.WithModifiers(fieldExpression.Modifiers.AddRange(accessModifierTokens));
                 newStatement = statement.ReplaceNode(statement, newStruct);
             }
+
+            if (statement is ConstructorDeclarationSyntax)
+            {
+                var fieldExpression = (ConstructorDeclarationSyntax)statement;
+                var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
+
+                var newStruct = fieldExpression.WithModifiers(fieldExpression.Modifiers.AddRange(accessModifierTokens));
+                newStatement = statement.ReplaceNode(statement, newStruct);
+            }
+
             var newRoot = newStatement == null ? root : root.ReplaceNode(statement, newStatement);
             return Task.FromResult(document.WithSyntaxRoot(newRoot).Project.Solution);
         }

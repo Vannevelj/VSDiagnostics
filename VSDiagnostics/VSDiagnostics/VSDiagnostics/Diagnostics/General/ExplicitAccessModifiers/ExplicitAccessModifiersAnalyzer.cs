@@ -23,19 +23,19 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
         public override void Initialize(AnalysisContext context)
         {
             context.RegisterSyntaxNodeAction(AnalyzeSymbol,
-                SyntaxKind.ClassDeclaration,
-                SyntaxKind.ConstructorDeclaration,
+                SyntaxKind.ClassDeclaration,//
+                SyntaxKind.ConstructorDeclaration,//
                 SyntaxKind.ConversionOperatorDeclaration,
-                SyntaxKind.DelegateDeclaration,
-                SyntaxKind.EnumDeclaration,
+                SyntaxKind.DelegateDeclaration,//
+                SyntaxKind.EnumDeclaration,//
                 SyntaxKind.EventDeclaration,
                 SyntaxKind.EventFieldDeclaration,
-                SyntaxKind.FieldDeclaration,
+                SyntaxKind.FieldDeclaration,//
                 SyntaxKind.IndexerDeclaration,
-                SyntaxKind.InterfaceDeclaration,
-                SyntaxKind.MethodDeclaration,
-                SyntaxKind.PropertyDeclaration,
-                SyntaxKind.StructDeclaration);
+                SyntaxKind.InterfaceDeclaration,//
+                SyntaxKind.MethodDeclaration,//
+                SyntaxKind.PropertyDeclaration,//
+                SyntaxKind.StructDeclaration);//
         }
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
@@ -130,8 +130,24 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 var declarationExpression = (MethodDeclarationSyntax)context.Node;
                 if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
                 {
+                    var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                    var accessibilityKeyword = AccessibilityToString(accessibility);
+
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        "private"));
+                        accessibilityKeyword));
+                }
+            }
+
+            if (context.Node is ConstructorDeclarationSyntax)
+            {
+                var declarationExpression = (ConstructorDeclarationSyntax)context.Node;
+                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind()) || m.Kind() == SyntaxKind.StaticKeyword))
+                {
+                    var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                    var accessibilityKeyword = AccessibilityToString(accessibility);
+
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
+                        accessibilityKeyword));
                 }
             }
         }

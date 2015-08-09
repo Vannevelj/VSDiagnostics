@@ -1319,5 +1319,129 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
             VerifyFix(original, result);
         }
+
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_ClassConstructorDeclaration_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        MyClass() { }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        private MyClass() { }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_ClassConstructorDeclaration_StaticCtorMostNotHaveAccessModifier_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        static MyClass() { }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        static MyClass() { }
+    }
+}";
+
+            VerifyDiagnostic(original);
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_ClassConstructorDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        public MyClass() { }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_ClassConstructorDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        [Obsolete]
+        MyClass()
+        {
+            var keepMe = true;
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        [Obsolete]
+        private MyClass()
+        {
+            var keepMe = true;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_ClassConstructorDeclaration_ClassHasExplicitNonDefaultModifier_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public class MyClass
+    {
+        MyClass() { }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    public class MyClass
+    {
+        private MyClass() { }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
     }
 }
