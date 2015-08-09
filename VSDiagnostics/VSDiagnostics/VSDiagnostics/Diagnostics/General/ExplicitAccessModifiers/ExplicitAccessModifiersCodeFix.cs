@@ -85,6 +85,15 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 newStatement = statement.ReplaceNode(statement, newStruct);
             }
 
+            if (statement is DelegateDeclarationSyntax)
+            {
+                var delegateExpression = (DelegateDeclarationSyntax)statement;
+                var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
+
+                var newStruct = delegateExpression.WithModifiers(delegateExpression.Modifiers.AddRange(accessModifierTokens));
+                newStatement = statement.ReplaceNode(statement, newStruct);
+            }
+
             if (statement is InterfaceDeclarationSyntax)
             {
                 var interfaceExpression = (InterfaceDeclarationSyntax)statement;

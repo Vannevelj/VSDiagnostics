@@ -287,6 +287,81 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void ExplicitAccessModifiers_DelegateDeclaration_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    delegate void Foo(int bar);
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    internal delegate void Foo(int bar);
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_DelegateDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    static delegate void Foo(int bar);
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    static internal delegate void Foo(int bar);
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_DelegateDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public delegate void Foo(int bar);
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_DelegateDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Obsolete]
+    delegate void Foo(int bar);
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Obsolete]
+    internal delegate void Foo(int bar);
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
         public void ExplicitAccessModifiers_InterfaceDeclaration_InvokesWarning()
         {
             var original = @"
@@ -734,6 +809,102 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original,
                 string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
                 string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_NestedDelegateDeclaration_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    internal class Program
+    {
+        delegate void Foo(int bar);
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    internal class Program
+    {
+        private delegate void Foo(int bar);
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_NestedDelegateDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    internal class Program
+    {
+        static delegate void Foo(int bar);
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    internal class Program
+    {
+        static private delegate void Foo(int bar);
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_NestedDelegateDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    internal class Program
+    {
+        public delegate void Foo(int bar);
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_NestedDelegateDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    internal class Program
+    {
+        [Obsolete]
+        delegate void Foo(int bar);
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    internal class Program
+    {
+        [Obsolete]
+        private delegate void Foo(int bar);
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
             VerifyFix(original, result);
         }
 

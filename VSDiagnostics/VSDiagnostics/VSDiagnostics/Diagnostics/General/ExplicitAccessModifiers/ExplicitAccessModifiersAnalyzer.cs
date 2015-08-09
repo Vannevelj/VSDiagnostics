@@ -80,6 +80,19 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 }
             }
 
+            if (context.Node is DelegateDeclarationSyntax)
+            {
+                var declarationExpression = (DelegateDeclarationSyntax)context.Node;
+                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
+                {
+                    var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                    var accessibilityKeyword = AccessibilityToString(accessibility);
+
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
+                        accessibilityKeyword));
+                }
+            }
+
             if (context.Node is InterfaceDeclarationSyntax)
             {
                 var declarationExpression = (InterfaceDeclarationSyntax)context.Node;
@@ -138,7 +151,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                     return "public";
                 default:
                     // friend has the same value as internal, and not applicable isn't an option here
-                    return "this should never show up";
+                    return "something happened - please create an issue on our GitHub page";
             }
         }
     }
