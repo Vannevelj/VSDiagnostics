@@ -28,7 +28,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 SyntaxKind.ConversionOperatorDeclaration,
                 SyntaxKind.DelegateDeclaration,//
                 SyntaxKind.EnumDeclaration,//
-                SyntaxKind.EventDeclaration,
+                SyntaxKind.EventDeclaration,//
                 SyntaxKind.EventFieldDeclaration,//
                 SyntaxKind.FieldDeclaration,//
                 SyntaxKind.IndexerDeclaration,
@@ -161,6 +161,19 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
                         "private"));
+                }
+            }
+
+            if (context.Node is EventDeclarationSyntax)
+            {
+                var declarationExpression = (EventDeclarationSyntax)context.Node;
+                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
+                {
+                    var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                    var accessibilityKeyword = AccessibilityToString(accessibility);
+
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
+                        accessibilityKeyword));
                 }
             }
         }

@@ -81,8 +81,8 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 var enumExpression = (EnumDeclarationSyntax)statement;
                 var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
-                var newStruct = enumExpression.WithModifiers(enumExpression.Modifiers.AddRange(accessModifierTokens));
-                newStatement = statement.ReplaceNode(statement, newStruct);
+                var newEnum = enumExpression.WithModifiers(enumExpression.Modifiers.AddRange(accessModifierTokens));
+                newStatement = statement.ReplaceNode(statement, newEnum);
             }
 
             if (statement is DelegateDeclarationSyntax)
@@ -90,8 +90,8 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 var delegateExpression = (DelegateDeclarationSyntax)statement;
                 var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
-                var newStruct = delegateExpression.WithModifiers(delegateExpression.Modifiers.AddRange(accessModifierTokens));
-                newStatement = statement.ReplaceNode(statement, newStruct);
+                var newDelegate = delegateExpression.WithModifiers(delegateExpression.Modifiers.AddRange(accessModifierTokens));
+                newStatement = statement.ReplaceNode(statement, newDelegate);
             }
 
             if (statement is InterfaceDeclarationSyntax)
@@ -99,8 +99,8 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 var interfaceExpression = (InterfaceDeclarationSyntax)statement;
                 var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
-                var newStruct = interfaceExpression.WithModifiers(interfaceExpression.Modifiers.AddRange(accessModifierTokens));
-                newStatement = statement.ReplaceNode(statement, newStruct);
+                var newInterface = interfaceExpression.WithModifiers(interfaceExpression.Modifiers.AddRange(accessModifierTokens));
+                newStatement = statement.ReplaceNode(statement, newInterface);
             }
 
             if (statement is FieldDeclarationSyntax)
@@ -117,8 +117,8 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 var propertyExpression = (PropertyDeclarationSyntax)statement;
                 var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
-                var newStruct = propertyExpression.WithModifiers(propertyExpression.Modifiers.AddRange(accessModifierTokens));
-                newStatement = statement.ReplaceNode(statement, newStruct);
+                var newProperty = propertyExpression.WithModifiers(propertyExpression.Modifiers.AddRange(accessModifierTokens));
+                newStatement = statement.ReplaceNode(statement, newProperty);
             }
 
             if (statement is MethodDeclarationSyntax)
@@ -126,8 +126,8 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 var methodExpression = (MethodDeclarationSyntax)statement;
                 var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
-                var newStruct = methodExpression.WithModifiers(methodExpression.Modifiers.AddRange(accessModifierTokens));
-                newStatement = statement.ReplaceNode(statement, newStruct);
+                var newMethod = methodExpression.WithModifiers(methodExpression.Modifiers.AddRange(accessModifierTokens));
+                newStatement = statement.ReplaceNode(statement, newMethod);
             }
 
             if (statement is ConstructorDeclarationSyntax)
@@ -135,8 +135,8 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 var constructorExpression = (ConstructorDeclarationSyntax)statement;
                 var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
-                var newStruct = constructorExpression.WithModifiers(constructorExpression.Modifiers.AddRange(accessModifierTokens));
-                newStatement = statement.ReplaceNode(statement, newStruct);
+                var newConstructor = constructorExpression.WithModifiers(constructorExpression.Modifiers.AddRange(accessModifierTokens));
+                newStatement = statement.ReplaceNode(statement, newConstructor);
             }
 
             if (statement is EventFieldDeclarationSyntax)
@@ -144,8 +144,17 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 var eventFieldExpression = (EventFieldDeclarationSyntax)statement;
                 var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
-                var newStruct = eventFieldExpression.WithModifiers(eventFieldExpression.Modifiers.AddRange(accessModifierTokens));
-                newStatement = statement.ReplaceNode(statement, newStruct);
+                var newEventField = eventFieldExpression.WithModifiers(eventFieldExpression.Modifiers.AddRange(accessModifierTokens));
+                newStatement = statement.ReplaceNode(statement, newEventField);
+            }
+
+            if (statement is EventDeclarationSyntax)
+            {
+                var eventExpression = (EventDeclarationSyntax)statement;
+                var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
+
+                var newEvent = eventExpression.WithModifiers(eventExpression.Modifiers.AddRange(accessModifierTokens));
+                newStatement = statement.ReplaceNode(statement, newEvent);
             }
 
             var newRoot = newStatement == null ? root : root.ReplaceNode(statement, newStatement);

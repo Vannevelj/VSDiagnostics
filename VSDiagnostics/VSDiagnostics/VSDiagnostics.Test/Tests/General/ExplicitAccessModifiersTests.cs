@@ -1444,7 +1444,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_EventDeclaration_InvokesWarning()
+        public void ExplicitAccessModifiers_EventFieldDeclaration_InvokesWarning()
         {
             var original = @"
 using System;
@@ -1453,7 +1453,7 @@ namespace ConsoleApplication1
 {
     public class Program
     {
-        event EventHandler show;
+        event EventHandler MyEvent;
     }
 }";
 
@@ -1464,7 +1464,121 @@ namespace ConsoleApplication1
 {
     public class Program
     {
-        private event EventHandler show;
+        private event EventHandler MyEvent;
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_EventFieldDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        static event EventHandler MyEvent;
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        static private event EventHandler MyEvent;
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_EventFieldDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        public event EventHandler MyEvent;
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_EventFieldDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        [Obsolete]
+        event EventHandler<int> MyEvent;
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        [Obsolete]
+        private event EventHandler<int> MyEvent;
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_EventDeclaration_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        event EventHandler MyEvent
+        {
+            add { var foo = value; }
+            remove { var foo = value; }
+        }
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        private event EventHandler MyEvent
+        {
+            add { var foo = value; }
+            remove { var foo = value; }
+        }
     }
 }";
 
@@ -1482,7 +1596,11 @@ namespace ConsoleApplication1
 {
     public class Program
     {
-        static event EventHandler show;
+        static event EventHandler MyEvent
+        {
+            add { var foo = value; }
+            remove { var foo = value; }
+        }
     }
 }";
 
@@ -1493,7 +1611,11 @@ namespace ConsoleApplication1
 {
     public class Program
     {
-        static private event EventHandler show;
+        static private event EventHandler MyEvent
+        {
+            add { var foo = value; }
+            remove { var foo = value; }
+        }
     }
 }";
 
@@ -1511,7 +1633,11 @@ namespace ConsoleApplication1
 {
     public class Program
     {
-        public event EventHandler show;
+        public event EventHandler MyEvent
+        {
+            add { var foo = value; }
+            remove { var foo = value; }
+        }
     }
 }";
 
@@ -1529,7 +1655,11 @@ namespace ConsoleApplication1
     public class Program
     {
         [Obsolete]
-        event EventHandler<int> show;
+        event EventHandler MyEvent
+        {
+            add { var foo = value; }
+            remove { var foo = value; }
+        }
     }
 }";
 
@@ -1541,7 +1671,11 @@ namespace ConsoleApplication1
     public class Program
     {
         [Obsolete]
-        private event EventHandler<int> show;
+        private event EventHandler MyEvent
+        {
+            add { var foo = value; }
+            remove { var foo = value; }
+        }
     }
 }";
 
