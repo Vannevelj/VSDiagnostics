@@ -23,19 +23,18 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
         public override void Initialize(AnalysisContext context)
         {
             context.RegisterSyntaxNodeAction(AnalyzeSymbol,
-                SyntaxKind.ClassDeclaration,//
-                SyntaxKind.ConstructorDeclaration,//
-                SyntaxKind.ConversionOperatorDeclaration,
-                SyntaxKind.DelegateDeclaration,//
-                SyntaxKind.EnumDeclaration,//
-                SyntaxKind.EventDeclaration,//
-                SyntaxKind.EventFieldDeclaration,//
-                SyntaxKind.FieldDeclaration,//
+                SyntaxKind.ClassDeclaration,
+                SyntaxKind.ConstructorDeclaration,
+                SyntaxKind.DelegateDeclaration,
+                SyntaxKind.EnumDeclaration,
+                SyntaxKind.EventDeclaration,
+                SyntaxKind.EventFieldDeclaration,
+                SyntaxKind.FieldDeclaration,
                 SyntaxKind.IndexerDeclaration,
-                SyntaxKind.InterfaceDeclaration,//
-                SyntaxKind.MethodDeclaration,//
-                SyntaxKind.PropertyDeclaration,//
-                SyntaxKind.StructDeclaration);//
+                SyntaxKind.InterfaceDeclaration,
+                SyntaxKind.MethodDeclaration,
+                SyntaxKind.PropertyDeclaration,
+                SyntaxKind.StructDeclaration);
         }
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
