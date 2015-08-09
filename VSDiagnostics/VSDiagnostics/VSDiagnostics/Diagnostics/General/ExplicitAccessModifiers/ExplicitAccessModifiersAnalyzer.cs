@@ -120,8 +120,11 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 var declarationExpression = (PropertyDeclarationSyntax)context.Node;
                 if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
                 {
+                    var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                    var accessibilityKeyword = AccessibilityToString(accessibility);
+
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        "private"));
+                        accessibilityKeyword));
                 }
             }
 
