@@ -34,7 +34,6 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 SyntaxKind.IndexerDeclaration,
                 SyntaxKind.InterfaceDeclaration,
                 SyntaxKind.MethodDeclaration,
-                SyntaxKind.OperatorDeclaration, // I don't think we need to do this one because you have to provide the public keyword for it to compile
                 SyntaxKind.PropertyDeclaration,
                 SyntaxKind.StructDeclaration);
         }
