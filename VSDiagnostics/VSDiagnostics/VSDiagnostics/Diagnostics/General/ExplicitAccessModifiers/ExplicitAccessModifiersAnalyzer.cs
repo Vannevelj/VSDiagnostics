@@ -124,6 +124,16 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                         "private"));
                 }
             }
+
+            if (context.Node is MethodDeclarationSyntax)
+            {
+                var declarationExpression = (MethodDeclarationSyntax)context.Node;
+                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
+                        "private"));
+                }
+            }
         }
 
         private readonly SyntaxKind[] _modifierKinds =

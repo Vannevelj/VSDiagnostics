@@ -84,7 +84,7 @@ namespace ConsoleApplication1
     [Obsolete]
     class MyClass
     {
-        void Method() { }
+        public void Method() { }
     }
 }";
 
@@ -96,7 +96,7 @@ namespace ConsoleApplication1
     [Obsolete]
     internal class MyClass
     {
-        void Method() { }
+        public void Method() { }
     }
 }";
 
@@ -432,7 +432,7 @@ namespace ConsoleApplication1
     [Obsolete]
     interface IMyInterface
     {
-        int Position();
+        public int Position();
     }
 }";
 
@@ -444,7 +444,7 @@ namespace ConsoleApplication1
     [Obsolete]
     internal interface IMyInterface
     {
-        int Position();
+        public int Position();
     }
 }";
 
@@ -545,7 +545,7 @@ namespace ConsoleApplication1
         [Obsolete]
         class MyInternalClass
         {
-            void Method();
+            public void Method();
         }
     }
 }";
@@ -561,7 +561,7 @@ namespace ConsoleApplication1
         [Obsolete]
         private class MyInternalClass
         {
-            void Method();
+            public void Method();
         }
     }
 }";
@@ -665,7 +665,7 @@ namespace ConsoleApplication1
         [Obsolete]
         struct MyInternalStruct
         {
-            void Method();
+            public void Method();
         }
     }
 }";
@@ -681,7 +681,7 @@ namespace ConsoleApplication1
         [Obsolete]
         private struct MyInternalStruct
         {
-            void Method();
+            public void Method();
         }
     }
 }";
@@ -1001,7 +1001,7 @@ namespace ConsoleApplication1
         [Obsolete]
         interface MyInternalInterface
         {
-            int Buzz();
+            public int Buzz();
         }
     }
 }";
@@ -1017,7 +1017,7 @@ namespace ConsoleApplication1
         [Obsolete]
         private interface MyInternalInterface
         {
-            int Buzz();
+            public int Buzz();
         }
     }
 }";
@@ -1219,6 +1219,104 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original,
                 string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
                 string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_MethodDeclaration_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        void Foo() { }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        private void Foo() { }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_MethodDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        static void Foo() { }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        static private void Foo() { }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_MethodDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public class MyClass
+    {
+        public void Foo() { }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_MethodDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        [Obsolete]
+        void Foo()
+        {
+            var keepMe = true;
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        [Obsolete]
+        private void Foo()
+        {
+            var keepMe = true;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
             VerifyFix(original, result);
         }
     }
