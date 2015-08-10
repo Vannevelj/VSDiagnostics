@@ -9,11 +9,12 @@ namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AttributeWithEmptyArgumentListAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "Atributes";
         private const string DiagnosticId = nameof(AttributeWithEmptyArgumentListAnalyzer);
-        private const string Message = "Attribute has empty argument list.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Remove empty argument list from attribute.";
+
+        private static readonly string Category = VSDiagnosticsResources.AttributesCategory;
+        private static readonly string Message = VSDiagnosticsResources.AttributeWithEmptyArgumentListAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.AttributeWithEmptyArgumentListAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 

@@ -9,11 +9,12 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class TypeToVarAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "General";
         private const string DiagnosticId = nameof(TypeToVarAnalyzer);
-        private const string Message = "Actual type can be replaced with 'var'.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Use var instead of type.";
+
+        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Message = VSDiagnosticsResources.TypeToVarAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.TypeToVarAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 

@@ -26,7 +26,7 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
             var diagnosticSpan = diagnostic.Location.SourceSpan;
             var methodDeclaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
 
-            context.RegisterCodeFix(CodeAction.Create("Add suffix", x => AddSuffixAsync(context.Document, methodDeclaration, context.CancellationToken), nameof(AsyncMethodWithoutAsyncSuffixAnalyzer)),
+            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.AsyncMethodWithoutAsyncSuffixCodeFixTitle, x => AddSuffixAsync(context.Document, methodDeclaration, context.CancellationToken), nameof(AsyncMethodWithoutAsyncSuffixAnalyzer)),
                 diagnostic);
         }
 

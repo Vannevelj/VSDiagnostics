@@ -11,11 +11,12 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class OnPropertyChangedWithoutNameOfOperatorAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "General";
         private const string DiagnosticId = nameof(OnPropertyChangedWithoutNameOfOperatorAnalyzer);
-        private const string Message = "OnPropertyChanged({0}) can use the nameof() operator.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Use the nameof() operator in conjunection with OnPropertyChanged";
+
+        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Message = VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 

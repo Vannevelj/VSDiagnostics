@@ -10,11 +10,12 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToFalseLiteral
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class CompareBooleanToFalseLiteralAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "General";
         private const string DiagnosticId = nameof(CompareBooleanToFalseLiteralAnalyzer);
-        private const string Message = "A boolean expression can be simplified.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "A boolean expression doesn't have to be compared to false.";
+
+        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Message = VSDiagnosticsResources.CompareBooleanToFalseLiteralAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.CompareBooleanToFalseLiteralAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 

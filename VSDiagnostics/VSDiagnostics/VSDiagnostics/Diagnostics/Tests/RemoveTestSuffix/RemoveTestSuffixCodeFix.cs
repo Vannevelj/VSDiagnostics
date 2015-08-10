@@ -8,12 +8,12 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 
-namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
+namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
 {
-    [ExportCodeFixProvider("TestMethodWithoutPublicModifier", LanguageNames.CSharp), Shared]
-    public class TestMethodWithoutPublicModifierCodeFix : CodeFixProvider
+    [ExportCodeFixProvider("RemoveTestSuffix", LanguageNames.CSharp), Shared]
+    public class RemoveTestSuffixCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(TestMethodWithoutPublicModifierAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(RemoveTestSuffixAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -26,15 +26,16 @@ namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
 
             var methodDeclaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
 
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.TestMethodWithoutPublicModifierCodeFixTitle, x => MakePublicAsync(context.Document, root, methodDeclaration), nameof(TestMethodWithoutPublicModifierAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.RemoveTestSuffixCodeFixTitle, x => RemoveTestSuffix(context.Document, root, methodDeclaration), nameof(RemoveTestSuffixAnalyzer)), diagnostic);
         }
 
-        private Task<Solution> MakePublicAsync(Document document, SyntaxNode root, MethodDeclarationSyntax method)
+        private Task<Solution> RemoveTestSuffix(Document document, SyntaxNode root, MethodDeclarationSyntax method)
         {
             var generator = SyntaxGenerator.GetGenerator(document);
-            var newMethod = generator.WithAccessibility(method, Accessibility.Public);
+            var newMethod = generator.WithName(method, method.Identifier.Text.Remove(method.Identifier.Text.Length - 4));
             var newRoot = root.ReplaceNode(method, newMethod);
             return Task.FromResult(document.WithSyntaxRoot(newRoot).Project.Solution);
         }
+
     }
 }

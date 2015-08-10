@@ -9,11 +9,12 @@ namespace VSDiagnostics.Diagnostics.General.CastToAs
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class CastToAsAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "General";
         private const string DiagnosticId = nameof(CastToAsAnalyzer);
-        private const string Message = "Use as instead of a cast.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Info;
-        private const string Title = "You can use as instead of a cast.";
+
+        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Message = VSDiagnosticsResources.CastToAsAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.CastToAsAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 

@@ -11,11 +11,12 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class SingleEmptyConstructorAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "General";
         private const string DiagnosticId = nameof(SingleEmptyConstructorAnalyzer);
-        private const string Message = "Type \"{0}\" has a redundant default constructor.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Your constructor is the same as a default constructor and can be removed.";
+
+        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Message = VSDiagnosticsResources.SingleEmptyConstructorAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.SingleEmptyConstructorAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 

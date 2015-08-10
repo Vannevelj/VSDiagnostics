@@ -10,11 +10,12 @@ namespace VSDiagnostics.Diagnostics.Exceptions.SingleGeneralException
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class SingleGeneralExceptionAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "Exceptions";
         private const string DiagnosticId = nameof(SingleGeneralExceptionAnalyzer);
-        private const string Message = "A single catch-all clause has been used.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Verifies whether a try-catch block does not contain just a single Exception clause.";
+
+        private static readonly string Category = VSDiagnosticsResources.ExceptionsCategory;
+        private static readonly string Message = VSDiagnosticsResources.SingleGeneralExceptionAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.SingleGeneralExceptionAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 

@@ -10,11 +10,12 @@ namespace VSDiagnostics.Diagnostics.Exceptions.CatchNullReferenceException
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class CatchNullReferenceExceptionAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "Exceptions";
         private const string DiagnosticId = nameof(CatchNullReferenceExceptionAnalyzer);
-        private const string Message = "A catch clause catches NullReferenceException. Consider using != null or null propagation instead.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Verifies whether no NullReferenceExceptions are caught.";
+
+        private static readonly string Category = VSDiagnosticsResources.ExceptionsCategory;
+        private static readonly string Message = VSDiagnosticsResources.CatchNullReferenceExceptionAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.CatchNullReferenceExceptionAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 

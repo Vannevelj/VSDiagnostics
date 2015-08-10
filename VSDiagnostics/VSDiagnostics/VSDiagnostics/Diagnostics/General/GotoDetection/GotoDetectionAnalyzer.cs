@@ -9,11 +9,12 @@ namespace VSDiagnostics.Diagnostics.General.GotoDetection
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class GotoDetectionAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "General";
         private const string DiagnosticId = nameof(GotoDetectionAnalyzer);
-        private const string Message = "Use of \"goto\" detected.  Consider using a method or loop instead.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Hidden;
-        private const string Title = "Use of \"goto\" detected.";
+
+        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Message = VSDiagnosticsResources.GotoDetectionAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.GotoDetectionAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 

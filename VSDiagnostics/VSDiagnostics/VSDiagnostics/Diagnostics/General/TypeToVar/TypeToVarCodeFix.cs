@@ -23,7 +23,7 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Use var", x => UseVarAsync(context.Document, root, statement), nameof(TypeToVarAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.TypeToVarCodeFixTitle, x => UseVarAsync(context.Document, root, statement), nameof(TypeToVarAnalyzer)), diagnostic);
         }
 
         private Task<Solution> UseVarAsync(Document document, SyntaxNode root, SyntaxNode statement)

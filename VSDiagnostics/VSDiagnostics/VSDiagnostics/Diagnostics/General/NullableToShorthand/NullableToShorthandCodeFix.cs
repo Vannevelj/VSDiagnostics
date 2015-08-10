@@ -25,7 +25,7 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var declaration = root.FindToken(diagnosticSpan.Start);
-            context.RegisterCodeFix(CodeAction.Create("Use shorthand notation", x => UseShorthandNotationAsync(context.Document, root, declaration), nameof(NullableToShorthandAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.NullableToShorthandCodeFixTitle, x => UseShorthandNotationAsync(context.Document, root, declaration), nameof(NullableToShorthandAnalyzer)), diagnostic);
         }
 
         private static async Task<Solution> UseShorthandNotationAsync(Document document, SyntaxNode root, SyntaxToken declaration)

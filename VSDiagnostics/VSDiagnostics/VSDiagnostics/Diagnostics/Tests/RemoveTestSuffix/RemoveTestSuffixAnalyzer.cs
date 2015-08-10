@@ -5,17 +5,17 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
+namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class TestMethodWithoutPublicModifierAnalyzer : DiagnosticAnalyzer
+    public class RemoveTestSuffixAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(TestMethodWithoutPublicModifierAnalyzer);
+        private const string DiagnosticId = nameof(RemoveTestSuffixAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.TestsCategory;
-        private static readonly string Message = VSDiagnosticsResources.TestMethodWithoutPublicModifierAnalyzerMessage;
-        private static readonly string Title = VSDiagnosticsResources.TestMethodWithoutPublicModifierAnalyzerTitle;
+        private static readonly string Message = VSDiagnosticsResources.RemoveTestSuffixAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.RemoveTestSuffixAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 
@@ -34,13 +34,17 @@ namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
                 return;
             }
 
-            if (IsTestMethod(method))
+            if (!method.Identifier.Text.EndsWith("Test", System.StringComparison.CurrentCultureIgnoreCase))
             {
-                if (!method.Modifiers.Any(SyntaxKind.PublicKeyword))
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, method.Identifier.GetLocation(), method.Identifier.Text));
-                }
+                return;
             }
+
+            if (!IsTestMethod(method))
+            {
+                return;
+            }
+
+            context.ReportDiagnostic(Diagnostic.Create(Rule, method.Identifier.GetLocation(), method.Identifier.Text));
         }
 
         private static bool IsTestMethod(MethodDeclarationSyntax method)
