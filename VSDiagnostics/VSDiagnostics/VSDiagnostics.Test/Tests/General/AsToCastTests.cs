@@ -89,7 +89,7 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
-        [TestMethod]
+            [TestMethod]
         public void AsToCast_CustomType_InvokesWarning()
         {
             var original = @"
