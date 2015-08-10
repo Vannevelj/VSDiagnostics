@@ -26,7 +26,7 @@ namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
 
             var methodDeclaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
 
-            context.RegisterCodeFix(CodeAction.Create("Make public", x => MakePublicAsync(context.Document, root, methodDeclaration), nameof(RemoveTestSuffixAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Remove \"Test\" suffix", x => MakePublicAsync(context.Document, root, methodDeclaration), nameof(RemoveTestSuffixAnalyzer)), diagnostic);
         }
 
         private Task<Solution> MakePublicAsync(Document document, SyntaxNode root, MethodDeclarationSyntax method)
