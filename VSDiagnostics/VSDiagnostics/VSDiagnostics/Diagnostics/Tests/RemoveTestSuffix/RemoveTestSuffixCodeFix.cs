@@ -26,10 +26,10 @@ namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
 
             var methodDeclaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
 
-            context.RegisterCodeFix(CodeAction.Create("Remove \"Test\" suffix", x => MakePublicAsync(context.Document, root, methodDeclaration), nameof(RemoveTestSuffixAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Remove \"Test\" suffix", x => RemoveTestSuffix(context.Document, root, methodDeclaration), nameof(RemoveTestSuffixAnalyzer)), diagnostic);
         }
 
-        private Task<Solution> MakePublicAsync(Document document, SyntaxNode root, MethodDeclarationSyntax method)
+        private Task<Solution> RemoveTestSuffix(Document document, SyntaxNode root, MethodDeclarationSyntax method)
         {
             var generator = SyntaxGenerator.GetGenerator(document);
             var newMethod = generator.WithName(method, method.Identifier.Text.Remove(method.Identifier.Text.Length - 4));
