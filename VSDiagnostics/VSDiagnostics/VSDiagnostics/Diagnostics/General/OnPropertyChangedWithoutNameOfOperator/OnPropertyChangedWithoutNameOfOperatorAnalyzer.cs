@@ -14,7 +14,7 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
         private const string DiagnosticId = nameof(OnPropertyChangedWithoutNameOfOperatorAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
-        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;;
+        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorAnalyzerTitle;
 
