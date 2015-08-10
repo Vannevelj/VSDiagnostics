@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -45,10 +46,9 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-                    var accessibilityKeyword = AccessibilityToString(accessibility);
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibilityKeyword));
+                        accessibility.ToString().ToLower()));
                 }
             }
 
@@ -58,10 +58,9 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-                    var accessibilityKeyword = AccessibilityToString(accessibility);
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibilityKeyword));
+                        accessibility.ToString().ToLower()));
                 }
             }
 
@@ -71,10 +70,9 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-                    var accessibilityKeyword = AccessibilityToString(accessibility);
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibilityKeyword));
+                        accessibility.ToString().ToLower()));
                 }
             }
 
@@ -84,10 +82,9 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-                    var accessibilityKeyword = AccessibilityToString(accessibility);
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibilityKeyword));
+                        accessibility.ToString().ToLower()));
                 }
             }
 
@@ -97,10 +94,9 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-                    var accessibilityKeyword = AccessibilityToString(accessibility);
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibilityKeyword));
+                        accessibility.ToString().ToLower()));
                 }
             }
 
@@ -120,10 +116,9 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-                    var accessibilityKeyword = AccessibilityToString(accessibility);
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibilityKeyword));
+                        accessibility.ToString().ToLower()));
                 }
             }
 
@@ -133,10 +128,9 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-                    var accessibilityKeyword = AccessibilityToString(accessibility);
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibilityKeyword));
+                        accessibility.ToString().ToLower()));
                 }
             }
 
@@ -146,10 +140,9 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind()) || m.Kind() == SyntaxKind.StaticKeyword))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-                    var accessibilityKeyword = AccessibilityToString(accessibility);
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibilityKeyword));
+                        accessibility.ToString().ToLower()));
                 }
             }
 
@@ -169,10 +162,9 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-                    var accessibilityKeyword = AccessibilityToString(accessibility);
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibilityKeyword));
+                        accessibility.ToString().ToLower()));
                 }
             }
 
@@ -182,10 +174,9 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-                    var accessibilityKeyword = AccessibilityToString(accessibility);
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibilityKeyword));
+                        accessibility.ToString().ToLower()));
                 }
             }
         }
@@ -197,25 +188,5 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             SyntaxKind.InternalKeyword,
             SyntaxKind.PrivateKeyword
         };
-
-        private string AccessibilityToString(Accessibility accessibility)
-        {
-            switch (accessibility)
-            {
-                case Accessibility.Private:
-                    return "private";
-                case Accessibility.ProtectedAndInternal:
-                    return "protected internal";
-                case Accessibility.Protected:
-                    return "protected";
-                case Accessibility.Internal:
-                    return "internal";
-                case Accessibility.Public:
-                    return "public";
-                default:
-                    // friend has the same value as internal, and not applicable isn't an option here
-                    return "something happened - please create an issue on our GitHub page";
-            }
-        }
     }
 }
