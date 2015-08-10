@@ -30,7 +30,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             var symbol = semanticModel.GetDeclaredSymbol(statement);
             var accessibility = symbol?.DeclaredAccessibility ?? Accessibility.Private;
 
-            context.RegisterCodeFix(CodeAction.Create("Add Modifier", x => AddModifier(context.Document, root, statement, accessibility), nameof(ExplicitAccessModifiersAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create("Add modifier", x => AddModifier(context.Document, root, statement, accessibility), nameof(ExplicitAccessModifiersAnalyzer)), diagnostic);
         }
 
         private Task<Solution> AddModifier(Document document, SyntaxNode root, SyntaxNode statement, Accessibility accessibility)

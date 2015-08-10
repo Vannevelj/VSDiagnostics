@@ -80,6 +80,15 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use nameof.
+        /// </summary>
+        internal static string ArgumentExceptionWithoutNameofOperatorCodeFixTitle {
+            get {
+                return ResourceManager.GetString("ArgumentExceptionWithoutNameofOperatorCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use cast instead of as..
         /// </summary>
         internal static string AsToCastAnalyzerMessage {
@@ -94,6 +103,15 @@ namespace VSDiagnostics {
         internal static string AsToCastAnalyzerTitle {
             get {
                 return ResourceManager.GetString("AsToCastAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use cast instead of as.
+        /// </summary>
+        internal static string AsToCastCodeFixTitle {
+            get {
+                return ResourceManager.GetString("AsToCastCodeFixTitle", resourceCulture);
             }
         }
         
@@ -125,6 +143,15 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add suffix.
+        /// </summary>
+        internal static string AsyncMethodWithoutAsyncSuffixCodeFixTitle {
+            get {
+                return ResourceManager.GetString("AsyncMethodWithoutAsyncSuffixCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Attributes.
         /// </summary>
         internal static string AttributesCategory {
@@ -152,6 +179,15 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove Parentheses.
+        /// </summary>
+        internal static string AttributeWithEmptyArgumentListCodeFixTitle {
+            get {
+                return ResourceManager.GetString("AttributeWithEmptyArgumentListCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use as instead of a cast..
         /// </summary>
         internal static string CastToAsAnalyzerMessage {
@@ -166,6 +202,15 @@ namespace VSDiagnostics {
         internal static string CastToAsAnalyzerTitle {
             get {
                 return ResourceManager.GetString("CastToAsAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use as instead of cast.
+        /// </summary>
+        internal static string CastToAsCodeFixTitle {
+            get {
+                return ResourceManager.GetString("CastToAsCodeFixTitle", resourceCulture);
             }
         }
         
@@ -206,6 +251,15 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Simplify expression.
+        /// </summary>
+        internal static string CompareBooleanToFalseLiteralCodeFixTitle {
+            get {
+                return ResourceManager.GetString("CompareBooleanToFalseLiteralCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A boolean expression can be simplified..
         /// </summary>
         internal static string CompareBooleanToTrueLiteralAnalyzerMessage {
@@ -224,6 +278,15 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Simplify expression.
+        /// </summary>
+        internal static string CompareBooleanToTrueLiteralCodeFixTitle {
+            get {
+                return ResourceManager.GetString("CompareBooleanToTrueLiteralCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A conditional operator can be omitted..
         /// </summary>
         internal static string ConditionalOperatorReturnsDefaultOptionsAnalyzerMessage {
@@ -238,6 +301,15 @@ namespace VSDiagnostics {
         internal static string ConditionalOperatorReturnsDefaultOptionsAnalyzerTitle {
             get {
                 return ResourceManager.GetString("ConditionalOperatorReturnsDefaultOptionsAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove conditional.
+        /// </summary>
+        internal static string ConditionalOperatorReturnsDefaultOptionsCodeFixTitle {
+            get {
+                return ResourceManager.GetString("ConditionalOperatorReturnsDefaultOptionsCodeFixTitle", resourceCulture);
             }
         }
         
@@ -305,6 +377,15 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add modifier.
+        /// </summary>
+        internal static string ExplicitAccessModifiersCodeFixTitle {
+            get {
+                return ResourceManager.GetString("ExplicitAccessModifiersCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
         internal static string GeneralCategory {
@@ -350,6 +431,15 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use braces.
+        /// </summary>
+        internal static string IfStatementWithoutBracesCodeFixTitle {
+            get {
+                return ResourceManager.GetString("IfStatementWithoutBracesCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The {0} {1} does not follow naming conventions. Should be {2}..
         /// </summary>
         internal static string NamingConventionsAnalyzerMessage {
@@ -364,6 +454,15 @@ namespace VSDiagnostics {
         internal static string NamingConventionsAnalyzerTitle {
             get {
                 return ResourceManager.GetString("NamingConventionsAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename.
+        /// </summary>
+        internal static string NamingConventionsCodeFixTitle {
+            get {
+                return ResourceManager.GetString("NamingConventionsCodeFixTitle", resourceCulture);
             }
         }
         
@@ -386,6 +485,15 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use property.
+        /// </summary>
+        internal static string NonEncapsulatedOrMutableFieldCodeFixTitle {
+            get {
+                return ResourceManager.GetString("NonEncapsulatedOrMutableFieldCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} can be written using the shorthand nullable notation..
         /// </summary>
         internal static string NullableToShorthandAnalyzerMessage {
@@ -400,6 +508,15 @@ namespace VSDiagnostics {
         internal static string NullableToShorthandAnalyzerTitle {
             get {
                 return ResourceManager.GetString("NullableToShorthandAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use shorthand notation.
+        /// </summary>
+        internal static string NullableToShorthandCodeFixTitle {
+            get {
+                return ResourceManager.GetString("NullableToShorthandCodeFixTitle", resourceCulture);
             }
         }
         
@@ -440,6 +557,15 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use nameof.
+        /// </summary>
+        internal static string OnPropertyChangedWithoutNameOfOperatorCodeFixTitle {
+            get {
+                return ResourceManager.GetString("OnPropertyChangedWithoutNameOfOperatorCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Test method &quot;{0}&quot; should not end with &quot;Test&quot;..
         /// </summary>
         internal static string RemoveTestSuffixAnalyzerMessage {
@@ -454,6 +580,15 @@ namespace VSDiagnostics {
         internal static string RemoveTestSuffixAnalyzerTitle {
             get {
                 return ResourceManager.GetString("RemoveTestSuffixAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &quot;Test&quot; suffix.
+        /// </summary>
+        internal static string RemoveTestSuffixCodeFixTitle {
+            get {
+                return ResourceManager.GetString("RemoveTestSuffixCodeFixTitle", resourceCulture);
             }
         }
         
@@ -476,6 +611,15 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use string.Empty.
+        /// </summary>
+        internal static string ReplaceEmptyStringWithStringDotEmptyCodeFixTitle {
+            get {
+                return ResourceManager.GetString("ReplaceEmptyStringWithStringDotEmptyCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rethrown exception loses the stacktrace..
         /// </summary>
         internal static string RethrowExceptionWithoutLosingStacktraceAnalyzerMessage {
@@ -490,6 +634,15 @@ namespace VSDiagnostics {
         internal static string RethrowExceptionWithoutLosingStacktraceAnalyzerTitle {
             get {
                 return ResourceManager.GetString("RethrowExceptionWithoutLosingStacktraceAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove rethrow.
+        /// </summary>
+        internal static string RethrowExceptionWithoutLosingStacktraceCodeFixTitle {
+            get {
+                return ResourceManager.GetString("RethrowExceptionWithoutLosingStacktraceCodeFixTitle", resourceCulture);
             }
         }
         
@@ -512,6 +665,15 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use expression bodied member.
+        /// </summary>
+        internal static string SimplifyExpressionBodiedMemberCodeFixTitle {
+            get {
+                return ResourceManager.GetString("SimplifyExpressionBodiedMemberCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Type &quot;{0}&quot; has a redundant default constructor..
         /// </summary>
         internal static string SingleEmptyConstructorAnalyzerMessage {
@@ -526,6 +688,15 @@ namespace VSDiagnostics {
         internal static string SingleEmptyConstructorAnalyzerTitle {
             get {
                 return ResourceManager.GetString("SingleEmptyConstructorAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove empty constructor.
+        /// </summary>
+        internal static string SingleEmptyConstructorCodeFixTitle {
+            get {
+                return ResourceManager.GetString("SingleEmptyConstructorCodeFixTitle", resourceCulture);
             }
         }
         
@@ -575,6 +746,15 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Make public.
+        /// </summary>
+        internal static string TestMethodWithoutPublicModifierCodeFixTitle {
+            get {
+                return ResourceManager.GetString("TestMethodWithoutPublicModifierCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tests.
         /// </summary>
         internal static string TestsCategory {
@@ -602,6 +782,15 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use as.
+        /// </summary>
+        internal static string TryCastWithoutUsingAsNotNullCodeFixTitle {
+            get {
+                return ResourceManager.GetString("TryCastWithoutUsingAsNotNullCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actual type can be replaced with &apos;var&apos;..
         /// </summary>
         internal static string TypeToVarAnalyzerMessage {
@@ -616,6 +805,15 @@ namespace VSDiagnostics {
         internal static string TypeToVarAnalyzerTitle {
             get {
                 return ResourceManager.GetString("TypeToVarAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use var.
+        /// </summary>
+        internal static string TypeToVarCodeFixTitle {
+            get {
+                return ResourceManager.GetString("TypeToVarCodeFixTitle", resourceCulture);
             }
         }
     }

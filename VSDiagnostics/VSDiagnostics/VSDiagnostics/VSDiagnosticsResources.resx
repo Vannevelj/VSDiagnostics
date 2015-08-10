@@ -319,4 +319,70 @@
   <data name="TypeToVarAnalyzerTitle" xml:space="preserve">
     <value>Use var instead of type.</value>
   </data>
+  <data name="ArgumentExceptionWithoutNameofOperatorCodeFixTitle" xml:space="preserve">
+    <value>Use nameof</value>
+  </data>
+  <data name="AsToCastCodeFixTitle" xml:space="preserve">
+    <value>Use cast instead of as</value>
+  </data>
+  <data name="AsyncMethodWithoutAsyncSuffixCodeFixTitle" xml:space="preserve">
+    <value>Add suffix</value>
+  </data>
+  <data name="AttributeWithEmptyArgumentListCodeFixTitle" xml:space="preserve">
+    <value>Remove Parentheses</value>
+  </data>
+  <data name="CastToAsCodeFixTitle" xml:space="preserve">
+    <value>Use as instead of cast</value>
+  </data>
+  <data name="CompareBooleanToFalseLiteralCodeFixTitle" xml:space="preserve">
+    <value>Simplify expression</value>
+  </data>
+  <data name="CompareBooleanToTrueLiteralCodeFixTitle" xml:space="preserve">
+    <value>Simplify expression</value>
+  </data>
+  <data name="ConditionalOperatorReturnsDefaultOptionsCodeFixTitle" xml:space="preserve">
+    <value>Remove conditional</value>
+  </data>
+  <data name="ExplicitAccessModifiersCodeFixTitle" xml:space="preserve">
+    <value>Add modifier</value>
+  </data>
+  <data name="IfStatementWithoutBracesCodeFixTitle" xml:space="preserve">
+    <value>Use braces</value>
+  </data>
+  <data name="NamingConventionsCodeFixTitle" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="NonEncapsulatedOrMutableFieldCodeFixTitle" xml:space="preserve">
+    <value>Use property</value>
+  </data>
+  <data name="NullableToShorthandCodeFixTitle" xml:space="preserve">
+    <value>Use shorthand notation</value>
+  </data>
+  <data name="OnPropertyChangedWithoutNameOfOperatorCodeFixTitle" xml:space="preserve">
+    <value>Use nameof</value>
+  </data>
+  <data name="RemoveTestSuffixCodeFixTitle" xml:space="preserve">
+    <value>Remove "Test" suffix</value>
+  </data>
+  <data name="ReplaceEmptyStringWithStringDotEmptyCodeFixTitle" xml:space="preserve">
+    <value>Use string.Empty</value>
+  </data>
+  <data name="RethrowExceptionWithoutLosingStacktraceCodeFixTitle" xml:space="preserve">
+    <value>Remove rethrow</value>
+  </data>
+  <data name="SimplifyExpressionBodiedMemberCodeFixTitle" xml:space="preserve">
+    <value>Use expression bodied member</value>
+  </data>
+  <data name="SingleEmptyConstructorCodeFixTitle" xml:space="preserve">
+    <value>Remove empty constructor</value>
+  </data>
+  <data name="TestMethodWithoutPublicModifierCodeFixTitle" xml:space="preserve">
+    <value>Make public</value>
+  </data>
+  <data name="TryCastWithoutUsingAsNotNullCodeFixTitle" xml:space="preserve">
+    <value>Use as</value>
+  </data>
+  <data name="TypeToVarCodeFixTitle" xml:space="preserve">
+    <value>Use var</value>
+  </data>
 </root>
