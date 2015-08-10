@@ -26,7 +26,7 @@ namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
 
             var methodDeclaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
 
-            context.RegisterCodeFix(CodeAction.Create("Make public", x => MakePublicAsync(context.Document, root, methodDeclaration), nameof(TestMethodWithoutPublicModifierAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.TestMethodWithoutPublicModifierCodeFixTitle, x => MakePublicAsync(context.Document, root, methodDeclaration), nameof(TestMethodWithoutPublicModifierAnalyzer)), diagnostic);
         }
 
         private Task<Solution> MakePublicAsync(Document document, SyntaxNode root, MethodDeclarationSyntax method)

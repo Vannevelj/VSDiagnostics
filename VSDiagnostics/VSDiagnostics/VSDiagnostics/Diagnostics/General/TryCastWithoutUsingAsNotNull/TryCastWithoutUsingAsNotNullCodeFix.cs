@@ -26,7 +26,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Use as", x => UseAsAsync(context.Document, statement), nameof(TryCastWithoutUsingAsNotNullAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.TryCastWithoutUsingAsNotNullCodeFixTitle, x => UseAsAsync(context.Document, statement), nameof(TryCastWithoutUsingAsNotNullAnalyzer)), diagnostic);
         }
 
         private async Task<Solution> UseAsAsync(Document document, SyntaxNode statement)

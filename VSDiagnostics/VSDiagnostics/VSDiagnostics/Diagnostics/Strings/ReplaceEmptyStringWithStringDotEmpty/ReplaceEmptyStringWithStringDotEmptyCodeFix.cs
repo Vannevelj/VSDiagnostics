@@ -24,7 +24,7 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var literalDeclaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<LiteralExpressionSyntax>().First();
-            context.RegisterCodeFix(CodeAction.Create("Use string.Empty", x => UseStringDotEmptyAsync(context.Document, root, literalDeclaration), nameof(ReplaceEmptyStringWithStringDotEmptyAnalyzer)),
+            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.ReplaceEmptyStringWithStringDotEmptyCodeFixTitle, x => UseStringDotEmptyAsync(context.Document, root, literalDeclaration), nameof(ReplaceEmptyStringWithStringDotEmptyAnalyzer)),
                 diagnostic);
         }
 
