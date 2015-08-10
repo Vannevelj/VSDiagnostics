@@ -10,11 +10,12 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class NonEncapsulatedOrMutableFieldAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "General";
         private const string DiagnosticId = nameof(NonEncapsulatedOrMutableFieldAnalyzer);
-        private const string Message = "Field {0} should be turned into a property.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Internal or public fields should be immutable or a property.";
+
+        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Message = VSDiagnosticsResources.NonEncapsulatedOrMutableFieldAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.NonEncapsulatedOrMutableFieldAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 

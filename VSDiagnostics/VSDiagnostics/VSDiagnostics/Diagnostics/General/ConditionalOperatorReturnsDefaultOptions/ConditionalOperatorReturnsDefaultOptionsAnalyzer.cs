@@ -9,11 +9,12 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsDefaultOpt
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ConditionalOperatorReturnsDefaultOptionsAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "General";
         private const string DiagnosticId = nameof(ConditionalOperatorReturnsDefaultOptionsAnalyzer);
-        private const string Message = "A conditional operator can be omitted.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "The conditional operator shouldn't return redundant true and false literals.";
+
+        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Message = VSDiagnosticsResources.ConditionalOperatorReturnsDefaultOptionsAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.ConditionalOperatorReturnsDefaultOptionsAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 

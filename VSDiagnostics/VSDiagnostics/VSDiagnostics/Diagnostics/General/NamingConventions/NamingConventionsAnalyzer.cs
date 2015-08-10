@@ -10,11 +10,12 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class NamingConventionsAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "General";
         private const string DiagnosticId = nameof(NamingConventionsAnalyzer);
-        private const string Message = "The {0} {1} does not follow naming conventions. Should be {2}.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "A member does not follow naming conventions.";
+
+        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Message = VSDiagnosticsResources.NamingConventionsAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.NamingConventionsAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 

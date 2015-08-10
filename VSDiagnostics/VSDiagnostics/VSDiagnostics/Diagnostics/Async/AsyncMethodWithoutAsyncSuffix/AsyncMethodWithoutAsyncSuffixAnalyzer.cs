@@ -10,11 +10,12 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AsyncMethodWithoutAsyncSuffixAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "Async";
         private const string DiagnosticId = nameof(AsyncMethodWithoutAsyncSuffixAnalyzer);
-        private const string Message = "Method \"{0}\" does not end with 'Async'.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Verifies whether an async method has the 'Async' suffix.";
+
+        private static readonly string Category = VSDiagnosticsResources.AsyncCategory;
+        private static readonly string Message = VSDiagnosticsResources.AsyncMethodWithoutAsyncSuffixAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.AsyncMethodWithoutAsyncSuffixAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, isEnabledByDefault: true);
 

@@ -10,11 +10,12 @@ namespace VSDiagnostics.Diagnostics.Attributes.ObsoleteAttributeWithoutReason
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ObsoleteAttributeWithoutReasonAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "Atributes";
         private const string DiagnosticId = nameof(ObsoleteAttributeWithoutReasonAnalyzer);
-        private const string Message = "Give a reason for the Obsolete attribute.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "The Obsolete attribute doesn't have a reason.";
+
+        private static readonly string Category = VSDiagnosticsResources.AttributesCategory;
+        private static readonly string Message = VSDiagnosticsResources.ObsoleteAttributeWithoutReasonAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.ObsoleteAttributeWithoutReasonAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 

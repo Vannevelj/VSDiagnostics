@@ -10,11 +10,12 @@ namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class RemoveTestSuffixAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "Tests";
         private const string DiagnosticId = nameof(RemoveTestSuffixAnalyzer);
-        private const string Message = "Test method \"{0}\" should not end with \"Test\".";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Verifies whether a test method ends with \"Test\".";
+
+        private static readonly string Category = VSDiagnosticsResources.TestsCategory;
+        private static readonly string Message = VSDiagnosticsResources.RemoveTestSuffixAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.RemoveTestSuffixAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 

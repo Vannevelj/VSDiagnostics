@@ -12,11 +12,12 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOpe
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ArgumentExceptionWithoutNameofOperatorAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "Exceptions";
         private const string DiagnosticId = nameof(ArgumentExceptionWithoutNameofOperatorAnalyzer);
-        private const string Message = "The field {0} is used in an ArgumentException as string. Consider using the nameof operator instead.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Suggest using the nameof operator in an ArgumentException.";
+
+        private static readonly string Category = VSDiagnosticsResources.ExceptionsCategory;
+        private static readonly string Message = VSDiagnosticsResources.ArgumentExceptionWithoutNameofOperatorAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.ArgumentExceptionWithoutNameofOperatorAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 

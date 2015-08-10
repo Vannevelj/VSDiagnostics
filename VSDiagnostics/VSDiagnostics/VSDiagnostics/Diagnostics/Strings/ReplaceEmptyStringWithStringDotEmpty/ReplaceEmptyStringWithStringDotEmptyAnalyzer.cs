@@ -10,11 +10,12 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ReplaceEmptyStringWithStringDotEmptyAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "Strings";
         private const string DiagnosticId = nameof(ReplaceEmptyStringWithStringDotEmptyAnalyzer);
-        private const string Message = "Empty string literal detected.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Replaces an empty string literal with the more expressive string.Empty.";
+
+        private static readonly string Category = VSDiagnosticsResources.StringsCategory;
+        private static readonly string Message = VSDiagnosticsResources.ReplaceEmptyStringWithStringDotEmptyAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.ReplaceEmptyStringWithStringDotEmptyAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 

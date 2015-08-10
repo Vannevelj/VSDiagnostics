@@ -11,11 +11,12 @@ namespace VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStac
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class RethrowExceptionWithoutLosingStacktraceAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "Exceptions";
         private const string DiagnosticId = nameof(RethrowExceptionWithoutLosingStacktraceAnalyzer);
-        private const string Message = "Rethrown exception loses the stacktrace.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Warns when an exception is rethrown in a way that it loses the stacktrace.";
+
+        private static readonly string Category = VSDiagnosticsResources.ExceptionsCategory;
+        private static readonly string Message = VSDiagnosticsResources.RethrowExceptionWithoutLosingStacktraceAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.RethrowExceptionWithoutLosingStacktraceAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 

@@ -10,11 +10,12 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     class ExplicitAccessModifiersAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "General";
         private const string DiagnosticId = nameof(ExplicitAccessModifiersAnalyzer);
-        private const string Message = "Use explicit {0} modifier.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Info;
-        private const string Title = "Use explicit {0} modifier.";
+
+        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Message = VSDiagnosticsResources.ExplicitAccessModifiersAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.ExplicitAccessModifiersAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 
