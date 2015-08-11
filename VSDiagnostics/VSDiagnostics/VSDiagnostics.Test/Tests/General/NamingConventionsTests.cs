@@ -45,6 +45,47 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void NamingConventions_WithPrivateField_AndCapitalStart_CallsAreUpdated_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int X;
+
+        void Method()
+        {
+            var v = X;
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int _x;
+
+        void Method()
+        {
+            var v = _x;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "X", "_x"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
         public void NamingConventions_WithPrivateField_AndCapitalStartWithUnderscore_InvokesWarning()
         {
             var original = @"
@@ -107,6 +148,47 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void NamingConventions_WithPublicField_CallsAreUpdated_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public int x;
+
+        void Method()
+        {
+            var v = x;
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public int X;
+
+        void Method()
+        {
+            var v = X;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "X"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
         public void NamingConventions_WithProtectedField_InvokesWarning()
         {
             var original = @"
@@ -130,6 +212,47 @@ namespace ConsoleApplication1
     class MyClass
     {
         protected int X;
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "X"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void NamingConventions_WithProtectedField_CallsAreUpdated_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        protected int x;
+
+        void Method()
+        {
+            var v = x;
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        protected int X;
+
+        void Method()
+        {
+            var v = X;
+        }
     }
 }";
 
@@ -169,6 +292,47 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void NamingConventions_WithInternalField_CallsAreUpdated_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        internal int x;
+
+        void Method()
+        {
+            var v = x;
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        internal int X;
+
+        void Method()
+        {
+            var v = X;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "X"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
         public void NamingConventions_WithProtectedInternalField_InvokesWarning()
         {
             var original = @"
@@ -200,6 +364,47 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void NamingConventions_WithProtectedInternalField_CallsAreUpdated_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        protected internal int x;
+
+        void Method()
+        {
+            var v = x;
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        protected internal int X;
+
+        void Method()
+        {
+            var v = X;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "x", "X"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
         public void NamingConventions_WithProperty_InvokesWarning()
         {
             var original = @"
@@ -223,6 +428,47 @@ namespace ConsoleApplication1
     class MyClass
     {
         public int X { get; set; }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "property", "x", "X"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void NamingConventions_WithProperty_CallsAreUpdated_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public int x { get; set; }
+
+        void Method()
+        {
+            var v = x;
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public int X { get; set; }
+
+        void Method()
+        {
+            var v = X;
+        }
     }
 }";
 
@@ -266,6 +512,51 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void NamingConventions_WithMethod_CallsAreUpdated_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void method()
+        {
+        }
+
+        void Test()
+        {
+            method();
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+        }
+
+        void Test()
+        {
+            Method();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "method", "method", "Method"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
         public void NamingConventions_WithClass_InvokesWarning()
         {
             var original = @"
@@ -295,6 +586,45 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void NamingConventions_WithClass_CallsAreUpdated_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class myClass
+    {
+    }
+
+    class Test
+    {
+        myClass _foo = new myClass();
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+    }
+
+    class Test
+    {
+        MyClass _foo = new MyClass();
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "class", "myClass", "MyClass"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
         public void NamingConventions_WithInterface_WithoutPrefix_AndLowerFirstLetter_InvokesWarning()
         {
             var original = @"
@@ -316,6 +646,45 @@ namespace ConsoleApplication1
 {
     interface ISomething
     {
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "something", "ISomething"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void NamingConventions_WithInterface_WithoutPrefix_AndLowerFirstLetter_CallsAreUpdated_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    interface something
+    {
+    }
+
+    class MyClass
+    {
+        MyClass(something foo) {}
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    interface ISomething
+    {
+    }
+
+    class MyClass
+    {
+        MyClass(ISomething foo) {}
     }
 }";
 
@@ -535,6 +904,45 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void NamingConventions_WithLocalVariable_CallsAreUpdated_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var MyVar = 5;
+            var foo = MyVar;
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var myVar = 5;
+            var foo = myVar;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "local", "MyVar", "myVar"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
         public void NamingConventions_WithParameter_InvokesWarning()
         {
             var original = @"
@@ -570,6 +978,43 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void NamingConventions_WithParameter_CallsAreUpdated_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(string Param)
+        {
+            var foo = Param;
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(string param)
+        {
+            var foo = param;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "parameter", "Param", "param"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
         public void NamingConventions_WithMultipleFields_InvokesWarning()
         {
             var original = @"
@@ -593,6 +1038,51 @@ namespace ConsoleApplication1
     class MyClass
     {
         private int _x, _y;
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "X", "_x"),
+                string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "Y", "_y"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void NamingConventions_WithMultipleFields_CallsAreUpdated_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int X, Y;
+
+        void Method()
+        {
+            var i = X;
+            var j = Y;
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int _x, _y;
+
+        void Method()
+        {
+            var i = _x;
+            var j = _y;
+        }
     }
 }";
 
@@ -1028,7 +1518,46 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NamingConventions_WithStruct_FollowingConventions_InvokesWarning()
+        public void NamingConventions_WithStruct_CallsAreUpdated_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    struct myStruct
+    {
+    }
+
+    class MyClass
+    {
+        myStruct _foo;
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    struct MyStruct
+    {
+    }
+
+    class MyClass
+    {
+        MyStruct _foo;
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "struct", "myStruct", "MyStruct"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void NamingConventions_WithStruct_FollowingConventions_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
