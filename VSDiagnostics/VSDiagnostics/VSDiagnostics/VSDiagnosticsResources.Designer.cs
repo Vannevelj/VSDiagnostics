@@ -314,6 +314,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A conditional operator can be omitted..
+        /// </summary>
+        internal static string ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The conditional operator shouldn&apos;t return redundant true and false literals..
+        /// </summary>
+        internal static string ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove conditional.
+        /// </summary>
+        internal static string ConditionalOperatorReturnsInvertedDefaultOptionsCodeFixTitle {
+            get {
+                return ResourceManager.GetString("ConditionalOperatorReturnsInvertedDefaultOptionsCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ArgumentException is thrown without a message..
         /// </summary>
         internal static string EmptyArgumentExceptionAnalyzerMessage {

@@ -53,6 +53,8 @@
     <Compile Include="Diagnostics\General\CompareBooleanToFalseLiteral\CompareBooleanToFalseLiteralCodeFix.cs" />
     <Compile Include="Diagnostics\General\CompareBooleanToTrueLiteral\CompareBooleanToTrueLiteralAnalyzer.cs" />
     <Compile Include="Diagnostics\General\CompareBooleanToTrueLiteral\CompareBooleanToTrueLiteralCodeFix.cs" />
+    <Compile Include="Diagnostics\General\ConditionalOperatorReturnsInvertedDefaultOptions\ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\ConditionalOperatorReturnsInvertedDefaultOptions\ConditionalOperatorReturnsInvertedDefaultOptionsCodeFix.cs" />
     <Compile Include="Diagnostics\General\ConditionalOperatorReturnsDefaultOptions\ConditionalOperatorReturnsDefaultOptionsAnalyzer.cs" />
     <Compile Include="Diagnostics\General\ConditionalOperatorReturnsDefaultOptions\ConditionalOperatorReturnsDefaultOptionsCodeFix.cs" />
     <Compile Include="Diagnostics\General\ExplicitAccessModifiers\ExplicitAccessModifiersAnalyzer.cs" />

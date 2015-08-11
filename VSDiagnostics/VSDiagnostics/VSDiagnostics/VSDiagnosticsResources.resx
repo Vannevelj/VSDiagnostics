@@ -385,4 +385,13 @@
   <data name="TypeToVarCodeFixTitle" xml:space="preserve">
     <value>Use var</value>
   </data>
+  <data name="ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzerMessage" xml:space="preserve">
+    <value>A conditional operator can be omitted.</value>
+  </data>
+  <data name="ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzerTitle" xml:space="preserve">
+    <value>The conditional operator shouldn't return redundant true and false literals.</value>
+  </data>
+  <data name="ConditionalOperatorReturnsInvertedDefaultOptionsCodeFixTitle" xml:space="preserve">
+    <value>Remove conditional</value>
+  </data>
 </root>
