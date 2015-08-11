@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,32 +35,11 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
         private Task<Solution> AddModifier(Document document, SyntaxNode root, SyntaxNode statement, Accessibility accessibility)
         {
             SyntaxNode newStatement = null;
-            var accessModifiers = new List<SyntaxToken>();
+            var accessModifierTokens = SyntaxFactory.TokenList(AccessModifiers(accessibility));
 
-            switch (accessibility)
-            {
-                case Accessibility.Private:
-                    accessModifiers.Add(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
-                    break;
-                case Accessibility.ProtectedAndInternal:
-                    accessModifiers.AddRange(new[]
-                    {SyntaxFactory.Token(SyntaxKind.ProtectedKeyword), SyntaxFactory.Token(SyntaxKind.InternalKeyword)});
-                    break;
-                case Accessibility.Protected:
-                    accessModifiers.Add(SyntaxFactory.Token(SyntaxKind.ProtectedKeyword));
-                    break;
-                case Accessibility.Internal:
-                    accessModifiers.Add(SyntaxFactory.Token(SyntaxKind.InternalKeyword));
-                    break;
-                case Accessibility.Public:
-                    accessModifiers.Add(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
-                    break;
-            }
-            
             if (statement is ClassDeclarationSyntax)
             {
                 var classExpression = (ClassDeclarationSyntax) statement;
-                var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
                 var newClass = classExpression.WithModifiers(classExpression.Modifiers.AddRange(accessModifierTokens));
                 newStatement = statement.ReplaceNode(statement, newClass);
@@ -70,7 +48,6 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (statement is StructDeclarationSyntax)
             {
                 var structExpression = (StructDeclarationSyntax)statement;
-                var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
                 var newStruct = structExpression.WithModifiers(structExpression.Modifiers.AddRange(accessModifierTokens));
                 newStatement = statement.ReplaceNode(statement, newStruct);
@@ -79,7 +56,6 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (statement is EnumDeclarationSyntax)
             {
                 var enumExpression = (EnumDeclarationSyntax)statement;
-                var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
                 var newEnum = enumExpression.WithModifiers(enumExpression.Modifiers.AddRange(accessModifierTokens));
                 newStatement = statement.ReplaceNode(statement, newEnum);
@@ -88,7 +64,6 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (statement is DelegateDeclarationSyntax)
             {
                 var delegateExpression = (DelegateDeclarationSyntax)statement;
-                var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
                 var newDelegate = delegateExpression.WithModifiers(delegateExpression.Modifiers.AddRange(accessModifierTokens));
                 newStatement = statement.ReplaceNode(statement, newDelegate);
@@ -97,7 +72,6 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (statement is InterfaceDeclarationSyntax)
             {
                 var interfaceExpression = (InterfaceDeclarationSyntax)statement;
-                var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
                 var newInterface = interfaceExpression.WithModifiers(interfaceExpression.Modifiers.AddRange(accessModifierTokens));
                 newStatement = statement.ReplaceNode(statement, newInterface);
@@ -106,7 +80,6 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (statement is FieldDeclarationSyntax)
             {
                 var fieldExpression = (FieldDeclarationSyntax)statement;
-                var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
                 var newStruct = fieldExpression.WithModifiers(fieldExpression.Modifiers.AddRange(accessModifierTokens));
                 newStatement = statement.ReplaceNode(statement, newStruct);
@@ -115,7 +88,6 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (statement is PropertyDeclarationSyntax)
             {
                 var propertyExpression = (PropertyDeclarationSyntax)statement;
-                var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
                 var newProperty = propertyExpression.WithModifiers(propertyExpression.Modifiers.AddRange(accessModifierTokens));
                 newStatement = statement.ReplaceNode(statement, newProperty);
@@ -124,7 +96,6 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (statement is MethodDeclarationSyntax)
             {
                 var methodExpression = (MethodDeclarationSyntax)statement;
-                var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
                 var newMethod = methodExpression.WithModifiers(methodExpression.Modifiers.AddRange(accessModifierTokens));
                 newStatement = statement.ReplaceNode(statement, newMethod);
@@ -133,7 +104,6 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (statement is ConstructorDeclarationSyntax)
             {
                 var constructorExpression = (ConstructorDeclarationSyntax)statement;
-                var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
                 var newConstructor = constructorExpression.WithModifiers(constructorExpression.Modifiers.AddRange(accessModifierTokens));
                 newStatement = statement.ReplaceNode(statement, newConstructor);
@@ -142,7 +112,6 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (statement is EventFieldDeclarationSyntax)
             {
                 var eventFieldExpression = (EventFieldDeclarationSyntax)statement;
-                var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
                 var newEventField = eventFieldExpression.WithModifiers(eventFieldExpression.Modifiers.AddRange(accessModifierTokens));
                 newStatement = statement.ReplaceNode(statement, newEventField);
@@ -151,7 +120,6 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (statement is EventDeclarationSyntax)
             {
                 var eventExpression = (EventDeclarationSyntax)statement;
-                var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
                 var newEvent = eventExpression.WithModifiers(eventExpression.Modifiers.AddRange(accessModifierTokens));
                 newStatement = statement.ReplaceNode(statement, newEvent);
@@ -160,7 +128,6 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (statement is IndexerDeclarationSyntax)
             {
                 var indexerExpression = (IndexerDeclarationSyntax)statement;
-                var accessModifierTokens = SyntaxFactory.TokenList(accessModifiers);
 
                 var newIndexer = indexerExpression.WithModifiers(indexerExpression.Modifiers.AddRange(accessModifierTokens));
                 newStatement = statement.ReplaceNode(statement, newIndexer);
@@ -168,6 +135,25 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
 
             var newRoot = newStatement == null ? root : root.ReplaceNode(statement, newStatement);
             return Task.FromResult(document.WithSyntaxRoot(newRoot).Project.Solution);
+        }
+
+        private SyntaxToken[] AccessModifiers(Accessibility accessibility)
+        {
+            switch (accessibility)
+            {
+                case Accessibility.Private:
+                    return new[] { SyntaxFactory.Token(SyntaxKind.PrivateKeyword) };
+                case Accessibility.ProtectedAndInternal:
+                    return new[] { SyntaxFactory.Token(SyntaxKind.ProtectedKeyword), SyntaxFactory.Token(SyntaxKind.InternalKeyword) };
+                case Accessibility.Protected:
+                    return new[] { SyntaxFactory.Token(SyntaxKind.ProtectedKeyword) };
+                case Accessibility.Internal:
+                    return new[] { SyntaxFactory.Token(SyntaxKind.InternalKeyword) };
+                case Accessibility.Public:
+                    return new[] { SyntaxFactory.Token(SyntaxKind.PublicKeyword) };
+            }
+
+            return null;    // this cannot be reached
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -44,7 +43,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node is ClassDeclarationSyntax)
             {
                 var declarationExpression = (ClassDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
@@ -56,7 +55,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node is StructDeclarationSyntax)
             {
                 var declarationExpression = (StructDeclarationSyntax)context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
@@ -68,7 +67,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node is EnumDeclarationSyntax)
             {
                 var declarationExpression = (EnumDeclarationSyntax)context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
@@ -80,7 +79,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node is DelegateDeclarationSyntax)
             {
                 var declarationExpression = (DelegateDeclarationSyntax)context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
@@ -92,7 +91,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node is InterfaceDeclarationSyntax)
             {
                 var declarationExpression = (InterfaceDeclarationSyntax)context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
@@ -104,7 +103,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node is FieldDeclarationSyntax)
             {
                 var declarationExpression = (FieldDeclarationSyntax)context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
                         "private"));
@@ -114,7 +113,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node is PropertyDeclarationSyntax)
             {
                 var declarationExpression = (PropertyDeclarationSyntax)context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
@@ -126,7 +125,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node is MethodDeclarationSyntax)
             {
                 var declarationExpression = (MethodDeclarationSyntax)context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
@@ -138,7 +137,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node is ConstructorDeclarationSyntax)
             {
                 var declarationExpression = (ConstructorDeclarationSyntax)context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind()) || m.Kind() == SyntaxKind.StaticKeyword))
+                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind()) || m.Kind() == SyntaxKind.StaticKeyword))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
@@ -150,7 +149,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node is EventFieldDeclarationSyntax)
             {
                 var declarationExpression = (EventFieldDeclarationSyntax)context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
                         "private"));
@@ -160,7 +159,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node is EventDeclarationSyntax)
             {
                 var declarationExpression = (EventDeclarationSyntax)context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
@@ -172,7 +171,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node is IndexerDeclarationSyntax)
             {
                 var declarationExpression = (IndexerDeclarationSyntax)context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _modifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
@@ -182,7 +181,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             }
         }
 
-        private readonly SyntaxKind[] _modifierKinds =
+        private readonly SyntaxKind[] _accessModifierKinds =
         {
             SyntaxKind.PublicKeyword,
             SyntaxKind.ProtectedKeyword,
