@@ -50,12 +50,6 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
                 typeExpression = expression.ReturnType;
             }
 
-            if (context.Node is FieldDeclarationSyntax)
-            {
-                var expression = (FieldDeclarationSyntax)context.Node;
-                typeExpression = expression.Declaration.Type;
-            }
-
             if (context.Node is IndexerDeclarationSyntax)
             {
                 var expression = (IndexerDeclarationSyntax)context.Node;
