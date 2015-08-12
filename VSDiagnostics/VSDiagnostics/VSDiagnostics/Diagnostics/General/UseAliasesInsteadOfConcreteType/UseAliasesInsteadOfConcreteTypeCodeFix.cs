@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,15 +42,34 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
             {
                 typeName = semanticModel.GetSymbolInfo((QualifiedNameSyntax)statement).Symbol.MetadataName;
             }
-            var newName =
-                UseAliasesInsteadOfConcreteTypeAnalyzer.MapConcreteTypeToPredefinedTypeAlias.First(
-                    kvp => kvp.Key == typeName).Value;
 
-            var newExpression = SyntaxFactory.IdentifierName(newName);
+            var aliasToken = MapConcreteTypeToPredefinedTypeAlias.First(kvp => kvp.Key == typeName).Value;
+
+            var newExpression = SyntaxFactory.PredefinedType(SyntaxFactory.Token(aliasToken));
             var newRoot = root.ReplaceNode(statement, newExpression).WithAdditionalAnnotations(Formatter.Annotation);
             var newDocument = document.WithSyntaxRoot(newRoot);
 
             return newDocument.Project.Solution;
         }
+
+        public static readonly Dictionary<string, SyntaxKind> MapConcreteTypeToPredefinedTypeAlias =
+            new Dictionary<string, SyntaxKind>
+            {
+                {"Int16", SyntaxKind.ShortKeyword},
+                {"Int32", SyntaxKind.IntKeyword},
+                {"Int64", SyntaxKind.LongKeyword},
+                {"UInt16", SyntaxKind.UShortKeyword},
+                {"UInt32", SyntaxKind.UIntKeyword},
+                {"UInt64", SyntaxKind.ULongKeyword},
+                {"Object", SyntaxKind.ObjectKeyword},
+                {"Byte", SyntaxKind.ByteKeyword},
+                {"SByte", SyntaxKind.SByteKeyword},
+                {"Char", SyntaxKind.CharKeyword},
+                {"Boolean", SyntaxKind.BoolKeyword},
+                {"Single", SyntaxKind.FloatKeyword},
+                {"Double", SyntaxKind.DoubleKeyword},
+                {"Decimal", SyntaxKind.DecimalKeyword},
+                {"String", SyntaxKind.StringKeyword}
+            };
     }
 }
