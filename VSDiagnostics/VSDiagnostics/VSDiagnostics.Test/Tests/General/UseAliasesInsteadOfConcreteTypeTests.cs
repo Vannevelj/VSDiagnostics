@@ -845,5 +845,234 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_SystemDotCharBecomesChar_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            System.Char c = 'r';
+        }
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            char c = 'r';
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "char", "Char"));
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
+        }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_Method_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        Int32 Method()
+        {
+            return 9;
+        }
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int Method()
+        {
+            return 9;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "int", "Int32"));
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
+        }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_ConversionOperator_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public static explicit operator Int32(char c)
+        {
+            return c;
+        }
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public static explicit operator int(char c)
+        {
+            return c;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "int", "Int32"));
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
+        }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_Delegate_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    delegate Int32 Foo(char bar);
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    delegate int Foo(char bar);
+}";
+
+            VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "int", "Int32"));
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
+        }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_Indexer_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        Int32 this[int index]
+        {
+            get { return index; }
+            set { var foo = value; }
+        }
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        int this[int index]
+        {
+            get { return index; }
+            set { var foo = value; }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "int", "Int32"));
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
+        }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_Operator_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        public static Int32 operator +(char c, Program p)
+        {
+            return c;
+        }
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        public static int operator +(char c, Program p)
+        {
+            return c;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "int", "Int32"));
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
+        }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_Property_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        public Int32 Foo { get; set; }
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        public int Foo { get; set; }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "int", "Int32"));
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
+        }
     }
 }

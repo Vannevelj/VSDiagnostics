@@ -24,19 +24,73 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
 
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.VariableDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeSymbol,
+                SyntaxKind.ConversionOperatorDeclaration,
+                SyntaxKind.DelegateDeclaration,
+                SyntaxKind.IndexerDeclaration,
+                SyntaxKind.MethodDeclaration,
+                SyntaxKind.OperatorDeclaration,
+                SyntaxKind.PropertyDeclaration,
+                SyntaxKind.VariableDeclaration);
         }
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var expression = context.Node as VariableDeclarationSyntax;
+            TypeSyntax typeExpression = null;
 
-            if (!(expression?.Type is IdentifierNameSyntax))
+            if (context.Node is ConversionOperatorDeclarationSyntax)
+            {
+                var expression = (ConversionOperatorDeclarationSyntax) context.Node;
+                typeExpression = expression.Type;
+            }
+
+            if (context.Node is DelegateDeclarationSyntax)
+            {
+                var expression = (DelegateDeclarationSyntax)context.Node;
+                typeExpression = expression.ReturnType;
+            }
+
+            if (context.Node is FieldDeclarationSyntax)
+            {
+                var expression = (FieldDeclarationSyntax)context.Node;
+                typeExpression = expression.Declaration.Type;
+            }
+
+            if (context.Node is IndexerDeclarationSyntax)
+            {
+                var expression = (IndexerDeclarationSyntax)context.Node;
+                typeExpression = expression.Type;
+            }
+
+            if (context.Node is MethodDeclarationSyntax)
+            {
+                var expression = (MethodDeclarationSyntax)context.Node;
+                typeExpression = expression.ReturnType;
+            }
+
+            if (context.Node is OperatorDeclarationSyntax)
+            {
+                var expression = (OperatorDeclarationSyntax)context.Node;
+                typeExpression = expression.ReturnType;
+            }
+
+            if (context.Node is PropertyDeclarationSyntax)
+            {
+                var expression = (PropertyDeclarationSyntax)context.Node;
+                typeExpression = expression.Type;
+            }
+
+            if (context.Node is VariableDeclarationSyntax)
+            {
+                var expression = (VariableDeclarationSyntax)context.Node;
+                typeExpression = expression.Type;
+            }
+
+            if (!(typeExpression is IdentifierNameSyntax) &&
+                !(typeExpression is QualifiedNameSyntax))
             {
                 return;
             }
-
-            var typeExpression = (IdentifierNameSyntax) expression.Type;
 
             if (typeExpression.IsVar)
             {
@@ -45,8 +99,9 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
 
             var symbol = context.SemanticModel.GetSymbolInfo(typeExpression).Symbol;
             var typeName = symbol.MetadataName;
+            var namespaceName = symbol.ContainingNamespace.Name;
 
-            if (symbol.ContainingNamespace.Name != "System")
+            if (namespaceName != "System")
             {
                 return;
             }

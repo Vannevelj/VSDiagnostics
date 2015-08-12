@@ -31,16 +31,22 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
         private async Task<Solution> AsToCastAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var semanticModel = await document.GetSemanticModelAsync();
+            string typeName;
 
-            var typeExpression = (IdentifierNameSyntax) statement;
-
-            var typeName = semanticModel.GetSymbolInfo(typeExpression).Symbol.MetadataName;
+            if (statement is IdentifierNameSyntax)
+            {
+                typeName = semanticModel.GetSymbolInfo((IdentifierNameSyntax)statement).Symbol.MetadataName;
+            }
+            else
+            {
+                typeName = semanticModel.GetSymbolInfo((QualifiedNameSyntax)statement).Symbol.MetadataName;
+            }
             var newName =
                 UseAliasesInsteadOfConcreteTypeAnalyzer.MapConcreteTypeToPredefinedTypeAlias.First(
                     kvp => kvp.Key == typeName).Value;
 
             var newExpression = SyntaxFactory.IdentifierName(newName);
-            var newRoot = root.ReplaceNode(typeExpression, newExpression).WithAdditionalAnnotations(Formatter.Annotation);
+            var newRoot = root.ReplaceNode(statement, newExpression).WithAdditionalAnnotations(Formatter.Annotation);
             var newDocument = document.WithSyntaxRoot(newRoot);
 
             return newDocument.Project.Solution;
