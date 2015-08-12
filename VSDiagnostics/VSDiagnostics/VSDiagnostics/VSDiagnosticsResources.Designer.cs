@@ -843,5 +843,32 @@ namespace VSDiagnostics {
                 return ResourceManager.GetString("TypeToVarCodeFixTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use alias {0} instead of concrete type {1}..
+        /// </summary>
+        internal static string UseAliasesInsteadOfConcreteTypeAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("UseAliasesInsteadOfConcreteTypeAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use alias instead of concrete type..
+        /// </summary>
+        internal static string UseAliasesInsteadOfConcreteTypeAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("UseAliasesInsteadOfConcreteTypeAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use alias.
+        /// </summary>
+        internal static string UseAliasesInsteadOfConcreteTypeCodeFixTitle {
+            get {
+                return ResourceManager.GetString("UseAliasesInsteadOfConcreteTypeCodeFixTitle", resourceCulture);
+            }
+        }
     }
 }
