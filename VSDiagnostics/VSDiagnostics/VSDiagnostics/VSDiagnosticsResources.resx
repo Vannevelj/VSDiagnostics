@@ -394,4 +394,15 @@
   <data name="ConditionalOperatorReturnsInvertedDefaultOptionsCodeFixTitle" xml:space="preserve">
     <value>Remove conditional</value>
   </data>
+  <data name="UseAliasesInsteadOfConcreteTypeAnalyzerMessage" xml:space="preserve">
+    <value>Use alias {0} instead of concrete type {1}.</value>
+    <comment>{0} - Alias name
+{1} - Type name</comment>
+  </data>
+  <data name="UseAliasesInsteadOfConcreteTypeAnalyzerTitle" xml:space="preserve">
+    <value>Use alias instead of concrete type.</value>
+  </data>
+  <data name="UseAliasesInsteadOfConcreteTypeCodeFixTitle" xml:space="preserve">
+    <value>Use alias</value>
+  </data>
 </root>

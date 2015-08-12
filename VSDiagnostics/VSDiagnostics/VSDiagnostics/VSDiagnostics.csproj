@@ -79,6 +79,8 @@
     <Compile Include="Diagnostics\General\TryCastWithoutUsingAsNotNull\TryCastWithoutUsingAsNotNullCodeFix.cs" />
     <Compile Include="Diagnostics\General\TypeToVar\TypeToVarAnalyzer.cs" />
     <Compile Include="Diagnostics\General\TypeToVar\TypeToVarCodeFix.cs" />
+    <Compile Include="Diagnostics\General\UseAliasesInsteadOfConcreteType\UseAliasesInsteadOfConcreteTypeCodeFix.cs" />
+    <Compile Include="Diagnostics\General\UseAliasesInsteadOfConcreteType\UseAliasesInsteadOfConcreteTypeAnalyzer.cs" />
     <Compile Include="Diagnostics\Strings\ReplaceEmptyStringWithStringDotEmpty\ReplaceEmptyStringWithStringDotEmptyAnalyzer.cs" />
     <Compile Include="Diagnostics\Strings\ReplaceEmptyStringWithStringDotEmpty\ReplaceEmptyStringWithStringDotEmptyCodeFix.cs" />
     <Compile Include="Diagnostics\Tests\RemoveTestSuffix\RemoveTestSuffixAnalyzer.cs" />
