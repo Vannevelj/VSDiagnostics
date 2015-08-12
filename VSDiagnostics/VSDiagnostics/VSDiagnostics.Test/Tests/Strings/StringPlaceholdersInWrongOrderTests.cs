@@ -2,7 +2,6 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.Helpers.CSharp;
-using VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty;
 using VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder;
 
 namespace VSDiagnostics.Test.Tests.Strings
@@ -203,7 +202,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithSinglePlaceholder_InvokesWarning()
+        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithSinglePlaceholder_DoesNotInvokeWarning()
         {
             var original = @"
     using System;
@@ -220,23 +219,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
     }";
 
-            var expected = @"
-    using System;
-    using System.Text;
-
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {
-            void Method()
-            {
-                string s = string.Format(""abc {0}"", ""y"", ""x"", ""z"");
-            }
-        }
-    }";
-
-            VerifyDiagnostic(original, StringPlaceholdersInWrongOrderAnalyzer.Rule.MessageFormat.ToString());
-            VerifyFix(original, expected);
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -279,6 +262,175 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
     }";
             VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithFormattedString_InvokesWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {
+            void Method()
+            {
+                DateTime date = DateTime.Now;
+                string formattedDate = string.Format(""Hello {1}, it's {0:hh:mm:ss t z}"", date, ""Jeroen"");
+            }
+        }
+    }";
+
+            var expected = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {
+            void Method()
+            {
+                DateTime date = DateTime.Now;
+                string formattedDate = string.Format(""Hello {0}, it's {1:hh:mm:ss t z}"", ""Jeroen"", date);
+            }
+        }
+    }";
+
+            VerifyDiagnostic(original, StringPlaceholdersInWrongOrderAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithFormatProvider_InvokesWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+    using System.Globalization;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {
+            void Method()
+            {
+                string s = string.Format(CultureInfo.InvariantCulture, ""Hello {1}, my name is {0}."", ""Mr. Test"", ""Mr. Tester"");
+            }
+        }
+    }";
+
+            var expected = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {
+            void Method()
+            {
+                string s = string.Format(CultureInfo.InvariantCulture, ""Hello {0}, my name is {1}."", ""Mr. Tester"", ""Mr. Test"");
+            }
+        }
+    }";
+
+            VerifyDiagnostic(original, StringPlaceholdersInWrongOrderAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void StringPlaceholdersInWrongOrder_WithEscapedCurlyBrace_DoesNotInvokeWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {
+            void Method()
+            {
+                string s = string.Format(""Hello {{Jeroen}}, my name is {0}"", ""Mr. Test"");
+            }
+        }
+    }";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void StringPlaceholdersInWrongOrder_WithDoubleEscapedCurlyBrace_InvokesWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {
+            void Method()
+            {
+                string s = string.Format(""Hello {{{1}}}, my name is {0}"", ""Mr. Test"", ""Mr. Tester"");
+            }
+        }
+    }";
+
+            var expected = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {
+            void Method()
+            {
+                string s = string.Format(""Hello {{{0}}}, my name is {1}"", ""Mr. Tester"", ""Mr. Test"");
+            }
+        }
+    }";
+            VerifyDiagnostic(original, StringPlaceholdersInWrongOrderAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void StringPlaceholdersInWrongOrder_WithNestedCurlyBraces_InvokesWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {
+            void Method()
+            {
+                string s = string.Format(""{{Hello {1}, my name is {0}}}"", ""Mr. Test"", ""Mr. Tester"");
+            }
+        }
+    }";
+
+            var expected = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {
+            void Method()
+            {
+                string s = string.Format(""{{Hello {0}, my name is {1}}}"", ""Mr. Tester"", ""Mr. Test"");
+            }
+        }
+    }";
+            VerifyDiagnostic(original, StringPlaceholdersInWrongOrderAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, expected);
         }
     }
 }

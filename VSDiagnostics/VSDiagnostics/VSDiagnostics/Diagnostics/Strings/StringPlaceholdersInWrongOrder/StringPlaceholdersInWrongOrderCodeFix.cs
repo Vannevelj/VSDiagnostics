@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
 
         private static Task<Solution> ReOrderPlaceholdersAsync(Document document, SyntaxNode root, InvocationExpressionSyntax stringFormatInvocation)
         {
-            return null;
+            throw new NotImplementedException();
         }
     }
 }
