@@ -39,9 +39,19 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
             var typeName = declaredSymbol.EnumUnderlyingType.MetadataName;
 
             var enumMemberDeclarations = declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>().ToList();
+            var replacedValues = 0;
 
             for (var i = 0; i < enumMemberDeclarations.Count; i++)
             {
+                if (enumMemberDeclarations[i].EqualsValue != null)
+                {
+                    var descendantNodes = enumMemberDeclarations[i].EqualsValue.Value.DescendantNodesAndSelf().ToList();
+                    if (descendantNodes.Any() && descendantNodes.All(n => n is IdentifierNameSyntax || n is BinaryExpressionSyntax))
+                    {
+                        continue;
+                    }
+                }
+
                 SyntaxToken literalToken;
 
                 // make sure we create a literal of the same type as the enum base type
@@ -50,30 +60,31 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
                 switch (typeName)
                 {
                     case nameof(Int16):
-                        var newShort = i == 0 ? (short)0 : (short)Math.Pow(2, i - 1);
+                        var newShort = replacedValues == 0 ? (short)0 : (short)Math.Pow(2, replacedValues - 1);
                         literalToken = SyntaxFactory.Literal(newShort);
                         break;
                     case nameof(UInt16):
-                        var newUshort = i == 0 ? (ushort)0 : (ushort)Math.Pow(2, i - 1);
+                        var newUshort = replacedValues == 0 ? (ushort)0 : (ushort)Math.Pow(2, replacedValues - 1);
                         literalToken = SyntaxFactory.Literal(newUshort);
                         break;
                     case nameof(Int32):
-                        var newInt = i == 0 ? 0 : (int)Math.Pow(2, i - 1);
+                        var newInt = replacedValues == 0 ? 0 : (int)Math.Pow(2, replacedValues - 1);
                         literalToken = SyntaxFactory.Literal(newInt);
                         break;
                     case nameof(UInt32):
-                        var newUint = i == 0 ? 0 : (uint)Math.Pow(2, i - 1);
+                        var newUint = replacedValues == 0 ? 0 : (uint)Math.Pow(2, replacedValues - 1);
                         literalToken = SyntaxFactory.Literal(newUint);
                         break;
                     case nameof(Int64):
-                        var newLong = i == 0 ? 0 : (long)Math.Pow(2, i - 1);
+                        var newLong = replacedValues == 0 ? 0 : (long)Math.Pow(2, replacedValues - 1);
                         literalToken = SyntaxFactory.Literal(newLong);
                         break;
                     default:
-                        var newUlong = i == 0 ? 0 : (ulong)Math.Pow(2, i - 1);
+                        var newUlong = replacedValues == 0 ? 0 : (ulong)Math.Pow(2, replacedValues - 1);
                         literalToken = SyntaxFactory.Literal(newUlong);
                         break;
                 }
+                replacedValues++;
 
                 var literalExpression = SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression,
                     literalToken);

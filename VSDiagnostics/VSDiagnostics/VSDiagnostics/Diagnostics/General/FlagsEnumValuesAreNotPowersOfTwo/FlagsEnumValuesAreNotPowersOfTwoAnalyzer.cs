@@ -43,6 +43,23 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
 
             foreach (var member in enumMemberDeclarations)
             {
+                // member doesn't have defined value - "foo" instead of "foo = 4"
+                if (member.EqualsValue == null)
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
+                    return;
+                }
+
+                if (member.EqualsValue.Value is BinaryExpressionSyntax)
+                {
+                    var binaryExpression = (BinaryExpressionSyntax) member.EqualsValue.Value;
+
+                    if (binaryExpression.DescendantNodes().OfType<IdentifierNameSyntax>().Any())
+                    {
+                        continue;
+                    }
+                }
+
                 var symbol = context.SemanticModel.GetDeclaredSymbol(member);
                 var value = symbol.ConstantValue;
 
