@@ -871,12 +871,12 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
-        // May be useful later
-        /*
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BitShifting_DoesNotInvokeWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_BitShifting_DoesNotInvokeWarning()
         {
             var original = @"
+using System;
+
 namespace ConsoleApplication1
 {
     [Flags]
@@ -897,6 +897,8 @@ namespace ConsoleApplication1
         public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_ValuesOfOtherFlags_DoesNotInvokeWarning()
         {
             var original = @"
+using System;
+
 namespace ConsoleApplication1
 {
     [Flags]
@@ -918,6 +920,43 @@ namespace ConsoleApplication1
 }";
             VerifyDiagnostic(original);
         }
-        */
+
+        [TestMethod]
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_CharactersInsteadOfIntValues_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo
+    {
+        Bar = 'a',
+        Biz = 'b',
+        Baz = 'c',
+        Buz = 'd',
+        Boz = 'e'
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo
+    {
+        Bar = 0,
+        Biz = 1,
+        Baz = 2,
+        Buz = 4,
+        Boz = 8
+    }
+}";
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyFix(original, result);
+        }
     }
 }

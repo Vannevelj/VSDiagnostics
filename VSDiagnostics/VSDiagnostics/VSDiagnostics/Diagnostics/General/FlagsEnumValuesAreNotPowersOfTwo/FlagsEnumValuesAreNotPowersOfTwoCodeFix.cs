@@ -33,7 +33,7 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
         {
             var semanticModel = await document.GetSemanticModelAsync();
 
-            var declarationExpression = statement as EnumDeclarationSyntax;
+            var declarationExpression = (EnumDeclarationSyntax) statement;
 
             var declaredSymbol = semanticModel.GetDeclaredSymbol(declarationExpression);
             var typeName = declaredSymbol.EnumUnderlyingType.MetadataName;
@@ -44,25 +44,28 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
             {
                 SyntaxToken literalToken;
 
+                // make sure we create a literal of the same type as the enum base type
+                // otherwise we can have issues with the type output
+                // ulong appends "UL" to the integer, while short doesn't, for example
                 switch (typeName)
                 {
-                    case "Int16":
+                    case nameof(Int16):
                         var newShort = i == 0 ? (short)0 : (short)Math.Pow(2, i - 1);
                         literalToken = SyntaxFactory.Literal(newShort);
                         break;
-                    case "UInt16":
+                    case nameof(UInt16):
                         var newUshort = i == 0 ? (ushort)0 : (ushort)Math.Pow(2, i - 1);
                         literalToken = SyntaxFactory.Literal(newUshort);
                         break;
-                    case "Int32":
+                    case nameof(Int32):
                         var newInt = i == 0 ? 0 : (int)Math.Pow(2, i - 1);
                         literalToken = SyntaxFactory.Literal(newInt);
                         break;
-                    case "UInt32":
+                    case nameof(UInt32):
                         var newUint = i == 0 ? 0 : (uint)Math.Pow(2, i - 1);
                         literalToken = SyntaxFactory.Literal(newUint);
                         break;
-                    case "Int64":
+                    case nameof(Int64):
                         var newLong = i == 0 ? 0 : (long)Math.Pow(2, i - 1);
                         literalToken = SyntaxFactory.Literal(newLong);
                         break;

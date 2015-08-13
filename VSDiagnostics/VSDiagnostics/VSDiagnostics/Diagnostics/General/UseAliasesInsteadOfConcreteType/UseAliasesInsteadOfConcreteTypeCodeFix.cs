@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
@@ -55,21 +56,21 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
         public static readonly Dictionary<string, SyntaxKind> MapConcreteTypeToPredefinedTypeAlias =
             new Dictionary<string, SyntaxKind>
             {
-                {"Int16", SyntaxKind.ShortKeyword},
-                {"Int32", SyntaxKind.IntKeyword},
-                {"Int64", SyntaxKind.LongKeyword},
-                {"UInt16", SyntaxKind.UShortKeyword},
-                {"UInt32", SyntaxKind.UIntKeyword},
-                {"UInt64", SyntaxKind.ULongKeyword},
-                {"Object", SyntaxKind.ObjectKeyword},
-                {"Byte", SyntaxKind.ByteKeyword},
-                {"SByte", SyntaxKind.SByteKeyword},
-                {"Char", SyntaxKind.CharKeyword},
-                {"Boolean", SyntaxKind.BoolKeyword},
-                {"Single", SyntaxKind.FloatKeyword},
-                {"Double", SyntaxKind.DoubleKeyword},
-                {"Decimal", SyntaxKind.DecimalKeyword},
-                {"String", SyntaxKind.StringKeyword}
+                {nameof(Int16), SyntaxKind.ShortKeyword},
+                {nameof(Int32), SyntaxKind.IntKeyword},
+                {nameof(Int64), SyntaxKind.LongKeyword},
+                {nameof(UInt16), SyntaxKind.UShortKeyword},
+                {nameof(UInt32), SyntaxKind.UIntKeyword},
+                {nameof(UInt64), SyntaxKind.ULongKeyword},
+                {nameof(Object), SyntaxKind.ObjectKeyword},
+                {nameof(Byte), SyntaxKind.ByteKeyword},
+                {nameof(SByte), SyntaxKind.SByteKeyword},
+                {nameof(Char), SyntaxKind.CharKeyword},
+                {nameof(Boolean), SyntaxKind.BoolKeyword},
+                {nameof(Single), SyntaxKind.FloatKeyword},
+                {nameof(Double), SyntaxKind.DoubleKeyword},
+                {nameof(Decimal), SyntaxKind.DecimalKeyword},
+                {nameof(String), SyntaxKind.StringKeyword}
             };
     }
 }

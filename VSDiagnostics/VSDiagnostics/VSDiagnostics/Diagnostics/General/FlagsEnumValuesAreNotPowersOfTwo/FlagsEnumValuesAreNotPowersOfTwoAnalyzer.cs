@@ -29,11 +29,7 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var declarationExpression = context.Node as EnumDeclarationSyntax;
-            if (declarationExpression == null)
-            {
-                return;
-            }
+            var declarationExpression = (EnumDeclarationSyntax) context.Node;
 
             if (!declarationExpression.AttributeLists.Any(
                     a => a.Attributes.Any(
@@ -45,39 +41,45 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
             var enumMemberDeclarations = declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>().ToList();
             var values = enumMemberDeclarations.Select(member => member.EqualsValue);
 
+            var enumName = context.SemanticModel.GetDeclaredSymbol(declarationExpression).Name;
+
             foreach (var equalsValue in values)
             {
+                // no value at all - "foo"
                 if (equalsValue == null)
                 {
-                    var enumName = context.SemanticModel.GetDeclaredSymbol(declarationExpression).Name;
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
                     return;
                 }
 
                 LiteralExpressionSyntax valueExpression = null;
 
+                // normal integer values - "foo = 4"
                 if (equalsValue.Value is LiteralExpressionSyntax)
                 {
                     valueExpression = (LiteralExpressionSyntax) equalsValue.Value;
                 }
+
+                // negative values - "foo = -4"
+                // bitwise compliment values - "foo = ~4"
+                // other prefix unary expressions except + - "foo = +4"
                 if (equalsValue.Value is PrefixUnaryExpressionSyntax)
                 {
                     var prefixUnaryExpression = (PrefixUnaryExpressionSyntax) equalsValue.Value;
-                    if (prefixUnaryExpression.OperatorToken.IsKind(SyntaxKind.MinusToken))
+                    if (!prefixUnaryExpression.OperatorToken.IsKind(SyntaxKind.PlusToken))
                     {
-                        var enumName = context.SemanticModel.GetDeclaredSymbol(declarationExpression).Name;
                         context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
                         return;
                     }
                 }
 
+                // all other values
                 if (valueExpression == null) { continue; }
 
                 ulong value;
 
                 if (!ulong.TryParse(valueExpression.Token.ValueText, out value) || !IsPowerOfTwo(value))
                 {
-                    var enumName = context.SemanticModel.GetDeclaredSymbol(declarationExpression).Name;
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
                     return;
                 }
@@ -89,5 +91,10 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
             var logValue = Math.Log(value, 2);
             return value == 0 || logValue - Math.Round(logValue) == 0;
         }
+    }
+
+    enum Test
+    {
+        Foo = 'r'
     }
 }
