@@ -35,6 +35,13 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
                 return;
             }
 
+            if (!declarationExpression.AttributeLists.Any(
+                    a => a.Attributes.Any(
+                        t => context.SemanticModel.GetSymbolInfo(t).Symbol.ContainingType.MetadataName == typeof(FlagsAttribute).Name)))
+            {
+                return;
+            }
+
             var enunMemberDeclarations = declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>().ToList();
             var values = enunMemberDeclarations.Select(member => member.EqualsValue);
 
