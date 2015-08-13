@@ -35,19 +35,52 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
                 return;
             }
 
-            var enunMemberDeclarations = declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>();
+            var enunMemberDeclarations = declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>().ToList();
+            var values = enunMemberDeclarations.Select(member => member.EqualsValue);
 
-            if (enunMemberDeclarations.Select(member => member.EqualsValue.Value as LiteralExpressionSyntax).Any(valueToken => !IsPowerOfTwo(int.Parse(valueToken.Token.ValueText))))
+            foreach (var equalsValue in values)
             {
-                var enumName = context.SemanticModel.GetDeclaredSymbol(declarationExpression).Name;
-                context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
+                if (equalsValue == null)
+                {
+                    var enumName = context.SemanticModel.GetDeclaredSymbol(declarationExpression).Name;
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
+                    return;
+                }
+
+                LiteralExpressionSyntax valueExpression = null;
+
+                if (equalsValue.Value is LiteralExpressionSyntax)
+                {
+                    valueExpression = (LiteralExpressionSyntax) equalsValue.Value;
+                }
+                if (equalsValue.Value is PrefixUnaryExpressionSyntax)
+                {
+                    var prefixUnaryExpression = (PrefixUnaryExpressionSyntax) equalsValue.Value;
+                    if (prefixUnaryExpression.OperatorToken.IsKind(SyntaxKind.MinusToken))
+                    {
+                        var enumName = context.SemanticModel.GetDeclaredSymbol(declarationExpression).Name;
+                        context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
+                        return;
+                    }
+                }
+
+                if (valueExpression == null) { continue; }
+
+                ulong value;
+
+                if (!ulong.TryParse(valueExpression.Token.ValueText, out value) || !IsPowerOfTwo(value))
+                {
+                    var enumName = context.SemanticModel.GetDeclaredSymbol(declarationExpression).Name;
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
+                    return;
+                }
             }
         }
 
-        private bool IsPowerOfTwo(int value)
+        private bool IsPowerOfTwo(ulong value)
         {
-            var valueAsBinary = Convert.ToString(value, 2);
-            return valueAsBinary == "0" || valueAsBinary.LastIndexOf('1') == 0;
+            var logValue = Math.Log(value, 2);
+            return value == 0 || logValue - Math.Round(logValue) == 0;
         }
     }
 }

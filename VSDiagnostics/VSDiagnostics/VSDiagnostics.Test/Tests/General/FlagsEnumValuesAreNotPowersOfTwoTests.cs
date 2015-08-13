@@ -23,7 +23,7 @@ namespace ConsoleApplication1
         Biz = 1,
         Baz = 2,
         Buz = 3,
-        Boz = 4,
+        Boz = 4
     }
 }";
 
@@ -43,11 +43,140 @@ namespace ConsoleApplication1
         Biz = 1,
         Baz = 2,
         Buz = 4,
-        Boz = 8,
+        Boz = 8
     }
 }";
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_HexValues_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo
+    {
+        Bar = 0x0,
+        Biz = 0x1,
+        Baz = 0x2,
+        Buz = 0x3,
+        Boz = 0x4
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+        }
+
+        [TestMethod]
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_HexValues_DoesNotInvokeWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo
+    {
+        Bar = 0x0,
+        Biz = 0x1,
+        Baz = 0x2,
+        Buz = 0x4,
+        Boz = 0x8
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_NegativeValues_DoesNotInvokeWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo
+    {
+        Bar = 0,
+        Biz = -1,
+        Baz = -2,
+        Buz = -4,
+        Boz = -8
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+        }
+
+        [TestMethod]
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_NoValues_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo
+    {
+        Bar = 0x0,
+        Biz,
+        Baz,
+        Buz,
+        Boz
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+        }
+
+        // May be useful later
+        /*
+        [TestMethod]
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BitShifting_DoesNotInvokeWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo
+    {
+        Bar = 0,
+        Biz = 1 << 0,
+        Baz = 1 << 1,
+        Buz = 1 << 2,
+        Boz = 1 << 3
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_ValuesOfOtherFlags_DoesNotInvokeWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Days
+    {
+        None = 0,
+        Sunday = 1,
+        Monday = 1 << 1,
+        WorkweekStart = Monday,
+        Tuesday = 1 << 2,
+        Wednesday = 1 << 3,
+        Thursday = 1 << 4,
+        Friday = 1 << 5,
+        WorkweekEnd = Friday,
+        Saturday = 1 << 6,
+        Weekend = Saturday | Sunday,
+        Weekdays = Monday | Tuesday | Wednesday | Thursday | Friday
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+        */
     }
 }
