@@ -38,64 +38,66 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
                 return;
             }
 
-            var enumMemberDeclarations = declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>().ToList();
-            var values = enumMemberDeclarations.Select(member => member.EqualsValue);
-
             var enumName = context.SemanticModel.GetDeclaredSymbol(declarationExpression).Name;
+            var enumMemberDeclarations = declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>().ToList();
 
-            foreach (var equalsValue in values)
+            foreach (var member in enumMemberDeclarations)
             {
-                // no value at all - "foo"
-                if (equalsValue == null)
+                var symbol = context.SemanticModel.GetDeclaredSymbol(member);
+                var value = symbol.ConstantValue;
+
+                switch (value.GetType().Name)
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
-                    return;
-                }
-
-                LiteralExpressionSyntax valueExpression = null;
-
-                // normal integer values - "foo = 4"
-                if (equalsValue.Value is LiteralExpressionSyntax)
-                {
-                    valueExpression = (LiteralExpressionSyntax) equalsValue.Value;
-                }
-
-                // negative values - "foo = -4"
-                // bitwise compliment values - "foo = ~4"
-                // other prefix unary expressions except + - "foo = +4"
-                if (equalsValue.Value is PrefixUnaryExpressionSyntax)
-                {
-                    var prefixUnaryExpression = (PrefixUnaryExpressionSyntax) equalsValue.Value;
-                    if (!prefixUnaryExpression.OperatorToken.IsKind(SyntaxKind.PlusToken))
-                    {
-                        context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
-                        return;
-                    }
-                }
-
-                // all other values
-                if (valueExpression == null) { continue; }
-
-                ulong value;
-                ulong.TryParse(valueExpression.Token.ValueText, out value);
-
-                if (!IsPowerOfTwo(value))
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
-                    return;
+                    case nameof(Int16):
+                        if (!IsPowerOfTwo((short)value))
+                        {
+                            context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
+                            return;
+                        }
+                        break;
+                    case nameof(UInt16):
+                        if (!IsPowerOfTwo((ushort)value))
+                        {
+                            context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
+                            return;
+                        }
+                        break;
+                    case nameof(Int32):
+                        if (!IsPowerOfTwo((int)value))
+                        {
+                            context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
+                            return;
+                        }
+                        break;
+                    case nameof(UInt32):
+                        if (!IsPowerOfTwo((uint)value))
+                        {
+                            context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
+                            return;
+                        }
+                        break;
+                    case nameof(Int64):
+                        if (!IsPowerOfTwo((long)value))
+                        {
+                            context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
+                            return;
+                        }
+                        break;
+                    default:
+                        if (!IsPowerOfTwo((ulong)value))
+                        {
+                            context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
+                            return;
+                        }
+                        break;
                 }
             }
         }
 
-        private bool IsPowerOfTwo(ulong value)
+        private bool IsPowerOfTwo(double value)
         {
             var logValue = Math.Log(value, 2);
             return value == 0 || logValue - Math.Round(logValue) == 0;
         }
-    }
-
-    enum Test
-    {
-        Foo = 'r'
     }
 }

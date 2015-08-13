@@ -939,7 +939,25 @@ namespace ConsoleApplication1
         Boz = 'e'
     }
 }";
-            VerifyDiagnostic(original);
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo
+    {
+        Bar = 0,
+        Biz = 1,
+        Baz = 2,
+        Buz = 4,
+        Boz = 8
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyFix(original, result);
         }
     }
 }
