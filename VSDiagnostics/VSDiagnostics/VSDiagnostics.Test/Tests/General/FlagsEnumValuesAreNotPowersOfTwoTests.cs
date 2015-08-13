@@ -1012,5 +1012,58 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Days"));
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BitshiftedValuesNotPowersOfTwo_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Days
+    {
+        None = 0,
+        Sunday = 1,
+        Monday = 75 << 1,
+        WorkweekStart = Monday,
+        Tuesday = 75 << 2,
+        Wednesday = 75 << 3,
+        Thursday = 75 << 4,
+        Friday = 75 << 5,
+        WorkweekEnd = Friday,
+        Saturday = 75 << 6,
+        Weekend = Saturday | Sunday,
+        Weekdays = Monday | Tuesday | Wednesday | Thursday | Friday
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Days
+    {
+        None = 0,
+        Sunday = 1,
+        Monday = 2,
+        WorkweekStart = Monday,
+        Tuesday = 4,
+        Wednesday = 8,
+        Thursday = 16,
+        Friday = 32,
+        WorkweekEnd = Friday,
+        Saturday = 64,
+        Weekend = Saturday | Sunday,
+        Weekdays = Monday | Tuesday | Wednesday | Thursday | Friday
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Days"));
+            VerifyFix(original, result);
+        }
     }
 }
