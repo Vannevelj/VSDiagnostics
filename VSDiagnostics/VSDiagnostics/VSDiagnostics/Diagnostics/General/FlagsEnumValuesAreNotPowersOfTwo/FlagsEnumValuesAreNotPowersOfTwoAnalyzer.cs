@@ -42,8 +42,8 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
                 return;
             }
 
-            var enunMemberDeclarations = declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>().ToList();
-            var values = enunMemberDeclarations.Select(member => member.EqualsValue);
+            var enumMemberDeclarations = declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>().ToList();
+            var values = enumMemberDeclarations.Select(member => member.EqualsValue);
 
             foreach (var equalsValue in values)
             {
