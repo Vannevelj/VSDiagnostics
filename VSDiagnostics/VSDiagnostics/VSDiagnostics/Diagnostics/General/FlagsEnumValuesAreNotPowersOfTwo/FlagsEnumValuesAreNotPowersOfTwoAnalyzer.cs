@@ -77,8 +77,9 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
                 if (valueExpression == null) { continue; }
 
                 ulong value;
+                ulong.TryParse(valueExpression.Token.ValueText, out value);
 
-                if (!ulong.TryParse(valueExpression.Token.ValueText, out value) || !IsPowerOfTwo(value))
+                if (!IsPowerOfTwo(value))
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
                     return;
