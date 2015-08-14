@@ -106,5 +106,34 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, EnumCanHaveFlagsAttributeAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void EnumCanHaveFlagsAttribute_AddsFlagsAttribute_AddsUsingSystemWhenUsingSystemDotAnything()
+        {
+            var original =
+@"using System.Text;
+
+namespace ConsoleApplication1
+{
+    enum Foo
+    {
+    }
+}";
+
+            var result =
+@"using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo
+    {
+    }
+}";
+
+            VerifyDiagnostic(original, EnumCanHaveFlagsAttributeAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
     }
 }

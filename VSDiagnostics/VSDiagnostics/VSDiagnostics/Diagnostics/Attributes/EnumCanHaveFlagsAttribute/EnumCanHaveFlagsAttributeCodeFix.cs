@@ -28,7 +28,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
             context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.EnumCanHaveFlagsAttributeCodeFixTitle, x => AddFlagAttribute(context.Document, root, statement), nameof(EnumCanHaveFlagsAttributeAnalyzer)), diagnostic);
         }
 
-        private Task<Solution> AddFlagAttribute(Document document, SyntaxNode root, SyntaxNode statement)
+        private async Task<Solution> AddFlagAttribute(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var enumDeclarationExpression = (EnumDeclarationSyntax) statement;
 
@@ -42,6 +42,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
             var newRoot = root.ReplaceNode(statement, newEnumDeclaration);
 
             var compilationUnit = (CompilationUnitSyntax)newRoot;
+            var semanticModel = await document.GetSemanticModelAsync();
 
             if (!compilationUnit.Usings.Any(usingSyntax =>
             {
@@ -57,7 +58,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
             }
 
             var newDocument = document.WithSyntaxRoot(newRoot);
-            return Task.FromResult(newDocument.Project.Solution);
+            return newDocument.Project.Solution;
         }
     }
 }
