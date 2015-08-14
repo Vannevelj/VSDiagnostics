@@ -423,4 +423,13 @@
   <data name="EnumCanHaveFlagsAttributeCodeFixTitle" xml:space="preserve">
     <value>Add Flags attribute</value>
   </data>
+  <data name="ConditionIsAlwaysTrueAnalyzerMessage" xml:space="preserve">
+    <value>Condition is always true.</value>
+  </data>
+  <data name="ConditionIsAlwaysTrueAnalyzerTitle" xml:space="preserve">
+    <value>Condition is always true.</value>
+  </data>
+  <data name="ConditionIsAlwaysTrueCodeFixTitle" xml:space="preserve">
+    <value>Remove condition.</value>
+  </data>
 </root>
