@@ -413,6 +413,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Flags enum {0} values are not powers of 2.
+        /// </summary>
+        internal static string FlagsEnumValuesAreNotPowersOfTwoAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("FlagsEnumValuesAreNotPowersOfTwoAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flags enum values are not powers of 2.
+        /// </summary>
+        internal static string FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use powers of 2.
+        /// </summary>
+        internal static string FlagsEnumValuesAreNotPowersOfTwoCodeFixTitle {
+            get {
+                return ResourceManager.GetString("FlagsEnumValuesAreNotPowersOfTwoCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
         internal static string GeneralCategory {

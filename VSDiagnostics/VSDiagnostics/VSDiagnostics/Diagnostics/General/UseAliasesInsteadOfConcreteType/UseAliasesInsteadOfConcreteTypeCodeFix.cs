@@ -1,4 +1,6 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,15 +43,34 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
             {
                 typeName = semanticModel.GetSymbolInfo((QualifiedNameSyntax)statement).Symbol.MetadataName;
             }
-            var newName =
-                UseAliasesInsteadOfConcreteTypeAnalyzer.MapConcreteTypeToPredefinedTypeAlias.First(
-                    kvp => kvp.Key == typeName).Value;
 
-            var newExpression = SyntaxFactory.IdentifierName(newName);
+            var aliasToken = MapConcreteTypeToPredefinedTypeAlias.First(kvp => kvp.Key == typeName).Value;
+
+            var newExpression = SyntaxFactory.PredefinedType(SyntaxFactory.Token(aliasToken));
             var newRoot = root.ReplaceNode(statement, newExpression).WithAdditionalAnnotations(Formatter.Annotation);
             var newDocument = document.WithSyntaxRoot(newRoot);
 
             return newDocument.Project.Solution;
         }
+
+        public static readonly Dictionary<string, SyntaxKind> MapConcreteTypeToPredefinedTypeAlias =
+            new Dictionary<string, SyntaxKind>
+            {
+                {nameof(Int16), SyntaxKind.ShortKeyword},
+                {nameof(Int32), SyntaxKind.IntKeyword},
+                {nameof(Int64), SyntaxKind.LongKeyword},
+                {nameof(UInt16), SyntaxKind.UShortKeyword},
+                {nameof(UInt32), SyntaxKind.UIntKeyword},
+                {nameof(UInt64), SyntaxKind.ULongKeyword},
+                {nameof(Object), SyntaxKind.ObjectKeyword},
+                {nameof(Byte), SyntaxKind.ByteKeyword},
+                {nameof(SByte), SyntaxKind.SByteKeyword},
+                {nameof(Char), SyntaxKind.CharKeyword},
+                {nameof(Boolean), SyntaxKind.BoolKeyword},
+                {nameof(Single), SyntaxKind.FloatKeyword},
+                {nameof(Double), SyntaxKind.DoubleKeyword},
+                {nameof(Decimal), SyntaxKind.DecimalKeyword},
+                {nameof(String), SyntaxKind.StringKeyword}
+            };
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -110,21 +111,21 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
         public static readonly Dictionary<string, string> MapConcreteTypeToPredefinedTypeAlias =
             new Dictionary<string, string>
             {
-                {"Int16", "short"},
-                {"Int32", "int"},
-                {"Int64", "long"},
-                {"UInt16", "ushort"},
-                {"UInt32", "uint"},
-                {"UInt64", "ulong"},
-                {"Object", "object"},
-                {"Byte", "byte"},
-                {"SByte", "sbyte"},
-                {"Char", "char"},
-                {"Boolean", "bool"},
-                {"Single", "float"},
-                {"Double", "double"},
-                {"Decimal", "decimal"},
-                {"String", "string"}
+                {nameof(Int16), "short"},
+                {nameof(Int32), "int"},
+                {nameof(Int64), "long"},
+                {nameof(UInt16), "ushort"},
+                {nameof(UInt32), "uint"},
+                {nameof(UInt64), "ulong"},
+                {nameof(Object), "object"},
+                {nameof(Byte), "byte"},
+                {nameof(SByte), "sbyte"},
+                {nameof(Char), "char"},
+                {nameof(Boolean), "bool"},
+                {nameof(Single), "float"},
+                {nameof(Double), "double"},
+                {nameof(Decimal), "decimal"},
+                {nameof(String), "string"}
             };
     }
 }
