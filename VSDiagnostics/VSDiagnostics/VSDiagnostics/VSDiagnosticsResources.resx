@@ -414,4 +414,13 @@
   <data name="FlagsEnumValuesAreNotPowersOfTwoCodeFixTitle" xml:space="preserve">
     <value>Use powers of 2</value>
   </data>
+  <data name="EnumCanHaveFlagsAttributeAnalyzerMessage" xml:space="preserve">
+    <value>Enum can have flags attribute.</value>
+  </data>
+  <data name="EnumCanHaveFlagsAttributeAnalyzerTitle" xml:space="preserve">
+    <value>Inform that enums can have the flags attribute.</value>
+  </data>
+  <data name="EnumCanHaveFlagsAttributeCodeFixTitle" xml:space="preserve">
+    <value>Add Flags attribute</value>
+  </data>
 </root>

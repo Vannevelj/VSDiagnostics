@@ -50,7 +50,7 @@ namespace ConsoleApplication1
             var result = @"
 namespace ConsoleApplication1
 {
-    static internal class MyClass
+    internal static class MyClass
     {
     }
 }";
@@ -141,7 +141,7 @@ namespace ConsoleApplication1
             var result = @"
 namespace ConsoleApplication1
 {
-    static internal struct MyStruct
+    internal static struct MyStruct
     {
     }
 }";
@@ -232,7 +232,7 @@ namespace ConsoleApplication1
             var result = @"
 namespace ConsoleApplication1
 {
-    static internal enum MyEnum
+    internal static enum MyEnum
     {
     }
 }";
@@ -317,7 +317,7 @@ namespace ConsoleApplication1
             var result = @"
 namespace ConsoleApplication1
 {
-    static internal delegate void Foo(int bar);
+    internal static delegate void Foo(int bar);
 }";
 
             VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
@@ -398,7 +398,7 @@ namespace ConsoleApplication1
             var result = @"
 namespace ConsoleApplication1
 {
-    static internal interface IMyInterface
+    internal static interface IMyInterface
     {
     }
 }";
@@ -502,7 +502,7 @@ namespace ConsoleApplication1
 {
     internal class MyClass
     {
-        static private class MyInternalClass
+        private static class MyInternalClass
         {
         }
     }
@@ -622,7 +622,7 @@ namespace ConsoleApplication1
 {
     internal class MyClass
     {
-        static private struct MyInternalStruct
+        private static struct MyInternalStruct
         {
         }
     }
@@ -742,7 +742,7 @@ namespace ConsoleApplication1
 {
     internal class MyClass
     {
-        static private enum MyInternalEnum
+        private static enum MyInternalEnum
         {
         }
     }
@@ -854,7 +854,7 @@ namespace ConsoleApplication1
 {
     internal class Program
     {
-        static private delegate void Foo(int bar);
+        private static delegate void Foo(int bar);
     }
 }";
 
@@ -958,7 +958,7 @@ namespace ConsoleApplication1
 {
     internal class MyClass
     {
-        static private interface MyInternalInterface
+        private static interface MyInternalInterface
         {
         }
     }
@@ -1070,9 +1070,9 @@ namespace ConsoleApplication1
             var result = @"
 namespace ConsoleApplication1
 {
-    static internal class MyClass
+    internal static class MyClass
     {
-        static private int Foo;
+        private static int Foo;
     }
 }";
 
@@ -1166,9 +1166,9 @@ namespace ConsoleApplication1
             var result = @"
 namespace ConsoleApplication1
 {
-    static internal class MyClass
+    internal static class MyClass
     {
-        static private int Foo { get; }
+        private static int Foo { get; }
     }
 }";
 
@@ -1264,7 +1264,7 @@ namespace ConsoleApplication1
 {
     internal class MyClass
     {
-        static private void Foo() { }
+        private static void Foo() { }
     }
 }";
 
@@ -1493,7 +1493,7 @@ namespace ConsoleApplication1
 {
     public class Program
     {
-        static private event EventHandler MyEvent;
+        private static event EventHandler MyEvent;
     }
 }";
 
@@ -1611,7 +1611,7 @@ namespace ConsoleApplication1
 {
     public class Program
     {
-        static private event EventHandler MyEvent
+        private static event EventHandler MyEvent
         {
             add { var foo = value; }
             remove { var foo = value; }

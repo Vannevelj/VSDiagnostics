@@ -48,7 +48,7 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
             }
 
             // ctor must have no body statements
-            if (constructorDeclaration.Body.Statements.Any())
+            if (constructorDeclaration.Body == null || constructorDeclaration.Body.Statements.Any())
             {
                 return;
             }
