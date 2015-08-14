@@ -135,5 +135,56 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, EnumCanHaveFlagsAttributeAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void EnumCanHaveFlagsAttribute_InspectionDoesNotReturnWhenFlagsAlreadyApplied()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo
+    {
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void EnumCanHaveFlagsAttribute_InspectionDoesNotReturnWhenFlagsAttributeAlreadyApplied()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [FlagsAttribute]
+    enum Foo
+    {
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void EnumCanHaveFlagsAttribute_InspectionDoesNotReturnWhenFlagsAlreadyAppliedAsChain()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Obsolete(""I'm obsolete""), Flags]
+    enum Foo
+    {
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }
