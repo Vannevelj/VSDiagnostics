@@ -7,12 +7,12 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
 
-namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysTrue
+namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysFalse
 {
-    public class ConditionIsAlwaysTrueCodeFix : CodeFixProvider
+    public class ConditionIsAlwaysFalseCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
-            => ImmutableArray.Create(ConditionIsAlwaysTrueAnalyzer.Rule.Id);
+            => ImmutableArray.Create(ConditionIsAlwaysFalseAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -25,19 +25,16 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysTrue
             var statement = root.FindNode(diagnosticSpan);
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.ConditionIsAlwaysTrueCodeFixTitle,
-                    x => RemoveConditionAsync(context.Document, root, statement), nameof(ConditionIsAlwaysTrueAnalyzer)), diagnostic);
+                    x => RemoveConditionAsync(context.Document, root, statement), nameof(ConditionIsAlwaysFalseCodeFix)), diagnostic);
         }
 
         private Task<Solution> RemoveConditionAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var ifStatement = (IfStatementSyntax)statement;
 
-            var blockStatement = ifStatement.Statement as BlockSyntax;
-
-            var newRoot = blockStatement == null ?
-                root.ReplaceNode(ifStatement, ifStatement.Statement).WithAdditionalAnnotations(Formatter.Annotation) :
-                root.ReplaceNode(ifStatement, blockStatement.Statements).WithAdditionalAnnotations(Formatter.Annotation);
-
+            var newRoot =
+                root.RemoveNode(ifStatement, SyntaxRemoveOptions.KeepNoTrivia)
+                    .WithAdditionalAnnotations(Formatter.Annotation);
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);
         }

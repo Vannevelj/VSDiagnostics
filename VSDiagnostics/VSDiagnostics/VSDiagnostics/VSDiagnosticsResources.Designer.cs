@@ -341,6 +341,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Condition is always false..
+        /// </summary>
+        internal static string ConditionIsAlwaysFalseAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ConditionIsAlwaysFalseAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Condition is always false..
+        /// </summary>
+        internal static string ConditionIsAlwaysFalseAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ConditionIsAlwaysFalseAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove condition and body..
+        /// </summary>
+        internal static string ConditionIsAlwaysFalseCodeFixTitle {
+            get {
+                return ResourceManager.GetString("ConditionIsAlwaysFalseCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Condition is always true..
         /// </summary>
         internal static string ConditionIsAlwaysTrueAnalyzerMessage {

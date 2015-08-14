@@ -432,4 +432,13 @@
   <data name="ConditionIsAlwaysTrueCodeFixTitle" xml:space="preserve">
     <value>Remove condition.</value>
   </data>
+  <data name="ConditionIsAlwaysFalseAnalyzerMessage" xml:space="preserve">
+    <value>Condition is always false.</value>
+  </data>
+  <data name="ConditionIsAlwaysFalseAnalyzerTitle" xml:space="preserve">
+    <value>Condition is always false.</value>
+  </data>
+  <data name="ConditionIsAlwaysFalseCodeFixTitle" xml:space="preserve">
+    <value>Remove condition and body.</value>
+  </data>
 </root>
