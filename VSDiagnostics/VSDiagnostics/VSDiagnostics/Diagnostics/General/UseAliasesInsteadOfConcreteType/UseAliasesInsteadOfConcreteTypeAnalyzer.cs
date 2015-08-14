@@ -93,6 +93,11 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
             }
 
             var symbol = context.SemanticModel.GetSymbolInfo(typeExpression).Symbol;
+            if (symbol == null)
+            {
+                return;
+            }
+
             var typeName = symbol.MetadataName;
             var namespaceName = symbol.ContainingNamespace.Name;
 
