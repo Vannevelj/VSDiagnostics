@@ -43,6 +43,20 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
 
             foreach (var member in enumMemberDeclarations)
             {
+                if (member.EqualsValue == null)
+                {
+                    continue;
+                }
+
+                var descendantNodes = member.EqualsValue.Value.DescendantNodesAndSelf().ToList();
+                if (descendantNodes.OfType<LiteralExpressionSyntax>().Any() && descendantNodes.OfType<IdentifierNameSyntax>().Any())
+                {
+                    return;
+                }
+            }
+
+            foreach (var member in enumMemberDeclarations)
+            {
                 // member doesn't have defined value - "foo" instead of "foo = 4"
                 if (member.EqualsValue == null)
                 {
@@ -52,9 +66,8 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
 
                 if (member.EqualsValue.Value is BinaryExpressionSyntax)
                 {
-                    var binaryExpression = (BinaryExpressionSyntax) member.EqualsValue.Value;
-
-                    if (binaryExpression.DescendantNodes().OfType<IdentifierNameSyntax>().Any())
+                    var descendantNodes = member.EqualsValue.Value.DescendantNodesAndSelf().ToList();
+                    if (descendantNodes.Any() && descendantNodes.All(n => n is IdentifierNameSyntax || n is BinaryExpressionSyntax))
                     {
                         continue;
                     }
