@@ -377,6 +377,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enum can have flags attribute..
+        /// </summary>
+        internal static string EnumCanHaveFlagsAttributeAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("EnumCanHaveFlagsAttributeAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inform that enums can have the flags attribute..
+        /// </summary>
+        internal static string EnumCanHaveFlagsAttributeAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("EnumCanHaveFlagsAttributeAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Flags attribute.
+        /// </summary>
+        internal static string EnumCanHaveFlagsAttributeCodeFixTitle {
+            get {
+                return ResourceManager.GetString("EnumCanHaveFlagsAttributeCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exceptions.
         /// </summary>
         internal static string ExceptionsCategory {
