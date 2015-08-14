@@ -42,18 +42,16 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
             var newRoot = root.ReplaceNode(statement, newEnumDeclaration);
 
             var compilationUnit = (CompilationUnitSyntax)newRoot;
-            var semanticModel = await document.GetSemanticModelAsync();
 
-            if (!compilationUnit.Usings.Any(usingSyntax =>
+            var usingSystemDirective = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System"));
+            var usingDirectives = compilationUnit.Usings.Select(u => u.Name.GetText().ToString());
+
+            if (usingDirectives.All(u => u != usingSystemDirective.Name.GetText().ToString()))
             {
-                var identifier = (IdentifierNameSyntax) usingSyntax.Name;
-                return identifier.Identifier.Text == "System";
-            }))
-            {
-                var usingSystemDirective = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System"));
+                var usings = compilationUnit.Usings.Add(usingSystemDirective).OrderBy(u => u.Name.GetText().ToString());
 
                 newRoot =
-                    compilationUnit.WithUsings(compilationUnit.Usings.Add(usingSystemDirective))
+                    compilationUnit.WithUsings(SyntaxFactory.List(usings))
                         .WithAdditionalAnnotations(Formatter.Annotation);
             }
 
