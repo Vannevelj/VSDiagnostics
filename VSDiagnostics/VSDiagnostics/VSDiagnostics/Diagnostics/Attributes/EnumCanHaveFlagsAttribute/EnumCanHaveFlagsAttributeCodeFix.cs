@@ -40,6 +40,22 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
                 enumDeclarationExpression.WithAttributeLists(enumDeclarationExpression.AttributeLists.Add(attributeList));
 
             var newRoot = root.ReplaceNode(statement, newEnumDeclaration);
+
+            var compilationUnit = (CompilationUnitSyntax)newRoot;
+
+            if (!compilationUnit.Usings.Any(usingSyntax =>
+            {
+                var identifier = (IdentifierNameSyntax) usingSyntax.Name;
+                return identifier.Identifier.Text == "System";
+            }))
+            {
+                var usingSystemDirective = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System"));
+
+                newRoot =
+                    compilationUnit.WithUsings(compilationUnit.Usings.Add(usingSystemDirective))
+                        .WithAdditionalAnnotations(Formatter.Annotation);
+            }
+
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);
         }

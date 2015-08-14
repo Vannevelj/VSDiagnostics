@@ -14,11 +14,64 @@ namespace VSDiagnostics.Test.Tests.Attributes
         protected override CodeFixProvider CodeFixProvider => new EnumCanHaveFlagsAttributeCodeFix();
 
         [TestMethod]
+        public void EnumCanHaveFlagsAttribute_AddsFlagsAttribute()
+        {
+            var original = 
+@"namespace ConsoleApplication1
+{
+    enum Foo
+    {
+    }
+}";
+
+            var result = 
+@"using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo
+    {
+    }
+}";
+
+            VerifyDiagnostic(original, EnumCanHaveFlagsAttributeAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void EnumCanHaveFlagsAttribute_AddsFlagsAttribute_DoesNotAddDuplicateUsingSystem()
+        {
+            var original =
+@"using System;
+
+namespace ConsoleApplication1
+{
+    enum Foo
+    {
+    }
+}";
+
+            var result =
+@"using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo
+    {
+    }
+}";
+
+            VerifyDiagnostic(original, EnumCanHaveFlagsAttributeAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
         public void EnumCanHaveFlagsAttribute_AddsFlagsAttribute_OnlyAddsFlagsAttribute()
         {
-            var original = @"
-using System;
-using System.Text;
+            var original =
+@"using System;
 
 namespace ConsoleApplication1
 {
@@ -33,9 +86,8 @@ namespace ConsoleApplication1
     }
 }";
 
-            var result = @"
-using System;
-using System.Text;
+            var result =
+@"using System;
 
 namespace ConsoleApplication1
 {
