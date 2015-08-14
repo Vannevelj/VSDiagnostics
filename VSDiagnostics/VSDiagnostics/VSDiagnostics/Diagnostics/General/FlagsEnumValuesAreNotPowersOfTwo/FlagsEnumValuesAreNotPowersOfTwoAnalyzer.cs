@@ -33,7 +33,12 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
 
             if (!declarationExpression.AttributeLists.Any(
                     a => a.Attributes.Any(
-                        t => context.SemanticModel.GetSymbolInfo(t).Symbol.ContainingType.MetadataName == typeof(FlagsAttribute).Name)))
+                        t =>
+                        {
+                            var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
+
+                            return symbol == null || symbol.ContainingType.MetadataName == typeof (FlagsAttribute).Name;
+                        })))
             {
                 return;
             }

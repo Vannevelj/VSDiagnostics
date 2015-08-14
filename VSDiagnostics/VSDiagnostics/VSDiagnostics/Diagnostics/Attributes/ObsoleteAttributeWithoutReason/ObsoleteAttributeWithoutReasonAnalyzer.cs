@@ -36,7 +36,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.ObsoleteAttributeWithoutReason
 
             // attribute type must be of type ObsoleteAttribute
             var type = context.SemanticModel.GetSymbolInfo(attributeExpression).Symbol;
-            if (type.ContainingType.MetadataName != typeof (ObsoleteAttribute).Name)
+            if (type == null || type.ContainingType.MetadataName != typeof (ObsoleteAttribute).Name)
             {
                 return;
             }
