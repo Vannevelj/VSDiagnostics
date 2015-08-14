@@ -41,7 +41,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             {
                 var classExpression = (ClassDeclarationSyntax) statement;
 
-                var newClass = classExpression.WithModifiers(classExpression.Modifiers.AddRange(accessModifierTokens));
+                var newClass = classExpression.WithModifiers(accessModifierTokens.AddRange(classExpression.Modifiers));
                 newStatement = statement.ReplaceNode(statement, newClass);
             }
 
@@ -49,7 +49,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             {
                 var structExpression = (StructDeclarationSyntax)statement;
 
-                var newStruct = structExpression.WithModifiers(structExpression.Modifiers.AddRange(accessModifierTokens));
+                var newStruct = structExpression.WithModifiers(accessModifierTokens.AddRange(structExpression.Modifiers));
                 newStatement = statement.ReplaceNode(statement, newStruct);
             }
 
@@ -57,7 +57,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             {
                 var enumExpression = (EnumDeclarationSyntax)statement;
 
-                var newEnum = enumExpression.WithModifiers(enumExpression.Modifiers.AddRange(accessModifierTokens));
+                var newEnum = enumExpression.WithModifiers(accessModifierTokens.AddRange(enumExpression.Modifiers));
                 newStatement = statement.ReplaceNode(statement, newEnum);
             }
 
@@ -65,7 +65,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             {
                 var delegateExpression = (DelegateDeclarationSyntax)statement;
 
-                var newDelegate = delegateExpression.WithModifiers(delegateExpression.Modifiers.AddRange(accessModifierTokens));
+                var newDelegate = delegateExpression.WithModifiers(accessModifierTokens.AddRange(delegateExpression.Modifiers));
                 newStatement = statement.ReplaceNode(statement, newDelegate);
             }
 
@@ -73,7 +73,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             {
                 var interfaceExpression = (InterfaceDeclarationSyntax)statement;
 
-                var newInterface = interfaceExpression.WithModifiers(interfaceExpression.Modifiers.AddRange(accessModifierTokens));
+                var newInterface = interfaceExpression.WithModifiers(accessModifierTokens.AddRange(interfaceExpression.Modifiers));
                 newStatement = statement.ReplaceNode(statement, newInterface);
             }
 
@@ -81,7 +81,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             {
                 var fieldExpression = (FieldDeclarationSyntax)statement;
 
-                var newStruct = fieldExpression.WithModifiers(fieldExpression.Modifiers.AddRange(accessModifierTokens));
+                var newStruct = fieldExpression.WithModifiers(accessModifierTokens.AddRange(fieldExpression.Modifiers));
                 newStatement = statement.ReplaceNode(statement, newStruct);
             }
 
@@ -89,7 +89,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             {
                 var propertyExpression = (PropertyDeclarationSyntax)statement;
 
-                var newProperty = propertyExpression.WithModifiers(propertyExpression.Modifiers.AddRange(accessModifierTokens));
+                var newProperty = propertyExpression.WithModifiers(accessModifierTokens.AddRange(propertyExpression.Modifiers));
                 newStatement = statement.ReplaceNode(statement, newProperty);
             }
 
@@ -97,7 +97,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             {
                 var methodExpression = (MethodDeclarationSyntax)statement;
 
-                var newMethod = methodExpression.WithModifiers(methodExpression.Modifiers.AddRange(accessModifierTokens));
+                var newMethod = methodExpression.WithModifiers(accessModifierTokens.AddRange(methodExpression.Modifiers));
                 newStatement = statement.ReplaceNode(statement, newMethod);
             }
 
@@ -105,7 +105,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             {
                 var constructorExpression = (ConstructorDeclarationSyntax)statement;
 
-                var newConstructor = constructorExpression.WithModifiers(constructorExpression.Modifiers.AddRange(accessModifierTokens));
+                var newConstructor = constructorExpression.WithModifiers(accessModifierTokens.AddRange(constructorExpression.Modifiers));
                 newStatement = statement.ReplaceNode(statement, newConstructor);
             }
 
@@ -113,7 +113,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             {
                 var eventFieldExpression = (EventFieldDeclarationSyntax)statement;
 
-                var newEventField = eventFieldExpression.WithModifiers(eventFieldExpression.Modifiers.AddRange(accessModifierTokens));
+                var newEventField = eventFieldExpression.WithModifiers(accessModifierTokens.AddRange(eventFieldExpression.Modifiers));
                 newStatement = statement.ReplaceNode(statement, newEventField);
             }
 
@@ -121,7 +121,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             {
                 var eventExpression = (EventDeclarationSyntax)statement;
 
-                var newEvent = eventExpression.WithModifiers(eventExpression.Modifiers.AddRange(accessModifierTokens));
+                var newEvent = eventExpression.WithModifiers(accessModifierTokens.AddRange(eventExpression.Modifiers));
                 newStatement = statement.ReplaceNode(statement, newEvent);
             }
 
@@ -129,7 +129,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             {
                 var indexerExpression = (IndexerDeclarationSyntax)statement;
 
-                var newIndexer = indexerExpression.WithModifiers(indexerExpression.Modifiers.AddRange(accessModifierTokens));
+                var newIndexer = indexerExpression.WithModifiers(accessModifierTokens.AddRange(indexerExpression.Modifiers));
                 newStatement = statement.ReplaceNode(statement, newIndexer);
             }
 
