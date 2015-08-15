@@ -441,4 +441,13 @@
   <data name="ConditionIsAlwaysFalseCodeFixTitle" xml:space="preserve">
     <value>Remove condition and body.</value>
   </data>
+  <data name="StringPlaceholdersInWrongOrderCodeFixTitle" xml:space="preserve">
+    <value>Re-order placeholders</value>
+  </data>
+  <data name="StringPlaceholdersInWrongOrderMessage" xml:space="preserve">
+    <value>Placeholders are not in ascending order.</value>
+  </data>
+  <data name="StringPlaceholdersInWrongOrderTitle" xml:space="preserve">
+    <value>Orders the arguments of a string.Format() call in ascending order according to index.</value>
+  </data>
 </root>

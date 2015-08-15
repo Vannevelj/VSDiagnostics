@@ -139,6 +139,7 @@
     <Compile Include="Tests\General\TypeToVarTests.cs" />
     <Compile Include="Tests\General\UseAliasesInsteadOfConcreteTypeTests.cs" />
     <Compile Include="Tests\Strings\ReplaceEmptyStringWithStringDotEmptyTests.cs" />
+    <Compile Include="Tests\Strings\StringPlaceholdersInWrongOrderTests.cs" />
     <Compile Include="Tests\Tests\RemoveTestSuffixTests.cs" />
     <Compile Include="Tests\Tests\TestMethodWithoutPublicModifierTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
