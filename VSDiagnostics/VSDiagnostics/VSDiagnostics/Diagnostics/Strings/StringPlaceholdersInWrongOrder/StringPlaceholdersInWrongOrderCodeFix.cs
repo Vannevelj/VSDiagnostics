@@ -27,7 +27,9 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var stringFormatInvocation = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<InvocationExpressionSyntax>().First();
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.StringPlaceholdersInWrongOrderCodeFixTitle, x => ReOrderPlaceholdersAsync(context.Document, root, stringFormatInvocation), nameof(StringPlaceholdersInWrongOrderAnalyzer)),
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.StringPlaceholdersInWrongOrderCodeFixTitle, x => ReOrderPlaceholdersAsync(context.Document, root, stringFormatInvocation),
+                    nameof(StringPlaceholdersInWrongOrderAnalyzer)),
                 diagnostic);
         }
 
@@ -37,20 +39,6 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
             var formatString = ((LiteralExpressionSyntax) stringFormatInvocation.ArgumentList.Arguments[firstArgumentIsLiteral ? 0 : 1].Expression).GetText().ToString();
             var elements = StringPlaceholdersInWrongOrderHelper.GetPlaceholdersSplit(formatString);
             var matches = StringPlaceholdersInWrongOrderHelper.GetPlaceholders(formatString);
-
-            // From all our elements, get the ones that represent an integer and get the lowest one. 
-            // This will give us our starting index
-            var newPlaceholderValue = elements.Min(x =>
-            {
-                int intValue;
-                // We're calling Normalize() to account for formatted placeholders
-                if (!int.TryParse(StringPlaceholdersInWrongOrderHelper.Normalize(x), out intValue))
-                {
-                    intValue = int.MaxValue;
-                }
-
-                return intValue;
-            });
 
             // Here we will store a key-value pair of the old placeholder value and the new value that we associate with it
             var placeholderMapping = new Dictionary<int, int>();
@@ -64,6 +52,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
             var placeholderIndexOrder = new List<int>();
 
             var amountOfPlaceholders = 0;
+            var newPlaceholderValue = 0;
 
             var sb = new StringBuilder(elements.Length);
             for (var index = 0; index < elements.Length; index++)

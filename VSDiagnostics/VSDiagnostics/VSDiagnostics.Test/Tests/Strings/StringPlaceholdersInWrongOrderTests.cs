@@ -155,7 +155,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         {
             void Method()
             {
-                string s = string.Format(""Hello {1}, my name is {2}. Yes you heard that right, {2}."", ""Mrs. Testing"", ""Mr. Tester"", ""Mr. Test"");
+                string s = string.Format(""Hello {0}, my name is {1}. Yes you heard that right, {1}."", ""Mrs. Testing"", ""Mr. Tester"", ""Mr. Test"");
             }
         }
     }";
