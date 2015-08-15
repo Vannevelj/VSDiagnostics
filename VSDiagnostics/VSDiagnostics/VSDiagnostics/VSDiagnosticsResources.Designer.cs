@@ -854,6 +854,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Re-order placeholders.
+        /// </summary>
+        internal static string StringPlaceholdersInWrongOrderCodeFixTitle {
+            get {
+                return ResourceManager.GetString("StringPlaceholdersInWrongOrderCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Placeholders are not in ascending order..
+        /// </summary>
+        internal static string StringPlaceholdersInWrongOrderMessage {
+            get {
+                return ResourceManager.GetString("StringPlaceholdersInWrongOrderMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Orders the arguments of a string.Format() call in ascending order according to index..
+        /// </summary>
+        internal static string StringPlaceholdersInWrongOrderTitle {
+            get {
+                return ResourceManager.GetString("StringPlaceholdersInWrongOrderTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Strings.
         /// </summary>
         internal static string StringsCategory {
