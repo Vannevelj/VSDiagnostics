@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
 using System.Globalization;
-using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -69,18 +68,15 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
             }
 
             // Get the formatted string from the correct position
-            var formattedString = firstArgument.Expression is LiteralExpressionSyntax
+            var formatString = firstArgument.Expression is LiteralExpressionSyntax
                 ? ((LiteralExpressionSyntax) firstArgument.Expression).GetText().ToString()
                 : ((LiteralExpressionSyntax) secondArgument.Expression).GetText().ToString();
 
             // Verify that all placeholders are counting from low to high.
             // Not all placeholders have to be used necessarily, we only re-order the ones that are actually used in the format string.
             //
-            // Get all elements in a string that are enclosed by an uneven amount of curly brackets (to account for escaped brackets).
-            // The result will be elements that are either plain integers or integers with a format appended to it, delimited by a colon.
-            // Display a warning when the integers in question are not in ascending order. 
-            var pattern = @"(?<!\{)\{(?:\{\{)*(\d+(?::.*?)?)\}(?:\}\})*(?!\})";
-            var placeholders = Regex.Matches(formattedString, pattern);
+            // Display a warning when the integers in question are not in ascending or equal order. 
+            var placeholders = StringPlaceholdersInWrongOrderHelper.GetPlaceholders(formatString);
 
             // If there's no placeholder used or there's only one, there's nothing to re-order
             if (placeholders.Count <= 1)
@@ -91,8 +87,8 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
             for (var index = 1; index < placeholders.Count; index++)
             {
                 int firstValue, secondValue;
-                if (!int.TryParse(Normalize(placeholders[index - 1].Value), out firstValue) ||
-                    !int.TryParse(Normalize(placeholders[index].Value), out secondValue))
+                if (!int.TryParse(StringPlaceholdersInWrongOrderHelper.Normalize(placeholders[index - 1].Value), out firstValue) ||
+                    !int.TryParse(StringPlaceholdersInWrongOrderHelper.Normalize(placeholders[index].Value), out secondValue))
                 {
                     // Parsing failed
                     return;
@@ -105,23 +101,6 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
                     return;
                 }
             }
-        }
-
-        /// <summary>
-        ///     Removes all curly braces and formatting definitions from the placeholder
-        /// </summary>
-        /// <param name="input">The placeholder entry to parse.</param>
-        /// <returns>Returns the placeholder index.</returns>
-        private static string Normalize(string input)
-        {
-            var temp = input.Trim('{', '}');
-            var colonIndex = temp.IndexOf(':');
-            if (colonIndex > 0)
-            {
-                return temp.Remove(colonIndex);
-            }
-
-            return temp;
         }
     }
 }

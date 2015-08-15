@@ -432,5 +432,25 @@ namespace VSDiagnostics.Test.Tests.Strings
             VerifyDiagnostic(original, StringPlaceholdersInWrongOrderAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, expected);
         }
+
+        [TestMethod]
+        public void StringPlaceholdersInWrongOrder_WithCommentedPlaceholder_AlsoUsedValidly_DoesNotInvokeWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {
+            void Method()
+            {
+                string s = string.Format(""Hello {{0}}, my name is {0}."", ""Mr. Test"");
+            }
+        }
+    }";
+            VerifyDiagnostic(original);
+        }
     }
 }
