@@ -28,26 +28,24 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             var invocation = context.Node as InvocationExpressionSyntax;
-            if (invocation == null)
+
+            // Verify we're dealing with a string.Format() call
+            var memberAccessExpression = invocation?.Expression as MemberAccessExpressionSyntax;
+            if (memberAccessExpression == null)
             {
                 return;
             }
 
-            // Verify we're dealing with a string.Format() call
-            var memberAccessExpression = invocation.Expression as MemberAccessExpressionSyntax;
-            if (memberAccessExpression != null)
+            var invokedType = context.SemanticModel.GetSymbolInfo(memberAccessExpression.Expression);
+            var invokedMethod = context.SemanticModel.GetSymbolInfo(memberAccessExpression.Name);
+            if (invokedType.Symbol == null || invokedMethod.Symbol == null)
             {
-                var invokedType = context.SemanticModel.GetSymbolInfo(memberAccessExpression.Expression);
-                var invokedMethod = context.SemanticModel.GetSymbolInfo(memberAccessExpression.Name);
-                if (invokedType.Symbol == null || invokedMethod.Symbol == null)
-                {
-                    return;
-                }
+                return;
+            }
 
-                if (invokedType.Symbol.MetadataName != typeof(string).Name || invokedMethod.Symbol.MetadataName != nameof(string.Format))
-                {
-                    return;
-                }
+            if (invokedType.Symbol.MetadataName != typeof(string).Name || invokedMethod.Symbol.MetadataName != nameof(string.Format))
+            {
+                return;
             }
 
             // Verify the format is a literal expression and not a method invocation or an identifier
