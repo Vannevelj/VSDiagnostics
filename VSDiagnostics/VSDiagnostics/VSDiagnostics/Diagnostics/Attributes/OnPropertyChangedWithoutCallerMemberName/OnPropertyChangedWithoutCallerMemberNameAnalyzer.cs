@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -52,10 +53,20 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
                     continue;
                 }
 
+                var param = method.ParameterList.Parameters.First();
                 var paramType = method.ParameterList.Parameters.First().Type as PredefinedTypeSyntax;
                 if (paramType == null || !paramType.Keyword.IsKind(SyntaxKind.StringKeyword))
                 {
                     continue;
+                }
+
+                if (param.AttributeLists.Any(a => a.Attributes.Any() && a.Attributes.Any(t =>
+                {
+                    var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
+                    return symbol != null && symbol.ContainingSymbol.MetadataName == typeof (CallerMemberNameAttribute).Name;
+                })))
+                {
+                    return;
                 }
 
                 context.ReportDiagnostic(Diagnostic.Create(Rule, classDeclaration.GetLocation()));
