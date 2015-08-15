@@ -107,7 +107,6 @@
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Tests\Async\AsyncMethodWithoutAsyncSuffixTests.cs" />
     <Compile Include="Tests\Attributes\AttributeWithEmptyArgumentListTests.cs" />
     <Compile Include="Tests\Attributes\EnumCanHaveFlagsAttributeTests.cs" />
