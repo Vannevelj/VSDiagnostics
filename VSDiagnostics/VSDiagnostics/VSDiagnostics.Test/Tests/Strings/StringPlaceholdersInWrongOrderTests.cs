@@ -453,5 +453,25 @@ namespace VSDiagnostics.Test.Tests.Strings
     }";
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithInvalidIndex_DoesNotInvokeWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {
+            void Method()
+            {
+                string s = string.Format(""{0} {1} {4} {3}"", ""a"", ""b"", ""c"", ""d"");
+            }
+        }
+    }";
+            VerifyDiagnostic(original);
+        }
     }
 }

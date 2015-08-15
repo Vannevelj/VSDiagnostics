@@ -10,11 +10,10 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class StringPlaceholdersInWrongOrderAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(StringPlaceholdersInWrongOrderAnalyzer);
-        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-
         private static readonly string Category = VSDiagnosticsResources.StringsCategory;
+        private const string DiagnosticId = nameof(StringPlaceholdersInWrongOrderAnalyzer);
         private static readonly string Message = VSDiagnosticsResources.StringPlaceholdersInWrongOrderMessage;
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
         private static readonly string Title = VSDiagnosticsResources.StringPlaceholdersInWrongOrderTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
@@ -53,7 +52,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
 
             // Verify the format is a literal expression and not a method invocation or an identifier
             // The overloads are in the form string.Format(string, object[]) or string.Format(CultureInfo, string, object[])
-            if (invocation.ArgumentList == null || !invocation.ArgumentList.Arguments.Any())
+            if (invocation.ArgumentList == null || invocation.ArgumentList.Arguments.Count < 2)
             {
                 return;
             }
@@ -69,7 +68,8 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
             }
 
             // Get the formatted string from the correct position
-            var formatString = firstArgument.Expression is LiteralExpressionSyntax
+            var firstArgumentIsLiteral = firstArgument.Expression is LiteralExpressionSyntax;
+            var formatString = firstArgumentIsLiteral
                 ? ((LiteralExpressionSyntax) firstArgument.Expression).GetText().ToString()
                 : ((LiteralExpressionSyntax) secondArgument.Expression).GetText().ToString();
 
@@ -92,6 +92,15 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
                     !int.TryParse(StringPlaceholdersInWrongOrderHelper.Normalize(placeholders[index].Value), out secondValue))
                 {
                     // Parsing failed
+                    return;
+                }
+
+                // Given a scenario like this:
+                //     string.Format("{0} {1} {4} {3}", a, b, c, d)
+                // it would otherwise crash because it's trying to access index 4, which we obviously don't have.
+                var argumentsToSkip = firstArgumentIsLiteral ? 1 : 2;
+                if (firstValue >= invocation.ArgumentList.Arguments.Count - argumentsToSkip || secondValue >= invocation.ArgumentList.Arguments.Count - argumentsToSkip)
+                {
                     return;
                 }
 
