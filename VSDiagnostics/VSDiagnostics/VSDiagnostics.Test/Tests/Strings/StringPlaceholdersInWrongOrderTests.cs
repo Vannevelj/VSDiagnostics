@@ -473,5 +473,29 @@ namespace VSDiagnostics.Test.Tests.Strings
     }";
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithDifferentMethodName_DoesNotInvokeWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {
+            MyClass()
+            {
+                Method(""{1} {0}"", 2, 3);
+            }
+
+            void Method(string s, int x, int y)
+            {
+            }
+        }
+    }";
+            VerifyDiagnostic(original);
+        }
     }
 }
