@@ -37,7 +37,29 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
                 return;
             }
 
-            context.ReportDiagnostic(Diagnostic.Create(Rule, classDeclaration.GetLocation()));
+            var methods = classDeclaration.DescendantNodes().OfType<MethodDeclarationSyntax>();
+
+            foreach (var method in methods)
+            {
+                var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(method);
+                if (declaredSymbol == null || declaredSymbol.MetadataName != "OnPropertyChanged")
+                {
+                    return;
+                }
+
+                if (method.ParameterList.Parameters.Count != 1)
+                {
+                    return;
+                }
+
+                var paramType = method.ParameterList.Parameters.First().Type as PredefinedTypeSyntax;
+                if (paramType == null || !paramType.Keyword.IsKind(SyntaxKind.StringKeyword))
+                {
+                    return;
+                }
+
+                context.ReportDiagnostic(Diagnostic.Create(Rule, classDeclaration.GetLocation()));
+            }
         }
 
         private bool ClassImplementsINotifyPropertyChanged(SemanticModel semanticModel, ClassDeclarationSyntax classDeclaration)
