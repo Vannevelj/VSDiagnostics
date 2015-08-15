@@ -10,11 +10,12 @@ namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class TestMethodWithoutPublicModifierAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "Tests";
         private const string DiagnosticId = nameof(TestMethodWithoutPublicModifierAnalyzer);
-        private const string Message = "Test method \"{0}\" is not public.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Verifies whether a test method has the public modifier.";
+
+        private static readonly string Category = VSDiagnosticsResources.TestsCategory;
+        private static readonly string Message = VSDiagnosticsResources.TestMethodWithoutPublicModifierAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.TestMethodWithoutPublicModifierAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 

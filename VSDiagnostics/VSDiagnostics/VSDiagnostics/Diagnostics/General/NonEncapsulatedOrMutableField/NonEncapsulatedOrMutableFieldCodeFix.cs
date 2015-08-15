@@ -28,7 +28,7 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Use property", x => UsePropertyAsync(context.Document, statement), nameof(NonEncapsulatedOrMutableFieldAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.NonEncapsulatedOrMutableFieldCodeFixTitle, x => UsePropertyAsync(context.Document, statement), nameof(NonEncapsulatedOrMutableFieldAnalyzer)), diagnostic);
         }
 
         private async Task<Solution> UsePropertyAsync(Document document, SyntaxNode statement)

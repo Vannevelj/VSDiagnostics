@@ -24,7 +24,7 @@ namespace VSDiagnostics.Diagnostics.General.IfStatementWithoutBraces
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Use braces", x => UseBracesNotationAsync(context.Document, root, statement), nameof(IfStatementWithoutBracesAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.IfStatementWithoutBracesCodeFixTitle, x => UseBracesNotationAsync(context.Document, root, statement), nameof(IfStatementWithoutBracesAnalyzer)), diagnostic);
         }
 
         private Task<Solution> UseBracesNotationAsync(Document document, SyntaxNode root, SyntaxNode statement)

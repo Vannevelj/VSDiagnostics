@@ -1,0 +1,444 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ArgumentExceptionWithoutNameofOperatorAnalyzerMessage" xml:space="preserve">
+    <value>The field {0} is used in an ArgumentException as string. Consider using the nameof operator instead.</value>
+    <comment>{0} - Field name</comment>
+  </data>
+  <data name="ArgumentExceptionWithoutNameofOperatorAnalyzerTitle" xml:space="preserve">
+    <value>Suggest using the nameof operator in an ArgumentException.</value>
+  </data>
+  <data name="AsToCastAnalyzerMessage" xml:space="preserve">
+    <value>Use cast instead of as.</value>
+  </data>
+  <data name="AsToCastAnalyzerTitle" xml:space="preserve">
+    <value>Use cast instead of as.</value>
+  </data>
+  <data name="AsyncCategory" xml:space="preserve">
+    <value>Async</value>
+  </data>
+  <data name="AsyncMethodWithoutAsyncSuffixAnalyzerMessage" xml:space="preserve">
+    <value>Method "{0}" does not end with 'Async'.</value>
+    <comment>{0} - Method name</comment>
+  </data>
+  <data name="AsyncMethodWithoutAsyncSuffixAnalyzerTitle" xml:space="preserve">
+    <value>Verifies whether an async method has the 'Async' suffix.</value>
+  </data>
+  <data name="AttributesCategory" xml:space="preserve">
+    <value>Attributes</value>
+  </data>
+  <data name="AttributeWithEmptyArgumentListAnalyzerMessage" xml:space="preserve">
+    <value>Attribute has empty argument list.</value>
+  </data>
+  <data name="AttributeWithEmptyArgumentListAnalyzerTitle" xml:space="preserve">
+    <value>Remove empty argument list from attribute.</value>
+  </data>
+  <data name="CastToAsAnalyzerMessage" xml:space="preserve">
+    <value>Use as instead of a cast.</value>
+  </data>
+  <data name="CastToAsAnalyzerTitle" xml:space="preserve">
+    <value>Use as instead of a cast.</value>
+  </data>
+  <data name="CatchNullReferenceExceptionAnalyzerMessage" xml:space="preserve">
+    <value>A catch clause catches NullReferenceException. Consider using != null or null propagation instead.</value>
+  </data>
+  <data name="CatchNullReferenceExceptionAnalyzerTitle" xml:space="preserve">
+    <value>Verifies whether no NullReferenceExceptions are caught.</value>
+  </data>
+  <data name="CompareBooleanToFalseLiteralAnalyzerMessage" xml:space="preserve">
+    <value>A boolean expression can be simplified.</value>
+  </data>
+  <data name="CompareBooleanToFalseLiteralAnalyzerTitle" xml:space="preserve">
+    <value>A boolean expression doesn't have to be compared to false.</value>
+  </data>
+  <data name="CompareBooleanToTrueLiteralAnalyzerMessage" xml:space="preserve">
+    <value>A boolean expression can be simplified.</value>
+  </data>
+  <data name="CompareBooleanToTrueLiteralAnalyzerTitle" xml:space="preserve">
+    <value>A boolean expression doesn't have to be compared to true.</value>
+  </data>
+  <data name="ConditionalOperatorReturnsDefaultOptionsAnalyzerMessage" xml:space="preserve">
+    <value>A conditional operator can be omitted.</value>
+  </data>
+  <data name="ConditionalOperatorReturnsDefaultOptionsAnalyzerTitle" xml:space="preserve">
+    <value>The conditional operator shouldn't return redundant true and false literals.</value>
+  </data>
+  <data name="EmptyArgumentExceptionAnalyzerMessage" xml:space="preserve">
+    <value>ArgumentException is thrown without a message.</value>
+  </data>
+  <data name="EmptyArgumentExceptionAnalyzerTitle" xml:space="preserve">
+    <value>Verifies whether an ArgumentException is thrown with a message.</value>
+  </data>
+  <data name="EmptyCatchClauseAnalyzerMessage" xml:space="preserve">
+    <value>Empty catch block detected.</value>
+  </data>
+  <data name="EmptyCatchClauseAnalyzerTitle" xml:space="preserve">
+    <value>Warns when an exception catch block is empty.</value>
+  </data>
+  <data name="ExceptionsCategory" xml:space="preserve">
+    <value>Exceptions</value>
+  </data>
+  <data name="ExplicitAccessModifiersAnalyzerMessage" xml:space="preserve">
+    <value>Use explicit {0} modifier.</value>
+    <comment>{0} - Access modifier</comment>
+  </data>
+  <data name="ExplicitAccessModifiersAnalyzerTitle" xml:space="preserve">
+    <value>Use explicit {0} modifier.</value>
+    <comment>{0} - Access modifier</comment>
+  </data>
+  <data name="GeneralCategory" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="GotoDetectionAnalyzerMessage" xml:space="preserve">
+    <value>Use of "goto" detected.  Consider using a method or loop instead.</value>
+  </data>
+  <data name="GotoDetectionAnalyzerTitle" xml:space="preserve">
+    <value>Use of "goto" detected.</value>
+  </data>
+  <data name="IfStatementWithoutBracesAnalyzerMessage" xml:space="preserve">
+    <value>An if-statement should be written using braces.</value>
+  </data>
+  <data name="IfStatementWithoutBracesAnalyzerTitle" xml:space="preserve">
+    <value>If blocks should use braces to denote start and end.</value>
+  </data>
+  <data name="NamingConventionsAnalyzerMessage" xml:space="preserve">
+    <value>The {0} {1} does not follow naming conventions. Should be {2}.</value>
+    <comment>{0} - Member type
+{1} - Member name
+{2} - Modified member name</comment>
+  </data>
+  <data name="NamingConventionsAnalyzerTitle" xml:space="preserve">
+    <value>A member does not follow naming conventions.</value>
+  </data>
+  <data name="NonEncapsulatedOrMutableFieldAnalyzerMessage" xml:space="preserve">
+    <value>Field {0} should be turned into a property.</value>
+    <comment>{0} - Field name</comment>
+  </data>
+  <data name="NonEncapsulatedOrMutableFieldAnalyzerTitle" xml:space="preserve">
+    <value>Internal or public fields should be immutable or a property.</value>
+  </data>
+  <data name="NullableToShorthandAnalyzerMessage" xml:space="preserve">
+    <value>{0} can be written using the shorthand nullable notation.</value>
+    <comment>{0} - Identifier name</comment>
+  </data>
+  <data name="NullableToShorthandAnalyzerTitle" xml:space="preserve">
+    <value>Use the shorthand T? notation for a nullable type.</value>
+  </data>
+  <data name="ObsoleteAttributeWithoutReasonAnalyzerMessage" xml:space="preserve">
+    <value>Give a reason for the Obsolete attribute.</value>
+  </data>
+  <data name="ObsoleteAttributeWithoutReasonAnalyzerTitle" xml:space="preserve">
+    <value>The Obsolete attribute doesn't have a reason.</value>
+  </data>
+  <data name="OnPropertyChangedWithoutNameOfOperatorAnalyzerMessage" xml:space="preserve">
+    <value>OnPropertyChanged({0}) can use the nameof() operator.</value>
+    <comment>{0} - Property name</comment>
+  </data>
+  <data name="OnPropertyChangedWithoutNameOfOperatorAnalyzerTitle" xml:space="preserve">
+    <value>Use the nameof() operator in conjunection with OnPropertyChanged</value>
+  </data>
+  <data name="RemoveTestSuffixAnalyzerMessage" xml:space="preserve">
+    <value>Test method "{0}" should not end with "Test".</value>
+    <comment>{0} - Method name</comment>
+  </data>
+  <data name="RemoveTestSuffixAnalyzerTitle" xml:space="preserve">
+    <value>Verifies whether a test method ends with "Test".</value>
+  </data>
+  <data name="ReplaceEmptyStringWithStringDotEmptyAnalyzerMessage" xml:space="preserve">
+    <value>Empty string literal detected.</value>
+  </data>
+  <data name="ReplaceEmptyStringWithStringDotEmptyAnalyzerTitle" xml:space="preserve">
+    <value>Replaces an empty string literal with the more expressive string.Empty.</value>
+  </data>
+  <data name="RethrowExceptionWithoutLosingStacktraceAnalyzerMessage" xml:space="preserve">
+    <value>Rethrown exception loses the stacktrace.</value>
+  </data>
+  <data name="RethrowExceptionWithoutLosingStacktraceAnalyzerTitle" xml:space="preserve">
+    <value>Warns when an exception is rethrown in a way that it loses the stacktrace.</value>
+  </data>
+  <data name="SimplifyExpressionBodiedMemberAnalyzerMessage" xml:space="preserve">
+    <value>{0} {1} can be written using an expression-bodied member</value>
+    <comment>{0} - Member type
+{1} - Member name</comment>
+  </data>
+  <data name="SimplifyExpressionBodiedMemberAnalyzerTitle" xml:space="preserve">
+    <value>Simplify the expression using an expression-bodied member.</value>
+  </data>
+  <data name="SingleEmptyConstructorAnalyzerMessage" xml:space="preserve">
+    <value>Type "{0}" has a redundant default constructor.</value>
+    <comment>{0} - Type name</comment>
+  </data>
+  <data name="SingleEmptyConstructorAnalyzerTitle" xml:space="preserve">
+    <value>Your constructor is the same as a default constructor and can be removed.</value>
+  </data>
+  <data name="SingleGeneralExceptionAnalyzerMessage" xml:space="preserve">
+    <value>A single catch-all clause has been used.</value>
+  </data>
+  <data name="SingleGeneralExceptionAnalyzerTitle" xml:space="preserve">
+    <value>Verifies whether a try-catch block does not contain just a single Exception clause.</value>
+  </data>
+  <data name="StringsCategory" xml:space="preserve">
+    <value>Strings</value>
+  </data>
+  <data name="TestMethodWithoutPublicModifierAnalyzerMessage" xml:space="preserve">
+    <value>Test method "{0}" is not public.</value>
+    <comment>{0} - Method name</comment>
+  </data>
+  <data name="TestMethodWithoutPublicModifierAnalyzerTitle" xml:space="preserve">
+    <value>Verifies whether a test method has the public modifier.</value>
+  </data>
+  <data name="TestsCategory" xml:space="preserve">
+    <value>Tests</value>
+  </data>
+  <data name="TryCastWithoutUsingAsNotNullAnalyzerMessage" xml:space="preserve">
+    <value>Variable {0} can be cast using as/null.</value>
+    <comment>{0} - Variable name</comment>
+  </data>
+  <data name="TryCastWithoutUsingAsNotNullAnalyzerTitle" xml:space="preserve">
+    <value>The conversion can be performed without casting twice.</value>
+  </data>
+  <data name="TypeToVarAnalyzerMessage" xml:space="preserve">
+    <value>Actual type can be replaced with 'var'.</value>
+  </data>
+  <data name="TypeToVarAnalyzerTitle" xml:space="preserve">
+    <value>Use var instead of type.</value>
+  </data>
+  <data name="ArgumentExceptionWithoutNameofOperatorCodeFixTitle" xml:space="preserve">
+    <value>Use nameof</value>
+  </data>
+  <data name="AsToCastCodeFixTitle" xml:space="preserve">
+    <value>Use cast instead of as</value>
+  </data>
+  <data name="AsyncMethodWithoutAsyncSuffixCodeFixTitle" xml:space="preserve">
+    <value>Add suffix</value>
+  </data>
+  <data name="AttributeWithEmptyArgumentListCodeFixTitle" xml:space="preserve">
+    <value>Remove Parentheses</value>
+  </data>
+  <data name="CastToAsCodeFixTitle" xml:space="preserve">
+    <value>Use as instead of cast</value>
+  </data>
+  <data name="CompareBooleanToFalseLiteralCodeFixTitle" xml:space="preserve">
+    <value>Simplify expression</value>
+  </data>
+  <data name="CompareBooleanToTrueLiteralCodeFixTitle" xml:space="preserve">
+    <value>Simplify expression</value>
+  </data>
+  <data name="ConditionalOperatorReturnsDefaultOptionsCodeFixTitle" xml:space="preserve">
+    <value>Remove conditional</value>
+  </data>
+  <data name="ExplicitAccessModifiersCodeFixTitle" xml:space="preserve">
+    <value>Add modifier</value>
+  </data>
+  <data name="IfStatementWithoutBracesCodeFixTitle" xml:space="preserve">
+    <value>Use braces</value>
+  </data>
+  <data name="NamingConventionsCodeFixTitle" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="NonEncapsulatedOrMutableFieldCodeFixTitle" xml:space="preserve">
+    <value>Use property</value>
+  </data>
+  <data name="NullableToShorthandCodeFixTitle" xml:space="preserve">
+    <value>Use shorthand notation</value>
+  </data>
+  <data name="OnPropertyChangedWithoutNameOfOperatorCodeFixTitle" xml:space="preserve">
+    <value>Use nameof</value>
+  </data>
+  <data name="RemoveTestSuffixCodeFixTitle" xml:space="preserve">
+    <value>Remove "Test" suffix</value>
+  </data>
+  <data name="ReplaceEmptyStringWithStringDotEmptyCodeFixTitle" xml:space="preserve">
+    <value>Use string.Empty</value>
+  </data>
+  <data name="RethrowExceptionWithoutLosingStacktraceCodeFixTitle" xml:space="preserve">
+    <value>Remove rethrow</value>
+  </data>
+  <data name="SimplifyExpressionBodiedMemberCodeFixTitle" xml:space="preserve">
+    <value>Use expression bodied member</value>
+  </data>
+  <data name="SingleEmptyConstructorCodeFixTitle" xml:space="preserve">
+    <value>Remove empty constructor</value>
+  </data>
+  <data name="TestMethodWithoutPublicModifierCodeFixTitle" xml:space="preserve">
+    <value>Make public</value>
+  </data>
+  <data name="TryCastWithoutUsingAsNotNullCodeFixTitle" xml:space="preserve">
+    <value>Use as</value>
+  </data>
+  <data name="TypeToVarCodeFixTitle" xml:space="preserve">
+    <value>Use var</value>
+  </data>
+  <data name="ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzerMessage" xml:space="preserve">
+    <value>A conditional operator can be omitted.</value>
+  </data>
+  <data name="ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzerTitle" xml:space="preserve">
+    <value>The conditional operator shouldn't return redundant true and false literals.</value>
+  </data>
+  <data name="ConditionalOperatorReturnsInvertedDefaultOptionsCodeFixTitle" xml:space="preserve">
+    <value>Remove conditional</value>
+  </data>
+  <data name="UseAliasesInsteadOfConcreteTypeAnalyzerMessage" xml:space="preserve">
+    <value>Use alias {0} instead of concrete type {1}.</value>
+    <comment>{0} - Alias name
+{1} - Type name</comment>
+  </data>
+  <data name="UseAliasesInsteadOfConcreteTypeAnalyzerTitle" xml:space="preserve">
+    <value>Use alias instead of concrete type.</value>
+  </data>
+  <data name="UseAliasesInsteadOfConcreteTypeCodeFixTitle" xml:space="preserve">
+    <value>Use alias</value>
+  </data>
+  <data name="FlagsEnumValuesAreNotPowersOfTwoAnalyzerMessage" xml:space="preserve">
+    <value>Flags enum {0} values are not powers of 2</value>
+  </data>
+  <data name="FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle" xml:space="preserve">
+    <value>Flags enum values are not powers of 2</value>
+  </data>
+  <data name="FlagsEnumValuesAreNotPowersOfTwoCodeFixTitle" xml:space="preserve">
+    <value>Use powers of 2</value>
+  </data>
+  <data name="EnumCanHaveFlagsAttributeAnalyzerMessage" xml:space="preserve">
+    <value>Enum can have flags attribute.</value>
+  </data>
+  <data name="EnumCanHaveFlagsAttributeAnalyzerTitle" xml:space="preserve">
+    <value>Inform that enums can have the flags attribute.</value>
+  </data>
+  <data name="EnumCanHaveFlagsAttributeCodeFixTitle" xml:space="preserve">
+    <value>Add Flags attribute</value>
+  </data>
+  <data name="ConditionIsAlwaysTrueAnalyzerMessage" xml:space="preserve">
+    <value>Condition is always true.</value>
+  </data>
+  <data name="ConditionIsAlwaysTrueAnalyzerTitle" xml:space="preserve">
+    <value>Condition is always true.</value>
+  </data>
+  <data name="ConditionIsAlwaysTrueCodeFixTitle" xml:space="preserve">
+    <value>Remove condition.</value>
+  </data>
+  <data name="ConditionIsAlwaysFalseAnalyzerMessage" xml:space="preserve">
+    <value>Condition is always false.</value>
+  </data>
+  <data name="ConditionIsAlwaysFalseAnalyzerTitle" xml:space="preserve">
+    <value>Condition is always false.</value>
+  </data>
+  <data name="ConditionIsAlwaysFalseCodeFixTitle" xml:space="preserve">
+    <value>Remove condition and body.</value>
+  </data>
+</root>

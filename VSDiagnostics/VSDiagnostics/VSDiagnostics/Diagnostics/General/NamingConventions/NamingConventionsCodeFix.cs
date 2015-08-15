@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Rename;
 using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.NamingConventions
@@ -25,10 +26,10 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var identifier = root.FindToken(diagnosticSpan.Start);
-            context.RegisterCodeFix(CodeAction.Create("Rename", x => RenameAsync(context.Document, root, identifier), nameof(NamingConventionsAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.NamingConventionsCodeFixTitle, x => RenameAsync(context.Document, root, identifier), nameof(NamingConventionsAnalyzer)), diagnostic);
         }
 
-        private Task<Solution> RenameAsync(Document document, SyntaxNode root, SyntaxToken identifier)
+        private async Task<Solution> RenameAsync(Document document, SyntaxNode root, SyntaxToken identifier)
         {
             var identifierParent = identifier.Parent;
             var newIdentifier = default(SyntaxToken);
@@ -73,9 +74,12 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
                 identifierParent = identifierParent.Parent;
             } while (identifierParent != null);
 
-            var newParent = identifierParent.ReplaceToken(identifier, newIdentifier);
-            var newRoot = root.ReplaceNode(identifierParent, newParent);
-            return Task.FromResult(document.WithSyntaxRoot(newRoot).Project.Solution);
+            var semanticModel = await document.GetSemanticModelAsync();
+            var symbol = semanticModel.GetDeclaredSymbol(identifier.Parent);
+            var solution = document.Project.Solution;
+            var options = solution.Workspace.Options;
+
+            return await Renamer.RenameSymbolAsync(solution, symbol, newIdentifier.Text, options);
         }
     }
 }

@@ -24,7 +24,8 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Use expression bodied member", x => UseExpressionBodiedMemberAsync(context.Document, root, statement), nameof(SimplifyExpressionBodiedMemberAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.SimplifyExpressionBodiedMemberCodeFixTitle, x => UseExpressionBodiedMemberAsync(context.Document, root, statement), nameof(SimplifyExpressionBodiedMemberAnalyzer)),
+                diagnostic);
         }
 
         private Task<Solution> UseExpressionBodiedMemberAsync(Document document, SyntaxNode root, SyntaxNode statement)

@@ -10,11 +10,12 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class NullableToShorthandAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "General";
         private const string DiagnosticId = nameof(NullableToShorthandAnalyzer);
-        private const string Message = "{0} can be written using the shorthand nullable notation.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Use the shorthand T? notation for a nullable type.";
+
+        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Message = VSDiagnosticsResources.NullableToShorthandAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.NullableToShorthandAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 

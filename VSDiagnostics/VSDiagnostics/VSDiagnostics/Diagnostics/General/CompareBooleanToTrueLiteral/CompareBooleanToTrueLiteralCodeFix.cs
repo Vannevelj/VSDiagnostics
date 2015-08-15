@@ -25,7 +25,7 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Simplify expression", x => SimplifyExpressionAsync(context.Document, root, statement), nameof(CompareBooleanToTrueLiteralAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.CompareBooleanToTrueLiteralCodeFixTitle, x => SimplifyExpressionAsync(context.Document, root, statement), nameof(CompareBooleanToTrueLiteralAnalyzer)), diagnostic);
         }
 
         private Task<Solution> SimplifyExpressionAsync(Document document, SyntaxNode root, SyntaxNode statement)
@@ -38,8 +38,8 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
             if (binaryExpression.Left is BinaryExpressionSyntax || binaryExpression.Right is BinaryExpressionSyntax)
             {
                 var internalBinaryExpression = binaryExpression.Left is BinaryExpressionSyntax
-                    ? (BinaryExpressionSyntax)binaryExpression.Left
-                    : (BinaryExpressionSyntax)binaryExpression.Right;
+                    ? (BinaryExpressionSyntax) binaryExpression.Left
+                    : (BinaryExpressionSyntax) binaryExpression.Right;
 
                 var newExpressionType = internalBinaryExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken) ^ binaryExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken)
                     ? SyntaxKind.NotEqualsExpression

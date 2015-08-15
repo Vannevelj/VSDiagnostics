@@ -10,11 +10,12 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class TryCastWithoutUsingAsNotNullAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "General";
         private const string DiagnosticId = nameof(TryCastWithoutUsingAsNotNullAnalyzer);
-        private const string Message = "Variable {0} can be casted using as/null.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "The conversion can be performed without casting twice.";
+
+        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Message = VSDiagnosticsResources.TryCastWithoutUsingAsNotNullAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.TryCastWithoutUsingAsNotNullAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 
