@@ -101,5 +101,70 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original, OnPropertyChangedWithoutCallerMemberNameAnalyzer.Rule.MessageFormat.ToString());
         }
+
+        [TestMethod]
+        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_MultipleMethods_InvokesWarning()
+        {
+            var original = @"
+using System.ComponentModel;
+
+namespace ConsoleApplication1
+{
+    class Foo : INotifyPropertyChanged
+    {
+        void PropertyChanged(string foo) { }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, OnPropertyChangedWithoutCallerMemberNameAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
+        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_MultipleParams_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System.ComponentModel;
+
+namespace ConsoleApplication1
+{
+    class Foo : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName, int foo)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_OneParamTypeNotString_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System.ComponentModel;
+
+namespace ConsoleApplication1
+{
+    class Foo : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(int foo)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }

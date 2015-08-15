@@ -44,21 +44,22 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
                 var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(method);
                 if (declaredSymbol == null || declaredSymbol.MetadataName != "OnPropertyChanged")
                 {
-                    return;
+                    continue;
                 }
 
                 if (method.ParameterList.Parameters.Count != 1)
                 {
-                    return;
+                    continue;
                 }
 
                 var paramType = method.ParameterList.Parameters.First().Type as PredefinedTypeSyntax;
                 if (paramType == null || !paramType.Keyword.IsKind(SyntaxKind.StringKeyword))
                 {
-                    return;
+                    continue;
                 }
 
                 context.ReportDiagnostic(Diagnostic.Create(Rule, classDeclaration.GetLocation()));
+                return;
             }
         }
 
