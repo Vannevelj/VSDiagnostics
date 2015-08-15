@@ -27,7 +27,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var stringFormatInvocation = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<InvocationExpressionSyntax>().First();
-            context.RegisterCodeFix(CodeAction.Create("Re-order placeholders", x => ReOrderPlaceholdersAsync(context.Document, root, stringFormatInvocation), nameof(StringPlaceholdersInWrongOrderAnalyzer)),
+            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.StringPlaceholdersInWrongOrderCodeFixTitle, x => ReOrderPlaceholdersAsync(context.Document, root, stringFormatInvocation), nameof(StringPlaceholdersInWrongOrderAnalyzer)),
                 diagnostic);
         }
 
