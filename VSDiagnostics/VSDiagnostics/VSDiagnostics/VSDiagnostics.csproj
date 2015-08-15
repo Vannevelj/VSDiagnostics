@@ -59,6 +59,10 @@
     <Compile Include="Diagnostics\General\ConditionalOperatorReturnsInvertedDefaultOptions\ConditionalOperatorReturnsInvertedDefaultOptionsCodeFix.cs" />
     <Compile Include="Diagnostics\General\ConditionalOperatorReturnsDefaultOptions\ConditionalOperatorReturnsDefaultOptionsAnalyzer.cs" />
     <Compile Include="Diagnostics\General\ConditionalOperatorReturnsDefaultOptions\ConditionalOperatorReturnsDefaultOptionsCodeFix.cs" />
+    <Compile Include="Diagnostics\General\ConditionIsAlwaysFalse\ConditionIsAlwaysFalseAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\ConditionIsAlwaysFalse\ConditionIsAlwaysFalseCodeFix.cs" />
+    <Compile Include="Diagnostics\General\ConditionIsAlwaysTrue\ConditionIsAlwaysTrueAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\ConditionIsAlwaysTrue\ConditionIsAlwaysTrueCodeFix.cs" />
     <Compile Include="Diagnostics\General\ExplicitAccessModifiers\ExplicitAccessModifiersAnalyzer.cs" />
     <Compile Include="Diagnostics\General\ExplicitAccessModifiers\ExplicitAccessModifiersCodeFix.cs" />
     <Compile Include="Diagnostics\General\FlagsEnumValuesAreNotPowersOfTwo\FlagsEnumValuesAreNotPowersOfTwoAnalyzer.cs" />
