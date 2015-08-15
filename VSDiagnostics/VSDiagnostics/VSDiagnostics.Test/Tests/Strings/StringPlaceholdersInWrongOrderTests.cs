@@ -155,7 +155,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         {
             void Method()
             {
-                string s = string.Format(""Hello {1}, my name is {2}. Yes you heard that right, {2}."", ""Mr. Tester"", ""Mrs. Testing"", ""Mr. Test"");
+                string s = string.Format(""Hello {1}, my name is {2}. Yes you heard that right, {2}."", ""Mrs. Testing"", ""Mr. Tester"", ""Mr. Test"");
             }
         }
     }";
@@ -325,6 +325,7 @@ namespace VSDiagnostics.Test.Tests.Strings
             var expected = @"
     using System;
     using System.Text;
+    using System.Globalization;
 
     namespace ConsoleApplication1
     {
