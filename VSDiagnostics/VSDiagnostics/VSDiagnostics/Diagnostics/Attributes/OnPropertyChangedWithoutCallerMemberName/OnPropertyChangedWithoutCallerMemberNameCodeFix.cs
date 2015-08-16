@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
 using VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute;
 
@@ -31,6 +32,8 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
 
         private async Task<Solution> AddCallerMemberNameAttribute(Document document, SyntaxNode root, SyntaxNode statement)
         {
+            var editor = await DocumentEditor.CreateAsync(document);
+
             var methodDeclaration = (MethodDeclarationSyntax)statement;
             var param = methodDeclaration.ParameterList.Parameters.First();
 
@@ -42,7 +45,23 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
                     .WithDefault(SyntaxFactory.EqualsValueClause(SyntaxFactory.ParseExpression("\"\"")))
                 : param.WithAttributeLists(param.AttributeLists.Add(attributeList));
 
-            var newRoot = root.ReplaceNode(param, newParam).WithAdditionalAnnotations(Formatter.Annotation);
+            editor.ReplaceNode(param, newParam);
+
+            var methodInvocations =
+                GetContainingClass(methodDeclaration).DescendantNodes()
+                    .OfType<InvocationExpressionSyntax>().Where(i =>
+                    {
+                        var identifierExpression = i.Expression as IdentifierNameSyntax;
+                        return identifierExpression != null && identifierExpression.Identifier.ValueText == "OnPropertyChanged";
+                    });
+
+            foreach (var methodInvocation in methodInvocations)
+            {
+                editor.ReplaceNode(methodInvocation,
+                    methodInvocation.WithArgumentList(SyntaxFactory.ArgumentList()));
+            }
+
+            var newRoot = await editor.GetChangedDocument().GetSyntaxRootAsync().ConfigureAwait(false);
 
             var compilationUnit = (CompilationUnitSyntax)newRoot;
 
@@ -53,16 +72,26 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
             {
                 var usings = compilationUnit.Usings.Add(usingSystemRuntimeCompilerServicesDirective).OrderBy(u => u.Name.GetText().ToString());
 
-                newRoot =
-                    compilationUnit.WithUsings(SyntaxFactory.List(usings))
-                        .WithAdditionalAnnotations(Formatter.Annotation);
+                newRoot = newRoot.ReplaceNode(compilationUnit, compilationUnit.WithUsings(SyntaxFactory.List(usings))
+                    .WithAdditionalAnnotations(Formatter.Annotation));
             }
-
-            var semanticModel = await document.GetSemanticModelAsync();
-            var symbol = semanticModel.GetDeclaredSymbol(methodDeclaration);
 
             var newDocument = document.WithSyntaxRoot(newRoot);
             return newDocument.Project.Solution;
+        }
+
+        private ClassDeclarationSyntax GetContainingClass(MethodDeclarationSyntax method)
+        {
+            var parentNode = method.Parent;
+            while(true)
+            {
+                if (parentNode is ClassDeclarationSyntax)
+                {
+                    return (ClassDeclarationSyntax) parentNode;
+                }
+
+                parentNode = parentNode.Parent;
+            }
         }
     }
 }

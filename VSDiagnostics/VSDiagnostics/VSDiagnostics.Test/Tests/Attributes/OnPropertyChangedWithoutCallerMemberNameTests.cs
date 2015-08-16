@@ -321,7 +321,8 @@ namespace ConsoleApplication1
     class Foo : INotifyPropertyChanged
     {
         private int _bar = 0;
-        public int Bar {
+        public int Bar
+        {
             get { return _bar; }
             set
             {
@@ -346,12 +347,94 @@ namespace ConsoleApplication1
     class Foo : INotifyPropertyChanged
     {
         private int _bar = 0;
-        public int Bar {
+        public int Bar
+        {
             get { return _bar; }
             set
             {
                 _bar = value;
-                OnPropertyChanged(); }
+                OnPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, OnPropertyChangedWithoutCallerMemberNameAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_UpdatesMultipleReferences_InvokesWarning()
+        {
+            var original = @"
+using System.ComponentModel;
+
+namespace ConsoleApplication1
+{
+    class Foo : INotifyPropertyChanged
+    {
+        private int _bar = 0;
+        public int Bar
+        {
+            get { return _bar; }
+            set
+            {
+                _bar = value;
+                OnPropertyChanged(""Bar""); }
+        }
+
+        private int _baz = 0;
+        public int Baz
+        {
+            get { return _baz; }
+            set
+            {
+                _baz = value;
+                OnPropertyChanged(""Baz""); }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}";
+
+            var result = @"
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace ConsoleApplication1
+{
+    class Foo : INotifyPropertyChanged
+    {
+        private int _bar = 0;
+        public int Bar
+        {
+            get { return _bar; }
+            set
+            {
+                _bar = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _baz = 0;
+        public int Baz
+        {
+            get { return _baz; }
+            set
+            {
+                _baz = value;
+                OnPropertyChanged();
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
