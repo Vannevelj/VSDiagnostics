@@ -687,5 +687,365 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void CompareBooleanToTrueLiteral_WithSimpleTrueLiteralComparison_GreaterThanOperator_EqualsOperator_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int isAwesome = 0;
+            if (isAwesome > 1 == true)
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int isAwesome = 0;
+            if (isAwesome > 1)
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void CompareBooleanToTrueLiteral_WithSimpleTrueLiteralComparison_LessThanOperator_EqualsOperator_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int isAwesome = 0;
+            if (isAwesome < 1 == true)
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int isAwesome = 0;
+            if (isAwesome < 1)
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void CompareBooleanToTrueLiteral_WithSimpleTrueLiteralComparison_GreaterThanOrEqualsOperator_EqualsOperator_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int isAwesome = 0;
+            if (isAwesome >= 1 == true)
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int isAwesome = 0;
+            if (isAwesome >= 1)
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void CompareBooleanToTrueLiteral_WithSimpleTrueLiteralComparison_LessThanOrEqualsOperator_EqualsOperator_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int isAwesome = 0;
+            if (isAwesome <= 1 == true)
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int isAwesome = 0;
+            if (isAwesome <= 1)
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void CompareBooleanToTrueLiteral_WithSimpleTrueLiteralComparison_GreaterThanOperator_NotEqualsOperator_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int isAwesome = 0;
+            if (isAwesome > 1 != true)
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int isAwesome = 0;
+            if (isAwesome <= 1)
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void CompareBooleanToTrueLiteral_WithSimpleTrueLiteralComparison_LessThanOperator_NotEqualsOperator_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int isAwesome = 0;
+            if (isAwesome < 1 != true)
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int isAwesome = 0;
+            if (isAwesome >= 1)
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void CompareBooleanToTrueLiteral_WithSimpleTrueLiteralComparison_GreaterThanOrEqualsOperator_NotEqualsOperator_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int isAwesome = 0;
+            if (isAwesome >= 1 != true)
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int isAwesome = 0;
+            if (isAwesome < 1)
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void CompareBooleanToTrueLiteral_WithSimpleTrueLiteralComparison_LessThanOrEqualsOperator_NotEqualsOperator_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int isAwesome = 0;
+            if (isAwesome <= 1 != true)
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            int isAwesome = 0;
+            if (isAwesome > 1)
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
     }
 }
