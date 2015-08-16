@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMemberName;
@@ -6,9 +7,11 @@ using VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMemberN
 namespace VSDiagnostics.Test.Tests.Attributes
 {
     [TestClass]
-    public class OnPropertyChangedWithoutCallerMemberNameTests : CSharpDiagnosticVerifier
+    public class OnPropertyChangedWithoutCallerMemberNameTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new OnPropertyChangedWithoutCallerMemberNameAnalyzer();
+
+        protected override CodeFixProvider CodeFixProvider => new OnPropertyChangedWithoutCallerMemberNameCodeFix();
 
         [TestMethod]
         public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_InvokesWarning()
@@ -28,7 +31,24 @@ namespace ConsoleApplication1
     }
 }";
 
+            var result = @"
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace ConsoleApplication1
+{
+    class Foo : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}";
+
             VerifyDiagnostic(original, OnPropertyChangedWithoutCallerMemberNameAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -74,7 +94,28 @@ namespace ConsoleApplication1
     }
 }";
 
+            var result = @"
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace ConsoleApplication1
+{
+    interface IFoo
+    {
+    }
+
+    class Foo : INotifyPropertyChanged, IFoo
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}";
+
             VerifyDiagnostic(original, OnPropertyChangedWithoutCallerMemberNameAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -99,7 +140,28 @@ namespace ConsoleApplication1
     }
 }";
 
+            var result = @"
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace ConsoleApplication1
+{
+    interface IFoo
+    {
+    }
+
+    class Foo : IFoo, INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}";
+
             VerifyDiagnostic(original, OnPropertyChangedWithoutCallerMemberNameAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -122,7 +184,26 @@ namespace ConsoleApplication1
     }
 }";
 
+            var result = @"
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace ConsoleApplication1
+{
+    class Foo : INotifyPropertyChanged
+    {
+        void PropertyChanged(string foo) { }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}";
+
             VerifyDiagnostic(original, OnPropertyChangedWithoutCallerMemberNameAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -179,7 +260,7 @@ namespace ConsoleApplication1
     class Foo : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = """")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -201,7 +282,24 @@ namespace ConsoleApplication1
     class Foo : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([Obsolete] string propertyName = null)
+        protected virtual void OnPropertyChanged([Obsolete] string propertyName = """")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace ConsoleApplication1
+{
+    class Foo : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([Obsolete][CallerMemberName] string propertyName = """")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -209,6 +307,7 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original, OnPropertyChangedWithoutCallerMemberNameAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
     }
 }

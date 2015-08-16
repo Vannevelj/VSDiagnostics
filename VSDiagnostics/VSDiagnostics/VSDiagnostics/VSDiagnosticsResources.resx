@@ -450,4 +450,13 @@
   <data name="StringPlaceholdersInWrongOrderTitle" xml:space="preserve">
     <value>Orders the arguments of a string.Format() call in ascending order according to index.</value>
   </data>
+  <data name="OnPropertyChangedWithoutCallerMemberNameAnalyzerMessage" xml:space="preserve">
+    <value>Use the CallerMemberName attribute.</value>
+  </data>
+  <data name="OnPropertyChangedWithoutCallerMemberNameAnalyzerTitle" xml:space="preserve">
+    <value>Use the CallerMemberName attribute to automatically pass the property name.</value>
+  </data>
+  <data name="OnPropertyChangedWithoutCallerMemberNameCodeFixTitle" xml:space="preserve">
+    <value>Add attribute</value>
+  </data>
 </root>

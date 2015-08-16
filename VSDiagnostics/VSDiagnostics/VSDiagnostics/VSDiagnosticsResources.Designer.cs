@@ -674,6 +674,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use the CallerMemberName attribute..
+        /// </summary>
+        internal static string OnPropertyChangedWithoutCallerMemberNameAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("OnPropertyChangedWithoutCallerMemberNameAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use the CallerMemberName attribute to automatically pass the property name..
+        /// </summary>
+        internal static string OnPropertyChangedWithoutCallerMemberNameAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("OnPropertyChangedWithoutCallerMemberNameAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add attribute.
+        /// </summary>
+        internal static string OnPropertyChangedWithoutCallerMemberNameCodeFixTitle {
+            get {
+                return ResourceManager.GetString("OnPropertyChangedWithoutCallerMemberNameCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OnPropertyChanged({0}) can use the nameof() operator..
         /// </summary>
         internal static string OnPropertyChangedWithoutNameOfOperatorAnalyzerMessage {

@@ -16,8 +16,8 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.AttributesCategory;
-        private static readonly string Message = VSDiagnosticsResources.ObsoleteAttributeWithoutReasonAnalyzerMessage;
-        private static readonly string Title = VSDiagnosticsResources.ObsoleteAttributeWithoutReasonAnalyzerTitle;
+        private static readonly string Message = VSDiagnosticsResources.OnPropertyChangedWithoutCallerMemberNameAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.OnPropertyChangedWithoutCallerMemberNameAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 
@@ -55,12 +55,15 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
 
                 var param = method.ParameterList.Parameters.First();
                 var paramType = method.ParameterList.Parameters.First().Type as PredefinedTypeSyntax;
-                if (paramType == null || !paramType.Keyword.IsKind(SyntaxKind.StringKeyword))
+                var value = param.Default.Value as LiteralExpressionSyntax;
+
+                if (paramType == null || value == null || !paramType.Keyword.IsKind(SyntaxKind.StringKeyword))
                 {
                     continue;
                 }
 
-                if (param.AttributeLists.Any(a => a.Attributes.Any() && a.Attributes.Any(t =>
+                if (value.Token.ValueText == "" &&
+                    param.AttributeLists.Any(a => a.Attributes.Any() && a.Attributes.Any(t =>
                 {
                     var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
                     return symbol != null && symbol.ContainingSymbol.MetadataName == typeof (CallerMemberNameAttribute).Name;
@@ -69,7 +72,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
                     return;
                 }
 
-                context.ReportDiagnostic(Diagnostic.Create(Rule, classDeclaration.GetLocation()));
+                context.ReportDiagnostic(Diagnostic.Create(Rule, method.GetLocation()));
                 return;
             }
         }
