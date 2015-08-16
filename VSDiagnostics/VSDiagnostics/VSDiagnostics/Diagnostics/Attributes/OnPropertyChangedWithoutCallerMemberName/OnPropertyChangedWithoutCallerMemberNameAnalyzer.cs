@@ -55,15 +55,13 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
 
                 var param = method.ParameterList.Parameters.First();
                 var paramType = method.ParameterList.Parameters.First().Type as PredefinedTypeSyntax;
-                var value = param.Default.Value as LiteralExpressionSyntax;
 
-                if (paramType == null || value == null || !paramType.Keyword.IsKind(SyntaxKind.StringKeyword))
+                if (paramType == null || !paramType.Keyword.IsKind(SyntaxKind.StringKeyword))
                 {
                     continue;
                 }
 
-                if (value.Token.ValueText == "" &&
-                    param.AttributeLists.Any(a => a.Attributes.Any() && a.Attributes.Any(t =>
+                if (param.AttributeLists.Any(a => a.Attributes.Any() && a.Attributes.Any(t =>
                 {
                     var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
                     return symbol != null && symbol.ContainingSymbol.MetadataName == typeof (CallerMemberNameAttribute).Name;

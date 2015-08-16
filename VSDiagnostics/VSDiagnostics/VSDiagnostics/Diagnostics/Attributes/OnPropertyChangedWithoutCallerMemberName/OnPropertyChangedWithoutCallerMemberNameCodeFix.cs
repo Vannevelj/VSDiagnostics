@@ -36,7 +36,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
 
             var callerMemberNameAttribute = SyntaxFactory.Attribute(SyntaxFactory.ParseName("CallerMemberName"));
             var attributeList = SyntaxFactory.AttributeList().AddAttributes(callerMemberNameAttribute);
-            var newParam = param.WithAttributeLists(param.AttributeLists.Add(attributeList));
+            var newParam = param.WithAttributeLists(param.AttributeLists.Add(attributeList)).WithDefault(SyntaxFactory.EqualsValueClause(SyntaxFactory.ParseExpression("\"\"")));
 
             var newRoot = root.ReplaceNode(param, newParam).WithAdditionalAnnotations(Formatter.Annotation);
 
