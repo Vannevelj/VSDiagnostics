@@ -1,12 +1,29 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace VSDiagnostics.Utilities
 {
     public static class Extensions
     {
+        public static bool ImplementsInterface(this ClassDeclarationSyntax classDeclaration, SemanticModel semanticModel, Type interfaceType)
+        {
+            var declaredSymbol = semanticModel.GetDeclaredSymbol(classDeclaration);
+
+            return declaredSymbol != null &&
+                   (declaredSymbol.Interfaces.Any(i => i.MetadataName == interfaceType.Name) ||
+                    declaredSymbol.BaseType.MetadataName == typeof(INotifyPropertyChanged).Name);
+
+            // For some peculiar reason, "class Foo : INotifyPropertyChanged" doesn't have any interfaces,
+            // But "class Foo : IFoo, INotifyPropertyChanged" has two.  "IFoo" is an interface defined by me.
+            // However, the BaseType for the first is the "INotifyPropertyChanged" symbol.
+            // Also, "class Foo : INotifyPropertyChanged, IFoo" has just one - "IFoo",
+            // But the BaseType again is "INotifyPropertyChanged".
+        }
+
         public static bool InheritsFrom(this ISymbol typeSymbol, Type type)
         {
             if (typeSymbol == null || type == null)

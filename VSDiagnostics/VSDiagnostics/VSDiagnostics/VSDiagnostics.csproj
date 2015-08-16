@@ -39,6 +39,8 @@
     <Compile Include="Diagnostics\Attributes\EnumCanHaveFlagsAttribute\EnumCanHaveFlagsAttributeAnalyzer.cs" />
     <Compile Include="Diagnostics\Attributes\EnumCanHaveFlagsAttribute\EnumCanHaveFlagsAttributeCodeFix.cs" />
     <Compile Include="Diagnostics\Attributes\ObsoleteAttributeWithoutReason\ObsoleteAttributeWithoutReasonAnalyzer.cs" />
+    <Compile Include="Diagnostics\Attributes\OnPropertyChangedWithoutCallerMemberName\OnPropertyChangedWithoutCallerMemberNameAnalyzer.cs" />
+    <Compile Include="Diagnostics\Attributes\OnPropertyChangedWithoutCallerMemberName\OnPropertyChangedWithoutCallerMemberNameCodeFix.cs" />
     <Compile Include="Diagnostics\Exceptions\ArgumentExceptionWithoutNameofOperator\ArgumentExceptionWithoutNameofOperatorAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\ArgumentExceptionWithoutNameofOperator\ArgumentExceptionWithoutNameofOperatorCodeFix.cs" />
     <Compile Include="Diagnostics\Exceptions\CatchNullReferenceException\CatchNullReferenceExceptionAnalyzer.cs" />
