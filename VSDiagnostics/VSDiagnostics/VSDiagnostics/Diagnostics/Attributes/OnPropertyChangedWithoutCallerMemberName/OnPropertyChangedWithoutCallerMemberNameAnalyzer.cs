@@ -26,58 +26,54 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
 
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.ClassDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.MethodDeclaration);
         }
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var classDeclaration = (ClassDeclarationSyntax) context.Node;
+            var methodDeclaration = (MethodDeclarationSyntax) context.Node;
+            var parentClass = methodDeclaration.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+
 
             // class must implement INotifyPropertyChanged
-            if (!classDeclaration.ImplementsInterface(context.SemanticModel, typeof(INotifyPropertyChanged)))
+            if (!parentClass.ImplementsInterface(context.SemanticModel, typeof(INotifyPropertyChanged)))
             {
                 return;
             }
 
-            var methods = classDeclaration.DescendantNodes().OfType<MethodDeclarationSyntax>();
-
-            foreach (var method in methods)
+            // method name must be "OnPropertyChanged"
+            var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclaration);
+            if (declaredSymbol == null || declaredSymbol.MetadataName != "OnPropertyChanged")
             {
-                // method name must be "OnPropertyChanged"
-                var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(method);
-                if (declaredSymbol == null || declaredSymbol.MetadataName != "OnPropertyChanged")
-                {
-                    continue;
-                }
-
-                // method must have just one parameter
-                if (method.ParameterList.Parameters.Count != 1)
-                {
-                    continue;
-                }
-
-                var param = method.ParameterList.Parameters.First();
-                var paramType = param.Type as PredefinedTypeSyntax;
-
-                // and that parameter must be of type string
-                if (paramType == null || !paramType.Keyword.IsKind(SyntaxKind.StringKeyword))
-                {
-                    continue;
-                }
-
-                // parameter must not have CallerMemberNameAttribute
-                if (param.AttributeLists.Any(a => a.Attributes.Any() && a.Attributes.Any(t =>
-                {
-                    var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
-                    return symbol != null && symbol.ContainingSymbol.MetadataName == typeof (CallerMemberNameAttribute).Name;
-                })))
-                {
-                    return;
-                }
-
-                context.ReportDiagnostic(Diagnostic.Create(Rule, method.GetLocation()));
                 return;
             }
+
+            // method must have just one parameter
+            if (methodDeclaration.ParameterList.Parameters.Count != 1)
+            {
+                return;
+            }
+
+            var param = methodDeclaration.ParameterList.Parameters.First();
+            var paramType = param.Type as PredefinedTypeSyntax;
+
+            // and that parameter must be of type string
+            if (paramType == null || !paramType.Keyword.IsKind(SyntaxKind.StringKeyword))
+            {
+                return;
+            }
+
+            // parameter must not have CallerMemberNameAttribute
+            if (param.AttributeLists.Any(a => a.Attributes.Any() && a.Attributes.Any(t =>
+            {
+                var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
+                return symbol != null && symbol.ContainingSymbol.MetadataName == typeof (CallerMemberNameAttribute).Name;
+            })))
+            {
+                return;
+            }
+
+            context.ReportDiagnostic(Diagnostic.Create(Rule, methodDeclaration.GetLocation()));
         }
     }
 }

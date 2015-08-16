@@ -9,14 +9,13 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
-using VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute;
 
 namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMemberName
 {
     [ExportCodeFixProvider("OnPropertyChangedWithoutCallerMemberName", LanguageNames.CSharp), Shared]
     public class OnPropertyChangedWithoutCallerMemberNameCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(EnumCanHaveFlagsAttributeAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(OnPropertyChangedWithoutCallerMemberNameAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -27,10 +26,10 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.OnPropertyChangedWithoutCallerMemberNameCodeFixTitle, x => AddCallerMemberNameAttribute(context.Document, root, statement), nameof(OnPropertyChangedWithoutCallerMemberNameAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.OnPropertyChangedWithoutCallerMemberNameCodeFixTitle, x => AddCallerMemberNameAttribute(context.Document, statement), nameof(OnPropertyChangedWithoutCallerMemberNameAnalyzer)), diagnostic);
         }
 
-        private async Task<Solution> AddCallerMemberNameAttribute(Document document, SyntaxNode root, SyntaxNode statement)
+        private async Task<Solution> AddCallerMemberNameAttribute(Document document, SyntaxNode statement)
         {
             var editor = await DocumentEditor.CreateAsync(document);
 
@@ -79,20 +78,6 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
 
             var newDocument = document.WithSyntaxRoot(newRoot);
             return newDocument.Project.Solution;
-        }
-
-        private ClassDeclarationSyntax GetContainingClass(MethodDeclarationSyntax method)
-        {
-            var parentNode = method.Parent;
-            while(true)
-            {
-                if (parentNode is ClassDeclarationSyntax)
-                {
-                    return (ClassDeclarationSyntax) parentNode;
-                }
-
-                parentNode = parentNode.Parent;
-            }
         }
     }
 }

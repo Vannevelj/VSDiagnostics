@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,11 +42,17 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToFalseLiteral
                     ? (BinaryExpressionSyntax) binaryExpression.Left
                     : (BinaryExpressionSyntax) binaryExpression.Right;
 
-                var newExpressionType = internalBinaryExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken) ^ binaryExpression.OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken)
-                    ? SyntaxKind.NotEqualsExpression
-                    : SyntaxKind.EqualsExpression;
+                // I know of no cases in which this should fail, but just in case...
+                if (!MapOperatorToReverseOperator.ContainsKey(binaryExpression.OperatorToken.Kind()))
+                {
+                    return Task.FromResult(document.Project.Solution);
+                }
 
-                newExpression = SyntaxFactory.BinaryExpression(newExpressionType, internalBinaryExpression.Left, internalBinaryExpression.Right);
+                var newOperator = binaryExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken)
+                    ? MapOperatorToReverseOperator.First(kvp => kvp.Key == internalBinaryExpression.OperatorToken.Kind()).Value
+                    : internalBinaryExpression.OperatorToken.Kind();
+
+                newExpression = internalBinaryExpression.WithOperatorToken(SyntaxFactory.Token(newOperator));
             }
             else
             {
@@ -65,5 +72,16 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToFalseLiteral
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);
         }
+
+        private static readonly Dictionary<SyntaxKind, SyntaxKind> MapOperatorToReverseOperator =
+            new Dictionary<SyntaxKind, SyntaxKind>
+            {
+                                {SyntaxKind.EqualsEqualsToken, SyntaxKind.ExclamationEqualsToken},
+                                {SyntaxKind.ExclamationEqualsToken, SyntaxKind.EqualsEqualsToken},
+                                {SyntaxKind.GreaterThanEqualsToken, SyntaxKind.LessThanToken},
+                                {SyntaxKind.LessThanToken, SyntaxKind.GreaterThanEqualsToken},
+                                {SyntaxKind.LessThanEqualsToken, SyntaxKind.GreaterThanToken},
+                                {SyntaxKind.GreaterThanToken, SyntaxKind.LessThanEqualsToken},
+            };
     }
 }
