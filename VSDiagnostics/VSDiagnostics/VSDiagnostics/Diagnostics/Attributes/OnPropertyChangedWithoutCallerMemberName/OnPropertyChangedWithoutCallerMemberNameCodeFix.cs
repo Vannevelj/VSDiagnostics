@@ -47,8 +47,9 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
 
             editor.ReplaceNode(param, newParam);
 
+            var parentClass = methodDeclaration.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault();
             var methodInvocations =
-                GetContainingClass(methodDeclaration).DescendantNodes()
+                parentClass.DescendantNodes()
                     .OfType<InvocationExpressionSyntax>().Where(i =>
                     {
                         var identifierExpression = i.Expression as IdentifierNameSyntax;

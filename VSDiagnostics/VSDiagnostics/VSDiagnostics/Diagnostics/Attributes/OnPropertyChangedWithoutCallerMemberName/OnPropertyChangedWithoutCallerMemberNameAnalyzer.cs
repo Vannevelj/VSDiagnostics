@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMemberName
 {
@@ -33,7 +34,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
             var classDeclaration = (ClassDeclarationSyntax) context.Node;
 
             // class must implement INotifyPropertyChanged
-            if (!ClassImplementsINotifyPropertyChanged(context.SemanticModel, classDeclaration))
+            if (!classDeclaration.ImplementsInterface(context.SemanticModel, typeof(INotifyPropertyChanged)))
             {
                 return;
             }
@@ -42,25 +43,29 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
 
             foreach (var method in methods)
             {
+                // method name must be "OnPropertyChanged"
                 var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(method);
                 if (declaredSymbol == null || declaredSymbol.MetadataName != "OnPropertyChanged")
                 {
                     continue;
                 }
 
+                // method must have just one parameter
                 if (method.ParameterList.Parameters.Count != 1)
                 {
                     continue;
                 }
 
                 var param = method.ParameterList.Parameters.First();
-                var paramType = method.ParameterList.Parameters.First().Type as PredefinedTypeSyntax;
+                var paramType = param.Type as PredefinedTypeSyntax;
 
+                // and that parameter must be of type string
                 if (paramType == null || !paramType.Keyword.IsKind(SyntaxKind.StringKeyword))
                 {
                     continue;
                 }
 
+                // parameter must not have CallerMemberNameAttribute
                 if (param.AttributeLists.Any(a => a.Attributes.Any() && a.Attributes.Any(t =>
                 {
                     var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
@@ -73,21 +78,6 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
                 context.ReportDiagnostic(Diagnostic.Create(Rule, method.GetLocation()));
                 return;
             }
-        }
-
-        private bool ClassImplementsINotifyPropertyChanged(SemanticModel semanticModel, ClassDeclarationSyntax classDeclaration)
-        {
-            var declaredSymbol = semanticModel.GetDeclaredSymbol(classDeclaration);
-
-            return declaredSymbol != null &&
-                   (declaredSymbol.Interfaces.Any(i => i.MetadataName == typeof (INotifyPropertyChanged).Name) ||
-                    declaredSymbol.BaseType.MetadataName == typeof (INotifyPropertyChanged).Name);
-
-            // For some peculiar reason, "class Foo : INotifyPropertyChanged" doesn't have any interfaces,
-            // But "class Foo : IFoo, INotifyPropertyChanged" has two.
-            // However, the BaseType for the first is the "INotifyPropertyChanged" symbol.
-            // Also, "class Foo : INotifyPropertyChanged, IFoo" has just one - "IFoo",
-            // But the BaseType again is "INotifyPropertyChanged".
         }
     }
 }
