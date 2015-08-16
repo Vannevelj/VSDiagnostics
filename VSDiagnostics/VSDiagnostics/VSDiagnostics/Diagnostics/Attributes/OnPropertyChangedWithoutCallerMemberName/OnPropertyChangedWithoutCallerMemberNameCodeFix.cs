@@ -29,14 +29,18 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
             context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.OnPropertyChangedWithoutCallerMemberNameCodeFixTitle, x => AddCallerMemberNameAttribute(context.Document, root, statement), nameof(OnPropertyChangedWithoutCallerMemberNameAnalyzer)), diagnostic);
         }
 
-        private Task<Solution> AddCallerMemberNameAttribute(Document document, SyntaxNode root, SyntaxNode statement)
+        private async Task<Solution> AddCallerMemberNameAttribute(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var methodDeclaration = (MethodDeclarationSyntax)statement;
             var param = methodDeclaration.ParameterList.Parameters.First();
 
             var callerMemberNameAttribute = SyntaxFactory.Attribute(SyntaxFactory.ParseName("CallerMemberName"));
             var attributeList = SyntaxFactory.AttributeList().AddAttributes(callerMemberNameAttribute);
-            var newParam = param.WithAttributeLists(param.AttributeLists.Add(attributeList)).WithDefault(SyntaxFactory.EqualsValueClause(SyntaxFactory.ParseExpression("\"\"")));
+
+            var newParam = param.Default == null
+                ? param.WithAttributeLists(param.AttributeLists.Add(attributeList))
+                    .WithDefault(SyntaxFactory.EqualsValueClause(SyntaxFactory.ParseExpression("\"\"")))
+                : param.WithAttributeLists(param.AttributeLists.Add(attributeList));
 
             var newRoot = root.ReplaceNode(param, newParam).WithAdditionalAnnotations(Formatter.Annotation);
 
@@ -54,8 +58,11 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
                         .WithAdditionalAnnotations(Formatter.Annotation);
             }
 
+            var semanticModel = await document.GetSemanticModelAsync();
+            var symbol = semanticModel.GetDeclaredSymbol(methodDeclaration);
+
             var newDocument = document.WithSyntaxRoot(newRoot);
-            return Task.FromResult(newDocument.Project.Solution);
+            return newDocument.Project.Solution;
         }
     }
 }

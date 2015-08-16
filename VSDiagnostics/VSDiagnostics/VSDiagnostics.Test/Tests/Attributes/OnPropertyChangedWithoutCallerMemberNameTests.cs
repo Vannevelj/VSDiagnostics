@@ -24,7 +24,7 @@ namespace ConsoleApplication1
     class Foo : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName = null)
+        protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -87,7 +87,7 @@ namespace ConsoleApplication1
     class Foo : INotifyPropertyChanged, IFoo
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName = null)
+        protected virtual void OnPropertyChanged(string propertyName = ""Biz"")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -107,7 +107,7 @@ namespace ConsoleApplication1
     class Foo : INotifyPropertyChanged, IFoo
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = """")
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = ""Biz"")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -133,7 +133,7 @@ namespace ConsoleApplication1
     class Foo : IFoo, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName = null)
+        protected virtual void OnPropertyChanged(string propertyName = """")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -177,7 +177,7 @@ namespace ConsoleApplication1
         void PropertyChanged(string foo) { }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName = null)
+        protected virtual void OnPropertyChanged(string propertyName = """")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -300,6 +300,62 @@ namespace ConsoleApplication1
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([Obsolete][CallerMemberName] string propertyName = """")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, OnPropertyChangedWithoutCallerMemberNameAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_RemovesReferenceParam_InvokesWarning()
+        {
+            var original = @"
+using System.ComponentModel;
+
+namespace ConsoleApplication1
+{
+    class Foo : INotifyPropertyChanged
+    {
+        private int _bar = 0;
+        public int Bar {
+            get { return _bar; }
+            set
+            {
+                _bar = value;
+                OnPropertyChanged(""Bar""); }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}";
+
+            var result = @"
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace ConsoleApplication1
+{
+    class Foo : INotifyPropertyChanged
+    {
+        private int _bar = 0;
+        public int Bar {
+            get { return _bar; }
+            set
+            {
+                _bar = value;
+                OnPropertyChanged(); }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
