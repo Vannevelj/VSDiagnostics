@@ -87,8 +87,8 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
             for (var index = 1; index < placeholders.Count; index++)
             {
                 int firstValue, secondValue;
-                if (!int.TryParse(StringPlaceholdersInWrongOrderHelper.Normalize(placeholders[index - 1].Value), out firstValue) ||
-                    !int.TryParse(StringPlaceholdersInWrongOrderHelper.Normalize(placeholders[index].Value), out secondValue))
+                if (!int.TryParse(placeholders[index - 1].Groups["index"].Value, out firstValue) ||
+                    !int.TryParse(placeholders[index].Groups["index"].Value, out secondValue))
                 {
                     // Parsing failed
                     return;
@@ -110,7 +110,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
                     for (var counter = 0; counter < currentIndex; counter++)
                     {
                         int intValue;
-                        if (int.TryParse(StringPlaceholdersInWrongOrderHelper.Normalize(placeholders[counter].Value), out intValue) && intValue == value)
+                        if (int.TryParse(placeholders[counter].Groups["index"].Value, out intValue) && intValue == value)
                         {
                             return true;
                         }
