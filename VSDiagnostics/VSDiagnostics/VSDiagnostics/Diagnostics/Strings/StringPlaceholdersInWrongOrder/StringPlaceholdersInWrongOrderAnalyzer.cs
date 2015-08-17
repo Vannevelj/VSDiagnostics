@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using System.Globalization;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -102,8 +103,24 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
                     return;
                 }
 
+                // Given a scenario {0} {1} {0} we have to make sure that this doesn't trigger a warning when we're simply re-using an index. 
+                // Those are exempt from the "always be ascending or equal" rule.
+                Func<int, int, bool> hasBeenUsedBefore = (value, currentIndex) =>
+                {
+                    for (var counter = 0; counter < currentIndex; counter++)
+                    {
+                        int intValue;
+                        if (int.TryParse(StringPlaceholdersInWrongOrderHelper.Normalize(placeholders[counter].Value), out intValue) && intValue == value)
+                        {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                };
+
                 // They should be in ascending or equal order
-                if (firstValue > secondValue)
+                if (firstValue > secondValue && !hasBeenUsedBefore(secondValue, index))
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, invocation.GetLocation()));
                     return;
