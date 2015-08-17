@@ -125,7 +125,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node is MethodDeclarationSyntax)
             {
                 var declarationExpression = (MethodDeclarationSyntax)context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())) && !(declarationExpression.Parent is InterfaceDeclarationSyntax))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 

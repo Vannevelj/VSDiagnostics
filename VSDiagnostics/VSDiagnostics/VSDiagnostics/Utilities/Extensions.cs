@@ -11,6 +11,8 @@ namespace VSDiagnostics.Utilities
     {
         public static bool ImplementsInterface(this ClassDeclarationSyntax classDeclaration, SemanticModel semanticModel, Type interfaceType)
         {
+            if (classDeclaration == null) { return false; }
+
             var declaredSymbol = semanticModel.GetDeclaredSymbol(classDeclaration);
 
             return declaredSymbol != null &&
