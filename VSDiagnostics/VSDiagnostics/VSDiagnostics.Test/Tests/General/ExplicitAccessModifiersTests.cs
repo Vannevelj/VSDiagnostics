@@ -1779,5 +1779,40 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_InterfaceMemberDeclaration_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    internal interface MyInterface
+    {
+        void MyMethod();
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_NestedInterfaceMemberDeclaration_DoesNotInvokeWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        private interface MyInternalInterface
+        {
+            void MyMethod();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }
