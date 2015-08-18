@@ -187,5 +187,23 @@ namespace VSDiagnostics.Test.Tests.Strings
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void ReplaceEmptyStringsWithStringDotEmpty_WithConstField_DoesNotInvokeWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {
+            private const string x = """";
+        }
+    }";
+
+            VerifyDiagnostic(original);
+        }
     }
 }
