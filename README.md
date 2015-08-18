@@ -24,25 +24,41 @@ Currently these diagnostics are implemented:
 
 | Category | Name | Description
 |:-:|:-:|:-:
-| Exceptions | EmptyArgumentException | Guards against using an `ArgumentException` without specifying which argument.
-| Exceptions   | SingleGeneralException  | Guards against using a catch-all clause.
-| Exceptions  | CatchNullReferenceException  | Guards against catching a NullReferenceException.
-| Exceptions | ArgumentExceptionWithNameofOperator | `ArgumentException` and its subclasses should use `nameof()` when they refer to a method parameter.
-| Exceptions | RethrowExceptionWithoutLosingStacktrace | Warns when an exception is rethrown in a way that it loses the stacktrace.
-| Exceptions | EmptyCatchClause | Warns when an exception catch block is empty.
 | Async | AsyncMethodWithoutAsyncSuffix | Asynchronous methods should end with -Async.
-| Strings | ReplaceEmptyStringWithStringDotEmpty | Use `string.Empty` instead of `""`.
-| Tests | TestMethodWithoutPublicModifier | Change the access modifier to `public` for all methods annotated as test. Supports NUnit, MSTest and xUnit.net.
-| General | NullableToShorthand | Changes `Nullable<T>` to `T?`.
-| General | IfStatementWithoutBraces | Changes one-liner `if` and `else` statements to be surrounded in a block.
+| Attributes | AttributeWithEmptyArgumentList | Attributes with empty argument lists can have the argument list removed.
+| Attributes | EnumCanHaveFlagsAttribute | Gives an enum the [Flags] attribute.
+| Attributes | ObsoleteAttributeWithoutReason | Complains if the [Obsolete] attribute is used without an explicit reason.
+| Attributes | OnPropertyChangedWithoutCallerMemberName | The `OnPropertyChanged()` method can automatically get the caller member name.
+| Exceptions | ArgumentExceptionWithoutNameofOperator | `ArgumentException` and its subclasses should use `nameof()` when they refer to a method parameter.
+| Exceptions | CatchNullReferenceException  | Guards against catching a NullReferenceException.
+| Exceptions | EmptyArgumentException | Guards against using an `ArgumentException` without specifying which argument.
+| Exceptions | EmptyCatchClause | Warns when an exception catch block is empty.
+| Exceptions | RethrowExceptionWithoutLosingStacktrace | Warns when an exception is rethrown in a way that it loses the stacktrace.
+| Exceptions | SingleGeneralException  | Guards against using a catch-all clause.
+| General | AsToCast | Allows you to change as statements to cast statements.
+| General | CastToAs | Allows you to change cast statements to as statements.
+| General | CompareBooleanToFalseLiteral | A boolean expression doesn't have to be compared to `false`.
+| General | CompareBooleanToTrueLiteral | A boolean expression doesn't have to be compared to `true`.
 | General | ConditionalOperatorReturnsDefaultOptions | The conditional operator shouldn't return redundant `true` and `false` literals.
-| General | CompareBooleanToTrueLiteral | A boolean expression doesn't have to be compared to true.
-| General | TypeToVar | Use `var` instead of an explicit type.
-| General | OnPropertyChangedWithoutNameOfOperator | Use the `nameof()` operator in conjunction with `OnPropertyChanged`
-| General | SimplifyExpressionBodiedMember | Simplify the expression using an expression-bodied member.
-| General | TryCastWithoutUsingAsNotNull | A conversion can be done using `as` + a `null` comparison.
+| General | ConditionalOperatorReturnsInvertedDefaultOptions | The conditional operator shouldn't return redundant `false` and `true` literals.
+| General | ConditionIsAlwaysFalse | Complains about `if` statements of the form `if (statement) { /* body */ }`, where "statement" is always evaluates to `false`.
+| General | ConditionIsAlwaysTrue | Complains about `if` statements of the form `if (statement) { /* body */ }`, where "statement" is always evaluates to `true`.
+| General | ExplicitAccessModifiers | Inserts the default access modifier for a declaration.
+| General | GotoDetection | Detects usage of the `goto` keyword.
+| General | IfStatementWithoutBraces | Changes one-liner `if` and `else` statements to be surrounded in a block.
 | General | NamingConventions | Implements the most common configuration of naming conventions.
 | General | NonEncapsulatedOrMutableField | A `public`, `internal` or `protected internal` non-`const`, non-`readonly` field should be used as a property.
+| General | NullableToShorthand | Changes `Nullable<T>` to `T?`.
+| General | OnPropertyChangedWithoutNameOfOperator | Use the `nameof()` operator in conjunction with `OnPropertyChanged`.
+| General | SimplifyExpressionBodiedMember | Simplify the expression using an expression-bodied member.
+| General | SingleEmptyConstructor | Warns about using a redundant default constructor.
+| General | TryCastWithoutUsingAsNotNull | A conversion can be done using `as` + a `null` comparison.
+| General | TypeToVar | Use `var` instead of an explicit type.
+| General | UseAliasesInsteadOfConcreteType | Use the built-in type aliases instead the concrete type.
+| Strings | ReplaceEmptyStringWithStringDotEmpty | Use `string.Empty` instead of `""`.
+| Strings | StringPlaceholdersInWrongOrder | Adjusts the placeholders in `string.Format()` calls to be in numerical order.
+| Tests | RemoveTestSuffix | Test methods do not need to use the "Test" suffic.
+| Tests | TestMethodWithoutPublicModifier | Change the access modifier to `public` for all methods annotated as test. Supports NUnit, MSTest and xUnit.net.
 
 ## How do I use this?
 
