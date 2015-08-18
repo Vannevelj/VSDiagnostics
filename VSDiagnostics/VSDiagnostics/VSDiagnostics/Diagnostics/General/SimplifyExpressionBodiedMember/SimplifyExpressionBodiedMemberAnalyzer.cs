@@ -13,7 +13,6 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
     {
         private const string DiagnosticId = nameof(SimplifyExpressionBodiedMemberAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.SimplifyExpressionBodiedMemberAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.SimplifyExpressionBodiedMemberAnalyzerTitle;
@@ -57,6 +56,11 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
             }
 
             if (propertyDeclaration.DescendantNodesAndTokensAndSelf().Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
+            {
+                return null;
+            }
+
+            if (propertyDeclaration.AccessorList.Accessors.Any(x => x.Keyword.IsKind(SyntaxKind.SetKeyword)))
             {
                 return null;
             }
