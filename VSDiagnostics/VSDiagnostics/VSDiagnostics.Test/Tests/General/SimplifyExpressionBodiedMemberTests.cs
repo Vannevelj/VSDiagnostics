@@ -279,7 +279,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMember_WithPropertyWithGetAndSet_DoesNotInvokeWarning()
+        public void SimplifyExpressionBodiedMember_WithAutoImplementedGetAndSet_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -405,6 +405,29 @@ namespace ConsoleApplication1
     [AttributeUsage(AttributeTargets.All)]
     class MyAttribute : Attribute
     {   
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithGetAndSetImplementation_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private string _myProperty;
+        string MyProperty 
+        { 
+            get { return _myProperty; } 
+            set { _myProperty = value; }
+        }
     }
 }";
 
