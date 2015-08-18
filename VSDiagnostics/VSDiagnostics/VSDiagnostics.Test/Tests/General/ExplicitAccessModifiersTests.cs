@@ -1781,7 +1781,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_InterfaceMemberDeclaration_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_InterfaceMethodMemberDeclaration_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -1798,7 +1798,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedInterfaceMemberDeclaration_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_NestedInterfaceMethodMemberDeclaration_DoesNotInvokeWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1808,6 +1808,41 @@ namespace ConsoleApplication1
         private interface MyInternalInterface
         {
             void MyMethod();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_InterfacePropertyMemberDeclaration_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    internal interface MyInterface
+    {
+        int MyMethod { get; set; }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_NestedInterfacePropertyMemberDeclaration_DoesNotInvokeWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        private interface MyInternalInterface
+        {
+            int MyMethod { get; set; }
         }
     }
 }";
