@@ -12,7 +12,6 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
     {
         private const string DiagnosticId = nameof(ReplaceEmptyStringWithStringDotEmptyAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-
         private static readonly string Category = VSDiagnosticsResources.StringsCategory;
         private static readonly string Message = VSDiagnosticsResources.ReplaceEmptyStringWithStringDotEmptyAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.ReplaceEmptyStringWithStringDotEmptyAnalyzerTitle;
@@ -47,6 +46,15 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
             if (stringLiteral.Ancestors().Any(x => x.IsKind(SyntaxKind.Parameter)))
             {
                 return;
+            }
+
+            var variableDeclaration = stringLiteral.Ancestors().OfType<FieldDeclarationSyntax>().FirstOrDefault();
+            if (variableDeclaration != null)
+            {
+                if (variableDeclaration.Modifiers.Any(x => x.IsKind(SyntaxKind.ConstKeyword)))
+                {
+                    return;
+                }
             }
 
             context.ReportDiagnostic(Diagnostic.Create(Rule, stringLiteral.GetLocation()));
