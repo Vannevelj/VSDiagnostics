@@ -10,7 +10,7 @@ namespace VSDiagnostics.Diagnostics.General.GotoDetection
     internal class GotoDetectionAnalyzer : DiagnosticAnalyzer
     {
         private const string DiagnosticId = nameof(GotoDetectionAnalyzer);
-        private const DiagnosticSeverity Severity = DiagnosticSeverity.Hidden;
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.GotoDetectionAnalyzerMessage;
