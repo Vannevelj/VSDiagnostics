@@ -10,7 +10,7 @@ namespace VSDiagnostics.Diagnostics.General.CastToAs
     public class CastToAsAnalyzer : DiagnosticAnalyzer
     {
         private const string DiagnosticId = nameof(CastToAsAnalyzer);
-        private const DiagnosticSeverity Severity = DiagnosticSeverity.Info;
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Hidden;
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.CastToAsAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.CastToAsAnalyzerTitle;
