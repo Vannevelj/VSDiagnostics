@@ -11,7 +11,6 @@ namespace VSDiagnostics.Diagnostics.General.CastToAs
     {
         private const string DiagnosticId = nameof(CastToAsAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Info;
-
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.CastToAsAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.CastToAsAnalyzerTitle;
@@ -33,7 +32,8 @@ namespace VSDiagnostics.Diagnostics.General.CastToAs
                 return;
             }
 
-            if (context.SemanticModel.GetTypeInfo(castExpression.Expression).ConvertedType.IsValueType)
+            var castedTypeInfo = context.SemanticModel.GetTypeInfo(castExpression.Expression);
+            if (castedTypeInfo.ConvertedType != null && castedTypeInfo.ConvertedType.IsValueType)
             {
                 return;
             }
