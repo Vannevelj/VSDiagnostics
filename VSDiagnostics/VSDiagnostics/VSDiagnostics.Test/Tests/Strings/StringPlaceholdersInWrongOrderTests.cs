@@ -497,5 +497,25 @@ namespace VSDiagnostics.Test.Tests.Strings
     }";
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void StringPlaceholdersInWrongOrder_WithReusedPlaceholderInDescendingOrder_DoesNotInvokeWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {
+            void Method()
+            {
+                string s = string.Format(""{0} {1} {0}"", ""a"", ""b"");
+            }
+        }
+    }";
+            VerifyDiagnostic(original);
+        }
     }
 }

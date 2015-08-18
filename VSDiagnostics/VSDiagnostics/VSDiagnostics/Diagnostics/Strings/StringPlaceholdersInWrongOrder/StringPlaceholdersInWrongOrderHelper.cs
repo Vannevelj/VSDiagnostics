@@ -4,8 +4,6 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
 {
     internal static class StringPlaceholdersInWrongOrderHelper
     {
-        private const string Pattern = @"(?<!\{)\{(?:\{\{)*(\d+(?::.*?)?)\}(?:\}\})*(?!\})";
-
         /// <summary>
         ///     Removes all curly braces and formatting definitions from the placeholder
         /// </summary>
@@ -33,7 +31,8 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
         /// <returns>Returns a collection of matches according to the regex.</returns>
         internal static MatchCollection GetPlaceholders(string input)
         {
-            return Regex.Matches(input, Pattern);
+            // This regex uses a named group so we can easily access the actual value
+            return Regex.Matches(input, @"(?<!\{)\{(?:\{\{)*((?<index>\d+)(?::.*?)?)\}(?:\}\})*(?!\})");
         }
 
         /// <summary>
@@ -42,7 +41,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
         /// </summary>
         internal static string[] GetPlaceholdersSplit(string input)
         {
-            return Regex.Split(input, Pattern);
+            return Regex.Split(input, @"(?<!\{)\{(?:\{\{)*(\d+(?::.*?)?)\}(?:\}\})*(?!\})");
         }
     }
 }
