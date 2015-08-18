@@ -40,6 +40,11 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
+            if (context.Node.Parent is InterfaceDeclarationSyntax)
+            {
+                return;
+            }
+
             if (context.Node is ClassDeclarationSyntax)
             {
                 var declarationExpression = (ClassDeclarationSyntax) context.Node;
@@ -125,7 +130,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node is MethodDeclarationSyntax)
             {
                 var declarationExpression = (MethodDeclarationSyntax)context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())) && !(declarationExpression.Parent is InterfaceDeclarationSyntax))
+                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
                 {
                     var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
