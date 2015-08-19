@@ -43,9 +43,13 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
                 return;
             }
 
-            var invokedProperty = invocation.ArgumentList.Arguments.FirstOrDefault();
+            if (invocation.ArgumentList == null || !invocation.ArgumentList.Arguments.Any())
+            {
+                return;
+            }
 
-            var argumentLiteralExpression = invokedProperty?.Expression as LiteralExpressionSyntax;
+            var invokedProperty = invocation.ArgumentList.Arguments.FirstOrDefault();
+            var argumentLiteralExpression = invokedProperty.Expression as LiteralExpressionSyntax;
             if (argumentLiteralExpression == null)
             {
                 return;
