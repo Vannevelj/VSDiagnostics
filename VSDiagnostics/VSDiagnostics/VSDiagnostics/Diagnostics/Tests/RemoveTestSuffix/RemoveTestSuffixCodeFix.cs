@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Editing;
+using Microsoft.CodeAnalysis.Rename;
 
 namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
 {
@@ -29,13 +29,21 @@ namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
             context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.RemoveTestSuffixCodeFixTitle, x => RemoveTestSuffix(context.Document, root, methodDeclaration), nameof(RemoveTestSuffixAnalyzer)), diagnostic);
         }
 
-        private Task<Solution> RemoveTestSuffix(Document document, SyntaxNode root, MethodDeclarationSyntax method)
+        private async Task<Solution> RemoveTestSuffix(Document document, SyntaxNode root, MethodDeclarationSyntax methodDeclaration)
         {
-            var generator = SyntaxGenerator.GetGenerator(document);
+            /*var generator = SyntaxGenerator.GetGenerator(document);
             var newMethod = generator.WithName(method, method.Identifier.Text.Remove(method.Identifier.Text.Length - 4));
             var newRoot = root.ReplaceNode(method, newMethod);
-            return Task.FromResult(document.WithSyntaxRoot(newRoot).Project.Solution);
-        }
+            return Task.FromResult(document.WithSyntaxRoot(newRoot).Project.Solution);*/
 
+            var methodSymbol = (await document.GetSemanticModelAsync()).GetDeclaredSymbol(methodDeclaration);
+            var newMethodName = methodDeclaration.Identifier.Text.Remove(methodDeclaration.Identifier.Text.Length - 4);
+
+            return await Renamer.RenameSymbolAsync(
+                document.Project.Solution,
+                methodSymbol,
+                newMethodName,
+                document.Project.Solution.Workspace.Options);
+        }
     }
 }
