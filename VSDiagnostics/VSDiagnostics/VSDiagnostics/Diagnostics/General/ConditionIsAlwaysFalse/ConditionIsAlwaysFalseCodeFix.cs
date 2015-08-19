@@ -30,7 +30,7 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysFalse
 
         private Task<Solution> RemoveConditionAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
-            var ifStatement = (IfStatementSyntax)statement;
+            var ifStatement = statement.Ancestors().OfType<IfStatementSyntax>().First();
 
             var newRoot =
                 root.RemoveNode(ifStatement, SyntaxRemoveOptions.KeepNoTrivia)
