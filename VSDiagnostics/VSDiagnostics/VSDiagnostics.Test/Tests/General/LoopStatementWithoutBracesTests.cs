@@ -23,7 +23,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             for (int i = 0; i < 10; i++) Console.WriteLine(""true"");
@@ -38,7 +38,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             for (int i = 0; i < 10; i++)
@@ -63,7 +63,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             for (int i = 0; i < 10; i++) /* comments */ Console.WriteLine(""true"");
@@ -78,7 +78,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             for (int i = 0; i < 10; i++) /* comments */
@@ -103,7 +103,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             for (int i = 0; i < 10; i++)
@@ -119,7 +119,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             for (int i = 0; i < 10; i++)
@@ -144,7 +144,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             for (int i = 0; i < 10; i++)
@@ -167,7 +167,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             while (true) Console.WriteLine(""true"");
@@ -182,7 +182,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             while (true)
@@ -207,7 +207,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             while (true) /* comments */ Console.WriteLine(""true"");
@@ -222,7 +222,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             while (true) /* comments */
@@ -247,7 +247,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             while (true)
@@ -263,7 +263,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             while (true)
@@ -288,7 +288,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             while (true)
@@ -312,7 +312,7 @@ using System.Collections.Generic;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             var list = new List<int>();
@@ -329,7 +329,7 @@ using System.Collections.Generic;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             var list = new List<int>();
@@ -356,7 +356,7 @@ using System.Collections.Generic;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             var list = new List<int>();
@@ -373,7 +373,7 @@ using System.Collections.Generic;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             var list = new List<int>();
@@ -400,7 +400,7 @@ using System.Collections.Generic;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             var list = new List<int>();
@@ -418,7 +418,7 @@ using System.Collections.Generic;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             var list = new List<int>();
@@ -445,7 +445,7 @@ using System.Collections.Generic;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             var list = new List<int>();
@@ -469,7 +469,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             do Console.WriteLine(""true""); while (true);
@@ -484,7 +484,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             do
@@ -510,7 +510,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             do /* comments */
@@ -527,7 +527,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             do /* comments */
@@ -553,7 +553,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             do
@@ -570,7 +570,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             do
@@ -596,7 +596,7 @@ using System.Text;
 namespace ConsoleApplication1
 {
     class MyClass
-    {   
+    {
         void Method()
         {
             do

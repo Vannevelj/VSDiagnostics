@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.General.LoopStatementWithoutBraces
 {
@@ -55,7 +56,7 @@ namespace VSDiagnostics.Diagnostics.General.LoopStatementWithoutBraces
                 newBlock = GetNewBlock(statement, doSyntax.Statement);
             }
 
-            var newRoot = root.ReplaceNode(statement, newBlock);
+            var newRoot = root.ReplaceNode(statement, newBlock).WithAdditionalAnnotations(Formatter.Annotation);
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);
         }
