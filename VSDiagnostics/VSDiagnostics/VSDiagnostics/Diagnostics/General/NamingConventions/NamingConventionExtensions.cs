@@ -131,14 +131,14 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
                 return "I" + normalizedString.Substring(1);
             }
 
-            // Something, something, isomething
-            if (normalizedString[0] != 'I')
+            // Something, something
+            if (normalizedString[0] != 'I' && normalizedString[0] != 'i')
             {
                 return "I" + char.ToUpper(normalizedString[0]) + normalizedString.Substring(1);
             }
 
-            // Isomething
-            if (normalizedString.Length >= 2 && normalizedString[0] == 'I' && char.IsLower(normalizedString[1]))
+            // Isomething, isomething
+            if (normalizedString.Length >= 2 && (normalizedString[0] == 'I' || normalizedString[0] == 'i') && char.IsLower(normalizedString[1]))
             {
                 return "I" + char.ToUpper(normalizedString[1]) + normalizedString.Substring(2);
             }
