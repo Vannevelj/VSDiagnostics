@@ -459,4 +459,13 @@
   <data name="OnPropertyChangedWithoutCallerMemberNameCodeFixTitle" xml:space="preserve">
     <value>Add attribute</value>
   </data>
+  <data name="LoopStatementWithoutBracesAnalyzerMessage" xml:space="preserve">
+    <value>A loop-statement should be written using braces.</value>
+  </data>
+  <data name="LoopStatementWithoutBracesAnalyzerTitle" xml:space="preserve">
+    <value>Loop blocks should use braces to denote start and end.</value>
+  </data>
+  <data name="LoopStatementWithoutBracesCodeFixTitle" xml:space="preserve">
+    <value>Use braces</value>
+  </data>
 </root>

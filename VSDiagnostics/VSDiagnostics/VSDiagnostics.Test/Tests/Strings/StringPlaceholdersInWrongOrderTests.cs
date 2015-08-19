@@ -517,5 +517,29 @@ namespace VSDiagnostics.Test.Tests.Strings
     }";
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void StringPlaceholdersInWrongOrder_StringsAreVariables_InvokesWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {
+            void Method()
+            {
+                var foo = ""{0} {1}""
+                var bar = ""bizz""
+                var baz = ""buzz""
+                var s = string.Format(foo, bar, baz);
+            }
+        }
+    }";
+
+            VerifyDiagnostic(original);
+        }
     }
 }
