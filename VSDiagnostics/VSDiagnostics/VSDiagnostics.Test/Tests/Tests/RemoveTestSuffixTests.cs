@@ -240,5 +240,52 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void RemoveTestSuffix_TestMethodDoesNotEndWithTest_UpdatesReferences_DoesNotInvokeWarning()
+        {
+            var original = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace ConsoleApplication1
+{
+    [TestClass]
+    class MyClass
+    {
+        void Foo()
+        {
+            MethodTest();
+        }
+
+        [Test]
+        public void MethodTest()
+        {
+        }
+    }
+}";
+
+            var result = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace ConsoleApplication1
+{
+    [TestClass]
+    class MyClass
+    {
+        void Foo()
+        {
+            Method();
+        }
+
+        [Test]
+        public void Method()
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(RemoveTestSuffixAnalyzer.Rule.MessageFormat.ToString(), "MethodTest"));
+            VerifyFix(original, result);
+        }
     }
 }

@@ -66,6 +66,12 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
                 return;
             }
 
+            if (!(firstArgument.Expression is LiteralExpressionSyntax) &&
+                !(secondArgument.Expression is LiteralExpressionSyntax))
+            {
+                return;
+            }
+
             // Get the formatted string from the correct position
             var firstArgumentIsLiteral = firstArgument.Expression is LiteralExpressionSyntax;
             var formatString = firstArgumentIsLiteral

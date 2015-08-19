@@ -575,6 +575,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A loop-statement should be written using braces..
+        /// </summary>
+        internal static string LoopStatementWithoutBracesAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("LoopStatementWithoutBracesAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loop blocks should use braces to denote start and end..
+        /// </summary>
+        internal static string LoopStatementWithoutBracesAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("LoopStatementWithoutBracesAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use braces.
+        /// </summary>
+        internal static string LoopStatementWithoutBracesCodeFixTitle {
+            get {
+                return ResourceManager.GetString("LoopStatementWithoutBracesCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The {0} {1} does not follow naming conventions. Should be {2}..
         /// </summary>
         internal static string NamingConventionsAnalyzerMessage {

@@ -693,6 +693,45 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void NamingConventions_WithInterface_WithLowercasePrefix_AndLowerFirstLetter_CallsAreUpdated_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    interface isomething
+    {
+    }
+
+    class MyClass
+    {
+        MyClass(isomething foo) {}
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    interface ISomething
+    {
+    }
+
+    class MyClass
+    {
+        MyClass(ISomething foo) {}
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "interface", "isomething", "ISomething"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
         public void NamingConventions_WithInterface_WithPrefix_AndLowerSecondLetter_InvokesWarning()
         {
             var original = @"
