@@ -31,11 +31,6 @@ namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
 
         private async Task<Solution> RemoveTestSuffix(Document document, SyntaxNode root, MethodDeclarationSyntax methodDeclaration)
         {
-            /*var generator = SyntaxGenerator.GetGenerator(document);
-            var newMethod = generator.WithName(method, method.Identifier.Text.Remove(method.Identifier.Text.Length - 4));
-            var newRoot = root.ReplaceNode(method, newMethod);
-            return Task.FromResult(document.WithSyntaxRoot(newRoot).Project.Solution);*/
-
             var methodSymbol = (await document.GetSemanticModelAsync()).GetDeclaredSymbol(methodDeclaration);
             var newMethodName = methodDeclaration.Identifier.Text.Remove(methodDeclaration.Identifier.Text.Length - 4);
 
