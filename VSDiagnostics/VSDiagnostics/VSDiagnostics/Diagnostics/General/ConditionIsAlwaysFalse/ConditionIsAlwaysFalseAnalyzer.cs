@@ -7,11 +7,10 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysFalse
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    class ConditionIsAlwaysFalseAnalyzer : DiagnosticAnalyzer
+    internal class ConditionIsAlwaysFalseAnalyzer : DiagnosticAnalyzer
     {
         private const string DiagnosticId = nameof(ConditionIsAlwaysFalseAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.ConditionIsAlwaysFalseAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.ConditionIsAlwaysFalseAnalyzerTitle;
@@ -31,7 +30,7 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysFalse
 
             if (ifStatement.Condition.IsKind(SyntaxKind.FalseLiteralExpression))
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, ifStatement.GetLocation()));
+                context.ReportDiagnostic(Diagnostic.Create(Rule, ifStatement.Condition.GetLocation()));
             }
         }
     }
