@@ -130,9 +130,6 @@
   <data name="AsToCastAnalyzerTitle" xml:space="preserve">
     <value>Use cast instead of as.</value>
   </data>
-  <data name="AsyncCategory" xml:space="preserve">
-    <value>Async</value>
-  </data>
   <data name="AsyncMethodWithoutAsyncSuffixAnalyzerMessage" xml:space="preserve">
     <value>Method "{0}" does not end with 'Async'.</value>
     <comment>{0} - Method name</comment>
@@ -467,5 +464,8 @@
   </data>
   <data name="LoopStatementWithoutBracesCodeFixTitle" xml:space="preserve">
     <value>Use braces</value>
+  </data>
+  <data name="AsyncCategory" xml:space="preserve">
+    <value>Async</value>
   </data>
 </root>
