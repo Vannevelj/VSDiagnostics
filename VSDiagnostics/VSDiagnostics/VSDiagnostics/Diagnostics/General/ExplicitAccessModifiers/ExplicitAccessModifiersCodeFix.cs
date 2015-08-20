@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Editing;
 
 namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
 {
@@ -34,106 +35,10 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
 
         private Task<Solution> AddModifier(Document document, SyntaxNode root, SyntaxNode statement, Accessibility accessibility)
         {
-            SyntaxNode newStatement = null;
-            var accessModifierTokens = SyntaxFactory.TokenList(AccessModifiers(accessibility));
+            var generator = SyntaxGenerator.GetGenerator(document);
+            var newStatement = generator.WithAccessibility(statement, accessibility);
 
-            if (statement is ClassDeclarationSyntax)
-            {
-                var classExpression = (ClassDeclarationSyntax) statement;
-
-                var newClass = classExpression.WithModifiers(accessModifierTokens.AddRange(classExpression.Modifiers));
-                newStatement = statement.ReplaceNode(statement, newClass);
-            }
-
-            if (statement is StructDeclarationSyntax)
-            {
-                var structExpression = (StructDeclarationSyntax)statement;
-
-                var newStruct = structExpression.WithModifiers(accessModifierTokens.AddRange(structExpression.Modifiers));
-                newStatement = statement.ReplaceNode(statement, newStruct);
-            }
-
-            if (statement is EnumDeclarationSyntax)
-            {
-                var enumExpression = (EnumDeclarationSyntax)statement;
-
-                var newEnum = enumExpression.WithModifiers(accessModifierTokens.AddRange(enumExpression.Modifiers));
-                newStatement = statement.ReplaceNode(statement, newEnum);
-            }
-
-            if (statement is DelegateDeclarationSyntax)
-            {
-                var delegateExpression = (DelegateDeclarationSyntax)statement;
-
-                var newDelegate = delegateExpression.WithModifiers(accessModifierTokens.AddRange(delegateExpression.Modifiers));
-                newStatement = statement.ReplaceNode(statement, newDelegate);
-            }
-
-            if (statement is InterfaceDeclarationSyntax)
-            {
-                var interfaceExpression = (InterfaceDeclarationSyntax)statement;
-
-                var newInterface = interfaceExpression.WithModifiers(accessModifierTokens.AddRange(interfaceExpression.Modifiers));
-                newStatement = statement.ReplaceNode(statement, newInterface);
-            }
-
-            if (statement is FieldDeclarationSyntax)
-            {
-                var fieldExpression = (FieldDeclarationSyntax)statement;
-
-                var newStruct = fieldExpression.WithModifiers(accessModifierTokens.AddRange(fieldExpression.Modifiers));
-                newStatement = statement.ReplaceNode(statement, newStruct);
-            }
-
-            if (statement is PropertyDeclarationSyntax)
-            {
-                var propertyExpression = (PropertyDeclarationSyntax)statement;
-
-                var newProperty = propertyExpression.WithModifiers(accessModifierTokens.AddRange(propertyExpression.Modifiers));
-                newStatement = statement.ReplaceNode(statement, newProperty);
-            }
-
-            if (statement is MethodDeclarationSyntax)
-            {
-                var methodExpression = (MethodDeclarationSyntax)statement;
-
-                var newMethod = methodExpression.WithModifiers(accessModifierTokens.AddRange(methodExpression.Modifiers));
-                newStatement = statement.ReplaceNode(statement, newMethod);
-            }
-
-            if (statement is ConstructorDeclarationSyntax)
-            {
-                var constructorExpression = (ConstructorDeclarationSyntax)statement;
-
-                var newConstructor = constructorExpression.WithModifiers(accessModifierTokens.AddRange(constructorExpression.Modifiers));
-                newStatement = statement.ReplaceNode(statement, newConstructor);
-            }
-
-            if (statement is EventFieldDeclarationSyntax)
-            {
-                var eventFieldExpression = (EventFieldDeclarationSyntax)statement;
-
-                var newEventField = eventFieldExpression.WithModifiers(accessModifierTokens.AddRange(eventFieldExpression.Modifiers));
-                newStatement = statement.ReplaceNode(statement, newEventField);
-            }
-
-            if (statement is EventDeclarationSyntax)
-            {
-                var eventExpression = (EventDeclarationSyntax)statement;
-
-                var newEvent = eventExpression.WithModifiers(accessModifierTokens.AddRange(eventExpression.Modifiers));
-                newStatement = statement.ReplaceNode(statement, newEvent);
-            }
-
-            if (statement is IndexerDeclarationSyntax)
-            {
-                var indexerExpression = (IndexerDeclarationSyntax)statement;
-
-                var newIndexer = indexerExpression.WithModifiers(accessModifierTokens.AddRange(indexerExpression.Modifiers));
-                newStatement = statement.ReplaceNode(statement, newIndexer);
-            }
-
-            var newRoot = newStatement == null ? root : root.ReplaceNode(statement, newStatement);
+            var newRoot = root.ReplaceNode(statement, newStatement);
             return Task.FromResult(document.WithSyntaxRoot(newRoot).Project.Solution);
         }
 

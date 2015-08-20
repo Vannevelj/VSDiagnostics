@@ -1849,5 +1849,570 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_ClassDeclaration_WithXmlDoc_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    /// <summary>
+    /// My XML doc for MyClass...
+    /// Second line...
+    /// </summary>
+    class MyClass
+    {
+        /// <summary>
+        /// My XML doc for MyInternalClass...
+        /// </summary>
+        class MyInternalClass
+        {
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    /// <summary>
+    /// My XML doc for MyClass...
+    /// Second line...
+    /// </summary>
+    internal class MyClass
+    {
+        /// <summary>
+        /// My XML doc for MyInternalClass...
+        /// </summary>
+        private class MyInternalClass
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_StructDeclaration_WithXmlDoc_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    /// <summary>
+    /// My XML doc for MyStruct...
+    /// Second line...
+    /// </summary>
+    struct MyStruct
+    {
+        /// <summary>
+        /// My XML doc for MyInternalStruct...
+        /// </summary>
+        struct MyInternalStruct
+        {
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    /// <summary>
+    /// My XML doc for MyStruct...
+    /// Second line...
+    /// </summary>
+    internal struct MyStruct
+    {
+        /// <summary>
+        /// My XML doc for MyInternalStruct...
+        /// </summary>
+        private struct MyInternalStruct
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_InterfaceDeclaration_WithXmlDoc_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    /// <summary>
+    /// My XML doc for IMyInterface...
+    /// Second line...
+    /// </summary>
+    interface IMyInterface
+    {
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    /// <summary>
+    /// My XML doc for IMyInterface...
+    /// Second line...
+    /// </summary>
+    internal interface IMyInterface
+    {
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_NestednterfaceDeclaration_WithXmlDoc_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    /// <summary>
+    /// My XML doc for MyClass...
+    /// Second line...
+    /// </summary>
+    class MyClass
+    {
+        /// <summary>
+        /// My XML doc for MyInternalInterface...
+        /// </summary>
+        interface MyInternalInterface
+        {
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    /// <summary>
+    /// My XML doc for MyClass...
+    /// Second line...
+    /// </summary>
+    internal class MyClass
+    {
+        /// <summary>
+        /// My XML doc for MyInternalInterface...
+        /// </summary>
+        private interface MyInternalInterface
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_EnumDeclaration_WithXmlDoc_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    /// <summary>
+    /// My XML doc for MyEnum...
+    /// Second line...
+    /// </summary>
+    enum MyEnum
+    {
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    /// <summary>
+    /// My XML doc for MyEnum...
+    /// Second line...
+    /// </summary>
+    internal enum MyEnum
+    {
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_NestedEnumDeclaration_WithXmlDoc_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    /// <summary>
+    /// My XML doc for MyClass...
+    /// Second line...
+    /// </summary>
+    class MyClass
+    {
+        /// <summary>
+        /// My XML doc for MyInternalEnum...
+        /// </summary>
+        enum MyInternalEnum
+        {
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    /// <summary>
+    /// My XML doc for MyClass...
+    /// Second line...
+    /// </summary>
+    internal class MyClass
+    {
+        /// <summary>
+        /// My XML doc for MyInternalEnum...
+        /// </summary>
+        private enum MyInternalEnum
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_DelegateDeclaration_WithXmlDoc_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    /// <summary>
+    /// My XML doc for Foo...
+    /// </summary>
+    /// <param name=""bar""></param>
+    delegate void Foo(int bar);
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    /// <summary>
+    /// My XML doc for Foo...
+    /// </summary>
+    /// <param name=""bar""></param>
+    internal delegate void Foo(int bar);
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_NestedDelegateDeclaration_WithXmlDoc_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    /// <summary>
+    /// My XML doc for MyClass...
+    /// Second line...
+    /// </summary>
+    class MyClass
+    {
+        /// <summary>
+        /// My XML doc for Foo...
+        /// </summary>
+        /// <param name=""bar""></param>
+        delegate void Foo(int bar);
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    /// <summary>
+    /// My XML doc for MyClass...
+    /// Second line...
+    /// </summary>
+    internal class MyClass
+    {
+        /// <summary>
+        /// My XML doc for Foo...
+        /// </summary>
+        /// <param name=""bar""></param>
+        private delegate void Foo(int bar);
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_FieldDeclaration_WithXmlDoc_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        /// <summary>
+        /// My XML doc for Foo...
+        /// </summary>
+        int Foo;
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        /// <summary>
+        /// My XML doc for Foo...
+        /// </summary>
+        private int Foo;
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_PropertyDeclaration_WithXmlDoc_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        /// <summary>
+        /// My XML doc for Foo...
+        /// </summary>
+        int Foo { get; set; }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        /// <summary>
+        /// My XML doc for Foo...
+        /// </summary>
+        private int Foo { get; set; }
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
+                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_MethodDeclaration_WithXmlDoc_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        /// <summary>
+        /// My XML doc for Foo...
+        /// </summary>
+        void Foo() { }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        /// <summary>
+        /// My XML doc for Foo...
+        /// </summary>
+        private void Foo() { }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_ClassConstructorDeclaration_WithXmlDoc_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        /// <summary>
+        /// My XML doc for MyClass ctor...
+        /// </summary>
+        MyClass() { }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        /// <summary>
+        /// My XML doc for MyClass ctor...
+        /// </summary>
+        private MyClass() { }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_EventFieldDeclaration_WithXmlDoc_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        /// <summary>
+        /// My XML doc for MyEvent...
+        /// </summary>
+        event EventHandler MyEvent;
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        /// <summary>
+        /// My XML doc for MyEvent...
+        /// </summary>
+        private event EventHandler MyEvent;
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_EventDeclaration_WithXmlDoc_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        /// <summary>
+        /// My XML doc for MyEvent...
+        /// </summary>
+        event EventHandler MyEvent
+        {
+            add { var foo = value; }
+            remove { var foo = value; }
+        }
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        /// <summary>
+        /// My XML doc for MyEvent...
+        /// </summary>
+        private event EventHandler MyEvent
+        {
+            add { var foo = value; }
+            remove { var foo = value; }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_IndexerDeclaration_WithXmlDoc_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        /// <summary>
+        /// My XML doc for indexer...
+        /// </summary>
+        /// <param name=""index""></param>
+        /// <returns>Value at index.</returns>
+        int this[int index]
+        {
+            get { return index; }
+            set { var foo = value; }
+        }
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        /// <summary>
+        /// My XML doc for indexer...
+        /// </summary>
+        /// <param name=""index""></param>
+        /// <returns>Value at index.</returns>
+        private int this[int index]
+        {
+            get { return index; }
+            set { var foo = value; }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
+            VerifyFix(original, result);
+        }
     }
 }
