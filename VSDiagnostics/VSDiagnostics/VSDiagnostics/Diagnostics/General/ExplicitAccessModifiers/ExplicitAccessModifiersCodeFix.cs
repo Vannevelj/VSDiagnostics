@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 
 namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
@@ -40,25 +38,6 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
 
             var newRoot = root.ReplaceNode(statement, newStatement);
             return Task.FromResult(document.WithSyntaxRoot(newRoot).Project.Solution);
-        }
-
-        private SyntaxToken[] AccessModifiers(Accessibility accessibility)
-        {
-            switch (accessibility)
-            {
-                case Accessibility.Private:
-                    return new[] { SyntaxFactory.Token(SyntaxKind.PrivateKeyword) };
-                case Accessibility.ProtectedAndInternal:
-                    return new[] { SyntaxFactory.Token(SyntaxKind.ProtectedKeyword), SyntaxFactory.Token(SyntaxKind.InternalKeyword) };
-                case Accessibility.Protected:
-                    return new[] { SyntaxFactory.Token(SyntaxKind.ProtectedKeyword) };
-                case Accessibility.Internal:
-                    return new[] { SyntaxFactory.Token(SyntaxKind.InternalKeyword) };
-                case Accessibility.Public:
-                    return new[] { SyntaxFactory.Token(SyntaxKind.PublicKeyword) };
-            }
-
-            return null;    // this cannot be reached
         }
     }
 }
