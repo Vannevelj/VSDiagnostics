@@ -329,5 +329,85 @@ namespace ConsoleApplication1
                 IfStatementWithoutBracesAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void IfStatementWithoutBraces_ElseIfWithBraces_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            var i = 5;
+            if (i == 5)
+            {
+                Console.WriteLine(""true"");
+            }
+            else if (i == 4)
+            {
+                Console.WriteLine(""true"");
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void IfStatementWithoutBraces_ElseIfWithoutBraces_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            var i = 5;
+            if (i == 5)
+            {
+                Console.WriteLine(""true"");
+            }
+            else if (i == 4)
+                Console.WriteLine(""true"");
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            var i = 5;
+            if (i == 5)
+            {
+                Console.WriteLine(""true"");
+            }
+            else if (i == 4)
+            {
+                Console.WriteLine(""true"");
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, IfStatementWithoutBracesAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
     }
 }
