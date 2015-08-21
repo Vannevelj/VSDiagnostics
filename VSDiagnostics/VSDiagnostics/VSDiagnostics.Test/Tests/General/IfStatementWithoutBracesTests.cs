@@ -329,5 +329,34 @@ namespace ConsoleApplication1
                 IfStatementWithoutBracesAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void IfStatementWithoutBraces_ElseIfWithBraces_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            var i = 5;
+            if (i == 5)
+            {
+                
+            }
+            else if (i == 4)
+            {
+                
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }

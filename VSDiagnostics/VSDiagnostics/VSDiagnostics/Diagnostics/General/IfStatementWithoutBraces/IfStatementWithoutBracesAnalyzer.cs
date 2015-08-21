@@ -57,6 +57,11 @@ namespace VSDiagnostics.Diagnostics.General.IfStatementWithoutBraces
                 return;
             }
 
+            if (elseClause.Statement is IfStatementSyntax)
+            {
+                return; 
+            }
+
             context.ReportDiagnostic(Diagnostic.Create(Rule, elseClause.ElseKeyword.GetLocation()));
         }
     }
