@@ -27,7 +27,7 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysFalse
             var statement = root.FindNode(diagnosticSpan);
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.ConditionIsAlwaysTrueCodeFixTitle,
-                    x => RemoveConditionAsync(context.Document, root, statement), nameof(ConditionIsAlwaysFalseCodeFix)), diagnostic);
+                    x => RemoveConditionAsync(context.Document, root, statement), nameof(ConditionIsAlwaysFalseAnalyzer)), diagnostic);
         }
 
         private Task<Solution> RemoveConditionAsync(Document document, SyntaxNode root, SyntaxNode statement)

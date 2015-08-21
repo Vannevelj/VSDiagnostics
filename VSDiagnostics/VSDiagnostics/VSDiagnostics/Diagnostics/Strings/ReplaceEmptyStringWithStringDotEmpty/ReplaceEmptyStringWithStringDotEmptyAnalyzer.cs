@@ -12,6 +12,7 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
     {
         private const string DiagnosticId = nameof(ReplaceEmptyStringWithStringDotEmptyAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+
         private static readonly string Category = VSDiagnosticsResources.StringsCategory;
         private static readonly string Message = VSDiagnosticsResources.ReplaceEmptyStringWithStringDotEmptyAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.ReplaceEmptyStringWithStringDotEmptyAnalyzerTitle;

@@ -9,7 +9,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.EmptyCatchClause
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class EmptyCatchClauseAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(EmptyCatchClause);
+        private const string DiagnosticId = nameof(EmptyCatchClauseAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.ExceptionsCategory;
