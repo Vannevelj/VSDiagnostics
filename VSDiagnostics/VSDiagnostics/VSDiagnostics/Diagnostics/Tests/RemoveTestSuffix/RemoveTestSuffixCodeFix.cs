@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.Rename;
 
 namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
 {
-    [ExportCodeFixProvider("RemoveTestSuffix", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(RemoveTestSuffixCodeFix), LanguageNames.CSharp), Shared]
     public class RemoveTestSuffixCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(RemoveTestSuffixAnalyzer.Rule.Id);

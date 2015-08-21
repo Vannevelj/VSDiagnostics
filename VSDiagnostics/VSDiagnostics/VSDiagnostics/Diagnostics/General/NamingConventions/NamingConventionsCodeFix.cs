@@ -12,7 +12,7 @@ using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.NamingConventions
 {
-    [ExportCodeFixProvider("NamingConventions", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(NamingConventionsCodeFix), LanguageNames.CSharp), Shared]
     public class NamingConventionsCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(NamingConventionsAnalyzer.Rule.Id);

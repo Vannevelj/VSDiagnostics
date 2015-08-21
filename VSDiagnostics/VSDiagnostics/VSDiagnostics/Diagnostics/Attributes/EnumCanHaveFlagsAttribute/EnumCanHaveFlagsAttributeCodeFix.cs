@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 {
-    [ExportCodeFixProvider("EnumCanHaveFlagsAttribute", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(EnumCanHaveFlagsAttributeCodeFix), LanguageNames.CSharp), Shared]
     public class EnumCanHaveFlagsAttributeCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(EnumCanHaveFlagsAttributeAnalyzer.Rule.Id);

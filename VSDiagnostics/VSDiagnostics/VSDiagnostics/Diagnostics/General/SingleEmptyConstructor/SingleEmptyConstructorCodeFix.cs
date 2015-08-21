@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
 {
-    [ExportCodeFixProvider("SingleEmptyConstructor", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(SingleEmptyConstructorCodeFix), LanguageNames.CSharp), Shared]
     internal class SingleEmptyConstructorCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(SingleEmptyConstructorAnalyzer.Rule.Id);

@@ -14,7 +14,7 @@ using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
 {
-    [ExportCodeFixProvider("NonEncapsulatedOrMutableField", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(NonEncapsulatedOrMutableFieldCodeFix), LanguageNames.CSharp), Shared]
     public class NonEncapsulatedOrMutableFieldCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id);

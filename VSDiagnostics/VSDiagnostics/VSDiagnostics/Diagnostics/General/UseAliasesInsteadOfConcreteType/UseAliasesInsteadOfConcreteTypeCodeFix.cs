@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
 {
-    [ExportCodeFixProvider("UseAliasesInsteadOfConcreteType", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(UseAliasesInsteadOfConcreteTypeCodeFix), LanguageNames.CSharp), Shared]
     public class UseAliasesInsteadOfConcreteTypeCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.Id);

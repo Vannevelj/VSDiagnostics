@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 {
-    [ExportCodeFixProvider("TryCastWithoutUsingAsNotNull", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(TryCastWithoutUsingAsNotNullCodeFix), LanguageNames.CSharp), Shared]
     public class TryCastWithoutUsingAsNotNullCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(TryCastWithoutUsingAsNotNullAnalyzer.Rule.Id);

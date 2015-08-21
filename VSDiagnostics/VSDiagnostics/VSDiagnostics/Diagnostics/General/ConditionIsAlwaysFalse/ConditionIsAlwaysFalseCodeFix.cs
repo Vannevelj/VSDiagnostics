@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysFalse
 {
-    [ExportCodeFixProvider("ConditionIsAlwaysFalse", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(ConditionIsAlwaysFalseCodeFix), LanguageNames.CSharp), Shared]
     public class ConditionIsAlwaysFalseCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds

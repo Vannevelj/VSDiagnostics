@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsInvertedDefaultOptions
 {
-    [ExportCodeFixProvider("ConditionalOperatorReturnsInvertedDefaultOptions", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(ConditionalOperatorReturnsInvertedDefaultOptionsCodeFix), LanguageNames.CSharp), Shared]
     public class ConditionalOperatorReturnsInvertedDefaultOptionsCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzer.Rule.Id);

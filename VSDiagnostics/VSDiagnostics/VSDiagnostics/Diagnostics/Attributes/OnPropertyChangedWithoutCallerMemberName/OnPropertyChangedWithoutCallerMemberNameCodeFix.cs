@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMemberName
 {
-    [ExportCodeFixProvider("OnPropertyChangedWithoutCallerMemberName", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(OnPropertyChangedWithoutCallerMemberNameCodeFix), LanguageNames.CSharp), Shared]
     public class OnPropertyChangedWithoutCallerMemberNameCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(OnPropertyChangedWithoutCallerMemberNameAnalyzer.Rule.Id);
