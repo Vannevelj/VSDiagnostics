@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
 {
-    [ExportCodeFixProvider("AttributeWithEmptyArgumentList", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(AttributeWithEmptyArgumentListCodeFix), LanguageNames.CSharp), Shared]
     public class AttributeWithEmptyArgumentListCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(AttributeWithEmptyArgumentListAnalyzer.Rule.Id);

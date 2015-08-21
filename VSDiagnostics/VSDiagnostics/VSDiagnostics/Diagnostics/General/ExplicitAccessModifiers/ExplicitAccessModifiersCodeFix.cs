@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.Editing;
 
 namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
 {
-    [ExportCodeFixProvider("ExplicitAccessModifiers", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(ExplicitAccessModifiersCodeFix), LanguageNames.CSharp), Shared]
     public class ExplicitAccessModifiersCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(ExplicitAccessModifiersAnalyzer.Rule.Id);

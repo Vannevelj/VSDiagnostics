@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.Editing;
 
 namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
 {
-    [ExportCodeFixProvider("TestMethodWithoutPublicModifier", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(TestMethodWithoutPublicModifierCodeFix), LanguageNames.CSharp), Shared]
     public class TestMethodWithoutPublicModifierCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(TestMethodWithoutPublicModifierAnalyzer.Rule.Id);

@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOperator
 {
-    [ExportCodeFixProvider("ArgumentExceptionWithoutNameofOperator", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(ArgumentExceptionWithoutNameofOperatorCodeFix), LanguageNames.CSharp), Shared]
     public class ArgumentExceptionWithoutNameofOperatorCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(ArgumentExceptionWithoutNameofOperatorAnalyzer.Rule.Id);

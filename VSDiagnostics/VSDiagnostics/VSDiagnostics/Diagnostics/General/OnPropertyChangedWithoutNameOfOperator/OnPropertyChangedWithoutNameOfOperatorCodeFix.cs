@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperator
 {
-    [ExportCodeFixProvider("OnPropertyChangedWithoutNameOfOperator", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(OnPropertyChangedWithoutNameOfOperatorCodeFix), LanguageNames.CSharp), Shared]
     public class OnPropertyChangedWithoutNameOfOperatorCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.Id);

@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.General.AsToCast
 {
-    [ExportCodeFixProvider("AsToCast", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(AsToCastCodeFix), LanguageNames.CSharp), Shared]
     public class AsToCastCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(AsToCastAnalyzer.Rule.Id);

@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
 {
-    [ExportCodeFixProvider("FlagsEnumValuesAreNotPowersOfTwo", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(FlagsEnumValuesAreNotPowersOfTwoCodeFix), LanguageNames.CSharp), Shared]
     public class FlagsEnumValuesAreNotPowersOfTwoCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.Id);

@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
 {
-    [ExportCodeFixProvider("NullableToShorthand", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(NullableToShorthandCodeFix), LanguageNames.CSharp), Shared]
     public class NullableToShorthandCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(NullableToShorthandAnalyzer.Rule.Id);

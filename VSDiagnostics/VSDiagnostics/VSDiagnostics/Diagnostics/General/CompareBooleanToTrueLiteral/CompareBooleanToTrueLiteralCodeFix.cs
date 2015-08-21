@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
 {
-    [ExportCodeFixProvider("CompareBooleanToTrueLiteral", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(CompareBooleanToTrueLiteralCodeFix), LanguageNames.CSharp), Shared]
     public class CompareBooleanToTrueLiteralCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(CompareBooleanToTrueLiteralAnalyzer.Rule.Id);

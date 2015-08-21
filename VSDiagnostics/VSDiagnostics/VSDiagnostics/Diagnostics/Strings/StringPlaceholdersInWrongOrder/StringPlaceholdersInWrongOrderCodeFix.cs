@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
 {
-    [ExportCodeFixProvider("StringPlaceHoldersInWrongOrder", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(StringPlaceHoldersInWrongOrderCodeFix), LanguageNames.CSharp), Shared]
     public class StringPlaceHoldersInWrongOrderCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(StringPlaceholdersInWrongOrderAnalyzer.Rule.Id);

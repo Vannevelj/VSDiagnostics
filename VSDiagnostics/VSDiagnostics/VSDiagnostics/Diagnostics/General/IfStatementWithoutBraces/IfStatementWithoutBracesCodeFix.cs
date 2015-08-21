@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace VSDiagnostics.Diagnostics.General.IfStatementWithoutBraces
 {
-    [ExportCodeFixProvider("IfStatementWithoutBraces", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(IfStatementWithoutBracesCodeFix), LanguageNames.CSharp), Shared]
     public class IfStatementWithoutBracesCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(IfStatementWithoutBracesAnalyzer.Rule.Id);
