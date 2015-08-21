@@ -11,6 +11,7 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysFalse
     {
         private const string DiagnosticId = nameof(ConditionIsAlwaysFalseAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.ConditionIsAlwaysFalseAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.ConditionIsAlwaysFalseAnalyzerTitle;

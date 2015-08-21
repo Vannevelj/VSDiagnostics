@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
@@ -9,6 +10,7 @@ using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysTrue
 {
+    [ExportCodeFixProvider("ConditionIsAlwaysTrue", LanguageNames.CSharp), Shared]
     public class ConditionIsAlwaysTrueCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds

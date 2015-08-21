@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
@@ -9,6 +10,7 @@ using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysFalse
 {
+    [ExportCodeFixProvider("ConditionIsAlwaysFalse", LanguageNames.CSharp), Shared]
     public class ConditionIsAlwaysFalseCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
@@ -25,7 +27,7 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysFalse
             var statement = root.FindNode(diagnosticSpan);
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.ConditionIsAlwaysTrueCodeFixTitle,
-                    x => RemoveConditionAsync(context.Document, root, statement), nameof(ConditionIsAlwaysFalseCodeFix)), diagnostic);
+                    x => RemoveConditionAsync(context.Document, root, statement), nameof(ConditionIsAlwaysFalseAnalyzer)), diagnostic);
         }
 
         private Task<Solution> RemoveConditionAsync(Document document, SyntaxNode root, SyntaxNode statement)

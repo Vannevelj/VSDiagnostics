@@ -11,10 +11,11 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class StringPlaceholdersInWrongOrderAnalyzer : DiagnosticAnalyzer
     {
-        private static readonly string Category = VSDiagnosticsResources.StringsCategory;
         private const string DiagnosticId = nameof(StringPlaceholdersInWrongOrderAnalyzer);
-        private static readonly string Message = VSDiagnosticsResources.StringPlaceholdersInWrongOrderMessage;
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+
+        private static readonly string Category = VSDiagnosticsResources.StringsCategory;
+        private static readonly string Message = VSDiagnosticsResources.StringPlaceholdersInWrongOrderMessage;
         private static readonly string Title = VSDiagnosticsResources.StringPlaceholdersInWrongOrderTitle;
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
