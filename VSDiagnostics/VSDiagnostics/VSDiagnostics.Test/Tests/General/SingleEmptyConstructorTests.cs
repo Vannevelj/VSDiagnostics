@@ -172,5 +172,50 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void SingleEmptyConstructor_ConstructorHasBaseCallWithArgument_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class MyExceptionClass : Exception
+    {
+        public MyExceptionClass() : base(""foo"")
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SingleEmptyConstructor_ConstructorHasBaseCallWithoutArgument_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public class MyExceptionClass : Exception
+    {
+        public MyExceptionClass() : base()
+        {
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    public class MyExceptionClass : Exception
+    {
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(SingleEmptyConstructorAnalyzer.Rule.MessageFormat.ToString(), "MyExceptionClass"));
+            VerifyFix(original, result);
+        }
     }
 }
