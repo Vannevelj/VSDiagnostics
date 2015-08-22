@@ -73,8 +73,10 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
                 {
                     var constructorInitializer = (ConstructorInitializerSyntax) node;
 
-                    return constructorInitializer.ThisOrBaseKeyword.IsKind(SyntaxKind.BaseKeyword) &&
-                           constructorInitializer.ArgumentList.Arguments.Any();
+                    // we must return false (to avoid the parent if) only if it is the base keyword
+                    // and there are no arguments.
+                    return !constructorInitializer.ThisOrBaseKeyword.IsKind(SyntaxKind.BaseKeyword) ||
+                            constructorInitializer.ArgumentList.Arguments.Any();
                 }
 
                 return false;
