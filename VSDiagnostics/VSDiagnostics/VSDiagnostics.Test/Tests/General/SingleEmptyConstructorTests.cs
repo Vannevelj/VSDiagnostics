@@ -217,5 +217,45 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, string.Format(SingleEmptyConstructorAnalyzer.Rule.MessageFormat.ToString(), "MyExceptionClass"));
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void SingleEmptyConstructor_ConstructorHasBaseCallWithArgument_ThisKeyword_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class MyExceptionClass : Exception
+    {
+        public MyExceptionClass() : this(""foo"")
+        {
+        }
+
+        public MyExceptionClass(string s)
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SingleEmptyConstructor_ConstructorHasBaseCallWithoutArgument_ThisKeyword_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public class MyExceptionClass : Exception
+    {
+        public MyExceptionClass() : this()
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }
