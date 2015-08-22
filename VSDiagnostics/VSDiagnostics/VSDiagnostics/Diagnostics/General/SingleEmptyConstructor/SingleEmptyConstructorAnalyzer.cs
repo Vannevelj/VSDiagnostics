@@ -65,6 +65,26 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
                 return;
             }
 
+            var childNodes = constructorDeclaration.ChildNodes().ToList();
+
+            if (childNodes.Any() && childNodes.Any(node =>
+            {
+                if (node is ConstructorInitializerSyntax)
+                {
+                    var constructorInitializer = (ConstructorInitializerSyntax) node;
+
+                    // we must return false (to avoid the parent if) only if it is the base keyword
+                    // and there are no arguments.
+                    return !constructorInitializer.ThisOrBaseKeyword.IsKind(SyntaxKind.BaseKeyword) ||
+                            constructorInitializer.ArgumentList.Arguments.Any();
+                }
+
+                return false;
+            }))
+            {
+                return;
+            }
+
             context.ReportDiagnostic(Diagnostic.Create(Rule, constructorDeclaration.GetLocation(), constructorDeclaration.Identifier));
         }
     }
