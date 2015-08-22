@@ -130,6 +130,7 @@
     <Compile Include="Tests\General\FlagsEnumValuesAreNotPowersOfTwoTests.cs" />
     <Compile Include="Tests\General\GotoDetectionTests.cs" />
     <Compile Include="Tests\General\IfStatementWithoutBracesTests.cs" />
+    <Compile Include="Tests\General\LoopStatementWithoutBracesTests.cs" />
     <Compile Include="Tests\General\NonEncapsulatedOrMutableFieldTests.cs" />
     <Compile Include="Tests\General\NamingConventionsTests.cs" />
     <Compile Include="Tests\General\NullableToShorthandTests.cs" />
