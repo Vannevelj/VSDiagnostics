@@ -433,5 +433,141 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithNestedBlock_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        string Name { get { { return ""ParameterCanBeByValInspection""; } } }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithOnlyIfInMethodBody_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            if(5 == 5)
+            {
+                Console.WriteLine();
+                return;
+            }
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithOnlyUsingInMethodBody_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            using(null as IDisposable)
+            {
+                Console.WriteLine();
+                return;
+            }
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithBlockInMethodBody_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            {
+                Console.WriteLine();
+                return;
+            }
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithWhileInMethodBody_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            while(5 == 5)
+            {
+                Console.WriteLine();
+                return;
+            }
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithDoWhileInMethodBody_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            do
+            {
+                Console.WriteLine();
+                return;
+            } while (5 == 5);
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
     }
 }

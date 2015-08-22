@@ -81,6 +81,11 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
+            if (getter.Body.Statements.SelectMany(x => x.DescendantNodesAndSelf()).Any(x => x is BlockSyntax))
+            {
+                return null;
+            }
+
             var statement = getter.Body.Statements.First();
             return Diagnostic.Create(Rule, statement.GetLocation(), "Property", propertyDeclaration.Identifier);
         }
@@ -102,8 +107,13 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
-            var statement = methodDeclaration.Body.Statements.FirstOrDefault();
-            var returnStatement = statement?.DescendantNodesAndSelf().OfType<ReturnStatementSyntax>().FirstOrDefault();
+            if (methodDeclaration.Body.Statements.SelectMany(x => x.DescendantNodesAndSelf()).Any(x => x is BlockSyntax))
+            {
+                return null;
+            }
+
+            var statement = methodDeclaration.Body.Statements.First();
+            var returnStatement = statement.DescendantNodesAndSelf().OfType<ReturnStatementSyntax>().FirstOrDefault();
             if (returnStatement == null)
             {
                 return null;
