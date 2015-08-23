@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
 {
@@ -93,7 +94,7 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
                 enumMemberDeclarations[i] = enumMemberDeclarations[i].WithEqualsValue(newEqualsValue);
             }
 
-            var newStatement = declarationExpression.WithMembers(SyntaxFactory.SeparatedList(enumMemberDeclarations));
+            var newStatement = declarationExpression.WithMembers(SyntaxFactory.SeparatedList(enumMemberDeclarations)).WithAdditionalAnnotations(Formatter.Annotation);
 
             var newRoot = root.ReplaceNode(statement, newStatement);
             return document.WithSyntaxRoot(newRoot).Project.Solution;

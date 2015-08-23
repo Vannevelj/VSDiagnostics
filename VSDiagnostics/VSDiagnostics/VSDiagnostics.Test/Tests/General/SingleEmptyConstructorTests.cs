@@ -242,7 +242,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_ConstructorHasBaseCallWithoutArgument_ThisKeyword_InvokesWarning()
+        public void SingleEmptyConstructor_ConstructorHasBaseCallWithoutArgument_ThisKeyword_DoesNotInvokeWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -259,7 +259,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_ConstructorHasXmlDocComment_ThisKeyword_InvokesWarning()
+        public void SingleEmptyConstructor_ConstructorHasXmlDocComment_ThisKeyword_DoesNotInvokeWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -279,7 +279,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_MultipleConstructors_ThisKeyword_InvokesWarning()
+        public void SingleEmptyConstructor_MultipleConstructors_ThisKeyword_DoesNotInvokeWarning()
         {
             var original = @"
 namespace ConsoleApplication1
