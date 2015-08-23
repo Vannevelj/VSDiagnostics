@@ -71,7 +71,7 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
                 return;
             }
 
-            if (constructorDeclaration.GetLeadingTrivia().Any(t => t.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia)))
+            if (constructorDeclaration.GetLeadingTrivia().Any(t => t.IsCommentTrivia()))
             {
                 return;
             }

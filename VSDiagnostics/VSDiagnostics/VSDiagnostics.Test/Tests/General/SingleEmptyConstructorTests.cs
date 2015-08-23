@@ -279,6 +279,26 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void SingleEmptyConstructor_ConstructorHasMultilineComment_ThisKeyword_DoesNotInvokeWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public class Foo
+    {
+        /*
+           Hi.  I'm a multiline comment.
+        */
+        public Foo()
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
         public void SingleEmptyConstructor_MultipleConstructors_ThisKeyword_DoesNotInvokeWarning()
         {
             var original = @"
