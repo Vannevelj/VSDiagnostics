@@ -403,22 +403,22 @@
     <value>Use alias</value>
   </data>
   <data name="FlagsEnumValuesAreNotPowersOfTwoAnalyzerMessage" xml:space="preserve">
-    <value>Flags enum {0} values are not powers of 2</value>
+    <value>[Flags] enum {0} values are not powers of 2</value>
   </data>
   <data name="FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle" xml:space="preserve">
-    <value>Flags enum values are not powers of 2</value>
+    <value>[Flags] enum values are not powers of 2</value>
   </data>
   <data name="FlagsEnumValuesAreNotPowersOfTwoCodeFixTitle" xml:space="preserve">
     <value>Use powers of 2</value>
   </data>
   <data name="EnumCanHaveFlagsAttributeAnalyzerMessage" xml:space="preserve">
-    <value>Enum can have flags attribute.</value>
+    <value>Enum can have [Flags] attribute.</value>
   </data>
   <data name="EnumCanHaveFlagsAttributeAnalyzerTitle" xml:space="preserve">
-    <value>Inform that enums can have the flags attribute.</value>
+    <value>Inform that enums can have the [Flags] attribute.</value>
   </data>
   <data name="EnumCanHaveFlagsAttributeCodeFixTitle" xml:space="preserve">
-    <value>Add Flags attribute</value>
+    <value>Add [Flags] attribute</value>
   </data>
   <data name="ConditionIsAlwaysTrueAnalyzerMessage" xml:space="preserve">
     <value>Condition is always true.</value>
