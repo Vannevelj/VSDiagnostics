@@ -219,7 +219,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_ConstructorHasBaseCallWithArgument_ThisKeyword_DoesNotInvokeWarning()
+        public void SingleEmptyConstructor_ConstructorHasThisCallWithArgument_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -242,7 +242,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_ConstructorHasBaseCallWithoutArgument_ThisKeyword_DoesNotInvokeWarning()
+        public void SingleEmptyConstructor_ConstructorHasThisCallWithoutArgument_DoesNotInvokeWarning()
         {
             var original = @"
 namespace ConsoleApplication1
