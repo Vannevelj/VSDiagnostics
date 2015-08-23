@@ -12,7 +12,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
     public class EnumCanHaveFlagsAttributeAnalyzer : DiagnosticAnalyzer
     {
         private const string DiagnosticId = nameof(EnumCanHaveFlagsAttributeAnalyzer);
-        private const DiagnosticSeverity Severity = DiagnosticSeverity.Info;
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Hidden;
 
         private static readonly string Category = VSDiagnosticsResources.AttributesCategory;
         private static readonly string Message = VSDiagnosticsResources.EnumCanHaveFlagsAttributeAnalyzerMessage;
