@@ -257,5 +257,46 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void SingleEmptyConstructor_ConstructorHasXmlDocComment_ThisKeyword_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public class Foo
+    {
+        /// <summary>
+        /// Doc comment for Foo
+        /// </summary>
+        public Foo()
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SingleEmptyConstructor_MultipleConstructors_ThisKeyword_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public class Foo
+    {
+        public Foo()
+        {
+        }
+
+        public Foo(int i)
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }

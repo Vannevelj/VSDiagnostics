@@ -65,6 +65,17 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
                 return;
             }
 
+            var classSymbol = context.SemanticModel.GetDeclaredSymbol(constructorDeclaration.Parent) as INamedTypeSymbol;
+            if (classSymbol != null && classSymbol.Constructors.Count() != 1)
+            {
+                return;
+            }
+
+            if (constructorDeclaration.GetLeadingTrivia().Any(t => t.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia)))
+            {
+                return;
+            }
+
             var childNodes = constructorDeclaration.ChildNodes().ToList();
 
             if (childNodes.Any() && childNodes.Any(node =>
