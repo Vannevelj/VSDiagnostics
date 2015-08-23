@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -36,6 +37,11 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
 
             var declaredType = localDeclaration.Declaration.Type;
             if (declaredType.IsVar)
+            {
+                return;
+            }
+
+            if (localDeclaration.Modifiers.Any(m => m.IsKind(SyntaxKind.ConstKeyword)))
             {
                 return;
             }
