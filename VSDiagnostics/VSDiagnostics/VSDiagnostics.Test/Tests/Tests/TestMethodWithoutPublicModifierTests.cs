@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.Tests
         protected override CodeFixProvider CodeFixProvider => new TestMethodWithoutPublicModifierCodeFix();
 
         [TestMethod]
-        public void TestMethodWithoutPublicModifier_WithPublicModifierAndTestAttribute_DoesNotInvokeWarning()
+        public void TestMethodWithoutPublicModifier_WithPublicModifierAndTestAttribute()
         {
             var test = @"
     using System;
@@ -37,7 +37,7 @@ namespace VSDiagnostics.Test.Tests.Tests
         }
 
         [TestMethod]
-        public void TestMethodWithoutPublicModifier_WithPublicModifierAndTestMethodAttribute_DoesNotInvokeWarning()
+        public void TestMethodWithoutPublicModifier_WithPublicModifierAndTestMethodAttribute()
         {
             var original = @"
     using System;
@@ -60,7 +60,7 @@ namespace VSDiagnostics.Test.Tests.Tests
         }
 
         [TestMethod]
-        public void TestMethodWithoutPublicModifier_WithPublicModifierAndFactAttribute_DoesNotInvokeWarning()
+        public void TestMethodWithoutPublicModifier_WithPublicModifierAndFactAttribute()
         {
             var original = @"
     using System;
@@ -82,7 +82,7 @@ namespace VSDiagnostics.Test.Tests.Tests
         }
 
         [TestMethod]
-        public void TestMethodWithoutPublicModifier_WithInternalModifierAndTestAttribute_InvokesWarning()
+        public void TestMethodWithoutPublicModifier_WithInternalModifierAndTestAttribute()
         {
             var original = @"
 using System;
@@ -123,7 +123,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TestMethodWithoutPublicModifier_WithInternalModifierAndTestMethodAttribute_InvokesWarning()
+        public void TestMethodWithoutPublicModifier_WithInternalModifierAndTestMethodAttribute()
         {
             var original = @"
 using System;
@@ -164,7 +164,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TestMethodWithoutPublicModifier_WithInternalModifierAndFactAttribute_InvokesWarning()
+        public void TestMethodWithoutPublicModifier_WithInternalModifierAndFactAttribute()
         {
             var original = @"
 using System;
@@ -203,7 +203,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TestMethodWithoutPublicModifier_WithPublicModifierAndMultipleAttributes_DoesNotInvokeWarning()
+        public void TestMethodWithoutPublicModifier_WithPublicModifierAndMultipleAttributes()
         {
             var original = @"
     using System;
@@ -227,7 +227,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TestMethodWithoutPublicModifier_WithProtectedInternalModifierAndTestMethodAttribute_InvokesWarning()
+        public void TestMethodWithoutPublicModifier_WithProtectedInternalModifierAndTestMethodAttribute()
         {
             var original = @"
 using System;
@@ -268,7 +268,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TestMethodWithoutPublicModifier_WithMultipleModifiersAndTestMethodAttribute_InvokesWarning()
+        public void TestMethodWithoutPublicModifier_WithMultipleModifiersAndTestMethodAttribute()
         {
             var original = @"
 using System;
@@ -309,7 +309,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TestMethodWithoutPublicModifier_WithoutModifierAndTestAttribute_InvokesWarning()
+        public void TestMethodWithoutPublicModifier_WithoutModifierAndTestAttribute()
         {
             var original = @"
 using System;
@@ -350,7 +350,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TestMethodWithoutPublicModifier_WithoutTestAttributeAttribute_DoesNotInvokeWarning()
+        public void TestMethodWithoutPublicModifier_WithoutTestAttributeAttribute()
         {
             var original = @"
     using System;

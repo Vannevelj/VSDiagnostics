@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.Async
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new AsyncMethodWithoutAsyncSuffixAnalyzer();
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_WithAsyncKeywordAndNoSuffix_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_WithAsyncKeywordAndNoSuffix()
         {
             var original = @"
     using System;

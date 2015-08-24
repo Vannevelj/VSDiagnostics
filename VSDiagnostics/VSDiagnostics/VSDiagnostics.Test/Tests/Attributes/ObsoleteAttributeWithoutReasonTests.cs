@@ -11,7 +11,7 @@ namespace VSDiagnostics.Test.Tests.Attributes
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new ObsoleteAttributeWithoutReasonAnalyzer();
 
         [TestMethod]
-        public void ObsoleteAttributeWithoutReason_WithObsoleteWithNullArgumentList_InvokesWarning()
+        public void ObsoleteAttributeWithoutReason_WithObsoleteWithNullArgumentList()
         {
             var test = @"
 using System;
@@ -31,7 +31,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ObsoleteAttributeWithoutReason_WithObsoleteAttributeWithoutReason_InvokesWarning()
+        public void ObsoleteAttributeWithoutReason_WithObsoleteAttributeWithoutReason()
         {
             var test = @"
 using System;
@@ -51,7 +51,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ObsoleteAttributeWithoutReason_WithObsoleteWithEmptyArgumentList_InvokesWarning()
+        public void ObsoleteAttributeWithoutReason_WithObsoleteWithEmptyArgumentList()
         {
             var test = @"
 using System;
@@ -71,7 +71,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ObsoleteAttributeWithoutReason_WithObsoleteAttributeWithEmptyArgumentList_InvokesWarning()
+        public void ObsoleteAttributeWithoutReason_WithObsoleteAttributeWithEmptyArgumentList()
         {
             var test = @"
 using System;
@@ -91,7 +91,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ObsoleteAttributeWithoutReason_WithObsoleteWithArgument_DoesNotInvokeWarning()
+        public void ObsoleteAttributeWithoutReason_WithObsoleteWithArgument()
         {
             var test = @"
 using System;
@@ -111,7 +111,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ObsoleteAttributeWithoutReason_WithObsoleteAttributeWithArgument_DoesNotInvokeWarning()
+        public void ObsoleteAttributeWithoutReason_WithObsoleteAttributeWithArgument()
         {
             var test = @"
 using System;
@@ -131,7 +131,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ObsoleteAttributeWithoutReason_WithObsoleteWithArguments_DoesNotInvokeWarning()
+        public void ObsoleteAttributeWithoutReason_WithObsoleteWithArguments()
         {
             var test = @"
 using System;
@@ -151,7 +151,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ObsoleteAttributeWithoutReason_WithObsoleteAttributeWithArguments_DoesNotInvokeWarning()
+        public void ObsoleteAttributeWithoutReason_WithObsoleteAttributeWithArguments()
         {
             var test = @"
 using System;
@@ -171,7 +171,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ObsoleteAttributeWithoutReason_NonObsoleteAttribute_DoesNotInvokeWarning()
+        public void ObsoleteAttributeWithoutReason_NonObsoleteAttribute()
         {
             var test = @"
 using System;

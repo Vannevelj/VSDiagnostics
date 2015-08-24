@@ -11,7 +11,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new CatchNullReferenceExceptionAnalyzer();
 
         [TestMethod]
-        public void CatchNullReferenceException_WithNullReferenceCatchClause_InvokesWarning()
+        public void CatchNullReferenceException_WithNullReferenceCatchClause()
         {
             var test = @"
     using System;
@@ -38,7 +38,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void CatchNullReferenceException_WithoutNullReferenceCatchClause_DoesNotInvokeWarning()
+        public void CatchNullReferenceException_WithoutNullReferenceCatchClause()
         {
             var test = @"
     using System;
@@ -65,7 +65,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void CatchNullReferenceException_WithEmptyCatchClause_DoesNotInvokeWarning()
+        public void CatchNullReferenceException_WithEmptyCatchClause()
         {
             var test = @"
     using System;

@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.Attributes
         protected override CodeFixProvider CodeFixProvider => new OnPropertyChangedWithoutCallerMemberNameCodeFix();
 
         [TestMethod]
-        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_InvokesWarning()
+        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged()
         {
             var original = @"
 using System.ComponentModel;
@@ -52,7 +52,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void OnPropertyChangedWithoutCallerMemberName_ClassDoesNotImplementINotifyPropertyChanged_DoesNotInvokeWarning()
+        public void OnPropertyChangedWithoutCallerMemberName_ClassDoesNotImplementINotifyPropertyChanged()
         {
             var original = @"
 using System.ComponentModel;
@@ -73,7 +73,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChangedAndCustomInterface_InvokesWarning()
+        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChangedAndCustomInterface()
         {
             var original = @"
 using System.ComponentModel;
@@ -119,7 +119,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsCustomInterfaceAndINotifyPropertyChanged_InvokesWarning()
+        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsCustomInterfaceAndINotifyPropertyChanged()
         {
             var original = @"
 using System.ComponentModel;
@@ -165,7 +165,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_MultipleMethods_InvokesWarning()
+        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_MultipleMethods()
         {
             var original = @"
 using System.ComponentModel;
@@ -207,7 +207,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_MultipleParams_DoesNotInvokeWarning()
+        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_MultipleParams()
         {
             var original = @"
 using System.ComponentModel;
@@ -228,7 +228,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_OneParamTypeNotString_DoesNotInvokeWarning()
+        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_OneParamTypeNotString()
         {
             var original = @"
 using System.ComponentModel;
@@ -249,7 +249,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_ParamAlreadyHasAttribute_DoesNotInvokeWarning()
+        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_ParamAlreadyHasAttribute()
         {
             var original = @"
 using System.ComponentModel;
@@ -271,7 +271,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_ParamAlreadyHasDifferentAttribute_InvokesWarning()
+        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_ParamAlreadyHasDifferentAttribute()
         {
             var original = @"
 using System;
@@ -311,7 +311,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_RemovesReferenceParam_InvokesWarning()
+        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_RemovesReferenceParam()
         {
             var original = @"
 using System.ComponentModel;
@@ -370,7 +370,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_UpdatesMultipleReferences_InvokesWarning()
+        public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_UpdatesMultipleReferences()
         {
             var original = @"
 using System.ComponentModel;

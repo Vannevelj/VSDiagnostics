@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.Attributes
         protected override CodeFixProvider CodeFixProvider => new AttributeWithEmptyArgumentListCodeFix();
 
         [TestMethod]
-        public void AttributeWithEmptyArgumentList_AttributeWithEmptyArgumentList_InvokesWarning()
+        public void AttributeWithEmptyArgumentList_AttributeWithEmptyArgumentList()
         {
             var original = @"
 using System;
@@ -49,7 +49,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void AttributeWithEmptyArgumentList_WithoutArgumentList_DoesNotInvokeWarning()
+        public void AttributeWithEmptyArgumentList_WithoutArgumentList()
         {
             var original = @"
 using System;
@@ -69,7 +69,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void AttributeWithEmptyArgumentList_WithArgumentList_DoesNotInvokeWarning()
+        public void AttributeWithEmptyArgumentList_WithArgumentList()
         {
             var original = @"
 using System;
@@ -90,7 +90,7 @@ namespace ConsoleApplication1
 
         // make sure it works on other attributes besides [Obsolete]
         [TestMethod]
-        public void AttributeWithEmptyArgumentList_AttributeWithEmptyArgumentList_FlagsAttribute_InvokesWarning()
+        public void AttributeWithEmptyArgumentList_AttributeWithEmptyArgumentList_FlagsAttribute()
         {
             var original = @"
 using System;
@@ -128,7 +128,7 @@ namespace ConsoleApplication1
 
         // make sure it works on other attributes besides [Obsolete]
         [TestMethod]
-        public void AttributeWithEmptyArgumentList_WithoutArgumentList_FlagsAttribute_DoesNotInvokeWarning()
+        public void AttributeWithEmptyArgumentList_WithoutArgumentList_FlagsAttribute()
         {
             var original = @"
 using System;

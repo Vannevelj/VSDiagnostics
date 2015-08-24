@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new AsToCastCodeFix();
 
         [TestMethod]
-        public void AsToCast_PredefinedType_InvokesWarning()
+        public void AsToCast_PredefinedType()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -49,7 +49,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void AsToCast_MethodCall_InvokesWarning()
+        public void AsToCast_MethodCall()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -90,7 +90,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void AsToCast_CustomType_InvokesWarning()
+        public void AsToCast_CustomType()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -139,7 +139,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void AsToCast_OnlyFormatSpecificNode_InvokesWarning()
+        public void AsToCast_OnlyFormatSpecificNode()
         {
             var original = @"
 namespace ConsoleApplication1
