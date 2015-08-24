@@ -256,7 +256,7 @@ namespace VSDiagnostics.Test.Tests.Async
 
         class MyClass : IMyInterface
         {
-            Task MyMethod()
+            public Task MyMethod()
             {
                 return Task.CompletedTask;
             }
@@ -277,7 +277,7 @@ namespace VSDiagnostics.Test.Tests.Async
 
         class MyClass : IMyInterface
         {
-            Task MyMethodAsync()
+            public Task MyMethodAsync()
             {
                 return Task.CompletedTask;
             }
@@ -316,7 +316,7 @@ namespace VSDiagnostics.Test.Tests.Async
 
         class MyClass : IMyInterface
         {
-            async Task MyMethod()
+            public async Task MyMethod()
             {
                 return Task.CompletedTask;
             }
@@ -337,7 +337,7 @@ namespace VSDiagnostics.Test.Tests.Async
 
         class MyClass : IMyInterface
         {
-            async Task MyMethodAsync()
+            public async Task MyMethodAsync()
             {
                 return Task.CompletedTask;
             }
@@ -831,7 +831,7 @@ namespace VSDiagnostics.Test.Tests.Async
     {
         interface IBaseInterface
         {
-	        Task MyMethod();
+            Task MyMethod();
         }
 
         interface IMyInterface : IBaseInterface
@@ -857,7 +857,7 @@ namespace VSDiagnostics.Test.Tests.Async
     {
         interface IBaseInterface
         {
-	        Task MyMethodAsync();
+            Task MyMethodAsync();
         }
 
         interface IMyInterface : IBaseInterface
@@ -992,14 +992,13 @@ namespace VSDiagnostics.Test.Tests.Async
     {
         interface IMyInterface
         {
-	        Task MyMethod();
+            Task MyMethod();
         }
 
         interface IAnotherInterface
         {
-	        Task MyMethod();
+            Task MyMethod();
         }
-
 
         class MyClass : IMyInterface, IAnotherInterface
         {
@@ -1019,14 +1018,13 @@ namespace VSDiagnostics.Test.Tests.Async
     {
         interface IMyInterface
         {
-	        Task MyMethodAsync();
+            Task MyMethodAsync();
         }
 
         interface IAnotherInterface
         {
-	        Task MyMethodAsync();
+            Task MyMethodAsync();
         }
-
 
         class MyClass : IMyInterface, IAnotherInterface
         {
@@ -1153,6 +1151,72 @@ namespace VSDiagnostics.Test.Tests.Async
 	        public override Task MyMethodAsync()
 	        {
 		        return Task.CompletedTask;
+	        }
+        }
+    }";
+
+            var diagnosticResultClass = new DiagnosticResult
+            {
+                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
+                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
+                Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
+                Locations = new[]
+                {
+                    new DiagnosticResultLocation("Test0.cs", 10, 31)
+                }
+            };
+
+            VerifyDiagnostic(original, diagnosticResultClass);
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithHiddenMember_InvokesWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApplication1
+    {
+        abstract class OtherBaseClass
+        {
+	        public virtual Task MyMethod()
+	        {
+		        return null;
+	        }
+        }
+
+        abstract class BaseClass : OtherBaseClass
+        {
+	        public new Task MyMethod()
+	        {
+		        return null;
+	        }
+        }
+    }";
+
+            var result = @"
+    using System;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApplication1
+    {
+        abstract class OtherBaseClass
+        {
+	        public virtual Task MyMethodAsync()
+	        {
+		        return null;
+	        }
+        }
+
+        abstract class BaseClass : OtherBaseClass
+        {
+	        public new Task MyMethodAsync()
+	        {
+		        return null;
 	        }
         }
     }";

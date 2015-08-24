@@ -52,7 +52,7 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
                 return;
             }
 
-            if (IsDefinedInAncestor(declaredSymbol, context))
+            if (IsDefinedInAncestor(declaredSymbol))
             {
                 return;
             }
@@ -68,7 +68,7 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
             }
         }
 
-        private static bool IsDefinedInAncestor(IMethodSymbol methodSymbol, SyntaxNodeAnalysisContext context)
+        private static bool IsDefinedInAncestor(IMethodSymbol methodSymbol)
         {
             var type = methodSymbol?.ContainingType;
             if (type == null)
@@ -79,13 +79,10 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
             var interfaces = type.AllInterfaces;
             foreach (var @interface in interfaces)
             {
-                var interfaceMethods = @interface.GetMembers().OfType<IMethodSymbol>().ToArray();
-                foreach (var method in interfaceMethods)
+                var interfaceMethods = @interface.GetMembers().Select(type.FindImplementationForInterfaceMember);
+                if (interfaceMethods.Any(method => method.Equals(methodSymbol)))
                 {
-                    if (method.Equals(methodSymbol))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
@@ -94,12 +91,9 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
             while (type != null)
             {
                 var methods = type.GetMembers().OfType<IMethodSymbol>().ToArray();
-                foreach (var method in methods)
+                if (methods.Any(method => method.Equals(methodSymbol)))
                 {
-                    if (method.Equals(methodSymbol))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
 
                 type = type.BaseType;
