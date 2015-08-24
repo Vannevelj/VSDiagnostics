@@ -161,7 +161,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SimplifyExpressionBodiedMember_WithMethodWithVoidReturn_DoesNotInvokeWarning()
+        public void SimplifyExpressionBodiedMember_WithMethodWithLocalAssignment_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -174,29 +174,6 @@ namespace ConsoleApplication1
         void MyMethod()
         {
             var result = 5 * 5;
-        }
-    }
-}";
-            VerifyDiagnostic(original);
-        }
-
-        [TestMethod]
-        public void SimplifyExpressionBodiedMember_WithMethodWithoutReturn_DoesNotInvokeWarning()
-        {
-            var original = @"
-using System;
-using System.Text;
-
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        int MyMethod()
-        {
-            while(true)
-            {
-                Console.WriteLine(""This is a weird feature"");
-            }
         }
     }
 }";
@@ -564,6 +541,347 @@ namespace ConsoleApplication1
                 Console.WriteLine();
                 return;
             } while (5 == 5);
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithSwitchInMethodBody_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+ 
+namespace ConsoleApplication1
+{
+    enum Foo
+    {
+        Baz,
+        Biz
+    }
+ 
+    class MyClass
+    {
+        Foo Bar { get; set; }
+ 
+        public void Method()
+        {
+            switch (Bar)
+            {
+                case Foo.Baz:
+                    return ""Geannuleerd"";
+                case Foo.Biz:
+                    return ""In behandeling"";
+                default:
+                    return ""Status onbekend"";
+            }
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithSwitchInPropertyGetter_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+ 
+namespace ConsoleApplication1
+{
+   enum Foo
+   {
+       Baz,
+       Biz
+   }
+ 
+   class MyClass
+   {
+       Foo Bar { get; set; }
+ 
+       public string BookingStatus
+       {
+           get
+           {
+               switch (Bar)
+               {
+                   case Foo.Baz:
+                       return ""Geannuleerd"";
+                   case Foo.Biz:
+                       return ""In behandeling"";
+                   default:
+                       return ""Status onbekend"";
+               }
+           }
+       }
+   }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithIfInPropertyGetter_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+ 
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public string BookingStatus
+        {
+            get
+            {
+                if(true)
+                {
+                    return ""lala"";
+                }
+            }
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithWhileInPropertyGetter_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+ 
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public string BookingStatus
+        {
+            get
+            {
+                while(5 == 5)
+                {
+                    return ""lala"";
+                }
+            }
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithDoWhileInPropertyGetter_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+ 
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public string BookingStatus
+        {
+            get
+            {
+                do
+                {
+                    return ""lala"";
+                } while(5 == 5);
+            }
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithIfInPropertyGetter_WithoutBlock_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+ 
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public string BookingStatus
+        {
+            get
+            {
+                if(true)
+                    return ""lala"";
+            }
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithDoWhileInPropertyGetter_WithoutBlock_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+ 
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public string BookingStatus
+        {
+            get
+            {
+                do
+                    return ""lala"";
+                while(5 == 5);
+            }
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithDoWhileInMethodBody_WithoutBlock_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            do
+                Console.WriteLine();
+            while (5 == 5);
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithIfInMethodBody_WithoutBlock_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            if(5 == 5)
+                Console.WriteLine();
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithWhileInMethodBody_WithoutBlock_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            while(5 == 5)
+                Console.WriteLine();
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithUsingInMethodBody_WithoutBlock_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            using(null as IDisposable)
+                Console.WriteLine();
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithVoidMethod_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void MyMethod()
+        {
+            Console.WriteLine();
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void MyMethod() => Console.WriteLine();
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(SimplifyExpressionBodiedMemberAnalyzer.Rule.MessageFormat.ToString(), "Method", "MyMethod"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithVoidMethod_ThrowingException_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void MyMethod()
+        {
+            throw new NotImplementedException();
         }
     }
 }";
