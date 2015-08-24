@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,7 +11,7 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
     public class TypeToVarAnalyzer : DiagnosticAnalyzer
     {
         private const string DiagnosticId = nameof(TypeToVarAnalyzer);
-        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Hidden;
 
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.TypeToVarAnalyzerMessage;
@@ -36,6 +37,11 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
 
             var declaredType = localDeclaration.Declaration.Type;
             if (declaredType.IsVar)
+            {
+                return;
+            }
+
+            if (localDeclaration.Modifiers.Any(m => m.IsKind(SyntaxKind.ConstKeyword)))
             {
                 return;
             }

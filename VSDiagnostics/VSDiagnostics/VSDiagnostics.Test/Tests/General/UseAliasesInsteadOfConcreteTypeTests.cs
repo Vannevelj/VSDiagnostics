@@ -1074,5 +1074,76 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "int", "Int32"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
+
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_Int32DotMaxValue_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        public void Foo()
+        {
+            var goo = Int32.MaxValue;
+        }
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        public void Foo()
+        {
+            var goo = int.MaxValue;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "int", "Int32"));
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
+        }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_CharBecomesChar_CharDotIsWhiteSpace_InvokesWarning()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        public void Foo()
+        {
+            var goo = Char.IsWhiteSpace(' ');
+        }
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        public void Foo()
+        {
+            var goo = char.IsWhiteSpace(' ');
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "char", "Char"));
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
+        }
     }
 }

@@ -31,10 +31,11 @@ namespace VSDiagnostics.Diagnostics.General.CastToAs
         private Task<Solution> CastToAsAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var castExpression = (CastExpressionSyntax) statement;
+            var newExpression =
+                SyntaxFactory.BinaryExpression(SyntaxKind.AsExpression, castExpression.Expression, castExpression.Type)
+                    .WithAdditionalAnnotations(Formatter.Annotation);
 
-            var newExpression = SyntaxFactory.BinaryExpression(SyntaxKind.AsExpression, castExpression.Expression, castExpression.Type);
-
-            var newRoot = root.ReplaceNode(castExpression, newExpression).WithAdditionalAnnotations(Formatter.Annotation);
+            var newRoot = root.ReplaceNode(castExpression, newExpression);
 
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);

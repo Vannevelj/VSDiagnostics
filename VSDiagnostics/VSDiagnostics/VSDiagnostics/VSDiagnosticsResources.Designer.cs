@@ -431,7 +431,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enum can have flags attribute..
+        ///   Looks up a localized string similar to Enum can have [Flags] attribute..
         /// </summary>
         internal static string EnumCanHaveFlagsAttributeAnalyzerMessage {
             get {
@@ -440,7 +440,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inform that enums can have the flags attribute..
+        ///   Looks up a localized string similar to Inform that enums can have the [Flags] attribute..
         /// </summary>
         internal static string EnumCanHaveFlagsAttributeAnalyzerTitle {
             get {
@@ -449,7 +449,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add Flags attribute.
+        ///   Looks up a localized string similar to Add [Flags] attribute.
         /// </summary>
         internal static string EnumCanHaveFlagsAttributeCodeFixTitle {
             get {
@@ -494,7 +494,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Flags enum {0} values are not powers of 2.
+        ///   Looks up a localized string similar to [Flags] enum {0} values are not powers of 2.
         /// </summary>
         internal static string FlagsEnumValuesAreNotPowersOfTwoAnalyzerMessage {
             get {
@@ -503,7 +503,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Flags enum values are not powers of 2.
+        ///   Looks up a localized string similar to [Flags] enum values are not powers of 2.
         /// </summary>
         internal static string FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle {
             get {

@@ -53,7 +53,7 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
             return newDocument.Project.Solution;
         }
 
-        public static readonly Dictionary<string, SyntaxKind> MapConcreteTypeToPredefinedTypeAlias =
+        private static readonly Dictionary<string, SyntaxKind> MapConcreteTypeToPredefinedTypeAlias =
             new Dictionary<string, SyntaxKind>
             {
                 {nameof(Int16), SyntaxKind.ShortKeyword},

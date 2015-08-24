@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
@@ -30,16 +31,12 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 
         private Task<Solution> AddFlagAttributeAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
-            var enumDeclarationExpression = (EnumDeclarationSyntax) statement;
+            var generator = SyntaxGenerator.GetGenerator(document);
 
             var flagsAttribute = SyntaxFactory.Attribute(SyntaxFactory.ParseName("Flags"));
-            var attributeList = SyntaxFactory.AttributeList();
-            attributeList = attributeList.AddAttributes(flagsAttribute);
+            var newStatement = generator.AddAttributes(statement, flagsAttribute);
 
-            var newEnumDeclaration =
-                enumDeclarationExpression.WithAttributeLists(enumDeclarationExpression.AttributeLists.Add(attributeList));
-
-            var newRoot = root.ReplaceNode(statement, newEnumDeclaration);
+            var newRoot = root.ReplaceNode(statement, newStatement);
 
             var compilationUnit = (CompilationUnitSyntax)newRoot;
 

@@ -238,5 +238,26 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void TypeToVar_WithLocalConstPredefinedType_DoesNotInvokeWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            const int x = 0;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }

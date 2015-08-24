@@ -89,7 +89,7 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
-            [TestMethod]
+        [TestMethod]
         public void AsToCast_CustomType_InvokesWarning()
         {
             var original = @"
@@ -108,7 +108,7 @@ namespace ConsoleApplication1
         void Method()
         {
             P variable = new Program();
-            var i = ch as Program;
+            var i = variable as Program;
         }
     }
 }";
@@ -129,7 +129,60 @@ namespace ConsoleApplication1
         void Method()
         {
             P variable = new Program();
-            var i = (Program)ch;
+            var i = (Program)variable;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, AsToCastAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void AsToCast_OnlyFormatSpecificNode_InvokesWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    interface P
+    {
+    }
+
+    class Program : P
+    {
+    }
+
+    class MyClass
+    {
+        void Method()
+        {
+            P variable = new Program();
+            var i = variable as Program;
+
+            var j = (Program) variable;    // make sure this isn't formatted to '(Program)variable'
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    interface P
+    {
+    }
+
+    class Program : P
+    {
+    }
+
+    class MyClass
+    {
+        void Method()
+        {
+            P variable = new Program();
+            var i = (Program)variable;
+
+            var j = (Program) variable;    // make sure this isn't formatted to '(Program)variable'
         }
     }
 }";

@@ -32,7 +32,8 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
                 SyntaxKind.MethodDeclaration,
                 SyntaxKind.OperatorDeclaration,
                 SyntaxKind.PropertyDeclaration,
-                SyntaxKind.VariableDeclaration);
+                SyntaxKind.VariableDeclaration,
+                SyntaxKind.SimpleMemberAccessExpression);
         }
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
@@ -81,7 +82,14 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
                 typeExpression = expression.Type;
             }
 
-            if (!(typeExpression is IdentifierNameSyntax) &&
+            if (context.Node is MemberAccessExpressionSyntax)
+            {
+                var expression = (MemberAccessExpressionSyntax)context.Node;
+                typeExpression = expression.Expression as IdentifierNameSyntax;
+            }
+
+            if (typeExpression == null ||
+                !(typeExpression is IdentifierNameSyntax) &&
                 !(typeExpression is QualifiedNameSyntax))
             {
                 return;
@@ -113,7 +121,7 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
             }
         }
 
-        public static readonly Dictionary<string, string> MapConcreteTypeToPredefinedTypeAlias =
+        private static readonly Dictionary<string, string> MapConcreteTypeToPredefinedTypeAlias =
             new Dictionary<string, string>
             {
                 {nameof(Int16), "short"},

@@ -219,7 +219,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_ConstructorHasBaseCallWithArgument_ThisKeyword_DoesNotInvokeWarning()
+        public void SingleEmptyConstructor_ConstructorHasThisCallWithArgument_DoesNotInvokeWarning()
         {
             var original = @"
 using System;
@@ -242,7 +242,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_ConstructorHasBaseCallWithoutArgument_ThisKeyword_InvokesWarning()
+        public void SingleEmptyConstructor_ConstructorHasThisCallWithoutArgument_DoesNotInvokeWarning()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -250,6 +250,67 @@ namespace ConsoleApplication1
     public class MyExceptionClass : Exception
     {
         public MyExceptionClass() : this()
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SingleEmptyConstructor_ConstructorHasXmlDocComment_ThisKeyword_DoesNotInvokeWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public class Foo
+    {
+        /// <summary>
+        /// Doc comment for Foo
+        /// </summary>
+        public Foo()
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SingleEmptyConstructor_ConstructorHasMultilineComment_ThisKeyword_DoesNotInvokeWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public class Foo
+    {
+        /*
+           Hi.  I'm a multiline comment.
+        */
+        public Foo()
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SingleEmptyConstructor_MultipleConstructors_ThisKeyword_DoesNotInvokeWarning()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public class Foo
+    {
+        public Foo()
+        {
+        }
+
+        public Foo(int i)
         {
         }
     }
