@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new ExplicitAccessModifiersCodeFix();
 
         [TestMethod]
-        public void ExplicitAccessModifiers_ClassDeclaration_InvokesWarning()
+        public void ExplicitAccessModifiers_ClassDeclaration()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -37,7 +37,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_ClassDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        public void ExplicitAccessModifiers_ClassDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -60,7 +60,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_ClassDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_ClassDeclaration_ContainsAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -74,7 +74,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_ClassDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        public void ExplicitAccessModifiers_ClassDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
 using System;
@@ -105,7 +105,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_StructDeclaration_InvokesWarning()
+        public void ExplicitAccessModifiers_StructDeclaration()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -128,7 +128,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_StructDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        public void ExplicitAccessModifiers_StructDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -151,7 +151,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_StructDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_StructDeclaration_ContainsAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -165,7 +165,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_StructDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        public void ExplicitAccessModifiers_StructDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
 using System;
@@ -196,7 +196,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_EnumDeclaration_InvokesWarning()
+        public void ExplicitAccessModifiers_EnumDeclaration()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -219,7 +219,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_EnumDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        public void ExplicitAccessModifiers_EnumDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -242,7 +242,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_EnumDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_EnumDeclaration_ContainsAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -256,7 +256,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_EnumDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        public void ExplicitAccessModifiers_EnumDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
 using System;
@@ -287,7 +287,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_DelegateDeclaration_InvokesWarning()
+        public void ExplicitAccessModifiers_DelegateDeclaration()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -306,7 +306,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_DelegateDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        public void ExplicitAccessModifiers_DelegateDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -325,7 +325,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_DelegateDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_DelegateDeclaration_ContainsAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -337,7 +337,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_DelegateDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        public void ExplicitAccessModifiers_DelegateDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
 using System;
@@ -362,7 +362,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_InterfaceDeclaration_InvokesWarning()
+        public void ExplicitAccessModifiers_InterfaceDeclaration()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -385,7 +385,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_InterfaceDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        public void ExplicitAccessModifiers_InterfaceDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -408,7 +408,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_InterfaceDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_InterfaceDeclaration_ContainsAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -422,7 +422,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_InterfaceDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        public void ExplicitAccessModifiers_InterfaceDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
 using System;
@@ -453,7 +453,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedClassDeclaration_InvokesWarning()
+        public void ExplicitAccessModifiers_NestedClassDeclaration()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -484,7 +484,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedClassDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        public void ExplicitAccessModifiers_NestedClassDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -515,7 +515,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedClassDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_NestedClassDeclaration_ContainsAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -532,7 +532,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedClassDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        public void ExplicitAccessModifiers_NestedClassDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
 using System;
@@ -573,7 +573,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedStructDeclaration_InvokesWarning()
+        public void ExplicitAccessModifiers_NestedStructDeclaration()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -604,7 +604,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedStructDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        public void ExplicitAccessModifiers_NestedStructDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -635,7 +635,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedStructDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_NestedStructDeclaration_ContainsAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -652,7 +652,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedStructDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        public void ExplicitAccessModifiers_NestedStructDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
 using System;
@@ -693,7 +693,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedEnumDeclaration_InvokesWarning()
+        public void ExplicitAccessModifiers_NestedEnumDeclaration()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -724,7 +724,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedEnumDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        public void ExplicitAccessModifiers_NestedEnumDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -755,7 +755,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedEnumDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_NestedEnumDeclaration_ContainsAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -772,7 +772,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedEnumDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        public void ExplicitAccessModifiers_NestedEnumDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
 using System;
@@ -813,7 +813,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedDelegateDeclaration_InvokesWarning()
+        public void ExplicitAccessModifiers_NestedDelegateDeclaration()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -838,7 +838,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedDelegateDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        public void ExplicitAccessModifiers_NestedDelegateDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -863,7 +863,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedDelegateDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_NestedDelegateDeclaration_ContainsAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -878,7 +878,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedDelegateDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        public void ExplicitAccessModifiers_NestedDelegateDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
 using System;
@@ -909,7 +909,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedInterfaceDeclaration_InvokesWarning()
+        public void ExplicitAccessModifiers_NestedInterfaceDeclaration()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -940,7 +940,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedInterfaceDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        public void ExplicitAccessModifiers_NestedInterfaceDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -971,7 +971,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedInterfaceDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_NestedInterfaceDeclaration_ContainsAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -988,7 +988,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedInterfaceDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        public void ExplicitAccessModifiers_NestedInterfaceDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
 using System;
@@ -1029,7 +1029,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_FieldDeclaration_InvokesWarning()
+        public void ExplicitAccessModifiers_FieldDeclaration()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1056,7 +1056,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_FieldDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        public void ExplicitAccessModifiers_FieldDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1083,7 +1083,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_FieldDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_FieldDeclaration_ContainsAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1098,7 +1098,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_FieldDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        public void ExplicitAccessModifiers_FieldDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1125,7 +1125,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_PropertyDeclaration_InvokesWarning()
+        public void ExplicitAccessModifiers_PropertyDeclaration()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1152,7 +1152,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_PropertyDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        public void ExplicitAccessModifiers_PropertyDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1179,7 +1179,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_PropertyDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_PropertyDeclaration_ContainsAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1194,7 +1194,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_PropertyDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        public void ExplicitAccessModifiers_PropertyDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1223,7 +1223,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_MethodDeclaration_InvokesWarning()
+        public void ExplicitAccessModifiers_MethodDeclaration()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1248,7 +1248,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_MethodDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        public void ExplicitAccessModifiers_MethodDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1273,7 +1273,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_MethodDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_MethodDeclaration_ContainsAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1288,7 +1288,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_MethodDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        public void ExplicitAccessModifiers_MethodDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1321,7 +1321,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_ClassConstructorDeclaration_InvokesWarning()
+        public void ExplicitAccessModifiers_ClassConstructorDeclaration()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1346,7 +1346,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_ClassConstructorDeclaration_StaticCtorMostNotHaveAccessModifier_InvokesWarning()
+        public void ExplicitAccessModifiers_ClassConstructorDeclaration_StaticCtorMostNotHaveAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1371,7 +1371,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_ClassConstructorDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_ClassConstructorDeclaration_ContainsAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1386,7 +1386,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_ClassConstructorDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        public void ExplicitAccessModifiers_ClassConstructorDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1419,7 +1419,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_ClassConstructorDeclaration_ClassHasExplicitNonDefaultModifier_InvokesWarning()
+        public void ExplicitAccessModifiers_ClassConstructorDeclaration_ClassHasExplicitNonDefaultModifier()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1444,7 +1444,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_EventFieldDeclaration_InvokesWarning()
+        public void ExplicitAccessModifiers_EventFieldDeclaration()
         {
             var original = @"
 using System;
@@ -1473,7 +1473,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_EventFieldDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        public void ExplicitAccessModifiers_EventFieldDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
 using System;
@@ -1502,7 +1502,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_EventFieldDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_EventFieldDeclaration_ContainsAccessModifier()
         {
             var original = @"
 using System;
@@ -1519,7 +1519,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_EventFieldDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        public void ExplicitAccessModifiers_EventFieldDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
 using System;
@@ -1550,7 +1550,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_EventDeclaration_InvokesWarning()
+        public void ExplicitAccessModifiers_EventDeclaration()
         {
             var original = @"
 using System;
@@ -1587,7 +1587,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_EventDeclaration_ContainsNonAccessModifier_InvokesWarning()
+        public void ExplicitAccessModifiers_EventDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
 using System;
@@ -1624,7 +1624,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_EventDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_EventDeclaration_ContainsAccessModifier()
         {
             var original = @"
 using System;
@@ -1645,7 +1645,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_EventDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        public void ExplicitAccessModifiers_EventDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
 using System;
@@ -1684,7 +1684,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_IndexerDeclaration_InvokesWarning()
+        public void ExplicitAccessModifiers_IndexerDeclaration()
         {
             var original = @"
 using System;
@@ -1721,7 +1721,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_IndexerDeclaration_ContainsAccessModifier_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_IndexerDeclaration_ContainsAccessModifier()
         {
             var original = @"
 using System;
@@ -1742,7 +1742,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_IndexerDeclaration_OnlyChangesAccessModifiers_InvokesWarning()
+        public void ExplicitAccessModifiers_IndexerDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
 using System;
@@ -1781,7 +1781,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_InterfaceMethodMemberDeclaration_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_InterfaceMethodMemberDeclaration()
         {
             var original = @"
 using System;
@@ -1798,7 +1798,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedInterfaceMethodMemberDeclaration_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_NestedInterfaceMethodMemberDeclaration()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1816,7 +1816,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_InterfacePropertyMemberDeclaration_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_InterfacePropertyMemberDeclaration()
         {
             var original = @"
 using System;
@@ -1833,7 +1833,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedInterfacePropertyMemberDeclaration_DoesNotInvokeWarning()
+        public void ExplicitAccessModifiers_NestedInterfacePropertyMemberDeclaration()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1851,7 +1851,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_ClassDeclaration_WithXmlDoc_InvokesWarning()
+        public void ExplicitAccessModifiers_ClassDeclaration_WithXmlDoc()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1896,7 +1896,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_StructDeclaration_WithXmlDoc_InvokesWarning()
+        public void ExplicitAccessModifiers_StructDeclaration_WithXmlDoc()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1941,7 +1941,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_InterfaceDeclaration_WithXmlDoc_InvokesWarning()
+        public void ExplicitAccessModifiers_InterfaceDeclaration_WithXmlDoc()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1972,7 +1972,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestednterfaceDeclaration_WithXmlDoc_InvokesWarning()
+        public void ExplicitAccessModifiers_NestednterfaceDeclaration_WithXmlDoc()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -2017,7 +2017,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_EnumDeclaration_WithXmlDoc_InvokesWarning()
+        public void ExplicitAccessModifiers_EnumDeclaration_WithXmlDoc()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -2048,7 +2048,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedEnumDeclaration_WithXmlDoc_InvokesWarning()
+        public void ExplicitAccessModifiers_NestedEnumDeclaration_WithXmlDoc()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -2093,7 +2093,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_DelegateDeclaration_WithXmlDoc_InvokesWarning()
+        public void ExplicitAccessModifiers_DelegateDeclaration_WithXmlDoc()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -2120,7 +2120,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_NestedDelegateDeclaration_WithXmlDoc_InvokesWarning()
+        public void ExplicitAccessModifiers_NestedDelegateDeclaration_WithXmlDoc()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -2163,7 +2163,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_FieldDeclaration_WithXmlDoc_InvokesWarning()
+        public void ExplicitAccessModifiers_FieldDeclaration_WithXmlDoc()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -2196,7 +2196,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_PropertyDeclaration_WithXmlDoc_InvokesWarning()
+        public void ExplicitAccessModifiers_PropertyDeclaration_WithXmlDoc()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -2229,7 +2229,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_MethodDeclaration_WithXmlDoc_InvokesWarning()
+        public void ExplicitAccessModifiers_MethodDeclaration_WithXmlDoc()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -2260,7 +2260,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_ClassConstructorDeclaration_WithXmlDoc_InvokesWarning()
+        public void ExplicitAccessModifiers_ClassConstructorDeclaration_WithXmlDoc()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -2291,7 +2291,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_EventFieldDeclaration_WithXmlDoc_InvokesWarning()
+        public void ExplicitAccessModifiers_EventFieldDeclaration_WithXmlDoc()
         {
             var original = @"
 using System;
@@ -2326,7 +2326,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_EventDeclaration_WithXmlDoc_InvokesWarning()
+        public void ExplicitAccessModifiers_EventDeclaration_WithXmlDoc()
         {
             var original = @"
 using System;
@@ -2369,7 +2369,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_IndexerDeclaration_WithXmlDoc_InvokesWarning()
+        public void ExplicitAccessModifiers_IndexerDeclaration_WithXmlDoc()
         {
             var original = @"
 using System;

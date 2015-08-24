@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new OnPropertyChangedWithoutNameOfOperatorCodeFix();
 
         [TestMethod]
-        public void OnPropertyChangedWithoutNameOfOperator_WithIdenticalString_InvokesWarning()
+        public void OnPropertyChangedWithoutNameOfOperator_WithIdenticalString()
         {
             var original = @"
 using System;
@@ -89,7 +89,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void OnPropertyChangedWithoutNameOfOperator_WithDifferentlyCasedString_InvokesWarning()
+        public void OnPropertyChangedWithoutNameOfOperator_WithDifferentlyCasedString()
         {
             var original = @"
 using System;
@@ -164,7 +164,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void OnPropertyChangedWithoutNameOfOperator_WithDifferentStringAndNoCorrespondingProperty_DoesNotInvokeWarning()
+        public void OnPropertyChangedWithoutNameOfOperator_WithDifferentStringAndNoCorrespondingProperty()
         {
             var original = @"
 using System;
@@ -204,7 +204,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void OnPropertyChangedWithoutNameOfOperator_WithDifferentStringAndCorrespondingProperty_InvokesWarning()
+        public void OnPropertyChangedWithoutNameOfOperator_WithDifferentStringAndCorrespondingProperty()
         {
             var original = @"
 using System;
@@ -301,7 +301,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void OnPropertyChangedWithoutNameOfOperator_WithNameOfOperator_DoesNotInvokeWarning()
+        public void OnPropertyChangedWithoutNameOfOperator_WithNameOfOperator()
         {
             var original = @"
 using System;
@@ -341,7 +341,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void OnPropertyChangedWithoutNameOfOperator_WithMultipleArguments_InvokesWarning()
+        public void OnPropertyChangedWithoutNameOfOperator_WithMultipleArguments()
         {
             var original = @"
 using System;

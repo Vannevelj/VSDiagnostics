@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         protected override CodeFixProvider CodeFixProvider => new ReplaceEmptyStringWithStringDotEmptyCodeFix();
 
         [TestMethod]
-        public void ReplaceEmptyStringsWithStringDotEmpty_WithLocalEmptyStringLiteral_InvokesWarning()
+        public void ReplaceEmptyStringsWithStringDotEmpty_WithLocalEmptyStringLiteral()
         {
             var original = @"
 using System;
@@ -51,7 +51,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ReplaceEmptyStringsWithStringDotEmpty_WithDefaultParameterEmptyStringLiteral_DoesNotInvokeWarning()
+        public void ReplaceEmptyStringsWithStringDotEmpty_WithDefaultParameterEmptyStringLiteral()
         {
             var original = @"
 using System;
@@ -72,7 +72,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ReplaceEmptyStringsWithStringDotEmpty_WithNonEmptyStringLiteral_DoesNotInvokeWarning()
+        public void ReplaceEmptyStringsWithStringDotEmpty_WithNonEmptyStringLiteral()
         {
             var original = @"
 using System;
@@ -93,7 +93,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ReplaceEmptyStringsWithStringDotEmpty_WithStringLiteralAsArgument_InvokesWarning()
+        public void ReplaceEmptyStringsWithStringDotEmpty_WithStringLiteralAsArgument()
         {
             var original = @"
 using System;
@@ -140,7 +140,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ReplaceEmptyStringsWithStringDotEmpty_WithStringDotEmpty_DoesNotInvokeWarning()
+        public void ReplaceEmptyStringsWithStringDotEmpty_WithStringDotEmpty()
         {
             var original = @"
 using System;
@@ -161,7 +161,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ReplaceEmptyStringsWithStringDotEmpty_WithEmptyStringAsAttributeArgument_DoesNotInvokeWarning()
+        public void ReplaceEmptyStringsWithStringDotEmpty_WithEmptyStringAsAttributeArgument()
         {
             var original = @"
 using System;
@@ -189,7 +189,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ReplaceEmptyStringsWithStringDotEmpty_WithConstField_DoesNotInvokeWarning()
+        public void ReplaceEmptyStringsWithStringDotEmpty_WithConstField()
         {
             var original = @"
 using System;
@@ -207,7 +207,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ReplaceEmptyStringsWithStringDotEmpty_KeepsCleanFormatting_InvokesWarning()
+        public void ReplaceEmptyStringsWithStringDotEmpty_KeepsCleanFormatting()
         {
             var original = @"
 using System;

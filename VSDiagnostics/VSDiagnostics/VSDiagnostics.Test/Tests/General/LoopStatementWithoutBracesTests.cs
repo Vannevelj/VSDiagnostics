@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new LoopStatementWithoutBracesCodeFix();
 
         [TestMethod]
-        public void LoopStatementWithoutBraces_For_WithoutBraces_OnSameLine_InvokesWarning()
+        public void LoopStatementWithoutBraces_For_WithoutBraces_OnSameLine()
         {
             var original = @"
 using System;
@@ -54,7 +54,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void LoopStatementWithoutBraces_For_WithoutBraces_OnSameLine_WithIntermittentComment_InvokesWarning()
+        public void LoopStatementWithoutBraces_For_WithoutBraces_OnSameLine_WithIntermittentComment()
         {
             var original = @"
 using System;
@@ -94,7 +94,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void LoopStatementWithoutBraces_For_WithoutBraces_OnNextLine_InvokesWarning()
+        public void LoopStatementWithoutBraces_For_WithoutBraces_OnNextLine()
         {
             var original = @"
 using System;
@@ -135,7 +135,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void LoopStatementWithoutBraces_For_WithBraces_DoesNotInvokeWarning()
+        public void LoopStatementWithoutBraces_For_WithBraces()
         {
             var original = @"
 using System;
@@ -158,7 +158,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void LoopStatementWithoutBraces_While_WithoutBraces_OnSameLine_InvokesWarning()
+        public void LoopStatementWithoutBraces_While_WithoutBraces_OnSameLine()
         {
             var original = @"
 using System;
@@ -198,7 +198,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void LoopStatementWithoutBraces_While_WithoutBraces_OnSameLine_WithIntermittentComment_InvokesWarning()
+        public void LoopStatementWithoutBraces_While_WithoutBraces_OnSameLine_WithIntermittentComment()
         {
             var original = @"
 using System;
@@ -238,7 +238,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void LoopStatementWithoutBraces_While_WithoutBraces_OnNextLine_InvokesWarning()
+        public void LoopStatementWithoutBraces_While_WithoutBraces_OnNextLine()
         {
             var original = @"
 using System;
@@ -279,7 +279,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void LoopStatementWithoutBraces_While_WithBraces_DoesNotInvokeWarning()
+        public void LoopStatementWithoutBraces_While_WithBraces()
         {
             var original = @"
 using System;
@@ -302,7 +302,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void LoopStatementWithoutBraces_Foreach_WithoutBraces_OnSameLine_InvokesWarning()
+        public void LoopStatementWithoutBraces_Foreach_WithoutBraces_OnSameLine()
         {
             var original = @"
 using System;
@@ -346,7 +346,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void LoopStatementWithoutBraces_Foreach_WithoutBraces_OnSameLine_WithIntermittentComment_InvokesWarning()
+        public void LoopStatementWithoutBraces_Foreach_WithoutBraces_OnSameLine_WithIntermittentComment()
         {
             var original = @"
 using System;
@@ -390,7 +390,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void LoopStatementWithoutBraces_Foreach_WithoutBraces_OnNextLine_InvokesWarning()
+        public void LoopStatementWithoutBraces_Foreach_WithoutBraces_OnNextLine()
         {
             var original = @"
 using System;
@@ -435,7 +435,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void LoopStatementWithoutBraces_Foreach_WithBraces_DoesNotInvokeWarning()
+        public void LoopStatementWithoutBraces_Foreach_WithBraces()
         {
             var original = @"
 using System;
@@ -460,7 +460,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void LoopStatementWithoutBraces_DoWhile_WithoutBraces_OnSameLine_InvokesWarning()
+        public void LoopStatementWithoutBraces_DoWhile_WithoutBraces_OnSameLine()
         {
             var original = @"
 using System;
@@ -501,7 +501,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void LoopStatementWithoutBraces_DoWhile_WithoutBraces_OnSameLine_WithIntermittentComment_InvokesWarning()
+        public void LoopStatementWithoutBraces_DoWhile_WithoutBraces_OnSameLine_WithIntermittentComment()
         {
             var original = @"
 using System;
@@ -544,7 +544,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void LoopStatementWithoutBraces_DoWhile_WithoutBraces_OnNextLine_InvokesWarning()
+        public void LoopStatementWithoutBraces_DoWhile_WithoutBraces_OnNextLine()
         {
             var original = @"
 using System;
@@ -587,7 +587,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void LoopStatementWithoutBraces_DoWhile_WithBraces_DoesNotInvokeWarning()
+        public void LoopStatementWithoutBraces_DoWhile_WithBraces()
         {
             var original = @"
 using System;

@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         protected override CodeFixProvider CodeFixProvider => new ArgumentExceptionWithoutNameofOperatorCodeFix();
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithoutCorrespondingParameter_InvokesWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithoutCorrespondingParameter()
         {
             var original = @"
     using System;
@@ -51,7 +51,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithoutCorrespondingParameterInDifferentCase_InvokesWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithoutCorrespondingParameterInDifferentCase()
         {
             var original = @"
     using System;
@@ -88,7 +88,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithMultipleArguments_InvokesWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithMultipleArguments()
         {
             var original = @"
     using System;
@@ -125,7 +125,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithMultipleParameters_AndCorrespondingParameter_InvokesWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithMultipleParameters_AndCorrespondingParameter()
         {
             var original = @"
     using System;
@@ -162,7 +162,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperator_WithArgumentNullException_WithCorrespondingParameterAsString_InvokesWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentNullException_WithCorrespondingParameterAsString()
         {
             var original = @"
     using System;
@@ -199,7 +199,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperator_WithArgumentNullException_WithCorrespondingParameterAsNameOf_DoesNotInvokeWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentNullException_WithCorrespondingParameterAsNameOf()
         {
             var original = @"
     using System;
@@ -220,7 +220,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperator_WithArgumentNullException_WithoutCorrespondingParameter_DoesNotInvokeWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentNullException_WithoutCorrespondingParameter()
         {
             var original = @"
     using System;
@@ -241,7 +241,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperator_WithArgumentNullException_WithoutCorrespondingParameter_ButDefinedOutsideMethodScope_DoesNotInvokeWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentNullException_WithoutCorrespondingParameter_ButDefinedOutsideMethodScope()
         {
             var original = @"
     using System;
@@ -311,7 +311,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithIntType_InvokesWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithIntType()
         {
             var original = @"
     using System;
@@ -348,7 +348,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithDefaultValue_InvokesWarning()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithDefaultValue()
         {
             var original = @"
     using System;

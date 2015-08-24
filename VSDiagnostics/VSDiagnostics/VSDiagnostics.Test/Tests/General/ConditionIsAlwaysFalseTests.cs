@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new ConditionIsAlwaysFalseCodeFix();
 
         [TestMethod]
-        public void ConditionIsAlwaysFalse_ConditionHasBraces_InvokesWarning()
+        public void ConditionIsAlwaysFalse_ConditionHasBraces()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -48,7 +48,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ConditionIsAlwaysFalse_ConditionDoesNotHaveBraces_InvokesWarning()
+        public void ConditionIsAlwaysFalse_ConditionDoesNotHaveBraces()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -86,7 +86,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ConditionIsAlwaysFalse_ConditionContainsTrueLiteral_InvokesWarning()
+        public void ConditionIsAlwaysFalse_ConditionContainsTrueLiteral()
         {
             var original = @"
 namespace ConsoleApplication1
