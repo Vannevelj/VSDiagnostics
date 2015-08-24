@@ -491,5 +491,26 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "Return statement"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
+
+        [TestMethod]
+        public void NullableToShorthand_TypeofNullable_InvokesWarning()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            if (typeof(int) == typeof(Nullable<>) { }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }
