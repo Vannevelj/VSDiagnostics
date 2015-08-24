@@ -1,5 +1,5 @@
 ﻿using System.Collections.Immutable;
-using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -34,7 +34,18 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
                 return;
             }
 
-            if (method.Modifiers.Any(x => x.IsKind(SyntaxKind.AsyncKeyword)))
+            if (method.Modifiers.Any(SyntaxKind.OverrideKeyword))
+            {
+                return;
+            }
+
+            var returnType = context.SemanticModel.GetTypeInfo(method.ReturnType);
+            if (returnType.Type == null)
+            {
+                return;
+            }
+
+            if (method.Modifiers.Any(SyntaxKind.AsyncKeyword) || returnType.Type.MetadataName == typeof(Task).Name || returnType.Type.MetadataName == typeof(Task<>).Name)
             {
                 if (!method.Identifier.Text.EndsWith("Async"))
                 {
