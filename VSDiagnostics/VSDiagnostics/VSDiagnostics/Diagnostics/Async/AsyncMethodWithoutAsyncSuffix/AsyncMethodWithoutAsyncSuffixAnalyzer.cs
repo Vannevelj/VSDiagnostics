@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -45,13 +46,66 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
                 return;
             }
 
-            if (method.Modifiers.Any(SyntaxKind.AsyncKeyword) || returnType.Type.MetadataName == typeof(Task).Name || returnType.Type.MetadataName == typeof(Task<>).Name)
+            var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(method);
+            if (declaredSymbol == null)
+            {
+                return;
+            }
+
+            if (IsDefinedInAncestor(declaredSymbol, context))
+            {
+                return;
+            }
+
+            if (method.Modifiers.Any(SyntaxKind.AsyncKeyword) ||
+                returnType.Type.MetadataName == typeof(Task).Name ||
+                returnType.Type.MetadataName == typeof(Task<>).Name)
             {
                 if (!method.Identifier.Text.EndsWith("Async"))
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, method.Identifier.GetLocation(), method.Identifier.Text));
                 }
             }
+        }
+
+        private static bool IsDefinedInAncestor(IMethodSymbol methodSymbol, SyntaxNodeAnalysisContext context)
+        {
+            var type = methodSymbol?.ContainingType;
+            if (type == null)
+            {
+                return false;
+            }
+
+            var interfaces = type.AllInterfaces;
+            foreach (var @interface in interfaces)
+            {
+                var interfaceMethods = @interface.GetMembers().OfType<IMethodSymbol>().ToArray();
+                foreach (var method in interfaceMethods)
+                {
+                    if (method.Equals(methodSymbol))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            // Start with the first ancestor
+            type = type.BaseType;
+            while (type != null)
+            {
+                var methods = type.GetMembers().OfType<IMethodSymbol>().ToArray();
+                foreach (var method in methods)
+                {
+                    if (method.Equals(methodSymbol))
+                    {
+                        return true;
+                    }
+                }
+
+                type = type.BaseType;
+            }
+
+            return false;
         }
     }
 }
