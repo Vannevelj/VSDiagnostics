@@ -1170,8 +1170,13 @@ namespace VSDiagnostics.Test.Tests.Async
             VerifyFix(original, result);
         }
 
+        /// <summary>
+        ///     This should not display a warning because hidden methods are not considered the same by Roslyn.
+        ///     You will also notice that when you rename a hidden method in VS2015, it will only rename one of the two methods.
+        ///     Therefore, in this scenario, we will have two warnings instead of just one.
+        /// </summary>
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithHiddenMember_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithHiddenMember()
         {
             var original = @"
     using System;
@@ -1182,7 +1187,7 @@ namespace VSDiagnostics.Test.Tests.Async
     {
         abstract class OtherBaseClass
         {
-	        public virtual Task MyMethod()
+            public virtual Task MyMethod()
 	        {
 		        return null;
 	        }
@@ -1190,7 +1195,7 @@ namespace VSDiagnostics.Test.Tests.Async
 
         abstract class BaseClass : OtherBaseClass
         {
-	        public new Task MyMethod()
+            public new Task MyMethod()
 	        {
 		        return null;
 	        }
@@ -1206,7 +1211,7 @@ namespace VSDiagnostics.Test.Tests.Async
     {
         abstract class OtherBaseClass
         {
-	        public virtual Task MyMethodAsync()
+            public virtual Task MyMethodAsync()
 	        {
 		        return null;
 	        }
@@ -1214,26 +1219,37 @@ namespace VSDiagnostics.Test.Tests.Async
 
         abstract class BaseClass : OtherBaseClass
         {
-	        public new Task MyMethodAsync()
+            public new Task MyMethodAsync()
 	        {
 		        return null;
 	        }
         }
     }";
 
-            var diagnosticResultClass = new DiagnosticResult
+            var diagnosticResultHiddenMember = new DiagnosticResult
             {
                 Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
                 Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
                 Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
                 Locations = new[]
                 {
-                    new DiagnosticResultLocation("Test0.cs", 10, 31)
+                    new DiagnosticResultLocation("Test0.cs", 10, 33)
                 }
             };
 
-            VerifyDiagnostic(original, diagnosticResultClass);
-            VerifyFix(original, result);
+            var diagnosticResultHidingMember = new DiagnosticResult
+            {
+                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
+                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
+                Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
+                Locations = new[]
+                {
+                    new DiagnosticResultLocation("Test0.cs", 18, 29)
+                }
+            };
+
+            VerifyDiagnostic(original, diagnosticResultHiddenMember, diagnosticResultHidingMember);
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true); // CS0109
         }
     }
 }
