@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new FlagsEnumValuesAreNotPowersOfTwoCodeFix();
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo()
         {
             var original = @"
 using System;
@@ -53,7 +53,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_DoesNotInvokeWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo()
         {
             var original = @"
 using System;
@@ -75,7 +75,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_HexValues_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_HexValues()
         {
             var original = @"
 using System;
@@ -114,7 +114,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_HexValues_DoesNotInvokeWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_HexValues()
         {
             var original = @"
 using System;
@@ -136,7 +136,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_NegativeValues_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_NegativeValues()
         {
             var original = @"
 using System;
@@ -175,7 +175,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_NoValues_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_NoValues()
         {
             var original = @"
 using System;
@@ -214,7 +214,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeShort_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeShort()
         {
             var original = @"
 using System;
@@ -253,7 +253,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_BaseTypeShort_DoesNotInvokeWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_BaseTypeShort()
         {
             var original = @"
 using System;
@@ -275,7 +275,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeUshort_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeUshort()
         {
             var original = @"
 using System;
@@ -314,7 +314,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_BaseTypeUshort_DoesNotInvokeWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_BaseTypeUshort()
         {
             var original = @"
 using System;
@@ -336,7 +336,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeInt_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeInt()
         {
             var original = @"
 using System;
@@ -375,7 +375,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_BaseTypeInt_DoesNotInvokeWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_BaseTypeInt()
         {
             var original = @"
 using System;
@@ -397,7 +397,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeUint_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeUint()
         {
             var original = @"
 using System;
@@ -436,7 +436,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_BaseTypeUint_DoesNotInvokeWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_BaseTypeUint()
         {
             var original = @"
 using System;
@@ -458,7 +458,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeLong_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeLong()
         {
             var original = @"
 using System;
@@ -497,7 +497,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_BaseTypeLong_DoesNotInvokeWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_BaseTypeLong()
         {
             var original = @"
 using System;
@@ -519,7 +519,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeUlong_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeUlong()
         {
             var original = @"
 using System;
@@ -558,7 +558,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_BaseTypeUlong_DoesNotInvokeWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_BaseTypeUlong()
         {
             var original = @"
 using System;
@@ -580,7 +580,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_NotFlagsEnum_DoesNotInvokeWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_NotFlagsEnum()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -599,7 +599,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_FlagsEnum_WithSystemNamespace_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_FlagsEnum_WithSystemNamespace()
         {
             var original = @"
 using System;
@@ -638,7 +638,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeInt16_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeInt16()
         {
             var original = @"
 using System;
@@ -677,7 +677,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeUInt16_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeUInt16()
         {
             var original = @"
 using System;
@@ -716,7 +716,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeInt32_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeInt32()
         {
             var original = @"
 using System;
@@ -755,7 +755,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeUInt32_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeUInt32()
         {
             var original = @"
 using System;
@@ -794,7 +794,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeInt64_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeInt64()
         {
             var original = @"
 using System;
@@ -833,7 +833,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeUInt64_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeUInt64()
         {
             var original = @"
 using System;
@@ -872,7 +872,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_BitShifting_DoesNotInvokeWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesArePowersOfTwo_BitShifting()
         {
             var original = @"
 using System;
@@ -894,7 +894,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_ValuesOfOtherFlags_DoesNotInvokeWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_ValuesOfOtherFlags()
         {
             var original = @"
 using System;
@@ -922,7 +922,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_CharactersInsteadOfIntValues_DoesNotInvokeWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_CharactersInsteadOfIntValues()
         {
             var original = @"
 using System;
@@ -961,7 +961,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BinaryExpressionsWithAllIdentifiersAreLeft_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BinaryExpressionsWithAllIdentifiersAreLeft()
         {
             var original = @"
 using System;
@@ -1014,7 +1014,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BitshiftedValuesNotPowersOfTwo_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BitshiftedValuesNotPowersOfTwo()
         {
             var original = @"
 using System;
@@ -1067,7 +1067,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BitOredValuesNotPowersOfTwo_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BitOredValuesNotPowersOfTwo()
         {
             var original = @"
 using System;
@@ -1096,7 +1096,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_EnsuresFixLooksNice_InvokesWarning()
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_EnsuresFixLooksNice()
         {
             var original = @"
 using System;

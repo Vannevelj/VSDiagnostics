@@ -11,7 +11,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new EmptyCatchClauseAnalyzer();
 
         [TestMethod]
-        public void EmptyCatchClause_WithSingleEmptyCatchBlock_InvokesWarning()
+        public void EmptyCatchClause_WithSingleEmptyCatchBlock()
         {
             var original = @"
 using System;
@@ -37,7 +37,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void EmptyCatchClause_WithOnlyTriviaInCatchBlock_InvokesWarning()
+        public void EmptyCatchClause_WithOnlyTriviaInCatchBlock()
         {
             var original = @"
 using System;
@@ -67,7 +67,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void EmptyCatchClause_WithMixOfEmptyAndNonEmptyCatchBlocks_InvokesWarning()
+        public void EmptyCatchClause_WithMixOfEmptyAndNonEmptyCatchBlocks()
         {
             var original = @"
 using System;
@@ -106,7 +106,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void EmptyCatchClause_WithNonEmptyCatchBlock_DoesNotInvokeWarning()
+        public void EmptyCatchClause_WithNonEmptyCatchBlock()
         {
             var original = @"
 using System;

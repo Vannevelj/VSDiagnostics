@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new CastToAsCodeFix();
 
         [TestMethod]
-        public void CastToAs_ValueType_DoesNotInvokeWarning()
+        public void CastToAs_ValueType()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -33,7 +33,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CastToAs_ValueType_InvokesWarning()
+        public void CastToAs_NullableValueType()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -68,7 +68,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CastToAs_CustomType_InvokesWarning()
+        public void CastToAs_CustomType()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -117,7 +117,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CastToAs_MethodCall_InvokesWarning()
+        public void CastToAs_MethodCall()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -158,7 +158,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CastToAs_FormatsOnlySpecificNode_InvokesWarning()
+        public void CastToAs_FormatsOnlySpecificNode()
         {
             var original = @"
 namespace ConsoleApplication1

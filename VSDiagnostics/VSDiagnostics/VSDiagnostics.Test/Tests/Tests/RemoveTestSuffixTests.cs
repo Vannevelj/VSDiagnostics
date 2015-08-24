@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.Tests
         protected override CodeFixProvider CodeFixProvider => new RemoveTestSuffixCodeFix();
 
         [TestMethod]
-        public void RemoveTestSuffix_TestMethodMethodEndsWithTest_InvokesWarning()
+        public void RemoveTestSuffix_TestMethodMethodEndsWithTest()
         {
             var original = @"
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -51,7 +51,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void RemoveTestSuffix_TestMethodMethodDoesNotEndWithTest_DoesNotInvokeWarning()
+        public void RemoveTestSuffix_TestMethodMethodDoesNotEndWithTest()
         {
             var original = @"
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -72,7 +72,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void RemoveTestSuffix_NonTestMethodEndsWithTest_DoesNotInvokeWarning()
+        public void RemoveTestSuffix_NonTestMethodEndsWithTest()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -89,7 +89,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void RemoveTestSuffix_NonTestMethodDoesNotEndWithTest_DoesNotInvokeWarning()
+        public void RemoveTestSuffix_NonTestMethodDoesNotEndWithTest()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -108,7 +108,7 @@ namespace ConsoleApplication1
 
 
         [TestMethod]
-        public void RemoveTestSuffix_AttributedMethodEndsWithTest_DoesNotInvokeWarning()
+        public void RemoveTestSuffix_AttributedMethodEndsWithTest()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -126,7 +126,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void RemoveTestSuffix_FactMethodEndsWithTest_InvokesWarning()
+        public void RemoveTestSuffix_FactMethodEndsWithTest()
         {
             var original = @"
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -163,7 +163,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void RemoveTestSuffix_FactMethodDoesNotEndWithTest_DoesNotInvokeWarning()
+        public void RemoveTestSuffix_FactMethodDoesNotEndWithTest()
         {
             var original = @"
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -184,7 +184,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void RemoveTestSuffix_TestMethodEndsWithTest_InvokesWarning()
+        public void RemoveTestSuffix_TestMethodEndsWithTest()
         {
             var original = @"
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -221,7 +221,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void RemoveTestSuffix_TestMethodDoesNotEndWithTest_DoesNotInvokeWarning()
+        public void RemoveTestSuffix_TestMethodDoesNotEndWithTest()
         {
             var original = @"
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -242,7 +242,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void RemoveTestSuffix_TestMethodDoesNotEndWithTest_UpdatesReferences_DoesNotInvokeWarning()
+        public void RemoveTestSuffix_TestMethodDoesNotEndWithTest_UpdatesReferences()
         {
             var original = @"
 using Microsoft.VisualStudio.TestTools.UnitTesting;

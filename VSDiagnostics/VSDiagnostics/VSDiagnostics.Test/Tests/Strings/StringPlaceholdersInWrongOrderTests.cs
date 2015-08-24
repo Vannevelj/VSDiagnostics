@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         protected override CodeFixProvider CodeFixProvider => new StringPlaceHoldersInWrongOrderCodeFix();
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_InCorrectOrder_WithSingleOccurrence_DoesNotInvokeWarning()
+        public void StringPlaceholdersInWrongOrder_InCorrectOrder_WithSingleOccurrence()
         {
             var original = @"
     using System;
@@ -34,7 +34,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_InCorrectOrder_WithMultipleOccurrences_DoesNotInvokeWarning()
+        public void StringPlaceholdersInWrongOrder_InCorrectOrder_WithMultipleOccurrences()
         {
             var original = @"
     using System;
@@ -54,7 +54,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithMultipleOccurrences_InvokesWarning()
+        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithMultipleOccurrences()
         {
             var original = @"
     using System;
@@ -91,7 +91,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithSingleOccurrence_InvokesWarning()
+        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithSingleOccurrence()
         {
             var original = @"
     using System;
@@ -128,7 +128,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithUnusedPlaceholder_InvokesWarning()
+        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithUnusedPlaceholder()
         {
             var original = @"
     using System;
@@ -165,7 +165,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithMultiplePlaceholders_InvokesWarning()
+        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithMultiplePlaceholders()
         {
             var original = @"
     using System;
@@ -202,7 +202,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithSinglePlaceholder_DoesNotInvokeWarning()
+        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithSinglePlaceholder()
         {
             var original = @"
     using System;
@@ -223,7 +223,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_WithFormatDefinedSeparately_DoesNotInvokeWarning()
+        public void StringPlaceholdersInWrongOrder_WithFormatDefinedSeparately()
         {
             var original = @"
     using System;
@@ -244,7 +244,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_WithInterpolatedString_DoesNotInvokeWarning()
+        public void StringPlaceholdersInWrongOrder_WithInterpolatedString()
         {
             var original = @"
     using System;
@@ -265,7 +265,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithFormattedString_InvokesWarning()
+        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithFormattedString()
         {
             var original = @"
     using System;
@@ -304,7 +304,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithFormatProvider_InvokesWarning()
+        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithFormatProvider()
         {
             var original = @"
     using System;
@@ -343,7 +343,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_WithEscapedCurlyBrace_DoesNotInvokeWarning()
+        public void StringPlaceholdersInWrongOrder_WithEscapedCurlyBrace()
         {
             var original = @"
     using System;
@@ -363,7 +363,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_WithDoubleEscapedCurlyBrace_InvokesWarning()
+        public void StringPlaceholdersInWrongOrder_WithDoubleEscapedCurlyBrace()
         {
             var original = @"
     using System;
@@ -399,7 +399,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_WithNestedCurlyBraces_InvokesWarning()
+        public void StringPlaceholdersInWrongOrder_WithNestedCurlyBraces()
         {
             var original = @"
     using System;
@@ -435,7 +435,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_WithCommentedPlaceholder_AlsoUsedValidly_DoesNotInvokeWarning()
+        public void StringPlaceholdersInWrongOrder_WithCommentedPlaceholder_AlsoUsedValidly()
         {
             var original = @"
     using System;
@@ -455,7 +455,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithInvalidIndex_DoesNotInvokeWarning()
+        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithInvalidIndex()
         {
             var original = @"
     using System;
@@ -475,7 +475,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithDifferentMethodName_DoesNotInvokeWarning()
+        public void StringPlaceholdersInWrongOrder_InIncorrectOrder_WithDifferentMethodName()
         {
             var original = @"
     using System;
@@ -499,7 +499,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_WithReusedPlaceholderInDescendingOrder_DoesNotInvokeWarning()
+        public void StringPlaceholdersInWrongOrder_WithReusedPlaceholderInDescendingOrder()
         {
             var original = @"
     using System;
@@ -519,7 +519,7 @@ namespace VSDiagnostics.Test.Tests.Strings
         }
 
         [TestMethod]
-        public void StringPlaceholdersInWrongOrder_StringsAreVariables_InvokesWarning()
+        public void StringPlaceholdersInWrongOrder_StringsAreVariables()
         {
             var original = @"
     using System;

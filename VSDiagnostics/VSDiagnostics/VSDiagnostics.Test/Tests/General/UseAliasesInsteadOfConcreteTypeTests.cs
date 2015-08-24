@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new UseAliasesInsteadOfConcreteTypeCodeFix();
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_Int16BecomesShort_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_Int16BecomesShort()
         {
             var original = @"
 using System;
@@ -49,7 +49,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_Int16Alias_DoesNotInvokeWarning()
+        public void UseAliasesInsteadOfConcreteType_Int16Alias()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -67,7 +67,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt()
         {
             var original = @"
 using System;
@@ -102,7 +102,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_Int32Alias_DoesNotInvokeWarning()
+        public void UseAliasesInsteadOfConcreteType_Int32Alias()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -120,7 +120,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_Int64BecomesLong_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_Int64BecomesLong()
         {
             var original = @"
 using System;
@@ -155,7 +155,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_Int64Alias_DoesNotInvokeWarning()
+        public void UseAliasesInsteadOfConcreteType_Int64Alias()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -173,7 +173,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_UInt16BecomesUshort_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_UInt16BecomesUshort()
         {
             var original = @"
 using System;
@@ -208,7 +208,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_UInt16Alias_DoesNotInvokeWarning()
+        public void UseAliasesInsteadOfConcreteType_UInt16Alias()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -226,7 +226,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_UInt32BecomesUint_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_UInt32BecomesUint()
         {
             var original = @"
 using System;
@@ -261,7 +261,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_UInt32Alias_DoesNotInvokeWarning()
+        public void UseAliasesInsteadOfConcreteType_UInt32Alias()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -279,7 +279,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_UInt64BecomesUlong_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_UInt64BecomesUlong()
         {
             var original = @"
 using System;
@@ -314,7 +314,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_UInt64Alias_DoesNotInvokeWarning()
+        public void UseAliasesInsteadOfConcreteType_UInt64Alias()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -332,7 +332,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_ObjectBecomesObject_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_ObjectBecomesObject()
         {
             var original = @"
 using System;
@@ -367,7 +367,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_ObjectAlias_DoesNotInvokeWarning()
+        public void UseAliasesInsteadOfConcreteType_ObjectAlias()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -385,7 +385,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_ByteBecomesByte_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_ByteBecomesByte()
         {
             var original = @"
 using System;
@@ -420,7 +420,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_ByteAlias_DoesNotInvokeWarning()
+        public void UseAliasesInsteadOfConcreteType_ByteAlias()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -438,7 +438,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_SByteBecomesSbyte_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_SByteBecomesSbyte()
         {
             var original = @"
 using System;
@@ -473,7 +473,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_SbyteAlias_DoesNotInvokeWarning()
+        public void UseAliasesInsteadOfConcreteType_SbyteAlias()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -491,7 +491,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_CharBecomesChar_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_CharBecomesChar()
         {
             var original = @"
 using System;
@@ -526,7 +526,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_CharAlias_DoesNotInvokeWarning()
+        public void UseAliasesInsteadOfConcreteType_CharAlias()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -544,7 +544,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_BooleanBecomesBool_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_BooleanBecomesBool()
         {
             var original = @"
 using System;
@@ -579,7 +579,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_BooleanAlias_DoesNotInvokeWarning()
+        public void UseAliasesInsteadOfConcreteType_BooleanAlias()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -597,7 +597,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_SingleBecomesFloat_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_SingleBecomesFloat()
         {
             var original = @"
 using System;
@@ -632,7 +632,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_SingleAlias_DoesNotInvokeWarning()
+        public void UseAliasesInsteadOfConcreteType_SingleAlias()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -650,7 +650,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_DoubleBecomesDouble_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_DoubleBecomesDouble()
         {
             var original = @"
 using System;
@@ -685,7 +685,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_DoubleAlias_DoesNotInvokeWarning()
+        public void UseAliasesInsteadOfConcreteType_DoubleAlias()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -703,7 +703,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_DecimalBecomesDecimal_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_DecimalBecomesDecimal()
         {
             var original = @"
 using System;
@@ -738,7 +738,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_DecimalAlias_DoesNotInvokeWarning()
+        public void UseAliasesInsteadOfConcreteType_DecimalAlias()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -756,7 +756,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_StringBecomesString_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_StringBecomesString()
         {
             var original = @"
 using System;
@@ -791,7 +791,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_StringAlias_DoesNotInvokeWarning()
+        public void UseAliasesInsteadOfConcreteType_StringAlias()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -809,7 +809,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_UseVar_DoesNotInvokeWarning()
+        public void UseAliasesInsteadOfConcreteType_UseVar()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -827,7 +827,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_UserDefinedType_DoesNotInvokeWarning()
+        public void UseAliasesInsteadOfConcreteType_UserDefinedType()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -847,7 +847,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_SystemDotCharBecomesChar_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_SystemDotCharBecomesChar()
         {
             var original = @"
 using System;
@@ -882,7 +882,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_Method_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_Method()
         {
             var original = @"
 using System;
@@ -917,7 +917,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_ConversionOperator_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_ConversionOperator()
         {
             var original = @"
 using System;
@@ -952,7 +952,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_Delegate_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_Delegate()
         {
             var original = @"
 using System;
@@ -975,7 +975,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_Indexer_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_Indexer()
         {
             var original = @"
 using System;
@@ -1012,7 +1012,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_Operator_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_Operator()
         {
             var original = @"
 using System;
@@ -1047,7 +1047,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_Property_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_Property()
         {
             var original = @"
 using System;
@@ -1077,7 +1077,7 @@ namespace ConsoleApplication1
 
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_Int32DotMaxValue_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_Int32DotMaxValue()
         {
             var original = @"
 using System;
@@ -1112,7 +1112,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_CharBecomesChar_CharDotIsWhiteSpace_InvokesWarning()
+        public void UseAliasesInsteadOfConcreteType_CharBecomesChar_CharDotIsWhiteSpace()
         {
             var original = @"
 using System;

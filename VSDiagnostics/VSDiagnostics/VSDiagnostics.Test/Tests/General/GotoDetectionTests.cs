@@ -11,7 +11,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new GotoDetectionAnalyzer();
 
         [TestMethod]
-        public void GotoDetection_GotoCaseStatement_InvokesWarning()
+        public void GotoDetection_GotoCaseStatement()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -38,7 +38,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void GotoDetection_GotoDefaultStatement_InvokesWarning()
+        public void GotoDetection_GotoDefaultStatement()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -63,7 +63,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void GotoDetection_GotoLabel_InvokesWarning()
+        public void GotoDetection_GotoLabel()
         {
             var original = @"
 namespace ConsoleApplication1
