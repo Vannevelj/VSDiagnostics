@@ -63,7 +63,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, EmptyCatchClauseAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -128,6 +128,33 @@ namespace ConsoleApplication1
         }
     }
 }";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void EmptyCatchClause_WithOnlyCommentsInCatchBlock()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            try
+            {
+            }
+            catch (Exception)
+            {
+                // just some comments
+            }
+        }
+    }
+}";
+
             VerifyDiagnostic(original);
         }
     }

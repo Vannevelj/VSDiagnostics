@@ -1,8 +1,10 @@
 ﻿using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Exceptions.EmptyCatchClause
 {
@@ -28,13 +30,17 @@ namespace VSDiagnostics.Diagnostics.Exceptions.EmptyCatchClause
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             var catchClause = context.Node as CatchClauseSyntax;
-            if (catchClause == null)
+            if (catchClause?.Block == null)
             {
                 return;
             }
 
-            var statements = catchClause.Block?.Statements;
-            if (statements.HasValue && statements.Value.Any())
+            if (catchClause.Block.Statements.Any())
+            {
+                return;
+            }
+
+            if (catchClause.Block.CloseBraceToken.LeadingTrivia.Any(x => x.IsCommentTrivia()))
             {
                 return;
             }
