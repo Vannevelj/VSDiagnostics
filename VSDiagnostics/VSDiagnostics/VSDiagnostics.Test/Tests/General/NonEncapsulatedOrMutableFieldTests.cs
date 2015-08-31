@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new NonEncapsulatedOrMutableFieldCodeFix();
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableField_WithInternalField_AndInlineInitialization_InvokesWarning()
+        public void NonEncapsulatedOrMutableField_WithInternalField_AndInlineInitialization()
         {
             var original = @"
 using System;
@@ -45,7 +45,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableField_WithInlineInitialization_InvokesWarning()
+        public void NonEncapsulatedOrMutableField_WithInlineInitialization()
         {
             var original = @"
 using System;
@@ -76,7 +76,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableField_WithPublicField_InvokesWarning()
+        public void NonEncapsulatedOrMutableField_WithPublicField()
         {
             var original = @"
 using System;
@@ -107,7 +107,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableField_WithPrivateField_DoesNotInvokeWarning()
+        public void NonEncapsulatedOrMutableField_WithPrivateField()
         {
             var original = @"
 using System;
@@ -125,7 +125,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableField_WithProtectedInternalField_InvokesWarning()
+        public void NonEncapsulatedOrMutableField_WithProtectedInternalField()
         {
             var original = @"
 using System;
@@ -156,7 +156,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableField_WithConstField_DoesNotInvokeWarning()
+        public void NonEncapsulatedOrMutableField_WithConstField()
         {
             var original = @"
 using System;
@@ -174,7 +174,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableField_WithReadOnlyField_DoesNotInvokeWarning()
+        public void NonEncapsulatedOrMutableField_WithReadOnlyField()
         {
             var original = @"
 using System;
@@ -192,7 +192,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableField_WithMultipleDeclarators_InvokesWarning()
+        public void NonEncapsulatedOrMutableField_WithMultipleDeclarators()
         {
             var original = @"
 using System;
@@ -227,7 +227,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableField_WithMultipleDeclaratorsAndInlineInitialization_InvokesWarning()
+        public void NonEncapsulatedOrMutableField_WithMultipleDeclaratorsAndInlineInitialization()
         {
             var original = @"
 using System;
@@ -262,7 +262,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableField_WithAttribute_InvokesWarning()
+        public void NonEncapsulatedOrMutableField_WithAttribute()
         {
             var original = @"
 using System;
@@ -308,7 +308,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableField_WithVerbatimIdentifier_InvokesWarning()
+        public void NonEncapsulatedOrMutableField_WithVerbatimIdentifier()
         {
             var original = @"
 using System;
@@ -339,7 +339,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void NonEncapsulatedOrMutableField_WithEscapedIdentifier_InvokesWarning()
+        public void NonEncapsulatedOrMutableField_WithEscapedIdentifier()
         {
             var original = @"
 using System;

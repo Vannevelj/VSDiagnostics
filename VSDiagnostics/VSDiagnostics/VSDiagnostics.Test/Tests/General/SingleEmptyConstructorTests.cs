@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new SingleEmptyConstructorCodeFix();
 
         [TestMethod]
-        public void SingleEmptyConstructor_WithEmptyConstructor_InvokesWarning()
+        public void SingleEmptyConstructor_WithEmptyConstructor()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -40,7 +40,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_WithSingleLineCommentInConstructor_DoesNotInvokeWarning()
+        public void SingleEmptyConstructor_WithSingleLineCommentInConstructor()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -58,7 +58,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_WithMultiLineCommentInConstructor_DoesNotInvokeWarning()
+        public void SingleEmptyConstructor_WithMultiLineCommentInConstructor()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -77,7 +77,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_WithConstructorParameters_DoesNotInvokeWarning()
+        public void SingleEmptyConstructor_WithConstructorParameters()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -94,7 +94,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_WithConstructorBody_DoesNotInvokeWarning()
+        public void SingleEmptyConstructor_WithConstructorBody()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -114,7 +114,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_WithImplicitPrivateConstructor_DoesNotInvokeWarning()
+        public void SingleEmptyConstructor_WithImplicitPrivateConstructor()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -134,7 +134,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_WithExplicitInternalConstructor_DoesNotInvokeWarning()
+        public void SingleEmptyConstructor_WithExplicitInternalConstructor()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -154,7 +154,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SingleEmptyConstructor_ConstructorHasAttributes_DoesNotInvokeWarning()
+        public void SingleEmptyConstructor_ConstructorHasAttributes()
         {
             var original = @"
 using System;
@@ -165,6 +165,152 @@ namespace ConsoleApplication1
     {
         [Obsolete]
         public MyClass()
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SingleEmptyConstructor_ConstructorHasBaseCallWithArgument()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class MyExceptionClass : Exception
+    {
+        public MyExceptionClass() : base(""foo"")
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SingleEmptyConstructor_ConstructorHasBaseCallWithoutArgument()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public class MyExceptionClass : Exception
+    {
+        public MyExceptionClass() : base()
+        {
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    public class MyExceptionClass : Exception
+    {
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(SingleEmptyConstructorAnalyzer.Rule.MessageFormat.ToString(), "MyExceptionClass"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void SingleEmptyConstructor_ConstructorHasThisCallWithArgument()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class MyExceptionClass : Exception
+    {
+        public MyExceptionClass() : this(""foo"")
+        {
+        }
+
+        public MyExceptionClass(string s)
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SingleEmptyConstructor_ConstructorHasThisCallWithoutArgument()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public class MyExceptionClass : Exception
+    {
+        public MyExceptionClass() : this()
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SingleEmptyConstructor_ConstructorHasXmlDocComment_ThisKeyword()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public class Foo
+    {
+        /// <summary>
+        /// Doc comment for Foo
+        /// </summary>
+        public Foo()
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SingleEmptyConstructor_ConstructorHasMultilineComment_ThisKeyword()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public class Foo
+    {
+        /*
+           Hi.  I'm a multiline comment.
+        */
+        public Foo()
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SingleEmptyConstructor_MultipleConstructors_ThisKeyword()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public class Foo
+    {
+        public Foo()
+        {
+        }
+
+        public Foo(int i)
         {
         }
     }

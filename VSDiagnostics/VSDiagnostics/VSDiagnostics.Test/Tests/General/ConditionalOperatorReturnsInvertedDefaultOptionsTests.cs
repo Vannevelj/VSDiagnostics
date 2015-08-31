@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new ConditionalOperatorReturnsInvertedDefaultOptionsCodeFix();
 
         [TestMethod]
-        public void ConditionalOperatorReturnsInvertedDefaultOptions_WithOnlyLiterals_InvokesWarning()
+        public void ConditionalOperatorReturnsInvertedDefaultOptions_WithOnlyLiterals()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -49,7 +49,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ConditionalOperatorReturnsInvertedDefaultOptions_AbsoluteBasic_InvokesWarning()
+        public void ConditionalOperatorReturnsInvertedDefaultOptions_AbsoluteBasic()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -82,7 +82,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ConditionalOperatorReturnsInvertedDefaultOptions_WithTrueConditionAsLiteral_DoesNotInvokeWarning()
+        public void ConditionalOperatorReturnsInvertedDefaultOptions_WithTrueConditionAsLiteral()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -103,7 +103,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ConditionalOperatorReturnsInvertedDefaultOptions_WithFalseConditionAsLiteral_DoesNotInvokeWarning()
+        public void ConditionalOperatorReturnsInvertedDefaultOptions_WithFalseConditionAsLiteral()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -124,7 +124,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ConditionalOperatorReturnsInvertedDefaultOptions_WithOnlyLiterals_AsReturnStatement_InvokesWarning()
+        public void ConditionalOperatorReturnsInvertedDefaultOptions_WithOnlyLiterals_AsReturnStatement()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -159,7 +159,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ConditionalOperatorReturnsInvertedDefaultOptions_WithStrings_DoesNotInvokeWarning()
+        public void ConditionalOperatorReturnsInvertedDefaultOptions_WithStrings()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -179,7 +179,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ConditionalOperatorReturnsInvertedDefaultOptions_WithMoreComplicatedCondition_InvokesWarning()
+        public void ConditionalOperatorReturnsInvertedDefaultOptions_WithMoreComplicatedCondition()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -214,7 +214,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ConditionalOperatorReturnsInvertedDefaultOptions_WithBooleanLiterals_DoesNotInvokeWarning()
+        public void ConditionalOperatorReturnsInvertedDefaultOptions_WithBooleanLiterals()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -234,7 +234,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ConditionalOperatorReturnsInvertedDefaultOptions_WithLiteralsAsString_DoesNotInvokeWarning()
+        public void ConditionalOperatorReturnsInvertedDefaultOptions_WithLiteralsAsString()
         {
             var original = @"
 namespace ConsoleApplication1

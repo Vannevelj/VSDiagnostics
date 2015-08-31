@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new TypeToVarCodeFix();
 
         [TestMethod]
-        public void TypeToVar_WithLocalPredefinedType_InvokesWarning()
+        public void TypeToVar_WithLocalPredefinedType()
         {
             var original = @"
 using System;
@@ -50,7 +50,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TypeToVar_WithLocalPredefinedTypeInitializedFromMethod_InvokesWarning()
+        public void TypeToVar_WithLocalPredefinedTypeInitializedFromMethod()
         {
             var original = @"
 using System;
@@ -96,7 +96,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TypeToVar_WithLocalDefinedWithVar_DoesNotInvokeWarning()
+        public void TypeToVar_WithLocalDefinedWithVar()
         {
             var original = @"
 using System;
@@ -116,7 +116,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TypeToVar_WithLocalAssignedUsingExplicitConversion_InvokesWarning()
+        public void TypeToVar_WithLocalAssignedUsingExplicitConversion()
         {
             var original = @"
 using System;
@@ -153,7 +153,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TypeToVar_WithLocalAssignedUsingImplicitConversion_DoesNotInvokeWarning()
+        public void TypeToVar_WithLocalAssignedUsingImplicitConversion()
         {
             var original = @"
 using System;
@@ -175,7 +175,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TypeToVar_WithFieldDeclaration_DoesNotInvokeWarning()
+        public void TypeToVar_WithFieldDeclaration()
         {
             var original = @"
 using System;
@@ -193,7 +193,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TypeToVar_WithLocalUninitialized_DoesNotInvokeWarning()
+        public void TypeToVar_WithLocalUninitialized()
         {
             var original = @"
 using System;
@@ -214,7 +214,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TypeToVar_WithLocalBaseClassTypeInitializedWithDerivedType_DoesNotInvokeWarning()
+        public void TypeToVar_WithLocalBaseClassTypeInitializedWithDerivedType()
         {
             var original = @"
 using System;
@@ -233,6 +233,27 @@ namespace ConsoleApplication1
 
     class Derived : Base
     {
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void TypeToVar_WithLocalConstPredefinedType()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            const int x = 0;
+        }
     }
 }";
 

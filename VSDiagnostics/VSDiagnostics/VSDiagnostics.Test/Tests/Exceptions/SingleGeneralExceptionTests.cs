@@ -11,7 +11,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new SingleGeneralExceptionAnalyzer();
 
         [TestMethod]
-        public void SingleGeneralException_WithSingleGeneralException_InvokesWarning()
+        public void SingleGeneralException_WithSingleGeneralException()
         {
             var test = @"
     using System;
@@ -38,7 +38,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void SingleGeneralException_WithSingleSpecificException_DoesNotInvokeWarning()
+        public void SingleGeneralException_WithSingleSpecificException()
         {
             var test = @"
     using System;
@@ -65,7 +65,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void SingleGeneralException_WithoutNamedCatchClauses_DoesNotInvokeWarning()
+        public void SingleGeneralException_WithoutNamedCatchClauses()
         {
             var test = @"
     using System;
@@ -92,7 +92,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void SingleGeneralException_WithMultipleCatchClauses_DoesNotInvokeWarning()
+        public void SingleGeneralException_WithMultipleCatchClauses()
         {
             var test = @"
     using System;

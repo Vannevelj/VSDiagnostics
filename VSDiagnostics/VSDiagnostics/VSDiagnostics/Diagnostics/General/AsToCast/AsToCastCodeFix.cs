@@ -32,9 +32,11 @@ namespace VSDiagnostics.Diagnostics.General.AsToCast
         {
             var binaryExpression = (BinaryExpressionSyntax) statement;
             var typeSyntax = SyntaxFactory.ParseTypeName(binaryExpression.Right.GetText().ToString());
-            var newExpression = SyntaxFactory.CastExpression(typeSyntax, binaryExpression.Left);
+            var newExpression =
+                SyntaxFactory.CastExpression(typeSyntax, binaryExpression.Left)
+                    .WithAdditionalAnnotations(Formatter.Annotation);
 
-            var newRoot = root.ReplaceNode(binaryExpression, newExpression).WithAdditionalAnnotations(Formatter.Annotation);
+            var newRoot = root.ReplaceNode(binaryExpression, newExpression);
 
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);

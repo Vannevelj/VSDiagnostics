@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new IfStatementWithoutBracesCodeFix();
 
         [TestMethod]
-        public void IfStatementWithoutBraces_WithoutBraces_OnSameLine_InvokesWarning()
+        public void IfStatementWithoutBraces_WithoutBraces_OnSameLine()
         {
             var original = @"
 using System;
@@ -54,7 +54,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void IfStatementWithoutBraces_WithoutBraces_OnSameLine_WithIntermittentComment_InvokesWarning()
+        public void IfStatementWithoutBraces_WithoutBraces_OnSameLine_WithIntermittentComment()
         {
             var original = @"
 using System;
@@ -94,7 +94,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void IfStatementWithoutBraces_WithoutBraces_OnNextLine_InvokesWarning()
+        public void IfStatementWithoutBraces_WithoutBraces_OnNextLine()
         {
             var original = @"
 using System;
@@ -135,7 +135,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void IfStatementWithoutBraces_WithBraces_DoesNotInvokeWarning()
+        public void IfStatementWithoutBraces_WithBraces()
         {
             var original = @"
 using System;
@@ -158,7 +158,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void IfStatementWithoutBraces_ElseStatementWithoutBraces_OnSameLine_InvokesWarning()
+        public void IfStatementWithoutBraces_ElseStatementWithoutBraces_OnSameLine()
         {
             var original = @"
 using System;
@@ -206,7 +206,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void IfStatementWithoutBraces_ElseStatementWithoutBraces_OnNextLine_InvokesWarning()
+        public void IfStatementWithoutBraces_ElseStatementWithoutBraces_OnNextLine()
         {
             var original = @"
 using System;
@@ -255,7 +255,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void IfStatementWithoutBraces_ElseStatementWithBraces_DoesNotInvokeWarning()
+        public void IfStatementWithoutBraces_ElseStatementWithBraces()
         {
             var original = @"
 using System;
@@ -282,7 +282,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void IfStatementWithoutBraces_IfAndElseWithoutBraces_InvokesWarning()
+        public void IfStatementWithoutBraces_IfAndElseWithoutBraces()
         {
             var original = @"
 using System;
@@ -331,7 +331,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void IfStatementWithoutBraces_ElseIfWithBraces_DoesNotInvokeWarning()
+        public void IfStatementWithoutBraces_ElseIfWithBraces()
         {
             var original = @"
 using System;
@@ -360,7 +360,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void IfStatementWithoutBraces_ElseIfWithoutBraces_InvokesWarning()
+        public void IfStatementWithoutBraces_ElseIfWithoutBraces()
         {
             var original = @"
 using System;

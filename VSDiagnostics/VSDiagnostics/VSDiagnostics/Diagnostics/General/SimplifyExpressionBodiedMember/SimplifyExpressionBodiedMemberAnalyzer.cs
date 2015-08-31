@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -16,6 +17,17 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.SimplifyExpressionBodiedMemberAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.SimplifyExpressionBodiedMemberAnalyzerTitle;
+
+        private static readonly List<SyntaxKind> Nodes = new List<SyntaxKind>();
+
+        static SimplifyExpressionBodiedMemberAnalyzer()
+        {
+            Nodes.AddRange(new[]
+            {
+                SyntaxKind.ExpressionStatement,
+                SyntaxKind.ReturnStatement
+            });
+        }
 
         internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 
@@ -81,6 +93,11 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
+            if (!Nodes.Contains(getter.Body.Statements[0].Kind()))
+            {
+                return null;
+            }
+
             var statement = getter.Body.Statements.First();
             return Diagnostic.Create(Rule, statement.GetLocation(), "Property", propertyDeclaration.Identifier);
         }
@@ -102,14 +119,12 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
-            var statement = methodDeclaration.Body.Statements.FirstOrDefault();
-            var returnStatement = statement?.DescendantNodesAndSelf().OfType<ReturnStatementSyntax>().FirstOrDefault();
-            if (returnStatement == null)
+            if (!Nodes.Contains(methodDeclaration.Body.Statements[0].Kind()))
             {
                 return null;
             }
 
-            return Diagnostic.Create(Rule, returnStatement.GetLocation(), "Method", methodDeclaration.Identifier.ValueText);
+            return Diagnostic.Create(Rule, methodDeclaration.Identifier.GetLocation(), "Method", methodDeclaration.Identifier.ValueText);
         }
     }
 }

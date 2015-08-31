@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
 {
@@ -31,7 +32,9 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
         private static Task<Solution> UseStringDotEmptyAsync(Document document, SyntaxNode root, LiteralExpressionSyntax literalDeclaration)
         {
             var stringDotEmptyInvocation = SyntaxFactory.ParseExpression("string.Empty");
-            var newRoot = root.ReplaceNode(literalDeclaration, stringDotEmptyInvocation);
+            var newRoot =
+                root.ReplaceNode(literalDeclaration, stringDotEmptyInvocation)
+                    .WithAdditionalAnnotations(Formatter.Annotation);
 
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);

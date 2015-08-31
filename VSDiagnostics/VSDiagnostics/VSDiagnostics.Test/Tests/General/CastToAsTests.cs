@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new CastToAsCodeFix();
 
         [TestMethod]
-        public void CastToAs_ValueType_DoesNotInvokeWarning()
+        public void CastToAs_ValueType()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -33,7 +33,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CastToAs_ValueType_InvokesWarning()
+        public void CastToAs_NullableValueType()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -68,7 +68,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CastToAs_CustomType_InvokesWarning()
+        public void CastToAs_CustomType()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -86,7 +86,7 @@ namespace ConsoleApplication1
         void Method()
         {
             P variable = new Program();
-            var i = (Program) ch;
+            var i = (Program) variable;
         }
     }
 }";
@@ -107,7 +107,7 @@ namespace ConsoleApplication1
         void Method()
         {
             P variable = new Program();
-            var i = ch as Program;
+            var i = variable as Program;
         }
     }
 }";
@@ -117,7 +117,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void CastToAs_MethodCall_InvokesWarning()
+        public void CastToAs_MethodCall()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -147,6 +147,47 @@ namespace ConsoleApplication1
         }
 
         object GetBoxedType()
+        {
+            return true;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, CastToAsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void CastToAs_FormatsOnlySpecificNode()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Main()
+        {
+            bool? b = (bool?) GetBoxedType();
+        }
+
+        object GetBoxedType ()  // make sure this space doesn't get fixed
+        {
+            return true;
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Main()
+        {
+            bool? b = GetBoxedType() as bool?;
+        }
+
+        object GetBoxedType ()  // make sure this space doesn't get fixed
         {
             return true;
         }

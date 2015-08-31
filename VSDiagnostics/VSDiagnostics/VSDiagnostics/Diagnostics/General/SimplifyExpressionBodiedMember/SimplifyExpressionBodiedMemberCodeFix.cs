@@ -24,19 +24,19 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.SimplifyExpressionBodiedMemberCodeFixTitle, x => UseExpressionBodiedMemberAsync(context.Document, root, statement), nameof(SimplifyExpressionBodiedMemberAnalyzer)),
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.SimplifyExpressionBodiedMemberCodeFixTitle, x => UseExpressionBodiedMemberAsync(context.Document, root, statement),
+                    nameof(SimplifyExpressionBodiedMemberAnalyzer)),
                 diagnostic);
         }
 
         private Task<Solution> UseExpressionBodiedMemberAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
-            var returnStatement = (ReturnStatementSyntax) statement;
-            var expression = returnStatement.Expression;
-            var arrowClause = SyntaxFactory.ArrowExpressionClause(expression);
-
             var property = statement.AncestorsAndSelf().OfType<PropertyDeclarationSyntax>().FirstOrDefault();
             if (property != null)
             {
+                var firstStatement = property.AccessorList.Accessors.FirstOrDefault(x => x.Keyword.IsKind(SyntaxKind.GetKeyword)).Body.Statements.First();
+                var arrowClause = SyntaxFactory.ArrowExpressionClause(((ReturnStatementSyntax) firstStatement).Expression);
                 var newProperty = property.RemoveNode(property.AccessorList, SyntaxRemoveOptions.KeepNoTrivia)
                                           .WithExpressionBody(arrowClause)
                                           .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
@@ -48,6 +48,9 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
             var method = statement.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().FirstOrDefault();
             if (method != null)
             {
+                var firstStatement = method.Body.Statements.First();
+                var expression = firstStatement is ExpressionStatementSyntax ? ((ExpressionStatementSyntax) firstStatement).Expression : ((ReturnStatementSyntax) firstStatement).Expression;
+                var arrowClause = SyntaxFactory.ArrowExpressionClause(expression);
                 root = root.ReplaceNode(method, method.RemoveNode(method.Body, SyntaxRemoveOptions.KeepNoTrivia)
                                                       .WithExpressionBody(arrowClause)
                                                       .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));

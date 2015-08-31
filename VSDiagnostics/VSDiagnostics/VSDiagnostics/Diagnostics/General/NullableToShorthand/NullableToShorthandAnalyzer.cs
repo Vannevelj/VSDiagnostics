@@ -29,6 +29,12 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var argumentList = (GenericNameSyntax) context.Node;
+
+            if (argumentList.TypeArgumentList.Arguments.OfType<OmittedTypeArgumentSyntax>().Any())
+            {
+                return;
+            }
+
             var identifier = "Unnamed variable";
             var ancestorNodes = new[] { SyntaxKind.LocalDeclarationStatement, SyntaxKind.FieldDeclaration, SyntaxKind.Parameter, SyntaxKind.PropertyDeclaration };
             var parentNode = context.Node.AncestorsAndSelf().FirstOrDefault(x => ancestorNodes.Contains(x.Kind()));

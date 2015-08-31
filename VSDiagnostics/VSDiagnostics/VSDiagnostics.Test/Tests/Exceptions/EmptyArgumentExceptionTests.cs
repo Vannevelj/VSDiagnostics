@@ -11,7 +11,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new EmptyArgumentExceptionAnalyzer();
 
         [TestMethod]
-        public void EmptyArgumentException_WithEmptyArgument_InvokesWarning()
+        public void EmptyArgumentException_WithEmptyArgument()
         {
             var test = @"
     using System;
@@ -32,7 +32,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void EmptyArgumentException_WithEmptyNullArgument_InvokesWarning()
+        public void EmptyArgumentException_WithEmptyNullArgument()
         {
             var test = @"
     using System;
@@ -53,7 +53,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void EmptyArgumentException_WithArgument_DoesNotInvokeWarning()
+        public void EmptyArgumentException_WithArgument()
         {
             var test = @"
     using System;
@@ -73,7 +73,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void EmptyArgumentException_WithDumbRethrowStatement_DoesNotInvokeWarning()
+        public void EmptyArgumentException_WithDumbRethrowStatement()
         {
             var test = @"
     using System;
@@ -95,7 +95,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void EmptyArgumentException_WithRethrowStatement_DoesNotInvokeWarning()
+        public void EmptyArgumentException_WithRethrowStatement()
         {
             var test = @"
     using System;
