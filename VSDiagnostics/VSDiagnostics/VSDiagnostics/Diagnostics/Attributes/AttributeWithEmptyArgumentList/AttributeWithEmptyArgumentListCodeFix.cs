@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
 {
-    [ExportCodeFixProvider(nameof(AttributeWithEmptyArgumentListCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(AttributeWithEmptyArgumentListCodeFix), LanguageNames.CSharp, LanguageNames.VisualBasic), Shared]
     public class AttributeWithEmptyArgumentListCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(AttributeWithEmptyArgumentListAnalyzer.Rule.Id);
@@ -23,16 +22,34 @@ namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.AttributeWithEmptyArgumentListCodeFixTitle, x => RemoveConstructorAsync(context.Document, root, statement), nameof(AttributeWithEmptyArgumentListAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.AttributeWithEmptyArgumentListCodeFixTitle, x => RemoveEmptyArgumentListAsync(context.Document, root, statement), nameof(AttributeWithEmptyArgumentListAnalyzer)), diagnostic);
         }
 
-        private Task<Solution> RemoveConstructorAsync(Document document, SyntaxNode root, SyntaxNode statement)
+        private Task<Solution> RemoveEmptyArgumentListAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
-            var attributeExpression = (AttributeSyntax) statement;
-            var newRoot = root.RemoveNode(attributeExpression.ArgumentList, SyntaxRemoveOptions.KeepNoTrivia);
+            SyntaxNode newRoot = null;
+
+            if (statement is Microsoft.CodeAnalysis.CSharp.Syntax.AttributeSyntax)
+            {
+                newRoot = RemoveEmptyArgumentListCSharp(root, (Microsoft.CodeAnalysis.CSharp.Syntax.AttributeSyntax)statement);
+            }
+            else if (statement is Microsoft.CodeAnalysis.VisualBasic.Syntax.AttributeSyntax)
+            {
+                newRoot = RemoveEmptyArgumentListVisualBasic(root, (Microsoft.CodeAnalysis.VisualBasic.Syntax.AttributeSyntax)statement);
+            }
 
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);
+        }
+
+        private SyntaxNode RemoveEmptyArgumentListCSharp(SyntaxNode root, Microsoft.CodeAnalysis.CSharp.Syntax.AttributeSyntax attributeExpression)
+        {
+            return root.RemoveNode(attributeExpression.ArgumentList, SyntaxRemoveOptions.KeepNoTrivia);
+        }
+
+        private SyntaxNode RemoveEmptyArgumentListVisualBasic(SyntaxNode root, Microsoft.CodeAnalysis.VisualBasic.Syntax.AttributeSyntax attributeExpression)
+        {
+            return root.RemoveNode(attributeExpression.ArgumentList, SyntaxRemoveOptions.KeepNoTrivia);
         }
     }
 }

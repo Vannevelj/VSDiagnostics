@@ -7,7 +7,7 @@ using VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList;
 namespace VSDiagnostics.Test.Tests.Attributes
 {
     [TestClass]
-    public class AttributeWithEmptyArgumentListTests : CSharpCodeFixVerifier
+    public class AttributeWithEmptyArgumentListCSharpTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new AttributeWithEmptyArgumentListAnalyzer();
 
@@ -99,7 +99,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {   
-        [Flag()]
+        [Flags()]
         enum Foo
         {
             Bar, Baz
@@ -114,7 +114,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {   
-        [Flag]
+        [Flags]
         enum Foo
         {
             Bar, Baz
@@ -137,7 +137,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {   
-        [Flag]
+        [Flags]
         enum Foo
         {
             Bar, Baz
