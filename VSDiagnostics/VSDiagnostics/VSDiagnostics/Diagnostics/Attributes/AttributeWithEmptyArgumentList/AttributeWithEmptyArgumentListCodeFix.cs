@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using CSharpAttributeSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.AttributeSyntax;
+using VisualBasicAttributeSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax.AttributeSyntax;
 
 namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
 {
@@ -29,25 +31,25 @@ namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
         {
             SyntaxNode newRoot = null;
 
-            if (statement is Microsoft.CodeAnalysis.CSharp.Syntax.AttributeSyntax)
+            if (statement is CSharpAttributeSyntax)
             {
-                newRoot = RemoveEmptyArgumentListCSharp(root, (Microsoft.CodeAnalysis.CSharp.Syntax.AttributeSyntax)statement);
+                newRoot = RemoveEmptyArgumentListCSharp(root, (CSharpAttributeSyntax)statement);
             }
-            else if (statement is Microsoft.CodeAnalysis.VisualBasic.Syntax.AttributeSyntax)
+            else if (statement is VisualBasicAttributeSyntax)
             {
-                newRoot = RemoveEmptyArgumentListVisualBasic(root, (Microsoft.CodeAnalysis.VisualBasic.Syntax.AttributeSyntax)statement);
+                newRoot = RemoveEmptyArgumentListVisualBasic(root, (VisualBasicAttributeSyntax)statement);
             }
 
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);
         }
 
-        private SyntaxNode RemoveEmptyArgumentListCSharp(SyntaxNode root, Microsoft.CodeAnalysis.CSharp.Syntax.AttributeSyntax attributeExpression)
+        private SyntaxNode RemoveEmptyArgumentListCSharp(SyntaxNode root, CSharpAttributeSyntax attributeExpression)
         {
             return root.RemoveNode(attributeExpression.ArgumentList, SyntaxRemoveOptions.KeepNoTrivia);
         }
 
-        private SyntaxNode RemoveEmptyArgumentListVisualBasic(SyntaxNode root, Microsoft.CodeAnalysis.VisualBasic.Syntax.AttributeSyntax attributeExpression)
+        private SyntaxNode RemoveEmptyArgumentListVisualBasic(SyntaxNode root, VisualBasicAttributeSyntax attributeExpression)
         {
             return root.RemoveNode(attributeExpression.ArgumentList, SyntaxRemoveOptions.KeepNoTrivia);
         }

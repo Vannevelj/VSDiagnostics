@@ -1,6 +1,10 @@
 ﻿using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
+using CSharpSyntaxKind = Microsoft.CodeAnalysis.CSharp.SyntaxKind;
+using VisualBasicSyntaxKind = Microsoft.CodeAnalysis.VisualBasic.SyntaxKind;
+using CSharpAttributeSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.AttributeSyntax;
+using VisualBasicAttributeSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax.AttributeSyntax;
 
 namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
 {
@@ -20,13 +24,13 @@ namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
 
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeCSharpSymbol, Microsoft.CodeAnalysis.CSharp.SyntaxKind.Attribute);
-            context.RegisterSyntaxNodeAction(AnalyzeVisualBasicSymbol, Microsoft.CodeAnalysis.VisualBasic.SyntaxKind.Attribute);
+            context.RegisterSyntaxNodeAction(AnalyzeCSharpSymbol, CSharpSyntaxKind.Attribute);
+            context.RegisterSyntaxNodeAction(AnalyzeVisualBasicSymbol, VisualBasicSyntaxKind.Attribute);
         }
 
         private void AnalyzeCSharpSymbol(SyntaxNodeAnalysisContext context)
         {
-            var attributeExpression = context.Node as Microsoft.CodeAnalysis.CSharp.Syntax.AttributeSyntax;
+            var attributeExpression = context.Node as CSharpAttributeSyntax;
             
             // attribute must have arguments
             // if there are no parenthesis, the ArgumentList is null
@@ -41,7 +45,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
 
         private void AnalyzeVisualBasicSymbol(SyntaxNodeAnalysisContext context)
         {
-            var attributeExpression = context.Node as Microsoft.CodeAnalysis.VisualBasic.Syntax.AttributeSyntax;
+            var attributeExpression = context.Node as VisualBasicAttributeSyntax;
 
             // attribute must have arguments
             // if there are no parenthesis, the ArgumentList is null
