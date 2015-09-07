@@ -33,10 +33,25 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysFalse
         private Task<Solution> RemoveConditionAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var ifStatement = statement.Ancestors().OfType<IfStatementSyntax>().First();
+            var blockStatement = ifStatement.Else?.Statement as BlockSyntax;
 
-            var newRoot =
-                root.RemoveNode(ifStatement, SyntaxRemoveOptions.KeepNoTrivia)
-                    .WithAdditionalAnnotations(Formatter.Annotation);
+            // no else
+            var newRoot = root.RemoveNode(ifStatement, SyntaxRemoveOptions.KeepNoTrivia).WithAdditionalAnnotations(Formatter.Annotation);
+
+            // else with braces
+            if (blockStatement != null)
+            {
+                newRoot = root.ReplaceNode(ifStatement, blockStatement.Statements).WithAdditionalAnnotations(Formatter.Annotation);
+            }
+
+            // else without braces
+            if (ifStatement.Else != null && blockStatement == null)
+            {
+                newRoot =
+                    root.ReplaceNode(ifStatement, ifStatement.Else.Statement)
+                        .WithAdditionalAnnotations(Formatter.Annotation);
+            }
+
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);
         }
