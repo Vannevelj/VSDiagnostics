@@ -431,7 +431,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enum can have [Flags] attribute..
+        ///   Looks up a localized string similar to Enum can have Flags attribute..
         /// </summary>
         internal static string EnumCanHaveFlagsAttributeAnalyzerMessage {
             get {
@@ -440,7 +440,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inform that enums can have the [Flags] attribute..
+        ///   Looks up a localized string similar to Inform that enums can have the Flags attribute..
         /// </summary>
         internal static string EnumCanHaveFlagsAttributeAnalyzerTitle {
             get {
@@ -449,7 +449,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add [Flags] attribute.
+        ///   Looks up a localized string similar to Add Flags attribute.
         /// </summary>
         internal static string EnumCanHaveFlagsAttributeCodeFixTitle {
             get {
