@@ -5,14 +5,17 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using CompilationUnitSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.CompilationUnitSyntax;
+using CSharpSyntaxFactory = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using VisualBasicSyntaxFactory = Microsoft.CodeAnalysis.VisualBasic.SyntaxFactory;
 
 namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 {
-    [ExportCodeFixProvider(nameof(EnumCanHaveFlagsAttributeCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(EnumCanHaveFlagsAttributeCodeFix), LanguageNames.CSharp, LanguageNames.VisualBasic), Shared]
     public class EnumCanHaveFlagsAttributeCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(EnumCanHaveFlagsAttributeAnalyzer.Rule.Id);
@@ -31,16 +34,33 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 
         private Task<Solution> AddFlagAttributeAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
+            SyntaxNode newRoot = null;
+
+            if (statement is EnumDeclarationSyntax)
+            {
+                newRoot = AddFlagAttributeCSharp(document, root, (EnumDeclarationSyntax)statement);
+            }
+            else if (statement is EnumStatementSyntax)
+            {
+                newRoot = AddFlagAttributeVisualBasic(document, root, (EnumStatementSyntax)statement);
+            }
+
+            var newDocument = document.WithSyntaxRoot(newRoot);
+            return Task.FromResult(newDocument.Project.Solution);
+        }
+
+        private SyntaxNode AddFlagAttributeCSharp(Document document, SyntaxNode root, SyntaxNode statement)
+        {
             var generator = SyntaxGenerator.GetGenerator(document);
 
-            var flagsAttribute = SyntaxFactory.Attribute(SyntaxFactory.ParseName("Flags"));
+            var flagsAttribute = CSharpSyntaxFactory.Attribute(CSharpSyntaxFactory.ParseName("Flags"));
             var newStatement = generator.AddAttributes(statement, flagsAttribute);
 
             var newRoot = root.ReplaceNode(statement, newStatement);
 
             var compilationUnit = (CompilationUnitSyntax)newRoot;
 
-            var usingSystemDirective = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System"));
+            var usingSystemDirective = CSharpSyntaxFactory.UsingDirective(CSharpSyntaxFactory.ParseName("System"));
             var usingDirectives = compilationUnit.Usings.Select(u => u.Name.GetText().ToString());
 
             if (usingDirectives.All(u => u != usingSystemDirective.Name.GetText().ToString()))
@@ -48,12 +68,25 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
                 var usings = compilationUnit.Usings.Add(usingSystemDirective).OrderBy(u => u.Name.GetText().ToString());
 
                 newRoot =
-                    compilationUnit.WithUsings(SyntaxFactory.List(usings))
+                    compilationUnit.WithUsings(CSharpSyntaxFactory.List(usings))
                         .WithAdditionalAnnotations(Formatter.Annotation);
             }
 
-            var newDocument = document.WithSyntaxRoot(newRoot);
-            return Task.FromResult(newDocument.Project.Solution);
+            return newRoot;
+        }
+
+        private SyntaxNode AddFlagAttributeVisualBasic(Document document, SyntaxNode root, SyntaxNode statement)
+        {
+            var generator = SyntaxGenerator.GetGenerator(document);
+
+            var flagsAttribute = VisualBasicSyntaxFactory.Attribute(VisualBasicSyntaxFactory.ParseName("Flags"));
+            var newStatement = generator.AddAttributes(statement, flagsAttribute);
+
+            // no need to add a `using` directive because creating a VB.NET project in VS
+            // adds a project reference to the `System` namespace
+            // to verify this, check the References tab of the project properties
+            // (bottom of the Debug tab)
+            return root.ReplaceNode(statement, newStatement);
         }
     }
 }

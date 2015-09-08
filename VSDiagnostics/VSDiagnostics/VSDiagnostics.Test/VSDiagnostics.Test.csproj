@@ -110,7 +110,8 @@
     <Compile Include="Tests\Async\AsyncMethodWithoutAsyncSuffixTests.cs" />
     <Compile Include="Tests\Attributes\AttributeWithEmptyArgumentListVisualBasicTests.cs" />
     <Compile Include="Tests\Attributes\AttributeWithEmptyArgumentListCSharpTests.cs" />
-    <Compile Include="Tests\Attributes\EnumCanHaveFlagsAttributeTests.cs" />
+    <Compile Include="Tests\Attributes\EnumCanHaveFlagsAttributeVisualBasicTests.cs" />
+    <Compile Include="Tests\Attributes\EnumCanHaveFlagsAttributeCSharpTests.cs" />
     <Compile Include="Tests\Attributes\ObsoleteAttributeWithoutReasonTests.cs" />
     <Compile Include="Tests\Attributes\OnPropertyChangedWithoutCallerMemberNameTests.cs" />
     <Compile Include="Tests\Exceptions\ArgumentExceptionWithoutNameofOperatorTests.cs" />
