@@ -14,6 +14,7 @@ namespace VSDiagnostics.Test.Tests.Attributes
         public void ObsoleteAttributeWithoutReason_WithObsoleteWithNullArgumentList()
         {
             var test = @"
+Imports System
 Module Module1
 
     <Obsolete>
@@ -31,6 +32,7 @@ End Module";
         public void ObsoleteAttributeWithoutReason_WithObsoleteAttributeWithoutReason()
         {
             var test = @"
+Imports System
 Module Module1
 
     <ObsoleteAttribute>
@@ -48,6 +50,7 @@ End Module";
         public void ObsoleteAttributeWithoutReason_WithObsoleteWithEmptyArgumentList()
         {
             var test = @"
+Imports System
 Module Module1
 
     <Obsolete()>
@@ -65,6 +68,7 @@ End Module";
         public void ObsoleteAttributeWithoutReason_WithObsoleteAttributeWithEmptyArgumentList()
         {
             var test = @"
+Imports System
 Module Module1
 
     <ObsoleteAttribute()>
@@ -82,6 +86,7 @@ End Module";
         public void ObsoleteAttributeWithoutReason_WithObsoleteWithArgument()
         {
             var test = @"
+Imports System
 Module Module1
 
     <Obsolete(""I have an argument."")>
@@ -99,6 +104,7 @@ End Module";
         public void ObsoleteAttributeWithoutReason_WithObsoleteAttributeWithArgument()
         {
             var test = @"
+Imports System
 Module Module1
 
     <ObsoleteAttribute(""I have an argument."")>
@@ -116,6 +122,7 @@ End Module";
         public void ObsoleteAttributeWithoutReason_WithObsoleteWithArguments()
         {
             var test = @"
+Imports System
 Module Module1
 
     <Obsolete(""I have two arguments."", true)>
@@ -133,6 +140,7 @@ End Module";
         public void ObsoleteAttributeWithoutReason_WithObsoleteAttributeWithArguments()
         {
             var test = @"
+Imports System
 Module Module1
 
     <ObsoleteAttribute(""I have two arguments."", true)>
@@ -150,6 +158,7 @@ End Module";
         public void ObsoleteAttributeWithoutReason_NonObsoleteAttribute()
         {
             var test = @"
+Imports System
 Module Module1
 
     <Flags>
