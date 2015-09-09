@@ -27,8 +27,8 @@ Module Module1
 End Module";
 
             var result = @"
-Module Module1
-
+Imports System
+Module Module
     <Flags>
     Enum Foo
         Bar
@@ -45,6 +45,7 @@ End Module";
         public void EnumCanHaveFlagsAttribute_AddsFlagsAttribute_OnlyAddsFlagsAttribute()
         {
             var original = @"
+Imports System
 Module Module1
 
     <Obsolete(""I'm obsolete"")>
@@ -56,6 +57,7 @@ Module Module1
 End Module";
 
             var result = @"
+Imports System
 Module Module1
 
     <Obsolete(""I'm obsolete"")>
@@ -88,6 +90,7 @@ Module Module1
 End Module";
 
             var result = @"
+Imports System
 Module Module1
 
     ''' <summary>
@@ -109,6 +112,7 @@ End Module";
         public void EnumCanHaveFlagsAttribute_InspectionDoesNotReturnWhenFlagsAlreadyApplied()
         {
             var original = @"
+Imports System
 Module Module1
 
     <Flags>
@@ -126,6 +130,7 @@ End Module";
         public void EnumCanHaveFlagsAttribute_InspectionDoesNotReturnWhenFlagsAttributeAlreadyApplied()
         {
             var original = @"
+Imports System
 Module Module1
 
     <FlagsAttribute>
@@ -143,6 +148,7 @@ End Module";
         public void EnumCanHaveFlagsAttribute_InspectionDoesNotReturnWhenFlagsAlreadyAppliedAsChain()
         {
             var original = @"
+Imports System
 Module Module1
 
     <Obsolete(""I'm obsolete""), Flags>

@@ -1,12 +1,12 @@
 ﻿using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.Helpers.CSharp;
+using RoslynTester.Helpers.VisualBasic;
 using VSDiagnostics.Diagnostics.Attributes.ObsoleteAttributeWithoutReason;
 
 namespace VSDiagnostics.Test.Tests.Attributes
 {
     [TestClass]
-    public class ObsoleteAttributeWithoutReasonTests : CSharpDiagnosticVerifier
+    public class ObsoleteAttributeWithoutReasonVisualBasicTests : VisualBasicDiagnosticVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new ObsoleteAttributeWithoutReasonAnalyzer();
 
@@ -14,18 +14,15 @@ namespace VSDiagnostics.Test.Tests.Attributes
         public void ObsoleteAttributeWithoutReason_WithObsoleteWithNullArgumentList()
         {
             var test = @"
-using System;
+Module Module1
 
-namespace ConsoleApplication1
-{
-    class MyClass
-    {   
-        [Obsolete]
-        void Method(string input)
-        {
-        }
-    }
-}";
+    <Obsolete>
+    Enum Foo
+        Bar
+        Baz
+    End Enum
+
+End Module";
 
             VerifyDiagnostic(test, ObsoleteAttributeWithoutReasonAnalyzer.Rule.MessageFormat.ToString());
         }
@@ -34,18 +31,15 @@ namespace ConsoleApplication1
         public void ObsoleteAttributeWithoutReason_WithObsoleteAttributeWithoutReason()
         {
             var test = @"
-using System;
+Module Module1
 
-namespace ConsoleApplication1
-{
-    class MyClass
-    {   
-        [ObsoleteAttribute]
-        void Method(string input)
-        {
-        }
-    }
-}";
+    <ObsoleteAttribute>
+    Enum Foo
+        Bar
+        Baz
+    End Enum
+
+End Module";
 
             VerifyDiagnostic(test, ObsoleteAttributeWithoutReasonAnalyzer.Rule.MessageFormat.ToString());
         }
@@ -54,18 +48,15 @@ namespace ConsoleApplication1
         public void ObsoleteAttributeWithoutReason_WithObsoleteWithEmptyArgumentList()
         {
             var test = @"
-using System;
+Module Module1
 
-namespace ConsoleApplication1
-{
-    class MyClass
-    {   
-        [Obsolete()]
-        void Method(string input)
-        {
-        }
-    }
-}";
+    <Obsolete()>
+    Enum Foo
+        Bar
+        Baz
+    End Enum
+
+End Module";
 
             VerifyDiagnostic(test, ObsoleteAttributeWithoutReasonAnalyzer.Rule.MessageFormat.ToString());
         }
@@ -74,18 +65,15 @@ namespace ConsoleApplication1
         public void ObsoleteAttributeWithoutReason_WithObsoleteAttributeWithEmptyArgumentList()
         {
             var test = @"
-using System;
+Module Module1
 
-namespace ConsoleApplication1
-{
-    class MyClass
-    {   
-        [ObsoleteAttribute()]
-        void Method(string input)
-        {
-        }
-    }
-}";
+    <ObsoleteAttribute()>
+    Enum Foo
+        Bar
+        Baz
+    End Enum
+
+End Module";
 
             VerifyDiagnostic(test, ObsoleteAttributeWithoutReasonAnalyzer.Rule.MessageFormat.ToString());
         }
@@ -94,18 +82,15 @@ namespace ConsoleApplication1
         public void ObsoleteAttributeWithoutReason_WithObsoleteWithArgument()
         {
             var test = @"
-using System;
+Module Module1
 
-namespace ConsoleApplication1
-{
-    class MyClass
-    {   
-        [Obsolete(""I have an argument."")]
-        void Method(string input)
-        {
-        }
-    }
-}";
+    <Obsolete(""I have an argument."")>
+    Enum Foo
+        Bar
+        Baz
+    End Enum
+
+End Module";
 
             VerifyDiagnostic(test);
         }
@@ -114,18 +99,15 @@ namespace ConsoleApplication1
         public void ObsoleteAttributeWithoutReason_WithObsoleteAttributeWithArgument()
         {
             var test = @"
-using System;
+Module Module1
 
-namespace ConsoleApplication1
-{
-    class MyClass
-    {   
-        [ObsoleteAttribute(""I have an argument."")]
-        void Method(string input)
-        {
-        }
-    }
-}";
+    <ObsoleteAttribute(""I have an argument."")>
+    Enum Foo
+        Bar
+        Baz
+    End Enum
+
+End Module";
 
             VerifyDiagnostic(test);
         }
@@ -134,18 +116,15 @@ namespace ConsoleApplication1
         public void ObsoleteAttributeWithoutReason_WithObsoleteWithArguments()
         {
             var test = @"
-using System;
+Module Module1
 
-namespace ConsoleApplication1
-{
-    class MyClass
-    {   
-        [Obsolete(""I have two arguments."", true)]
-        void Method(string input)
-        {
-        }
-    }
-}";
+    <Obsolete(""I have two arguments."", true)>
+    Enum Foo
+        Bar
+        Baz
+    End Enum
+
+End Module";
 
             VerifyDiagnostic(test);
         }
@@ -154,18 +133,15 @@ namespace ConsoleApplication1
         public void ObsoleteAttributeWithoutReason_WithObsoleteAttributeWithArguments()
         {
             var test = @"
-using System;
+Module Module1
 
-namespace ConsoleApplication1
-{
-    class MyClass
-    {   
-        [ObsoleteAttribute(""I have two arguments."", true)]
-        void Method(string input)
-        {
-        }
-    }
-}";
+    <ObsoleteAttribute(""I have two arguments."", true)>
+    Enum Foo
+        Bar
+        Baz
+    End Enum
+
+End Module";
 
             VerifyDiagnostic(test);
         }
@@ -174,18 +150,15 @@ namespace ConsoleApplication1
         public void ObsoleteAttributeWithoutReason_NonObsoleteAttribute()
         {
             var test = @"
-using System;
+Module Module1
 
-namespace ConsoleApplication1
-{
-    class MyClass
-    {   
-        [MTAThread]
-        void Method(string input)
-        {
-        }
-    }
-}";
+    <Flags>
+    Enum Foo
+        Bar
+        Baz
+    End Enum
+
+End Module";
 
             VerifyDiagnostic(test);
         }
