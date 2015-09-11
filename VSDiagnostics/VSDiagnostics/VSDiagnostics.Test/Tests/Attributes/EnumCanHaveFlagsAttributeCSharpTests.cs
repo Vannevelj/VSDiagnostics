@@ -163,8 +163,8 @@ namespace ConsoleApplication1
 }";
 
             var result =
-@"using System;
-using System.Text;
+@"using System.Text;
+using System;
 
 namespace ConsoleApplication1
 {
