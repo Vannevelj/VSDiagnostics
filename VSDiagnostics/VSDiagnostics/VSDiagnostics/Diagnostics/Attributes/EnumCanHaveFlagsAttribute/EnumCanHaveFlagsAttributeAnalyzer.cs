@@ -2,13 +2,15 @@
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using CSharpSyntaxKind = Microsoft.CodeAnalysis.CSharp.SyntaxKind;
+using VisualBasicSyntaxKind = Microsoft.CodeAnalysis.VisualBasic.SyntaxKind;
 
 namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 {
-    [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    [DiagnosticAnalyzer(LanguageNames.CSharp, LanguageNames.VisualBasic)]
     public class EnumCanHaveFlagsAttributeAnalyzer : DiagnosticAnalyzer
     {
         private const string DiagnosticId = nameof(EnumCanHaveFlagsAttributeAnalyzer);
@@ -24,10 +26,11 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.EnumDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeCSharpSymbol, CSharpSyntaxKind.EnumDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeVisualBasicSymbol, VisualBasicSyntaxKind.EnumStatement);
         }
 
-        private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
+        private void AnalyzeCSharpSymbol(SyntaxNodeAnalysisContext context)
         {
             var enumDeclaration = (EnumDeclarationSyntax)context.Node;
 
@@ -39,6 +42,25 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 
                             return symbol == null || symbol.ContainingType.MetadataName == typeof(FlagsAttribute).Name;
                         })))
+            {
+                return;
+            }
+
+            context.ReportDiagnostic(Diagnostic.Create(Rule, enumDeclaration.GetLocation()));
+        }
+
+        private void AnalyzeVisualBasicSymbol(SyntaxNodeAnalysisContext context)
+        {
+            var enumDeclaration = (EnumStatementSyntax)context.Node;
+
+            // enum must not already have flags attribute
+            if (enumDeclaration.AttributeLists.Any(
+                a => a.Attributes.Any(
+                    t => {
+                        var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
+
+                        return symbol == null || symbol.ContainingType.MetadataName == typeof(FlagsAttribute).Name;
+                    })))
             {
                 return;
             }

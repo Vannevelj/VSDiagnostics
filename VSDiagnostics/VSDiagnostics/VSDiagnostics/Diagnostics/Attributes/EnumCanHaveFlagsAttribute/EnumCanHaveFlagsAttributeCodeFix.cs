@@ -1,18 +1,24 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using CSharpCompilationUnitSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.CompilationUnitSyntax;
+using VisualBasicCompilationUnitSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax.CompilationUnitSyntax;
+using CSharpSyntaxFactory = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using VisualBasicSyntaxFactory = Microsoft.CodeAnalysis.VisualBasic.SyntaxFactory;
 
 namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 {
-    [ExportCodeFixProvider(nameof(EnumCanHaveFlagsAttributeCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(EnumCanHaveFlagsAttributeCodeFix), LanguageNames.CSharp, LanguageNames.VisualBasic), Shared]
     public class EnumCanHaveFlagsAttributeCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(EnumCanHaveFlagsAttributeAnalyzer.Rule.Id);
@@ -31,29 +37,71 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 
         private Task<Solution> AddFlagAttributeAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
-            var generator = SyntaxGenerator.GetGenerator(document);
+            SyntaxNode newRoot = null;
 
-            var flagsAttribute = SyntaxFactory.Attribute(SyntaxFactory.ParseName("Flags"));
-            var newStatement = generator.AddAttributes(statement, flagsAttribute);
-
-            var newRoot = root.ReplaceNode(statement, newStatement);
-
-            var compilationUnit = (CompilationUnitSyntax)newRoot;
-
-            var usingSystemDirective = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System"));
-            var usingDirectives = compilationUnit.Usings.Select(u => u.Name.GetText().ToString());
-
-            if (usingDirectives.All(u => u != usingSystemDirective.Name.GetText().ToString()))
+            if (statement is EnumDeclarationSyntax)
             {
-                var usings = compilationUnit.Usings.Add(usingSystemDirective).OrderBy(u => u.Name.GetText().ToString());
-
-                newRoot =
-                    compilationUnit.WithUsings(SyntaxFactory.List(usings))
-                        .WithAdditionalAnnotations(Formatter.Annotation);
+                newRoot = AddFlagAttributeCSharp(document, root, (EnumDeclarationSyntax)statement);
+            }
+            else if (statement is EnumStatementSyntax)
+            {
+                newRoot = AddFlagAttributeVisualBasic(document, root, (EnumStatementSyntax)statement);
             }
 
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);
+        }
+
+        private SyntaxNode AddFlagAttributeCSharp(Document document, SyntaxNode root, SyntaxNode statement)
+        {
+            var generator = SyntaxGenerator.GetGenerator(document);
+
+            var flagsAttribute = CSharpSyntaxFactory.Attribute(CSharpSyntaxFactory.ParseName("Flags"));
+            var newStatement = generator.AddAttributes(statement, flagsAttribute);
+
+            var newRoot = root.ReplaceNode(statement, newStatement);
+
+            var compilationUnit = (CSharpCompilationUnitSyntax)newRoot;
+
+            var usingSystemDirective = CSharpSyntaxFactory.UsingDirective(CSharpSyntaxFactory.ParseName("System"));
+            var usingDirectives = compilationUnit.Usings.Select(u => u.Name.GetText().ToString());
+
+            if (usingDirectives.All(u => u != usingSystemDirective.Name.GetText().ToString()))
+            {
+                newRoot = generator.AddNamespaceImports(compilationUnit, usingSystemDirective);
+            }
+
+            return newRoot;
+        }
+
+        private SyntaxNode AddFlagAttributeVisualBasic(Document document, SyntaxNode root, SyntaxNode statement)
+        {
+            var generator = SyntaxGenerator.GetGenerator(document);
+
+            var flagsAttribute = VisualBasicSyntaxFactory.Attribute(VisualBasicSyntaxFactory.ParseName("Flags"));
+            var newStatement = generator.AddAttributes(statement, flagsAttribute);
+
+            var newRoot = root.ReplaceNode(statement, newStatement).WithAdditionalAnnotations(Formatter.Annotation);
+
+            var compilationUnit = (VisualBasicCompilationUnitSyntax)newRoot;
+
+            var importSystemClause =
+                VisualBasicSyntaxFactory.SimpleImportsClause(
+                    VisualBasicSyntaxFactory.ParseName("System"))
+                    .WithTrailingTrivia(
+                        VisualBasicSyntaxFactory.SyntaxTrivia(
+                            Microsoft.CodeAnalysis.VisualBasic.SyntaxKind.EndOfLineTrivia, Environment.NewLine));
+            var importsList = VisualBasicSyntaxFactory.SeparatedList(new List<ImportsClauseSyntax> { importSystemClause });
+            var importStatement = VisualBasicSyntaxFactory.ImportsStatement(importsList);
+
+            var imports = compilationUnit.Imports.SelectMany(c => c.ImportsClauses.OfType<SimpleImportsClauseSyntax>().Select(i => i.Name.GetText().ToString()));
+
+            if (imports.All(u => u != importSystemClause.Name.GetText().ToString()))
+            {
+                newRoot = generator.AddNamespaceImports(compilationUnit, importStatement);
+            }
+
+            return newRoot;
         }
     }
 }
