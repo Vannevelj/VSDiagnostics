@@ -944,6 +944,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Structs.
+        /// </summary>
+        internal static string StructsCategory {
+            get {
+                return ResourceManager.GetString("StructsCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warns when a struct replaces the &apos;this&apos; with a new instance, causing the values to be replaced everywhere they are used..
+        /// </summary>
+        internal static string StructsShouldNotMutateSelfAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("StructsShouldNotMutateSelfAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A struct should not mutate itself..
+        /// </summary>
+        internal static string StructsShouldNotMutateSelfAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("StructsShouldNotMutateSelfAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Test method &quot;{0}&quot; is not public..
         /// </summary>
         internal static string TestMethodWithoutPublicModifierAnalyzerMessage {

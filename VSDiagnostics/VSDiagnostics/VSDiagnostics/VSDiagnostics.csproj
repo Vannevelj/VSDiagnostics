@@ -98,6 +98,7 @@
     <Compile Include="Diagnostics\Strings\StringPlaceholdersInWrongOrder\StringPlaceholdersInWrongOrderAnalyzer.cs" />
     <Compile Include="Diagnostics\Strings\StringPlaceholdersInWrongOrder\StringPlaceholdersInWrongOrderCodeFix.cs" />
     <Compile Include="Diagnostics\Strings\StringPlaceholdersInWrongOrder\StringPlaceholdersInWrongOrderHelper.cs" />
+    <Compile Include="Diagnostics\Structs\StructShouldNotMutateSelfAnalyzer.cs" />
     <Compile Include="Diagnostics\Tests\RemoveTestSuffix\RemoveTestSuffixAnalyzer.cs" />
     <Compile Include="Diagnostics\Tests\RemoveTestSuffix\RemoveTestSuffixCodeFix.cs" />
     <Compile Include="Diagnostics\Tests\TestMethodWithoutPublicModifier\TestMethodWithoutPublicModifierAnalyzer.cs" />
@@ -188,6 +189,7 @@
       <LastGenOutput>VSDiagnosticsResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Choose>
     <When Condition=" $(NUGETLOCAL) != '' ">
