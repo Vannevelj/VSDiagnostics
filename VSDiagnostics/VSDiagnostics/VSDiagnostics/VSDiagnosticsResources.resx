@@ -468,4 +468,13 @@
   <data name="AsyncCategory" xml:space="preserve">
     <value>Async</value>
   </data>
+  <data name="StructsCategory" xml:space="preserve">
+    <value>Structs</value>
+  </data>
+  <data name="StructsShouldNotMutateSelfAnalyzerMessage" xml:space="preserve">
+    <value>Warns when a struct replaces the 'this' with a new instance, causing the values to be replaced everywhere they are used.</value>
+  </data>
+  <data name="StructsShouldNotMutateSelfAnalyzerTitle" xml:space="preserve">
+    <value>A struct should not mutate itself.</value>
+  </data>
 </root>

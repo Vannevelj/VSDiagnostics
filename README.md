@@ -57,6 +57,7 @@ Currently these diagnostics are implemented:
 | General | UseAliasesInsteadOfConcreteType | Use the built-in type aliases instead the concrete type.
 | Strings | ReplaceEmptyStringWithStringDotEmpty | Use `string.Empty` instead of `""`.
 | Strings | StringPlaceholdersInWrongOrder | Adjusts the placeholders in `string.Format()` calls to be in numerical order.
+| Structs | StructShouldNotMutateSelf | Warns when a struct attempts to assign 'this' to a new instance of the struct.
 | Tests | RemoveTestSuffix | Test methods do not need to use the "Test" suffic.
 | Tests | TestMethodWithoutPublicModifier | Change the access modifier to `public` for all methods annotated as test. Supports NUnit, MSTest and xUnit.net.
 
