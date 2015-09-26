@@ -412,13 +412,13 @@
     <value>Use powers of 2</value>
   </data>
   <data name="EnumCanHaveFlagsAttributeAnalyzerMessage" xml:space="preserve">
-    <value>Enum can have [Flags] attribute.</value>
+    <value>Enum can have Flags attribute.</value>
   </data>
   <data name="EnumCanHaveFlagsAttributeAnalyzerTitle" xml:space="preserve">
-    <value>Inform that enums can have the [Flags] attribute.</value>
+    <value>Inform that enums can have the Flags attribute.</value>
   </data>
   <data name="EnumCanHaveFlagsAttributeCodeFixTitle" xml:space="preserve">
-    <value>Add [Flags] attribute</value>
+    <value>Add Flags attribute</value>
   </data>
   <data name="ConditionIsAlwaysTrueAnalyzerMessage" xml:space="preserve">
     <value>Condition is always true.</value>
@@ -467,5 +467,14 @@
   </data>
   <data name="AsyncCategory" xml:space="preserve">
     <value>Async</value>
+  </data>
+  <data name="StructsCategory" xml:space="preserve">
+    <value>Structs</value>
+  </data>
+  <data name="StructsShouldNotMutateSelfAnalyzerMessage" xml:space="preserve">
+    <value>Warns when a struct replaces the 'this' with a new instance, causing the values to be replaced everywhere they are used.</value>
+  </data>
+  <data name="StructsShouldNotMutateSelfAnalyzerTitle" xml:space="preserve">
+    <value>A struct should not mutate itself.</value>
   </data>
 </root>

@@ -431,7 +431,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enum can have [Flags] attribute..
+        ///   Looks up a localized string similar to Enum can have Flags attribute..
         /// </summary>
         internal static string EnumCanHaveFlagsAttributeAnalyzerMessage {
             get {
@@ -440,7 +440,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inform that enums can have the [Flags] attribute..
+        ///   Looks up a localized string similar to Inform that enums can have the Flags attribute..
         /// </summary>
         internal static string EnumCanHaveFlagsAttributeAnalyzerTitle {
             get {
@@ -449,7 +449,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add [Flags] attribute.
+        ///   Looks up a localized string similar to Add Flags attribute.
         /// </summary>
         internal static string EnumCanHaveFlagsAttributeCodeFixTitle {
             get {
@@ -940,6 +940,33 @@ namespace VSDiagnostics {
         internal static string StringsCategory {
             get {
                 return ResourceManager.GetString("StringsCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Structs.
+        /// </summary>
+        internal static string StructsCategory {
+            get {
+                return ResourceManager.GetString("StructsCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warns when a struct replaces the &apos;this&apos; with a new instance, causing the values to be replaced everywhere they are used..
+        /// </summary>
+        internal static string StructsShouldNotMutateSelfAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("StructsShouldNotMutateSelfAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A struct should not mutate itself..
+        /// </summary>
+        internal static string StructsShouldNotMutateSelfAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("StructsShouldNotMutateSelfAnalyzerTitle", resourceCulture);
             }
         }
         

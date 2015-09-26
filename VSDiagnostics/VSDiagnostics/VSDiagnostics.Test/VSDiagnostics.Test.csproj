@@ -66,8 +66,8 @@
       <HintPath>..\..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="RoslynTester, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\RoslynTester.1.4.0\lib\RoslynTester.dll</HintPath>
+    <Reference Include="RoslynTester, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\RoslynTester.1.5.0\lib\RoslynTester.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -108,9 +108,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tests\Async\AsyncMethodWithoutAsyncSuffixTests.cs" />
-    <Compile Include="Tests\Attributes\AttributeWithEmptyArgumentListTests.cs" />
-    <Compile Include="Tests\Attributes\EnumCanHaveFlagsAttributeTests.cs" />
-    <Compile Include="Tests\Attributes\ObsoleteAttributeWithoutReasonTests.cs" />
+    <Compile Include="Tests\Attributes\AttributeWithEmptyArgumentListVisualBasicTests.cs" />
+    <Compile Include="Tests\Attributes\AttributeWithEmptyArgumentListCSharpTests.cs" />
+    <Compile Include="Tests\Attributes\EnumCanHaveFlagsAttributeVisualBasicTests.cs" />
+    <Compile Include="Tests\Attributes\EnumCanHaveFlagsAttributeCSharpTests.cs" />
+    <Compile Include="Tests\Attributes\ObsoleteAttributeWithoutReasonVisualBasicTests.cs" />
+    <Compile Include="Tests\Attributes\ObsoleteAttributeWithoutReasonCSharpTests.cs" />
     <Compile Include="Tests\Attributes\OnPropertyChangedWithoutCallerMemberNameTests.cs" />
     <Compile Include="Tests\Exceptions\ArgumentExceptionWithoutNameofOperatorTests.cs" />
     <Compile Include="Tests\Exceptions\CatchNullReferenceExceptionTests.cs" />
@@ -142,6 +145,7 @@
     <Compile Include="Tests\General\UseAliasesInsteadOfConcreteTypeTests.cs" />
     <Compile Include="Tests\Strings\ReplaceEmptyStringWithStringDotEmptyTests.cs" />
     <Compile Include="Tests\Strings\StringPlaceholdersInWrongOrderTests.cs" />
+    <Compile Include="Tests\Structs\StructMutateSelfTests.cs" />
     <Compile Include="Tests\Tests\RemoveTestSuffixTests.cs" />
     <Compile Include="Tests\Tests\TestMethodWithoutPublicModifierTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

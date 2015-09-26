@@ -1,12 +1,14 @@
 ﻿using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using CSharpSyntaxKind = Microsoft.CodeAnalysis.CSharp.SyntaxKind;
+using VisualBasicSyntaxKind = Microsoft.CodeAnalysis.VisualBasic.SyntaxKind;
+using CSharpAttributeSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.AttributeSyntax;
+using VisualBasicAttributeSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax.AttributeSyntax;
 
 namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
 {
-    [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    [DiagnosticAnalyzer(LanguageNames.CSharp, LanguageNames.VisualBasic)]
     public class AttributeWithEmptyArgumentListAnalyzer : DiagnosticAnalyzer
     {
         private const string DiagnosticId = nameof(AttributeWithEmptyArgumentListAnalyzer);
@@ -22,12 +24,28 @@ namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
 
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.Attribute);
+            context.RegisterSyntaxNodeAction(AnalyzeCSharpSymbol, CSharpSyntaxKind.Attribute);
+            context.RegisterSyntaxNodeAction(AnalyzeVisualBasicSymbol, VisualBasicSyntaxKind.Attribute);
         }
 
-        private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
+        private void AnalyzeCSharpSymbol(SyntaxNodeAnalysisContext context)
         {
-            var attributeExpression = context.Node as AttributeSyntax;
+            var attributeExpression = context.Node as CSharpAttributeSyntax;
+            
+            // attribute must have arguments
+            // if there are no parenthesis, the ArgumentList is null
+            // if there are empty parenthesis, the ArgumentList is empty
+            if (attributeExpression?.ArgumentList == null || attributeExpression.ArgumentList.Arguments.Any())
+            {
+                return;
+            }
+
+            context.ReportDiagnostic(Diagnostic.Create(Rule, attributeExpression.GetLocation()));
+        }
+
+        private void AnalyzeVisualBasicSymbol(SyntaxNodeAnalysisContext context)
+        {
+            var attributeExpression = context.Node as VisualBasicAttributeSyntax;
 
             // attribute must have arguments
             // if there are no parenthesis, the ArgumentList is null

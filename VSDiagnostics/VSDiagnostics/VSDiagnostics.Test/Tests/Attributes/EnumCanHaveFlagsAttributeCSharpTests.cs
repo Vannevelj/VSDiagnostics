@@ -7,7 +7,7 @@ using VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute;
 namespace VSDiagnostics.Test.Tests.Attributes
 {
     [TestClass]
-    public class EnumCanHaveFlagsAttributeTests : CSharpCodeFixVerifier
+    public class EnumCanHaveFlagsAttributeCSharpTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new EnumCanHaveFlagsAttributeAnalyzer();
 
@@ -163,8 +163,8 @@ namespace ConsoleApplication1
 }";
 
             var result =
-@"using System;
-using System.Text;
+@"using System.Text;
+using System;
 
 namespace ConsoleApplication1
 {
