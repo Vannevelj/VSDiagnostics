@@ -71,6 +71,37 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void RedundantXmlDocReturn_DoesNotThrowIfOnlyReturnsElementExists()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        /// <returns></returns>
+        public void Fizz()
+        {
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        
+        public void Fizz()
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, RedundantXmlDocReturnAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
         public void RedundantXmlDocReturn_FiresForNonVoidMethod_OnlyRemovesReturnClause()
         {
             var original = @"
@@ -193,6 +224,7 @@ namespace ConsoleApplication1
         /// <summary>
         /// 
         /// </summary>
+        /// text isn't usually outside XML nodes...
         [System.Obsolete("""")]
         public void Fizz()
         {

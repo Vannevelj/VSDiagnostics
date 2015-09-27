@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +8,6 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.XMLDocComments.RedundantXMLDocReturn
 {
@@ -45,30 +45,38 @@ namespace VSDiagnostics.Diagnostics.XMLDocComments.RedundantXMLDocReturn
 
             var docCommentNodes = docComment.Content;
 
-            for (var i = 1; i < docCommentNodes.Count; i++)
+            var indexOfDocCommentNode = docCommentNodes.IndexOf(n =>
             {
-                var node = docCommentNodes[i] as XmlElementSyntax;
+                var node = n as XmlElementSyntax;
+                return node != null && node.StartTag.Name.LocalName.Text == "returns";
+            });
 
-                if (node == null || node.StartTag.Name.LocalName.Text != "returns")
-                {
-                    continue;
-                }
+            newDocComment = docComment.RemoveNode(docCommentNodes[indexOfDocCommentNode], SyntaxRemoveOptions.KeepNoTrivia);
 
-                newDocComment = docComment.RemoveNode(node, SyntaxRemoveOptions.KeepNoTrivia);
+            if (indexOfDocCommentNode == 0 || !(newDocComment.Content[indexOfDocCommentNode - 1] is XmlTextSyntax))
+            {
+                return Task.FromResult(document.WithSyntaxRoot(root.ReplaceNode(docComment, newDocComment)).Project.Solution);
+            }
 
-                var leadingDocCommentLines = newDocComment.Content[i - 1] as XmlTextSyntax; // have to remove from the new version...
+            var leadingDocCommentLines = (XmlTextSyntax)newDocComment.Content[indexOfDocCommentNode - 1];
 
-                if (leadingDocCommentLines == null)
+            var textTokens = leadingDocCommentLines.TextTokens;
+
+            for (var j = textTokens.Count - 1; j >= 0; j--)
+            {
+                if (textTokens[j].Text.Trim() != "")
                 {
                     break;
                 }
 
-                newDocComment = newDocComment.RemoveNode(leadingDocCommentLines, SyntaxRemoveOptions.KeepNoTrivia);
+                textTokens = textTokens.RemoveAt(j);
             }
 
-            var newRoot = root.ReplaceNode(docComment, newDocComment);
+            var newLeadingDocCommentLines = leadingDocCommentLines.WithTextTokens(textTokens);
 
-            return Task.FromResult(document.WithSyntaxRoot(newRoot).Project.Solution);
+            newDocComment = newDocComment.ReplaceNode(leadingDocCommentLines, newLeadingDocCommentLines);
+
+            return Task.FromResult(document.WithSyntaxRoot(root.ReplaceNode(docComment, newDocComment)).Project.Solution);
         }
     }
 }
