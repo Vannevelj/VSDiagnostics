@@ -477,4 +477,16 @@
   <data name="StructsShouldNotMutateSelfAnalyzerTitle" xml:space="preserve">
     <value>A struct should not mutate itself.</value>
   </data>
+  <data name="RedundantXmlDocReturnAnalyzerMessage" xml:space="preserve">
+    <value>Redundant &lt;return&gt; clause on void method in XML documentation.</value>
+  </data>
+  <data name="RedundantXmlDocReturnAnalyzerTitle" xml:space="preserve">
+    <value>Remove &lt;return&gt; clause on XML doc.</value>
+  </data>
+  <data name="RedundantXmlDocReturnCodeFixTitle" xml:space="preserve">
+    <value>Remove &lt;return&gt; clause</value>
+  </data>
+  <data name="XmlDocCommentsCategory" xml:space="preserve">
+    <value>XML Docs</value>
+  </data>
 </root>

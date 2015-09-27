@@ -150,6 +150,7 @@
     <Compile Include="Tests\Tests\TestMethodWithoutPublicModifierTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\Utilities\NamingConventionsTests.cs" />
+    <Compile Include="Tests\XMLDocComments\RedundantXMLDocReturn\RedundantXMLDocReturnTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

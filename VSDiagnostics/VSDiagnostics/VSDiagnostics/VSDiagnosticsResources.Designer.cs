@@ -755,6 +755,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Redundant &lt;return&gt; clause on void method in XML documentation..
+        /// </summary>
+        internal static string RedundantXmlDocReturnAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("RedundantXmlDocReturnAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &lt;return&gt; clause on XML doc..
+        /// </summary>
+        internal static string RedundantXmlDocReturnAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("RedundantXmlDocReturnAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &lt;return&gt; clause.
+        /// </summary>
+        internal static string RedundantXmlDocReturnCodeFixTitle {
+            get {
+                return ResourceManager.GetString("RedundantXmlDocReturnCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Test method &quot;{0}&quot; should not end with &quot;Test&quot;..
         /// </summary>
         internal static string RemoveTestSuffixAnalyzerMessage {
@@ -1084,6 +1111,15 @@ namespace VSDiagnostics {
         internal static string UseAliasesInsteadOfConcreteTypeCodeFixTitle {
             get {
                 return ResourceManager.GetString("UseAliasesInsteadOfConcreteTypeCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML Docs.
+        /// </summary>
+        internal static string XmlDocCommentsCategory {
+            get {
+                return ResourceManager.GetString("XmlDocCommentsCategory", resourceCulture);
             }
         }
     }

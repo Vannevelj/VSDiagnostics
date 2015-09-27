@@ -103,6 +103,8 @@
     <Compile Include="Diagnostics\Tests\RemoveTestSuffix\RemoveTestSuffixCodeFix.cs" />
     <Compile Include="Diagnostics\Tests\TestMethodWithoutPublicModifier\TestMethodWithoutPublicModifierAnalyzer.cs" />
     <Compile Include="Diagnostics\Tests\TestMethodWithoutPublicModifier\TestMethodWithoutPublicModifierCodeFix.cs" />
+    <Compile Include="Diagnostics\XMLDocComments\RedundantXMLDocReturn\RedundantXMLDocReturnAnalyzer.cs" />
+    <Compile Include="Diagnostics\XMLDocComments\RedundantXMLDocReturn\RedundantXMLDocReturnCodeFix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Utilities\NamingConvention.cs" />
