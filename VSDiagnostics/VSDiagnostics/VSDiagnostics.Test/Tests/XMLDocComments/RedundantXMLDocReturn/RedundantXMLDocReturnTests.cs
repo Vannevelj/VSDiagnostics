@@ -60,7 +60,6 @@ namespace ConsoleApplication1
         /// <summary>
         /// 
         /// </summary>
-        /// 
         public void Fizz()
         {
         }
@@ -98,7 +97,43 @@ namespace ConsoleApplication1
         /// <summary>
         /// 
         /// </summary>
+        [System.Obsolete("""")]
+        public void Fizz()
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, RedundantXmlDocReturnAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void RedundantXmlDocReturn_FiresForNonVoidMethod_OnlyRemovesReturnClause_DoesNotRemoveOtherClauses()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        /// <summary>
         /// 
+        /// </summary> <returns></returns>
+        [System.Obsolete("""")]
+        public void Fizz()
+        {
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        /// <summary>
+        /// 
+        /// </summary>
         [System.Obsolete("""")]
         public void Fizz()
         {
@@ -128,6 +163,45 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void RedundantXmlDocReturn_FiresForNonVoidMethod_OnlyRemovesReturnClause_DocumentAllTextBeforeNodeRemoved()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// text isn't usually outside XML nodes...
+        /// <returns></returns>
+        [System.Obsolete("""")]
+        public void Fizz()
+        {
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        [System.Obsolete("""")]
+        public void Fizz()
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, RedundantXmlDocReturnAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
     }
 }

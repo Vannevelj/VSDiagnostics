@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.XMLDocComments.RedundantXMLDocReturn
 {
@@ -40,10 +41,32 @@ namespace VSDiagnostics.Diagnostics.XMLDocComments.RedundantXMLDocReturn
 
         private Task<Solution> RemoveXmlReturn(Document document, SyntaxNode root, DocumentationCommentTriviaSyntax docComment)
         {
-            var newRoot =
-                root.RemoveNode(
-                    docComment.Content.OfType<XmlElementSyntax>()
-                        .First(n => n.StartTag.Name.LocalName.Text == "returns"), SyntaxRemoveOptions.KeepNoTrivia);
+            DocumentationCommentTriviaSyntax newDocComment = null;
+
+            var docCommentNodes = docComment.Content;
+
+            for (var i = 1; i < docCommentNodes.Count; i++)
+            {
+                var node = docCommentNodes[i] as XmlElementSyntax;
+
+                if (node == null || node.StartTag.Name.LocalName.Text != "returns")
+                {
+                    continue;
+                }
+
+                newDocComment = docComment.RemoveNode(node, SyntaxRemoveOptions.KeepNoTrivia);
+
+                var leadingDocCommentLines = newDocComment.Content[i - 1] as XmlTextSyntax; // have to remove from the new version...
+
+                if (leadingDocCommentLines == null)
+                {
+                    break;
+                }
+
+                newDocComment = newDocComment.RemoveNode(leadingDocCommentLines, SyntaxRemoveOptions.KeepNoTrivia);
+            }
+
+            var newRoot = root.ReplaceNode(docComment, newDocComment);
 
             return Task.FromResult(document.WithSyntaxRoot(newRoot).Project.Solution);
         }
