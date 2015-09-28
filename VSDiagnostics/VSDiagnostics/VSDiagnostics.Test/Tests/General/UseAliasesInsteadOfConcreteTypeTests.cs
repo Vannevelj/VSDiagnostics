@@ -608,7 +608,7 @@ namespace ConsoleApplication1
     {
         void Method()
         {
-            Single s = 1.5;
+            Single s = 1.5F;
         }
     }
 }";
@@ -622,7 +622,7 @@ namespace ConsoleApplication1
     {
         void Method()
         {
-            float s = 1.5;
+            float s = 1.5F;
         }
     }
 }";
@@ -641,7 +641,7 @@ namespace ConsoleApplication1
     {
         void Method()
         {
-            float s = 1.5;
+            float s = 1.5F;
         }
     }
 }";
@@ -714,7 +714,7 @@ namespace ConsoleApplication1
     {
         void Method()
         {
-            Decimal d = 1.5;
+            Decimal d = 1.5M;
         }
     }
 }";
@@ -728,7 +728,7 @@ namespace ConsoleApplication1
     {
         void Method()
         {
-            decimal d = 1.5;
+            decimal d = 1.5M;
         }
     }
 }";
@@ -747,7 +747,7 @@ namespace ConsoleApplication1
     {
         void Method()
         {
-            decimal d = 1.5;
+            decimal d = 1.5M;
         }
     }
 }";
@@ -926,9 +926,9 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        public static explicit operator Int32(char c)
+        public static explicit operator Int32(MyClass c)
         {
-            return c;
+            return 5;
         }
     }
 }";
@@ -940,9 +940,9 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        public static explicit operator int (char c)
+        public static explicit operator int (MyClass c)
         {
-            return c;
+            return 5;
         }
     }
 }";

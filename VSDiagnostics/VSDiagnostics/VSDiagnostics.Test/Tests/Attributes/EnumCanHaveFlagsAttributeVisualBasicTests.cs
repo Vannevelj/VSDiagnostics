@@ -28,7 +28,7 @@ End Module";
 
             var result = @"
 Imports System
-Module Module
+Module Module1
     <Flags>
     Enum Foo
         Bar

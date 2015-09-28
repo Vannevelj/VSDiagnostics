@@ -1623,7 +1623,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        private const int X;
+        private const int X = 5;
     }
 }";
 

@@ -127,6 +127,7 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
+        // bug: modifier "static" is not valid - remove?
         [TestMethod]
         public void ExplicitAccessModifiers_StructDeclaration_ContainsNonAccessModifier()
         {
@@ -218,6 +219,7 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
+        // bug: modifier "static" is not valid - remove?
         [TestMethod]
         public void ExplicitAccessModifiers_EnumDeclaration_ContainsNonAccessModifier()
         {
@@ -305,6 +307,7 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
+        // bug: modifier "static" is not valid - remove?
         [TestMethod]
         public void ExplicitAccessModifiers_DelegateDeclaration_ContainsNonAccessModifier()
         {
@@ -384,6 +387,7 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
+        // bug: modifier "static" is not valid - remove?
         [TestMethod]
         public void ExplicitAccessModifiers_InterfaceDeclaration_ContainsNonAccessModifier()
         {
@@ -421,6 +425,7 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original);
         }
 
+        // bug: modifier "public" is not valid - remove?
         [TestMethod]
         public void ExplicitAccessModifiers_InterfaceDeclaration_OnlyChangesAccessModifiers()
         {
@@ -545,7 +550,7 @@ namespace ConsoleApplication1
         [Obsolete]
         class MyInternalClass
         {
-            public void Method();
+            public void Method() {}
         }
     }
 }";
@@ -561,7 +566,7 @@ namespace ConsoleApplication1
         [Obsolete]
         private class MyInternalClass
         {
-            public void Method();
+            public void Method() {}
         }
     }
 }";
@@ -603,6 +608,7 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
+        // bug: modifier "static" is not valid - remove?
         [TestMethod]
         public void ExplicitAccessModifiers_NestedStructDeclaration_ContainsNonAccessModifier()
         {
@@ -665,7 +671,7 @@ namespace ConsoleApplication1
         [Obsolete]
         struct MyInternalStruct
         {
-            public void Method();
+            public void Method() {}
         }
     }
 }";
@@ -681,7 +687,7 @@ namespace ConsoleApplication1
         [Obsolete]
         private struct MyInternalStruct
         {
-            public void Method();
+            public void Method() {}
         }
     }
 }";
@@ -723,6 +729,7 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
+        // bug: modifier "static" is not valid - remove?
         [TestMethod]
         public void ExplicitAccessModifiers_NestedEnumDeclaration_ContainsNonAccessModifier()
         {
@@ -837,6 +844,7 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
+        // bug: modifier "static" is not valid - remove?
         [TestMethod]
         public void ExplicitAccessModifiers_NestedDelegateDeclaration_ContainsNonAccessModifier()
         {
@@ -939,6 +947,7 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
+        // bug: modifier "static" is not valid - remove?
         [TestMethod]
         public void ExplicitAccessModifiers_NestedInterfaceDeclaration_ContainsNonAccessModifier()
         {
@@ -987,6 +996,7 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original);
         }
 
+        // bug: modifier "public" is not valid - remove?
         [TestMethod]
         public void ExplicitAccessModifiers_NestedInterfaceDeclaration_OnlyChangesAccessModifiers()
         {
@@ -1197,22 +1207,26 @@ namespace ConsoleApplication1
         public void ExplicitAccessModifiers_PropertyDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
+using System;
+
 namespace ConsoleApplication1
 {
     class MyClass
     {
         [Obsolete]
-        int Foo { set; }    // I know this is bad, but we might as well test it
+        int Foo { get; set; }
     }
 }";
 
             var result = @"
+using System;
+
 namespace ConsoleApplication1
 {
     internal class MyClass
     {
         [Obsolete]
-        private int Foo { set; }    // I know this is bad, but we might as well test it
+        private int Foo { get; set; }
     }
 }";
 
@@ -1291,6 +1305,8 @@ namespace ConsoleApplication1
         public void ExplicitAccessModifiers_MethodDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
+using System;
+
 namespace ConsoleApplication1
 {
     internal class MyClass
@@ -1304,6 +1320,8 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
+using System;
+
 namespace ConsoleApplication1
 {
     internal class MyClass
@@ -1389,6 +1407,8 @@ namespace ConsoleApplication1
         public void ExplicitAccessModifiers_ClassConstructorDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
+using System;
+
 namespace ConsoleApplication1
 {
     internal class MyClass
@@ -1402,6 +1422,8 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
+using System;
+
 namespace ConsoleApplication1
 {
     internal class MyClass

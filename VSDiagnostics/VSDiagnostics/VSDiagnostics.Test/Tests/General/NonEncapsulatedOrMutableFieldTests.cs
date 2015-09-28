@@ -166,7 +166,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        internal const int x;
+        internal const int x = 5;
     }
 }";
 

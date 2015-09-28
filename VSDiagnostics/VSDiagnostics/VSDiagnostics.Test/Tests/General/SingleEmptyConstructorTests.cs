@@ -196,6 +196,8 @@ namespace ConsoleApplication1
         public void SingleEmptyConstructor_ConstructorHasBaseCallWithoutArgument()
         {
             var original = @"
+using System;
+
 namespace ConsoleApplication1
 {
     public class MyExceptionClass : Exception
@@ -207,6 +209,8 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
+using System;
+
 namespace ConsoleApplication1
 {
     public class MyExceptionClass : Exception
@@ -245,11 +249,17 @@ namespace ConsoleApplication1
         public void SingleEmptyConstructor_ConstructorHasThisCallWithoutArgument()
         {
             var original = @"
+using System;
+
 namespace ConsoleApplication1
 {
     public class MyExceptionClass : Exception
     {
-        public MyExceptionClass() : this()
+        public MyExceptionClass() : this(""message"")
+        {
+        }
+
+        public MyExceptionClass(string message)
         {
         }
     }
