@@ -589,7 +589,7 @@ namespace ConsoleApplication1
     {
         Foo Bar { get; set; }
  
-        public void Method()
+        public string Method()
         {
             switch (Bar)
             {

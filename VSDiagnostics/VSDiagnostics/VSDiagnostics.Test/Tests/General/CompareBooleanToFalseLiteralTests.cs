@@ -17,6 +17,8 @@ namespace VSDiagnostics.Test.Tests.General
         public void CompareBooleanToFalseLiteral_WithSimpleFalseLiteralComparison()
         {
             var original = @"
+using System;
+
 namespace ConsoleApplication1
 {
     class MyClass
@@ -33,6 +35,8 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
+using System;
+
 namespace ConsoleApplication1
 {
     class MyClass
@@ -90,6 +94,7 @@ namespace ConsoleApplication1
         {
             var original = @"
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -111,6 +116,7 @@ namespace ConsoleApplication1
 
             var result = @"
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -139,6 +145,7 @@ namespace ConsoleApplication1
         {
             var original = @"
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -160,6 +167,7 @@ namespace ConsoleApplication1
 
             var result = @"
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -193,7 +201,7 @@ namespace ConsoleApplication1
     {
         void Method()
         {
-            bool isAwesome = False;
+            bool isAwesome = false;
         }
     }
 }";
@@ -226,7 +234,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        bool Method()
+        void Method()
         {
             if (""someString"" == ""false"")
             {
@@ -248,7 +256,7 @@ namespace ConsoleApplication1
     {
         bool Method()
         {
-            bool isAwesome = False;
+            bool isAwesome = false;
             return false == isAwesome;
         }
     }
@@ -261,7 +269,7 @@ namespace ConsoleApplication1
     {
         bool Method()
         {
-            bool isAwesome = False;
+            bool isAwesome = false;
             return !isAwesome;
         }
     }
@@ -275,6 +283,8 @@ namespace ConsoleApplication1
         public void CompareBooleanToFalseLiteral_WithSimpleFalseLiteralComparison_NotEqualsOperator()
         {
             var original = @"
+using System;
+
 namespace ConsoleApplication1
 {
     class MyClass
@@ -291,6 +301,8 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
+using System;
+
 namespace ConsoleApplication1
 {
     class MyClass
@@ -348,6 +360,7 @@ namespace ConsoleApplication1
         {
             var original = @"
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -369,6 +382,7 @@ namespace ConsoleApplication1
 
             var result = @"
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -397,6 +411,7 @@ namespace ConsoleApplication1
         {
             var original = @"
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -418,6 +433,7 @@ namespace ConsoleApplication1
 
             var result = @"
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -449,7 +465,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        bool Method()
+        void Method()
         {
             if (""someString"" != ""false"")
             {
@@ -471,7 +487,7 @@ namespace ConsoleApplication1
     {
         bool Method()
         {
-            bool isAwesome = False;
+            bool isAwesome = false;
             return false != isAwesome;
         }
     }
@@ -484,7 +500,7 @@ namespace ConsoleApplication1
     {
         bool Method()
         {
-            bool isAwesome = False;
+            bool isAwesome = false;
             return isAwesome;
         }
     }

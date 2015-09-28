@@ -531,9 +531,9 @@ namespace VSDiagnostics.Test.Tests.Strings
         {
             void Method()
             {
-                var foo = ""{0} {1}""
-                var bar = ""bizz""
-                var baz = ""buzz""
+                var foo = ""{0} {1}"";
+                var bar = ""bizz"";
+                var baz = ""buzz"";
                 var s = string.Format(foo, bar, baz);
             }
         }

@@ -104,6 +104,7 @@ namespace ConsoleApplication1
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -127,6 +128,7 @@ namespace ConsoleApplication1
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -157,6 +159,7 @@ namespace ConsoleApplication1
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -180,6 +183,7 @@ namespace ConsoleApplication1
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -255,7 +259,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        bool Method()
+        void Method()
         {
             if (""someString"" == ""true"")
             {
@@ -399,6 +403,7 @@ namespace ConsoleApplication1
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -422,6 +427,7 @@ namespace ConsoleApplication1
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -452,6 +458,7 @@ namespace ConsoleApplication1
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -475,6 +482,7 @@ namespace ConsoleApplication1
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -530,7 +538,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        bool Method()
+        void Method()
         {
             if (""someString"" != ""true"")
             {
