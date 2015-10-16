@@ -505,7 +505,7 @@ namespace ConsoleApplication1
     {
         void Method()
         {
-            if (typeof(int) == typeof(Nullable<>) { }
+            if (typeof(int) == typeof(Nullable<>)) { }
         }
     }
 }";

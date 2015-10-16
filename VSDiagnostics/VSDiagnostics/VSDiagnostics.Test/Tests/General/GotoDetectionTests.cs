@@ -25,10 +25,12 @@ namespace ConsoleApplication1
             {
                 case 1:
                     cost = 4;
+                    break;
                 case 2:
                     goto case 1;
                 default:
                     cost = -1;
+                    break;
             }
         }
     }
@@ -54,6 +56,7 @@ namespace ConsoleApplication1
                     goto default;
                 default:
                     cost = 4;
+                    break;
             }
         }
     }

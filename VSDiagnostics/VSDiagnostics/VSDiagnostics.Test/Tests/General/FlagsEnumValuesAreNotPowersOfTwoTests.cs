@@ -1086,7 +1086,7 @@ namespace ConsoleApplication1
         Thursday = 1 << 4,
         Friday = 1 << 5,
         WorkweekEnd = Friday | 63,
-        Saturday = 1 << 6
+        Saturday = 1 << 6,
         Weekend = Saturday | Sunday,
         Weekdays = Monday | Tuesday | Wednesday | Thursday | Friday
     }

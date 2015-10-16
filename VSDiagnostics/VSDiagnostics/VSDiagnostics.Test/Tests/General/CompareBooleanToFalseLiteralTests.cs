@@ -26,7 +26,7 @@ namespace ConsoleApplication1
             bool isAwesome = false;
             if (isAwesome == false)
             {
-                Console.WriteLine(""awesome"");
+                System.Console.WriteLine(""awesome"");
             }
         }
     }
@@ -42,7 +42,7 @@ namespace ConsoleApplication1
             bool isAwesome = false;
             if (!isAwesome)
             {
-                Console.WriteLine(""awesome"");
+                System.Console.WriteLine(""awesome"");
             }
         }
     }
@@ -90,6 +90,7 @@ namespace ConsoleApplication1
         {
             var original = @"
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -111,6 +112,7 @@ namespace ConsoleApplication1
 
             var result = @"
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -139,6 +141,7 @@ namespace ConsoleApplication1
         {
             var original = @"
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -160,6 +163,7 @@ namespace ConsoleApplication1
 
             var result = @"
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -193,7 +197,7 @@ namespace ConsoleApplication1
     {
         void Method()
         {
-            bool isAwesome = False;
+            bool isAwesome = false;
         }
     }
 }";
@@ -226,7 +230,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        bool Method()
+        void Method()
         {
             if (""someString"" == ""false"")
             {
@@ -248,7 +252,7 @@ namespace ConsoleApplication1
     {
         bool Method()
         {
-            bool isAwesome = False;
+            bool isAwesome = false;
             return false == isAwesome;
         }
     }
@@ -261,7 +265,7 @@ namespace ConsoleApplication1
     {
         bool Method()
         {
-            bool isAwesome = False;
+            bool isAwesome = false;
             return !isAwesome;
         }
     }
@@ -284,7 +288,7 @@ namespace ConsoleApplication1
             bool isAwesome = false;
             if (isAwesome != false)
             {
-                Console.WriteLine(""awesome"");
+                System.Console.WriteLine(""awesome"");
             }
         }
     }
@@ -300,7 +304,7 @@ namespace ConsoleApplication1
             bool isAwesome = false;
             if (isAwesome)
             {
-                Console.WriteLine(""awesome"");
+                System.Console.WriteLine(""awesome"");
             }
         }
     }
@@ -348,6 +352,7 @@ namespace ConsoleApplication1
         {
             var original = @"
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -369,6 +374,7 @@ namespace ConsoleApplication1
 
             var result = @"
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -397,6 +403,7 @@ namespace ConsoleApplication1
         {
             var original = @"
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -418,6 +425,7 @@ namespace ConsoleApplication1
 
             var result = @"
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -453,7 +461,7 @@ namespace ConsoleApplication1
         {
             if (""someString"" != ""false"")
             {
-
+                return true;
             }
         }
     }
@@ -471,7 +479,7 @@ namespace ConsoleApplication1
     {
         bool Method()
         {
-            bool isAwesome = False;
+            bool isAwesome = false;
             return false != isAwesome;
         }
     }
@@ -484,7 +492,7 @@ namespace ConsoleApplication1
     {
         bool Method()
         {
-            bool isAwesome = False;
+            bool isAwesome = false;
             return isAwesome;
         }
     }

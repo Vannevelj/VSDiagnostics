@@ -28,7 +28,6 @@ namespace VSDiagnostics.Test.Tests.Async
         {   
             async Task Method()
             {
-                return Task.CompletedTask;
             }
         }
     }";
@@ -44,7 +43,6 @@ namespace VSDiagnostics.Test.Tests.Async
         {   
             async Task MethodAsync()
             {
-                return Task.CompletedTask;
             }
         }
     }";
@@ -67,7 +65,6 @@ namespace VSDiagnostics.Test.Tests.Async
         {   
             async Task MethodAsync()
             {
-                return Task.CompletedTask;
             }
         }
     }";
@@ -88,7 +85,6 @@ namespace VSDiagnostics.Test.Tests.Async
         {   
             void Method()
             {
-                return Task.CompletedTask;
             }
         }
     }";
@@ -318,7 +314,6 @@ namespace VSDiagnostics.Test.Tests.Async
         {
             public async Task MyMethod()
             {
-                return Task.CompletedTask;
             }
         }
     }";
@@ -339,23 +334,11 @@ namespace VSDiagnostics.Test.Tests.Async
         {
             public async Task MyMethodAsync()
             {
-                return Task.CompletedTask;
             }
         }
     }";
 
-            var diagnosticResult = new DiagnosticResult
-            {
-                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
-                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
-                Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
-                Locations = new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 10, 18)
-                }
-            };
-
-            VerifyDiagnostic(original, diagnosticResult);
+            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
             VerifyFix(original, result);
         }
 
@@ -378,7 +361,6 @@ namespace VSDiagnostics.Test.Tests.Async
         {
             public override async Task MyMethod()
             {
-                return Task.CompletedTask;
             }
         }
     }";
@@ -399,23 +381,12 @@ namespace VSDiagnostics.Test.Tests.Async
         {
             public override async Task MyMethodAsync()
             {
-                return Task.CompletedTask;
             }
         }
     }";
 
-            var diagnosticResult = new DiagnosticResult
-            {
-                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
-                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
-                Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
-                Locations = new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 10, 34)
-                }
-            };
 
-            VerifyDiagnostic(original, diagnosticResult);
+            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
             VerifyFix(original, result);
         }
 
@@ -498,7 +469,7 @@ namespace VSDiagnostics.Test.Tests.Async
         {
             public override Task<int> MyMethod()
             {
-                return Task.CompletedTask;
+                return Task.FromResult(5);
             }
         }
     }";
@@ -519,23 +490,12 @@ namespace VSDiagnostics.Test.Tests.Async
         {
             public override Task<int> MyMethodAsync()
             {
-                return Task.CompletedTask;
+                return Task.FromResult(5);
             }
         }
     }";
 
-            var diagnosticResult = new DiagnosticResult
-            {
-                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
-                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
-                Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
-                Locations = new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 10, 39)
-                }
-            };
-
-            VerifyDiagnostic(original, diagnosticResult);
+            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
             VerifyFix(original, result);
         }
 
@@ -553,7 +513,7 @@ namespace VSDiagnostics.Test.Tests.Async
         {
             public virtual Task MyMethod()
             {
-                return Task.CompletedTask;
+                return Task.FromResult(5);
             }
         }
 
@@ -561,7 +521,6 @@ namespace VSDiagnostics.Test.Tests.Async
         {
             public override async Task MyMethod()
             {
-                return Task.CompletedTask;
             }
         }
     }";
@@ -577,7 +536,7 @@ namespace VSDiagnostics.Test.Tests.Async
         {
             public virtual Task MyMethodAsync()
             {
-                return Task.CompletedTask;
+                return Task.FromResult(5);
             }
         }
 
@@ -585,23 +544,11 @@ namespace VSDiagnostics.Test.Tests.Async
         {
             public override async Task MyMethodAsync()
             {
-                return Task.CompletedTask;
             }
         }
     }";
 
-            var diagnosticResult = new DiagnosticResult
-            {
-                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
-                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
-                Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
-                Locations = new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 10, 33)
-                }
-            };
-
-            VerifyDiagnostic(original, diagnosticResult);
+            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
             VerifyFix(original, result);
         }
 
@@ -619,7 +566,7 @@ namespace VSDiagnostics.Test.Tests.Async
         {
             public virtual Task MyMethod()
             {
-                return Task.CompletedTask;
+                return Task.FromResult(10);
             }
         }
 
@@ -627,7 +574,7 @@ namespace VSDiagnostics.Test.Tests.Async
         {
             public override Task MyMethod()
             {
-                return Task.CompletedTask;
+                return Task.FromResult(5);
             }
         }
     }";
@@ -643,7 +590,7 @@ namespace VSDiagnostics.Test.Tests.Async
         {
             public virtual Task MyMethodAsync()
             {
-                return Task.CompletedTask;
+                return Task.FromResult(10);
             }
         }
 
@@ -651,23 +598,12 @@ namespace VSDiagnostics.Test.Tests.Async
         {
             public override Task MyMethodAsync()
             {
-                return Task.CompletedTask;
+                return Task.FromResult(5);
             }
         }
     }";
 
-            var diagnosticResult = new DiagnosticResult
-            {
-                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
-                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
-                Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
-                Locations = new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 10, 33)
-                }
-            };
-
-            VerifyDiagnostic(original, diagnosticResult);
+            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
             VerifyFix(original, result);
         }
 
@@ -722,18 +658,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
     }";
 
-            var diagnosticResult = new DiagnosticResult
-            {
-                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
-                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
-                Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
-                Locations = new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 10, 38)
-                }
-            };
-
-            VerifyDiagnostic(original, diagnosticResult);
+            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
             VerifyFix(original, result);
         }
 
@@ -804,18 +729,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
     }";
 
-            var diagnosticResult = new DiagnosticResult
-            {
-                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
-                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
-                Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
-                Locations = new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 10, 30)
-                }
-            };
-
-            VerifyDiagnostic(original, diagnosticResult);
+            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
             VerifyFix(original, result);
         }
 

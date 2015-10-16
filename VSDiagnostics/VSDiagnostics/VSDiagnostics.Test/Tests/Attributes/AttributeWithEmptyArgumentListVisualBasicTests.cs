@@ -7,7 +7,7 @@ using VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList;
 namespace VSDiagnostics.Test.Tests.Attributes
 {
     [TestClass]
-    public class AttributeWithEmptyArgumentListTests : VisualBasicCodeFixVerifier
+    public class AttributeWithEmptyArgumentListVisualBasicTests : VisualBasicCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new AttributeWithEmptyArgumentListAnalyzer();
 
@@ -17,6 +17,8 @@ namespace VSDiagnostics.Test.Tests.Attributes
         public void AttributeWithEmptyArgumentList_AttributeWithEmptyArgumentList()
         {
             var original = @"
+Imports System
+
 Module Module1
 
     <Obsolete()>
@@ -27,6 +29,8 @@ Module Module1
 End Module";
 
             var result = @"
+Imports System
+
 Module Module1
 
     <Obsolete>
@@ -44,6 +48,8 @@ End Module";
         public void AttributeWithEmptyArgumentList_WithoutArgumentList()
         {
             var original = @"
+Imports System
+
 Module Module1
 
     <Obsolete>
@@ -60,6 +66,8 @@ End Module";
         public void AttributeWithEmptyArgumentList_WithArgumentList()
         {
             var original = @"
+Imports System
+
 Module Module1
 
     <Obsolete(""test"", true)>
@@ -77,6 +85,8 @@ End Module";
         public void AttributeWithEmptyArgumentList_AttributeWithEmptyArgumentList_FlagsAttribute()
         {
             var original = @"
+Imports System
+
 Module Module1
     
     <Flags()>
@@ -88,6 +98,8 @@ Module Module1
 End Module";
 
             var result = @"
+Imports System
+
 Module Module1
     
     <Flags>
@@ -107,6 +119,8 @@ End Module";
         public void AttributeWithEmptyArgumentList_WithoutArgumentList_FlagsAttribute()
         {
             var original = @"
+Imports System
+
 Module Module1
     
     <Flags>

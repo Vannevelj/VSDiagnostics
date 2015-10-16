@@ -93,7 +93,7 @@ namespace ConsoleApplication1
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(e.Message);
+                System.Console.WriteLine(e.Message);
             }
         }
     }
@@ -123,7 +123,7 @@ namespace ConsoleApplication1
             }
             catch (ArgumentNullException e) when (e.ParamName == ""test"")
             {
-                System.Diagnostics.Debug.WriteLine(e.Message);
+                System.Console.WriteLine(e.Message);
             }
         }
     }

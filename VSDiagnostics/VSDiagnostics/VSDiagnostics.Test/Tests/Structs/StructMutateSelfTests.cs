@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Structs;
 
-namespace VSDiagnostics.Test.Tests.Tests
+namespace VSDiagnostics.Test.Tests.Structs
 {
     [TestClass]
     public class StructMutateSelfTest : CSharpDiagnosticVerifier
@@ -55,29 +55,7 @@ struct Rectangle
 
             VerifyDiagnostic(original, string.Format(StructShouldNotMutateSelfAnalyzer.Rule.MessageFormat.ToString()));
         }
-
-        [TestMethod]
-        public void StructShouldNotMutateSelf_ClassThatMutatesSelf()
-        {
-            var original = @"
-class X
-{
-	private int x;
-
-	public X(int value)
-	{
-		x = value;
-	}
-
-	public void Mutate()
-	{
-		this = new X(5);
-	}
-}";
-
-            VerifyDiagnostic(original);
-        }
-
+ 
         [TestMethod]
         public void StructShouldNotMutateSelf_AssigningToAVariableVar()
         {
