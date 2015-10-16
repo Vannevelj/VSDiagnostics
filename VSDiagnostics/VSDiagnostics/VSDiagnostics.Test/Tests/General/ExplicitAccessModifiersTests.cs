@@ -128,12 +128,13 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        [Ignore] // Needs RoslynTester update to allow /unsafe to be passed to the compilation
         public void ExplicitAccessModifiers_StructDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
 {
-    static struct MyStruct
+    unsafe struct MyStruct
     {
     }
 }";
@@ -141,7 +142,7 @@ namespace ConsoleApplication1
             var result = @"
 namespace ConsoleApplication1
 {
-    internal static struct MyStruct
+    internal unsafe struct MyStruct
     {
     }
 }";
@@ -343,6 +344,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        [Ignore] // Needs RoslynTester update to allow /unsafe to be passed to the compilation
         public void ExplicitAccessModifiers_InterfaceDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
@@ -562,6 +564,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        [Ignore] // Needs RoslynTester update to allow /unsafe to be passed to the compilation
         public void ExplicitAccessModifiers_NestedStructDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
@@ -569,7 +572,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        static struct MyInternalStruct
+        unsafe struct MyInternalStruct
         {
         }
     }
@@ -580,7 +583,7 @@ namespace ConsoleApplication1
 {
     internal class MyClass
     {
-        private static struct MyInternalStruct
+        private unsafe struct MyInternalStruct
         {
         }
     }
@@ -623,7 +626,9 @@ namespace ConsoleApplication1
         [Obsolete]
         struct MyInternalStruct
         {
-            public void Method();
+            public void Method()
+            {
+            }
         }
     }
 }";
@@ -639,7 +644,9 @@ namespace ConsoleApplication1
         [Obsolete]
         private struct MyInternalStruct
         {
-            public void Method();
+            public void Method()
+            {
+            }
         }
     }
 }";
@@ -765,6 +772,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        [Ignore] // Needs RoslynTester update to allow /unsafe to be passed to the compilation
         public void ExplicitAccessModifiers_NestedDelegateDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
@@ -867,6 +875,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        [Ignore] // Needs RoslynTester update to allow /unsafe to be passed to the compilation
         public void ExplicitAccessModifiers_NestedInterfaceDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
@@ -874,7 +883,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        static interface MyInternalInterface
+        unsafe interface MyInternalInterface
         {
         }
     }
@@ -885,7 +894,7 @@ namespace ConsoleApplication1
 {
     internal class MyClass
     {
-        private static interface MyInternalInterface
+        private unsafe interface MyInternalInterface
         {
         }
     }
@@ -1129,7 +1138,7 @@ namespace ConsoleApplication1
     class MyClass
     {
         [Obsolete]
-        int Foo { set; }    // I know this is bad, but we might as well test it
+        int Foo { get; set; }    // I know this is bad, but we might as well test it
     }
 }";
 
@@ -1139,7 +1148,7 @@ namespace ConsoleApplication1
     internal class MyClass
     {
         [Obsolete]
-        private int Foo { set; }    // I know this is bad, but we might as well test it
+        private int Foo { get; set; }    // I know this is bad, but we might as well test it
     }
 }";
 

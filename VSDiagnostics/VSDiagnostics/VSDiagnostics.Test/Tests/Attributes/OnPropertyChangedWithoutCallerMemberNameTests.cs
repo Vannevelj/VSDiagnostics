@@ -17,7 +17,7 @@ namespace VSDiagnostics.Test.Tests.Attributes
         public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged()
         {
             var original = @"
-using System.ComponentModel;
+using System;
 
 namespace ConsoleApplication1
 {
@@ -32,7 +32,7 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
-using System.ComponentModel;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace ConsoleApplication1
@@ -55,7 +55,7 @@ namespace ConsoleApplication1
         public void OnPropertyChangedWithoutCallerMemberName_ClassDoesNotImplementINotifyPropertyChanged()
         {
             var original = @"
-using System.ComponentModel;
+using System;
 
 namespace ConsoleApplication1
 {
@@ -76,7 +76,7 @@ namespace ConsoleApplication1
         public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChangedAndCustomInterface()
         {
             var original = @"
-using System.ComponentModel;
+using System;
 
 namespace ConsoleApplication1
 {
@@ -95,7 +95,7 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
-using System.ComponentModel;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace ConsoleApplication1
@@ -122,7 +122,7 @@ namespace ConsoleApplication1
         public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsCustomInterfaceAndINotifyPropertyChanged()
         {
             var original = @"
-using System.ComponentModel;
+using System;
 
 namespace ConsoleApplication1
 {
@@ -141,7 +141,7 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
-using System.ComponentModel;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace ConsoleApplication1
@@ -168,13 +168,13 @@ namespace ConsoleApplication1
         public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_MultipleMethods()
         {
             var original = @"
-using System.ComponentModel;
+using System;
 
 namespace ConsoleApplication1
 {
     class Foo : INotifyPropertyChanged
     {
-        void PropertyChanged(string foo) { }
+        void SomeMethod(string foo) { }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName = """")
@@ -185,14 +185,14 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
-using System.ComponentModel;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace ConsoleApplication1
 {
     class Foo : INotifyPropertyChanged
     {
-        void PropertyChanged(string foo) { }
+        void SomeMethod(string foo) { }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = """")
@@ -210,7 +210,7 @@ namespace ConsoleApplication1
         public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_MultipleParams()
         {
             var original = @"
-using System.ComponentModel;
+using System;
 
 namespace ConsoleApplication1
 {
@@ -231,7 +231,7 @@ namespace ConsoleApplication1
         public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_OneParamTypeNotString()
         {
             var original = @"
-using System.ComponentModel;
+using System;
 
 namespace ConsoleApplication1
 {
@@ -240,7 +240,7 @@ namespace ConsoleApplication1
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(int foo)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(foo)));
         }
     }
 }";
@@ -252,7 +252,7 @@ namespace ConsoleApplication1
         public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_ParamAlreadyHasAttribute()
         {
             var original = @"
-using System.ComponentModel;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace ConsoleApplication1
@@ -275,23 +275,25 @@ namespace ConsoleApplication1
         {
             var original = @"
 using System;
-using System.ComponentModel;
 
 namespace ConsoleApplication1
 {
     class Foo : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([Obsolete] string propertyName = """")
+        protected virtual void OnPropertyChanged([MyAttribute] string propertyName = """")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+    }
+
+    class MyAttribute : Attribute
+    {
     }
 }";
 
             var result = @"
 using System;
-using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace ConsoleApplication1
@@ -299,10 +301,14 @@ namespace ConsoleApplication1
     class Foo : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([Obsolete][CallerMemberName] string propertyName = """")
+        protected virtual void OnPropertyChanged([MyAttribute][CallerMemberName] string propertyName = """")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+    }
+
+    class MyAttribute : Attribute
+    {
     }
 }";
 
@@ -314,7 +320,7 @@ namespace ConsoleApplication1
         public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_RemovesReferenceParam()
         {
             var original = @"
-using System.ComponentModel;
+using System;
 
 namespace ConsoleApplication1
 {
@@ -339,7 +345,7 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
-using System.ComponentModel;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace ConsoleApplication1
@@ -373,7 +379,7 @@ namespace ConsoleApplication1
         public void OnPropertyChangedWithoutCallerMemberName_ClassImplementsINotifyPropertyChanged_UpdatesMultipleReferences()
         {
             var original = @"
-using System.ComponentModel;
+using System;
 
 namespace ConsoleApplication1
 {
@@ -408,7 +414,7 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
-using System.ComponentModel;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace ConsoleApplication1

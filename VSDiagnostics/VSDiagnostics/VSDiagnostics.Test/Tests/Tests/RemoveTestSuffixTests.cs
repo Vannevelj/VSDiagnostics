@@ -17,8 +17,6 @@ namespace VSDiagnostics.Test.Tests.Tests
         public void RemoveTestSuffix_TestMethodMethodEndsWithTest()
         {
             var original = @"
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace ConsoleApplication1
 {
     [TestClass]
@@ -32,8 +30,6 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace ConsoleApplication1
 {
     [TestClass]
@@ -54,8 +50,6 @@ namespace ConsoleApplication1
         public void RemoveTestSuffix_TestMethodMethodDoesNotEndWithTest()
         {
             var original = @"
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace ConsoleApplication1
 {
     [TestClass]
@@ -129,8 +123,6 @@ namespace ConsoleApplication1
         public void RemoveTestSuffix_FactMethodEndsWithTest()
         {
             var original = @"
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace ConsoleApplication1
 {
     [TestClass]
@@ -144,8 +136,6 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace ConsoleApplication1
 {
     [TestClass]
@@ -166,8 +156,6 @@ namespace ConsoleApplication1
         public void RemoveTestSuffix_FactMethodDoesNotEndWithTest()
         {
             var original = @"
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace ConsoleApplication1
 {
     [TestClass]
@@ -187,8 +175,6 @@ namespace ConsoleApplication1
         public void RemoveTestSuffix_TestMethodEndsWithTest()
         {
             var original = @"
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace ConsoleApplication1
 {
     [TestClass]
@@ -202,8 +188,6 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace ConsoleApplication1
 {
     [TestClass]
@@ -224,8 +208,6 @@ namespace ConsoleApplication1
         public void RemoveTestSuffix_TestMethodDoesNotEndWithTest()
         {
             var original = @"
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace ConsoleApplication1
 {
     [TestClass]
@@ -245,8 +227,6 @@ namespace ConsoleApplication1
         public void RemoveTestSuffix_TestMethodDoesNotEndWithTest_UpdatesReferences()
         {
             var original = @"
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace ConsoleApplication1
 {
     [TestClass]
@@ -265,8 +245,6 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace ConsoleApplication1
 {
     [TestClass]
