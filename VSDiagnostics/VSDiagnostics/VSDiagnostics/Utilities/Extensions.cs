@@ -34,7 +34,7 @@ namespace VSDiagnostics.Utilities
             }
 
             var baseType = typeSymbol;
-            while (baseType != null)
+            while (baseType != null && baseType.MetadataName != typeof(object).Name && baseType.MetadataName != typeof(ValueType).Name)
             {
                 if (baseType.MetadataName == type.Name)
                 {

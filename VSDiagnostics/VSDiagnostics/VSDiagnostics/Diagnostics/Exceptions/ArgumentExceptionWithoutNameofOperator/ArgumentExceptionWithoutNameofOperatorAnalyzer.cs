@@ -38,7 +38,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOpe
 
             var exceptionType = objectCreationExpression.Type;
             var symbolInformation = context.SemanticModel.GetSymbolInfo(exceptionType);
-            if (symbolInformation.Symbol.InheritsFrom(typeof (ArgumentException)))
+            if (symbolInformation.Symbol.InheritsFrom(typeof(ArgumentException)))
             {
                 var arguments = objectCreationExpression.ArgumentList.Arguments.Select(x => x.Expression).OfType<LiteralExpressionSyntax>();
                 var methodParameters = objectCreationExpression.Ancestors().OfType<MethodDeclarationSyntax>().FirstOrDefault()?.ParameterList.Parameters;
@@ -51,7 +51,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOpe
 
                 foreach (var argument in arguments)
                 {
-                    var argumentName = argument.Token.Value;
+                    var argumentName = argument.Token.ValueText;
                     var correspondingParameter = methodParameters.Value.FirstOrDefault(x => string.Equals((string) x.Identifier.Value, (string) argumentName, StringComparison.OrdinalIgnoreCase));
                     if (correspondingParameter != null)
                     {
