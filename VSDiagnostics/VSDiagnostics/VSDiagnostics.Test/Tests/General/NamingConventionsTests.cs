@@ -1678,5 +1678,112 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "X", "_x"));
             VerifyFix(original, expected);
         }
+
+        [TestMethod]
+        public void NamingConventions_WithEnum()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    enum myEnum
+    {
+        A,
+        B,
+        C
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    enum MyEnum
+    {
+        A,
+        B,
+        C
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "enum", "myEnum", "MyEnum"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void NamingConventions_WithEnumMembers()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    enum MyEnum
+    {
+        a,
+        B,
+        C
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    enum MyEnum
+    {
+        A,
+        B,
+        C
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "enum member", "a", "A"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void NamingConventions_WithEnum_FollowingConventions()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    enum MyEnum
+    {
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void NamingConventions_WithEnumMembers_FollowingConventions()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    enum MyEnum
+    {
+        A,
+        B,
+        C
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }

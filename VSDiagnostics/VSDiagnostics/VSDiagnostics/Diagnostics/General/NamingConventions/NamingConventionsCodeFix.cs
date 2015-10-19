@@ -26,10 +26,10 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var identifier = root.FindToken(diagnosticSpan.Start);
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.NamingConventionsCodeFixTitle, x => RenameAsync(context.Document, root, identifier), nameof(NamingConventionsAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.NamingConventionsCodeFixTitle, x => RenameAsync(context.Document, identifier), nameof(NamingConventionsAnalyzer)), diagnostic);
         }
 
-        private async Task<Solution> RenameAsync(Document document, SyntaxNode root, SyntaxToken identifier)
+        private async Task<Solution> RenameAsync(Document document, SyntaxToken identifier)
         {
             var identifierParent = identifier.Parent;
             var newIdentifier = default(SyntaxToken);
@@ -53,7 +53,9 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
                 if (identifierParent is PropertyDeclarationSyntax ||
                     identifierParent is MethodDeclarationSyntax ||
                     identifierParent is ClassDeclarationSyntax ||
-                    identifierParent is StructDeclarationSyntax)
+                    identifierParent is StructDeclarationSyntax ||
+                    identifierParent is EnumDeclarationSyntax ||
+                    identifierParent is EnumMemberDeclarationSyntax)
                 {
                     newIdentifier = identifier.WithConvention(NamingConvention.UpperCamelCase);
                     break;

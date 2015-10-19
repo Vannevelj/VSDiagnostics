@@ -31,7 +31,9 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
                 SyntaxKind.InterfaceDeclaration,
                 SyntaxKind.LocalDeclarationStatement,
                 SyntaxKind.Parameter,
-                SyntaxKind.StructDeclaration);
+                SyntaxKind.StructDeclaration,
+                SyntaxKind.EnumDeclaration,
+                SyntaxKind.EnumMemberDeclaration);
         }
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
@@ -79,24 +81,28 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             if (nodeAsProperty != null)
             {
                 CheckNaming(nodeAsProperty.Identifier, "property", NamingConvention.UpperCamelCase, context);
+                return;
             }
 
             var nodeAsMethod = context.Node as MethodDeclarationSyntax;
             if (nodeAsMethod != null)
             {
                 CheckNaming(nodeAsMethod.Identifier, "method", NamingConvention.UpperCamelCase, context);
+                return;
             }
 
             var nodeAsClass = context.Node as ClassDeclarationSyntax;
             if (nodeAsClass != null)
             {
                 CheckNaming(nodeAsClass.Identifier, "class", NamingConvention.UpperCamelCase, context);
+                return;
             }
 
             var nodeAsInterface = context.Node as InterfaceDeclarationSyntax;
             if (nodeAsInterface != null)
             {
                 CheckNaming(nodeAsInterface.Identifier, "interface", NamingConvention.InterfacePrefixUpperCamelCase, context);
+                return;
             }
 
             var nodeAsLocal = context.Node as LocalDeclarationStatementSyntax;
@@ -126,6 +132,21 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             if (nodeAsStruct != null)
             {
                 CheckNaming(nodeAsStruct.Identifier, "struct", NamingConvention.UpperCamelCase, context);
+                return;
+            }
+
+            var nodeAsEnum = context.Node as EnumDeclarationSyntax;
+            if (nodeAsEnum != null)
+            {
+                CheckNaming(nodeAsEnum.Identifier, "enum", NamingConvention.UpperCamelCase, context);
+                return;
+            }
+
+            var nodeAsEnumMember = context.Node as EnumMemberDeclarationSyntax;
+            if (nodeAsEnumMember != null)
+            {
+                CheckNaming(nodeAsEnumMember.Identifier, "enum member", NamingConvention.UpperCamelCase, context);
+                return;
             }
         }
 
