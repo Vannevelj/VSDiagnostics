@@ -280,18 +280,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
     }";
 
-            var diagnosticResult = new DiagnosticResult
-            {
-                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
-                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
-                Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
-                Locations = new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 10, 18)
-                }
-            };
-
-            VerifyDiagnostic(original, diagnosticResult);
+            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
             VerifyFix(original, result);
         }
 
@@ -435,18 +424,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
     }";
 
-            var diagnosticResult = new DiagnosticResult
-            {
-                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
-                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
-                Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
-                Locations = new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 10, 34)
-                }
-            };
-
-            VerifyDiagnostic(original, diagnosticResult);
+            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
             VerifyFix(original, result);
         }
 
@@ -788,18 +766,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
     }";
 
-            var diagnosticResult = new DiagnosticResult
-            {
-                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
-                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
-                Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
-                Locations = new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 10, 18)
-                }
-            };
-
-            VerifyDiagnostic(original, diagnosticResult);
+            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
             VerifyFix(original, result);
         }
 
@@ -868,29 +835,10 @@ namespace VSDiagnostics.Test.Tests.Async
         }
     }";
 
-            var diagnosticResultClass = new DiagnosticResult
-            {
-                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
-                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
-                Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
-                Locations = new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 10, 31)
-                }
-            };
-
-            var diagnosticResultInterface = new DiagnosticResult
-            {
-                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
-                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
-                Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
-                Locations = new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 15, 15)
-                }
-            };
-
-            VerifyDiagnostic(original, diagnosticResultClass, diagnosticResultInterface);
+            VerifyDiagnostic(
+                original,
+                string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
+                string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
             VerifyFix(original, result);
         }
 
@@ -949,29 +897,10 @@ namespace VSDiagnostics.Test.Tests.Async
         }
     }";
 
-            var diagnosticResultClass = new DiagnosticResult
-            {
-                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
-                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
-                Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
-                Locations = new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 10, 18)
-                }
-            };
-
-            var diagnosticResultInterface = new DiagnosticResult
-            {
-                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
-                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
-                Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
-                Locations = new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 15, 18)
-                }
-            };
-
-            VerifyDiagnostic(original, diagnosticResultClass, diagnosticResultInterface);
+            VerifyDiagnostic(
+                original,
+                string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
+                string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
             VerifyFix(original, result);
         }
 
@@ -1069,18 +998,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
     }";
 
-            var diagnosticResultClass = new DiagnosticResult
-            {
-                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
-                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
-                Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
-                Locations = new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 10, 31)
-                }
-            };
-
-            VerifyDiagnostic(original, diagnosticResultClass);
+            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
             VerifyFix(original, result);
         }
 
@@ -1140,30 +1058,11 @@ namespace VSDiagnostics.Test.Tests.Async
         }
     }";
 
-            var diagnosticResultHiddenMember = new DiagnosticResult
-            {
-                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
-                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
-                Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
-                Locations = new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 10, 33)
-                }
-            };
-
-            var diagnosticResultHidingMember = new DiagnosticResult
-            {
-                Id = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id,
-                Message = string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
-                Severity = AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.DefaultSeverity,
-                Locations = new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 18, 29)
-                }
-            };
-
-            VerifyDiagnostic(original, diagnosticResultHiddenMember, diagnosticResultHidingMember);
-            VerifyFix(original, result, allowNewCompilerDiagnostics: true); // CS0109
+            VerifyDiagnostic(
+                original, 
+                string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"), 
+                string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true); // CS0109 We're no longer hiding a base member so new becomes obsolete
         }
     }
 }
