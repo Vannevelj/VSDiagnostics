@@ -890,7 +890,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A single catch-all clause has been used..
+        ///   Looks up a localized string similar to A single catch-all clause has been used. Consider adding specific exception handlers or a comment..
         /// </summary>
         internal static string SingleGeneralExceptionAnalyzerMessage {
             get {

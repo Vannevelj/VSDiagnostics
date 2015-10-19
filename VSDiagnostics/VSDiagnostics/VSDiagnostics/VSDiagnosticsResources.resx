@@ -285,7 +285,7 @@
     <value>Your constructor is the same as a default constructor and can be removed.</value>
   </data>
   <data name="SingleGeneralExceptionAnalyzerMessage" xml:space="preserve">
-    <value>A single catch-all clause has been used.</value>
+    <value>A single catch-all clause has been used. Consider adding specific exception handlers or a comment.</value>
   </data>
   <data name="SingleGeneralExceptionAnalyzerTitle" xml:space="preserve">
     <value>Verifies whether a try-catch block does not contain just a single Exception clause.</value>
@@ -404,6 +404,7 @@
   </data>
   <data name="FlagsEnumValuesAreNotPowersOfTwoAnalyzerMessage" xml:space="preserve">
     <value>[Flags] enum {0} values are not powers of 2</value>
+    <comment>{0} - Enum typename</comment>
   </data>
   <data name="FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle" xml:space="preserve">
     <value>[Flags] enum values are not powers of 2</value>
