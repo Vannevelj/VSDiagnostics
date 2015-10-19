@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
+namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class FlagsEnumValuesAreNotPowersOfTwoAnalyzer : DiagnosticAnalyzer
@@ -14,7 +14,7 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
         private const string DiagnosticId = nameof(FlagsEnumValuesAreNotPowersOfTwoAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Error;
 
-        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Category = VSDiagnosticsResources.AttributesCategory;
         private static readonly string Message = VSDiagnosticsResources.FlagsEnumValuesAreNotPowersOfTwoAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle;
 
@@ -30,21 +30,23 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var declarationExpression = (EnumDeclarationSyntax) context.Node;
-
-            if (!declarationExpression.AttributeLists.Any(
-                    a => a.Attributes.Any(
+            var flagsAttribute = declarationExpression.AttributeLists.FirstOrDefault(
+                    a => a.Attributes.FirstOrDefault(
                         t =>
                         {
                             var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
+                            return symbol == null || symbol.ContainingType.MetadataName == typeof(FlagsAttribute).Name;
+                        }) != null);
+            
 
-                            return symbol == null || symbol.ContainingType.MetadataName == typeof (FlagsAttribute).Name;
-                        })))
+            if (flagsAttribute == null)
             {
                 return;
             }
 
             var enumName = context.SemanticModel.GetDeclaredSymbol(declarationExpression).Name;
             var enumMemberDeclarations = declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>().ToList();
+            Action reportDiagnostic = () => context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
 
             foreach (var member in enumMemberDeclarations)
             {
@@ -65,7 +67,7 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
                 // member doesn't have defined value - "foo" instead of "foo = 4"
                 if (member.EqualsValue == null)
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
+                    reportDiagnostic();
                     return;
                 }
 
@@ -86,45 +88,47 @@ namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
                     case nameof(Int16):
                         if (!IsPowerOfTwo((short)value))
                         {
-                            context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
+                            reportDiagnostic();
                             return;
                         }
                         break;
                     case nameof(UInt16):
                         if (!IsPowerOfTwo((ushort)value))
                         {
-                            context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
+                            reportDiagnostic();
                             return;
                         }
                         break;
                     case nameof(Int32):
                         if (!IsPowerOfTwo((int)value))
                         {
-                            context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
+                            reportDiagnostic();
                             return;
                         }
                         break;
                     case nameof(UInt32):
                         if (!IsPowerOfTwo((uint)value))
                         {
-                            context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
+                            reportDiagnostic();
                             return;
                         }
                         break;
                     case nameof(Int64):
                         if (!IsPowerOfTwo((long)value))
                         {
-                            context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
+                            reportDiagnostic();
+                            return;
+                        }
+                        break;
+                    case nameof(UInt64):
+                        if (!IsPowerOfTwo((ulong)value))
+                        {
+                            reportDiagnostic();
                             return;
                         }
                         break;
                     default:
-                        if (!IsPowerOfTwo((ulong)value))
-                        {
-                            context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
-                            return;
-                        }
-                        break;
+                        throw new ArgumentException("This enum-backing type is not supported.");
                 }
             }
         }

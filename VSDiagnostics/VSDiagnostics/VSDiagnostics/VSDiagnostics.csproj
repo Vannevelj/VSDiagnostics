@@ -67,8 +67,8 @@
     <Compile Include="Diagnostics\General\ConditionIsAlwaysTrue\ConditionIsAlwaysTrueCodeFix.cs" />
     <Compile Include="Diagnostics\General\ExplicitAccessModifiers\ExplicitAccessModifiersAnalyzer.cs" />
     <Compile Include="Diagnostics\General\ExplicitAccessModifiers\ExplicitAccessModifiersCodeFix.cs" />
-    <Compile Include="Diagnostics\General\FlagsEnumValuesAreNotPowersOfTwo\FlagsEnumValuesAreNotPowersOfTwoAnalyzer.cs" />
-    <Compile Include="Diagnostics\General\FlagsEnumValuesAreNotPowersOfTwo\FlagsEnumValuesAreNotPowersOfTwoCodeFix.cs" />
+    <Compile Include="Diagnostics\Attributes\FlagsEnumValuesAreNotPowersOfTwo\FlagsEnumValuesAreNotPowersOfTwoAnalyzer.cs" />
+    <Compile Include="Diagnostics\Attributes\FlagsEnumValuesAreNotPowersOfTwo\FlagsEnumValuesAreNotPowersOfTwoCodeFix.cs" />
     <Compile Include="Diagnostics\General\GotoDetection\GotoDetectionAnalyzer.cs" />
     <Compile Include="Diagnostics\General\IfStatementWithoutBraces\IfStatementWithoutBracesAnalyzer.cs" />
     <Compile Include="Diagnostics\General\IfStatementWithoutBraces\IfStatementWithoutBracesCodeFix.cs" />
