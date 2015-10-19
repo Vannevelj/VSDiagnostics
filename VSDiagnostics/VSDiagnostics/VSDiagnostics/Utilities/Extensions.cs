@@ -11,7 +11,10 @@ namespace VSDiagnostics.Utilities
     {
         public static bool ImplementsInterface(this ClassDeclarationSyntax classDeclaration, SemanticModel semanticModel, Type interfaceType)
         {
-            if (classDeclaration == null) { return false; }
+            if (classDeclaration == null)
+            {
+                return false;
+            }
 
             var declaredSymbol = semanticModel.GetDeclaredSymbol(classDeclaration);
 
@@ -40,7 +43,7 @@ namespace VSDiagnostics.Utilities
                 {
                     return true;
                 }
-                baseType = ((ITypeSymbol) typeSymbol).BaseType;
+                baseType = ((ITypeSymbol) baseType).BaseType;
             }
 
             return false;

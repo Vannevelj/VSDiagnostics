@@ -71,5 +71,33 @@ namespace VSDiagnostics.Test.Tests.Utilities
             var typeSymbol = semanticModel.GetSymbolInfo(objectCreationExpression.Type);
             Assert.IsTrue(typeSymbol.Symbol.InheritsFrom(typeof(ArgumentException)));
         }
+
+        [TestMethod]
+        public void InheritsFrom_WithRelevantType_WithExceptionType()
+        {
+            var source = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            void Method(string input)
+            {
+                var x = new ArgumentNullException();
+            }
+        }
+    }";
+            var tree = CSharpSyntaxTree.ParseText(source);
+            var mscorlib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
+            var compilation = CSharpCompilation.Create("MyCompilation", new[] { tree }, new[] { mscorlib });
+            var semanticModel = compilation.GetSemanticModel(tree);
+
+            var root = tree.GetRoot();
+            var objectCreationExpression = root.DescendantNodes().OfType<ObjectCreationExpressionSyntax>().First();
+            var typeSymbol = semanticModel.GetSymbolInfo(objectCreationExpression.Type);
+            Assert.IsTrue(typeSymbol.Symbol.InheritsFrom(typeof(Exception)));
+        }
     }
 }
