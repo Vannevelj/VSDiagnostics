@@ -1145,5 +1145,167 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "char", "Char"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_Nameof()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var a = nameof(Int16);
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_Typeof()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        public void Foo()
+        {
+            var x = typeof(Int16);
+        }
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        public void Foo()
+        {
+            var x = typeof(short);
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "short", "Int16"));
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
+        }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_Parameter()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        public void Foo(Int32 i)
+        {
+        }
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program
+    {
+        public void Foo(int i)
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "int", "Int32"));
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
+        }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_Parameter_WithAlias()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(int i)
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_TypeArgument()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program<T>
+    {
+        public void Foo()
+        {
+            new Program<Int32>();
+        }
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program<T>
+    {
+        public void Foo()
+        {
+            new Program<int>();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "int", "Int32"));
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
+        }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_TypeArgument_WithAlias()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public class Program<T>
+    {
+        public void Foo()
+        {
+            new Program<int>();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }
