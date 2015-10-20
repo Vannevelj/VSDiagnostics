@@ -27,10 +27,10 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.UseAliasesInsteadOfConcreteTypeCodeFixTitle, x => AsToCastAsync(context.Document, root, statement), nameof(UseAliasesInsteadOfConcreteTypeAnalyzer)), diagnostic);
+            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.UseAliasesInsteadOfConcreteTypeCodeFixTitle, x => UseAliasAsync(context.Document, root, statement), nameof(UseAliasesInsteadOfConcreteTypeAnalyzer)), diagnostic);
         }
 
-        private async Task<Solution> AsToCastAsync(Document document, SyntaxNode root, SyntaxNode statement)
+        private async Task<Solution> UseAliasAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var semanticModel = await document.GetSemanticModelAsync();
             string typeName;
@@ -44,7 +44,7 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
                 typeName = semanticModel.GetSymbolInfo((QualifiedNameSyntax)statement).Symbol.MetadataName;
             }
 
-            var aliasToken = MapConcreteTypeToPredefinedTypeAlias.First(kvp => kvp.Key == typeName).Value;
+            var aliasToken = MapConcreteTypeToPredefinedTypeAlias[typeName];
 
             var newExpression = SyntaxFactory.PredefinedType(SyntaxFactory.Token(aliasToken));
             var newRoot = root.ReplaceNode(statement, newExpression).WithAdditionalAnnotations(Formatter.Annotation);

@@ -19,7 +19,28 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
         private static readonly string Message = VSDiagnosticsResources.UseAliasesInsteadOfConcreteTypeAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.UseAliasesInsteadOfConcreteTypeAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private static readonly Dictionary<string, string> MapConcreteTypeToPredefinedTypeAlias =
+            new Dictionary<string, string>
+            {
+                {nameof(Int16), "short"},
+                {nameof(Int32), "int"},
+                {nameof(Int64), "long"},
+                {nameof(UInt16), "ushort"},
+                {nameof(UInt32), "uint"},
+                {nameof(UInt64), "ulong"},
+                {nameof(Object), "object"},
+                {nameof(Byte), "byte"},
+                {nameof(SByte), "sbyte"},
+                {nameof(Char), "char"},
+                {nameof(Boolean), "bool"},
+                {nameof(Single), "float"},
+                {nameof(Double), "double"},
+                {nameof(Decimal), "decimal"},
+                {nameof(String), "string"}
+            };
+
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -33,7 +54,10 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
                 SyntaxKind.OperatorDeclaration,
                 SyntaxKind.PropertyDeclaration,
                 SyntaxKind.VariableDeclaration,
-                SyntaxKind.SimpleMemberAccessExpression);
+                SyntaxKind.SimpleMemberAccessExpression,
+                SyntaxKind.Parameter,
+                SyntaxKind.TypeOfExpression,
+                SyntaxKind.TypeArgumentList);
         }
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
@@ -42,7 +66,7 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
 
             if (context.Node is ConversionOperatorDeclarationSyntax)
             {
-                var expression = (ConversionOperatorDeclarationSyntax) context.Node;
+                var expression = (ConversionOperatorDeclarationSyntax)context.Node;
                 typeExpression = expression.Type;
             }
 
@@ -88,6 +112,27 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
                 typeExpression = expression.Expression as IdentifierNameSyntax;
             }
 
+            if (context.Node is ParameterSyntax)
+            {
+                var expression = (ParameterSyntax)context.Node;
+                typeExpression = expression.Type;
+            }
+
+            if (context.Node is TypeOfExpressionSyntax)
+            {
+                var expression = (TypeOfExpressionSyntax)context.Node;
+                typeExpression = expression.Type;
+            }
+
+            if (context.Node is TypeArgumentListSyntax)
+            {
+                var expression = (TypeArgumentListSyntax)context.Node;
+                foreach (var argument in expression.Arguments)
+                {
+                    typeExpression = argument;
+                }
+            }
+
             if (typeExpression == null ||
                 !(typeExpression is IdentifierNameSyntax) &&
                 !(typeExpression is QualifiedNameSyntax))
@@ -120,25 +165,5 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
                     MapConcreteTypeToPredefinedTypeAlias.First(kvp => kvp.Key == typeName).Value, typeName));
             }
         }
-
-        private static readonly Dictionary<string, string> MapConcreteTypeToPredefinedTypeAlias =
-            new Dictionary<string, string>
-            {
-                {nameof(Int16), "short"},
-                {nameof(Int32), "int"},
-                {nameof(Int64), "long"},
-                {nameof(UInt16), "ushort"},
-                {nameof(UInt32), "uint"},
-                {nameof(UInt64), "ulong"},
-                {nameof(Object), "object"},
-                {nameof(Byte), "byte"},
-                {nameof(SByte), "sbyte"},
-                {nameof(Char), "char"},
-                {nameof(Boolean), "bool"},
-                {nameof(Single), "float"},
-                {nameof(Double), "double"},
-                {nameof(Decimal), "decimal"},
-                {nameof(String), "string"}
-            };
     }
 }
