@@ -403,11 +403,11 @@
     <value>Use alias</value>
   </data>
   <data name="FlagsEnumValuesAreNotPowersOfTwoAnalyzerMessage" xml:space="preserve">
-    <value>[Flags] enum {0} values are not powers of 2</value>
+    <value>[Flags] enum {0} its values are not explicit powers of 2</value>
     <comment>{0} - Enum typename</comment>
   </data>
   <data name="FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle" xml:space="preserve">
-    <value>[Flags] enum values are not powers of 2</value>
+    <value>[Flags] enum its values are not explicit powers of 2</value>
   </data>
   <data name="FlagsEnumValuesAreNotPowersOfTwoCodeFixTitle" xml:space="preserve">
     <value>Use powers of 2</value>

@@ -494,7 +494,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Flags] enum {0} values are not powers of 2.
+        ///   Looks up a localized string similar to [Flags] enum {0} its values are not explicit powers of 2.
         /// </summary>
         internal static string FlagsEnumValuesAreNotPowersOfTwoAnalyzerMessage {
             get {
@@ -503,7 +503,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Flags] enum values are not powers of 2.
+        ///   Looks up a localized string similar to [Flags] enum its values are not explicit powers of 2.
         /// </summary>
         internal static string FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle {
             get {

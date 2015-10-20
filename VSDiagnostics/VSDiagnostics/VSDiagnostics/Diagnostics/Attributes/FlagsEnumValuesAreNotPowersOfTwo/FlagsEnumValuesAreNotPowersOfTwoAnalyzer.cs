@@ -46,7 +46,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 
             var enumName = context.SemanticModel.GetDeclaredSymbol(declarationExpression).Name;
             var enumMemberDeclarations = declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>().ToList();
-            Action reportDiagnostic = () => context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), enumName));
+            Action reportDiagnostic = () => context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.Identifier.GetLocation(), enumName));
 
             foreach (var member in enumMemberDeclarations)
             {

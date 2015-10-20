@@ -126,7 +126,7 @@
     <Compile Include="Tests\General\ConditionIsAlwaysFalseTests.cs" />
     <Compile Include="Tests\General\ConditionIsAlwaysTrueTests.cs" />
     <Compile Include="Tests\General\ExplicitAccessModifiersTests.cs" />
-    <Compile Include="Tests\General\FlagsEnumValuesAreNotPowersOfTwoTests.cs" />
+    <Compile Include="Tests\Attributes\FlagsEnumValuesAreNotPowersOfTwoTests.cs" />
     <Compile Include="Tests\General\GotoDetectionTests.cs" />
     <Compile Include="Tests\General\IfStatementWithoutBracesTests.cs" />
     <Compile Include="Tests\General\LoopStatementWithoutBracesTests.cs" />
