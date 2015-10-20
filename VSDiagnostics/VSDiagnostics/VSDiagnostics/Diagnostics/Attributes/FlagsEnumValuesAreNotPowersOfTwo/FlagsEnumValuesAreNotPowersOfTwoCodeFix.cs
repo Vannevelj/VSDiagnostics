@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
 
-namespace VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo
+namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 {
     [ExportCodeFixProvider(nameof(FlagsEnumValuesAreNotPowersOfTwoCodeFix), LanguageNames.CSharp), Shared]
     public class FlagsEnumValuesAreNotPowersOfTwoCodeFix : CodeFixProvider

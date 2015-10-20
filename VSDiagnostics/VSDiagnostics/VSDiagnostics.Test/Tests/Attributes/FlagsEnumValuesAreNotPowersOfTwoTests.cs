@@ -2,9 +2,9 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.Helpers.CSharp;
-using VSDiagnostics.Diagnostics.General.FlagsEnumValuesAreNotPowersOfTwo;
+using VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo;
 
-namespace VSDiagnostics.Test.Tests.General
+namespace VSDiagnostics.Test.Tests.Attributes
 {
     [TestClass]
     public class FlagsEnumValuesAreNotPowersOfTwoTests : CSharpCodeFixVerifier
@@ -1120,7 +1120,44 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "CalendarType"));
+            VerifyDiagnostic(original,
+                string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "CalendarType"));
+            VerifyFix(original, result);
+
+        }
+
+        [TestMethod]
+        public void FlagsEnumValuesAreNotPowersOfTwo_WithoutExplicitValues()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo
+    {
+        A,
+        B,
+        C
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo
+    {
+        A = 0,
+        B = 1,
+        C = 2
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
     }
