@@ -1160,5 +1160,84 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeByte()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo : byte
+    {
+        Bar = 0,
+        Biz = 1,
+        Baz = 2,
+        Buz = 3,
+        Boz = 4
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo : byte
+    {
+        Bar = 0,
+        Biz = 1,
+        Baz = 2,
+        Buz = 4,
+        Boz = 8
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeSByte()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo : sbyte
+    {
+        Bar = 0,
+        Biz = 1,
+        Baz = 2,
+        Buz = 3,
+        Boz = 4
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo : sbyte
+    {
+        Bar = 0,
+        Biz = 1,
+        Baz = 2,
+        Buz = 4,
+        Boz = 8
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
+            VerifyFix(original, result);
+        }
+
     }
 }

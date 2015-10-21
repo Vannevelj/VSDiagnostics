@@ -122,6 +122,15 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
                         break;
                     case nameof(UInt64):
                         if (!IsPowerOfTwo((ulong)value))
+                    case nameof(Byte):
+                        if (!IsPowerOfTwo((byte) value))
+                        {
+                            reportDiagnostic();
+                            return;
+                        }
+                        break;
+                    case nameof(SByte):
+                        if (!IsPowerOfTwo((sbyte) value))
                         {
                             reportDiagnostic();
                             return;

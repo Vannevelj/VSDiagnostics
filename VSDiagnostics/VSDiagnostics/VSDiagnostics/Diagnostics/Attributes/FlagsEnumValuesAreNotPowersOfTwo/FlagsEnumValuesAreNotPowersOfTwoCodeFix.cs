@@ -84,6 +84,14 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
                         var newUlong = replacedValues == 0 ? 0 : (ulong)Math.Pow(2, replacedValues - 1);
                         literalToken = SyntaxFactory.Literal(newUlong);
                         break;
+                    case nameof(Byte):
+                        var newByte = replacedValues == 0 ? 0 : (byte) Math.Pow(2, replacedValues - 1);
+                        literalToken = SyntaxFactory.Literal(newByte);
+                        break;
+                    case nameof(SByte):
+                        var newSByte = replacedValues == 0 ? 0 : (sbyte) Math.Pow(2, replacedValues - 1);
+                        literalToken = SyntaxFactory.Literal(newSByte);
+                        break;
                 }
                 replacedValues++;
 
