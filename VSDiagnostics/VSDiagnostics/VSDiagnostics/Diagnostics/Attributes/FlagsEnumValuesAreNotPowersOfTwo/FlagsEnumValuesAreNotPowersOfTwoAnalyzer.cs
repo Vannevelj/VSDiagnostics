@@ -12,15 +12,23 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
     public class FlagsEnumValuesAreNotPowersOfTwoAnalyzer : DiagnosticAnalyzer
     {
         private const string DiagnosticId = nameof(FlagsEnumValuesAreNotPowersOfTwoAnalyzer);
+        private const string DiagnosticIdValuesDontFit = "AnotherIDWeHaveToInvent"; // TODO
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Error;
 
         private static readonly string Category = VSDiagnosticsResources.AttributesCategory;
         private static readonly string Message = VSDiagnosticsResources.FlagsEnumValuesAreNotPowersOfTwoAnalyzerMessage;
+
+        private static readonly string MessageValuesDontFit =
+            VSDiagnosticsResources.FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor DefaultRule
+            => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+        internal static DiagnosticDescriptor ValuesDontFitRule
+            => new DiagnosticDescriptor(DiagnosticIdValuesDontFit, Title, MessageValuesDontFit, Category, Severity, true);
+
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(DefaultRule);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -31,13 +39,13 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
         {
             var declarationExpression = (EnumDeclarationSyntax) context.Node;
             var flagsAttribute = declarationExpression.AttributeLists.FirstOrDefault(
-                    a => a.Attributes.FirstOrDefault(
-                        t =>
-                        {
-                            var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
-                            return symbol == null || symbol.ContainingType.MetadataName == typeof(FlagsAttribute).Name;
-                        }) != null);
-            
+                a => a.Attributes.FirstOrDefault(
+                    t =>
+                    {
+                        var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
+                        return symbol == null || symbol.ContainingType.MetadataName == typeof (FlagsAttribute).Name;
+                    }) != null);
+
 
             if (flagsAttribute == null)
             {
@@ -45,8 +53,12 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
             }
 
             var enumName = context.SemanticModel.GetDeclaredSymbol(declarationExpression).Name;
-            var enumMemberDeclarations = declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>().ToList();
-            Action reportDiagnostic = () => context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.Identifier.GetLocation(), enumName));
+            var enumMemberDeclarations =
+                declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>().ToList();
+            Action reportDiagnostic =
+                () =>
+                    context.ReportDiagnostic(Diagnostic.Create(DefaultRule, declarationExpression.Identifier.GetLocation(),
+                        enumName));
 
             foreach (var member in enumMemberDeclarations)
             {
@@ -56,7 +68,8 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
                 }
 
                 var descendantNodes = member.EqualsValue.Value.DescendantNodesAndSelf().ToList();
-                if (descendantNodes.OfType<LiteralExpressionSyntax>().Any() && descendantNodes.OfType<IdentifierNameSyntax>().Any())
+                if (descendantNodes.OfType<LiteralExpressionSyntax>().Any() &&
+                    descendantNodes.OfType<IdentifierNameSyntax>().Any())
                 {
                     return;
                 }
@@ -74,7 +87,8 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
                 if (member.EqualsValue.Value is BinaryExpressionSyntax)
                 {
                     var descendantNodes = member.EqualsValue.Value.DescendantNodesAndSelf().ToList();
-                    if (descendantNodes.Any() && descendantNodes.All(n => n is IdentifierNameSyntax || n is BinaryExpressionSyntax))
+                    if (descendantNodes.Any() &&
+                        descendantNodes.All(n => n is IdentifierNameSyntax || n is BinaryExpressionSyntax))
                     {
                         continue;
                     }
@@ -86,42 +100,47 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
                 switch (value.GetType().Name)
                 {
                     case nameof(Int16):
-                        if (!IsPowerOfTwo((short)value))
+                        if (!IsPowerOfTwo((short) value))
                         {
                             reportDiagnostic();
                             return;
                         }
                         break;
                     case nameof(UInt16):
-                        if (!IsPowerOfTwo((ushort)value))
+                        if (!IsPowerOfTwo((ushort) value))
                         {
                             reportDiagnostic();
                             return;
                         }
                         break;
                     case nameof(Int32):
-                        if (!IsPowerOfTwo((int)value))
+                        if (!IsPowerOfTwo((int) value))
                         {
                             reportDiagnostic();
                             return;
                         }
                         break;
                     case nameof(UInt32):
-                        if (!IsPowerOfTwo((uint)value))
+                        if (!IsPowerOfTwo((uint) value))
                         {
                             reportDiagnostic();
                             return;
                         }
                         break;
                     case nameof(Int64):
-                        if (!IsPowerOfTwo((long)value))
+                        if (!IsPowerOfTwo((long) value))
                         {
                             reportDiagnostic();
                             return;
                         }
                         break;
                     case nameof(UInt64):
-                        if (!IsPowerOfTwo((ulong)value))
+                        if (!IsPowerOfTwo((ulong) value))
+                        {
+                            reportDiagnostic();
+                            return;
+                        }
+                        break;
                     case nameof(Byte):
                         if (!IsPowerOfTwo((byte) value))
                         {
