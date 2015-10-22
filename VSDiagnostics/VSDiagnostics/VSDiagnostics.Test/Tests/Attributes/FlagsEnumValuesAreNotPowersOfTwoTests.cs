@@ -1265,7 +1265,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.ValuesDontFitRule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.ValuesDontFitRule.MessageFormat.ToString(), "Foo", "byte"));
         }
 
         [TestMethod]
@@ -1294,7 +1294,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.ValuesDontFitRule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.ValuesDontFitRule.MessageFormat.ToString(), "Foo", "sbyte"));
         }
     }
 }
