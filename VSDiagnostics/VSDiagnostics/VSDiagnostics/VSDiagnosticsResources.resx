@@ -478,4 +478,9 @@
   <data name="StructsShouldNotMutateSelfAnalyzerTitle" xml:space="preserve">
     <value>A struct should not mutate itself.</value>
   </data>
+  <data name="FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerMessage" xml:space="preserve">
+    <value>[Flags] enum {0} its values are not explicit powers of 2 and does not fit in a {1} enum type.</value>
+    <comment>{0} - Enum typename
+{1} - Enum basetypename</comment>
+  </data>
 </root>

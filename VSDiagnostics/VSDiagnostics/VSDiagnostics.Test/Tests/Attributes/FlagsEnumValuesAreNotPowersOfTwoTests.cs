@@ -48,7 +48,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
 
@@ -109,7 +109,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
 
@@ -170,7 +170,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
 
@@ -209,7 +209,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
 
@@ -248,7 +248,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
 
@@ -309,7 +309,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
 
@@ -370,7 +370,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
 
@@ -431,7 +431,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
 
@@ -492,7 +492,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
 
@@ -553,7 +553,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
 
@@ -633,7 +633,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
 
@@ -672,7 +672,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
 
@@ -711,7 +711,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
 
@@ -750,7 +750,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
 
@@ -789,7 +789,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
 
@@ -828,7 +828,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
 
@@ -867,7 +867,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
 
@@ -956,7 +956,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
         }
 
@@ -1009,7 +1009,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Days"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Days"));
             VerifyFix(original, result);
         }
 
@@ -1062,7 +1062,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Days"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Days"));
             VerifyFix(original, result);
         }
 
@@ -1121,7 +1121,7 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original,
-                string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "CalendarType"));
+                string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "CalendarType"));
             VerifyFix(original, result);
 
         }
@@ -1157,8 +1157,144 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.Rule.MessageFormat.ToString(), "Foo"));
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
             VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeByte()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo : byte
+    {
+        Bar = 0,
+        Biz = 1,
+        Baz = 2,
+        Buz = 3,
+        Boz = 4
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo : byte
+    {
+        Bar = 0,
+        Biz = 1,
+        Baz = 2,
+        Buz = 4,
+        Boz = 8
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void FlagsEnumValuesAreNotPowersOfTwo_ValuesAreNotPowersOfTwo_BaseTypeSByte()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo : sbyte
+    {
+        Bar = 0,
+        Biz = 1,
+        Baz = 2,
+        Buz = 3,
+        Boz = 4
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo : sbyte
+    {
+        Bar = 0,
+        Biz = 1,
+        Baz = 2,
+        Buz = 4,
+        Boz = 8
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.MessageFormat.ToString(), "Foo"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void FlagsEnumValuesAreNotPowersOfTwo_Byte_TooManyMembersForFlags()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo : byte
+    {
+        A = 0,
+        B = 1,
+        C = 2,
+        D = 3,
+        E = 4,
+        F = 5,
+        G = 6,
+        H = 7,
+        I = 8,
+        J = 9,
+        K = 10,
+        L = 11
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.ValuesDontFitRule.MessageFormat.ToString(), "Foo", "byte"));
+        }
+
+        [TestMethod]
+        public void FlagsEnumValuesAreNotPowersOfTwo_SByte_TooManyMembersForFlags()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    [Flags]
+    enum Foo : sbyte
+    {
+        A = 0,
+        B = 1,
+        C = 2,
+        D = 3,
+        E = 4,
+        F = 5,
+        G = 6,
+        H = 7,
+        I = 8,
+        J = 9,
+        K = 10,
+        L = 11
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(FlagsEnumValuesAreNotPowersOfTwoAnalyzer.ValuesDontFitRule.MessageFormat.ToString(), "Foo", "sbyte"));
         }
     }
 }
