@@ -8,7 +8,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
     [TestClass]
     public class CatchNullReferenceExceptionTests : CSharpDiagnosticVerifier
     {
-        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new CatchNullReferenceExceptionAnalyzer();
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new CatchingNullReferenceExceptionAnalyzer();
 
         [TestMethod]
         public void CatchNullReferenceException_WithNullReferenceCatchClause()
@@ -34,7 +34,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
     }";
 
-            VerifyDiagnostic(test, CatchNullReferenceExceptionAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(test, CatchingNullReferenceExceptionAnalyzer.Rule.MessageFormat.ToString());
         }
 
         [TestMethod]

@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 using CSharpSyntaxKind = Microsoft.CodeAnalysis.CSharp.SyntaxKind;
 using VisualBasicSyntaxKind = Microsoft.CodeAnalysis.VisualBasic.SyntaxKind;
 using CSharpAttributeSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.AttributeSyntax;
@@ -12,14 +13,14 @@ namespace VSDiagnostics.Diagnostics.Attributes.ObsoleteAttributeWithoutReason
     [DiagnosticAnalyzer(LanguageNames.CSharp, LanguageNames.VisualBasic)]
     public class ObsoleteAttributeWithoutReasonAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(ObsoleteAttributeWithoutReasonAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.AttributesCategory;
         private static readonly string Message = VSDiagnosticsResources.ObsoleteAttributeWithoutReasonAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.ObsoleteAttributeWithoutReasonAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.ObsoleteAttributeWithoutReason, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -65,7 +66,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.ObsoleteAttributeWithoutReason
 
             // attribute type must be of type ObsoleteAttribute
             var type = context.SemanticModel.GetSymbolInfo(attributeExpression).Symbol;
-            if (type == null || type.ContainingType.MetadataName != typeof(ObsoleteAttribute).Name)
+            if (type == null || type.ContainingType.MetadataName != typeof (ObsoleteAttribute).Name)
             {
                 return;
             }

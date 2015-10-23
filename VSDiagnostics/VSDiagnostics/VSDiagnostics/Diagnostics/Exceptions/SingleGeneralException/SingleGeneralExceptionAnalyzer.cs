@@ -4,20 +4,21 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Exceptions.SingleGeneralException
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class SingleGeneralExceptionAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(SingleGeneralExceptionAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.ExceptionsCategory;
         private static readonly string Message = VSDiagnosticsResources.SingleGeneralExceptionAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.SingleGeneralExceptionAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.SingleGeneralException, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 

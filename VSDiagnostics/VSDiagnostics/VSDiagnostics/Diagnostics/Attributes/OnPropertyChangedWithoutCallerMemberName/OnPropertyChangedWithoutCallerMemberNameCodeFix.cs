@@ -15,7 +15,8 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
     [ExportCodeFixProvider(nameof(OnPropertyChangedWithoutCallerMemberNameCodeFix), LanguageNames.CSharp), Shared]
     public class OnPropertyChangedWithoutCallerMemberNameCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(OnPropertyChangedWithoutCallerMemberNameAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds
+            => ImmutableArray.Create(OnPropertyChangedWithoutCallerMemberNameAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -26,14 +27,17 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.OnPropertyChangedWithoutCallerMemberNameCodeFixTitle, x => AddCallerMemberNameAttribute(context.Document, statement), nameof(OnPropertyChangedWithoutCallerMemberNameAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.OnPropertyChangedWithoutCallerMemberNameCodeFixTitle,
+                    x => AddCallerMemberNameAttribute(context.Document, statement),
+                    OnPropertyChangedWithoutCallerMemberNameAnalyzer.Rule.Id), diagnostic);
         }
 
         private async Task<Solution> AddCallerMemberNameAttribute(Document document, SyntaxNode statement)
         {
             var editor = await DocumentEditor.CreateAsync(document);
 
-            var methodDeclaration = (MethodDeclarationSyntax)statement;
+            var methodDeclaration = (MethodDeclarationSyntax) statement;
             var param = methodDeclaration.ParameterList.Parameters.First();
 
             var callerMemberNameAttribute = SyntaxFactory.Attribute(SyntaxFactory.ParseName("CallerMemberName"));
@@ -52,7 +56,8 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
                     .OfType<InvocationExpressionSyntax>().Where(i =>
                     {
                         var identifierExpression = i.Expression as IdentifierNameSyntax;
-                        return identifierExpression != null && identifierExpression.Identifier.ValueText == "OnPropertyChanged";
+                        return identifierExpression != null &&
+                               identifierExpression.Identifier.ValueText == "OnPropertyChanged";
                     });
 
             foreach (var methodInvocation in methodInvocations)
@@ -63,14 +68,17 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
 
             var newRoot = await editor.GetChangedDocument().GetSyntaxRootAsync().ConfigureAwait(false);
 
-            var compilationUnit = (CompilationUnitSyntax)newRoot;
+            var compilationUnit = (CompilationUnitSyntax) newRoot;
 
-            var usingSystemRuntimeCompilerServicesDirective = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System.Runtime.CompilerServices"));
+            var usingSystemRuntimeCompilerServicesDirective =
+                SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System.Runtime.CompilerServices"));
             var usingDirectives = compilationUnit.Usings.Select(u => u.Name.GetText().ToString());
 
             if (usingDirectives.All(u => u != usingSystemRuntimeCompilerServicesDirective.Name.GetText().ToString()))
             {
-                var usings = compilationUnit.Usings.Add(usingSystemRuntimeCompilerServicesDirective).OrderBy(u => u.Name.GetText().ToString());
+                var usings =
+                    compilationUnit.Usings.Add(usingSystemRuntimeCompilerServicesDirective)
+                        .OrderBy(u => u.Name.GetText().ToString());
 
                 newRoot = newRoot.ReplaceNode(compilationUnit, compilationUnit.WithUsings(SyntaxFactory.List(usings))
                     .WithAdditionalAnnotations(Formatter.Annotation));

@@ -5,20 +5,23 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AsyncMethodWithoutAsyncSuffixAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(AsyncMethodWithoutAsyncSuffixAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.AsyncCategory;
         private static readonly string Message = VSDiagnosticsResources.AsyncMethodWithoutAsyncSuffixAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.AsyncMethodWithoutAsyncSuffixAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, isEnabledByDefault: true);
+        internal static DiagnosticDescriptor Rule
+            =>
+                new DiagnosticDescriptor(DiagnosticId.AsyncMethodWithoutAsyncSuffix, Title, Message, Category, Severity,
+                    isEnabledByDefault: true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -58,12 +61,13 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
             }
 
             if (method.Modifiers.Any(SyntaxKind.AsyncKeyword) ||
-                returnType.Type.MetadataName == typeof(Task).Name ||
-                returnType.Type.MetadataName == typeof(Task<>).Name)
+                returnType.Type.MetadataName == typeof (Task).Name ||
+                returnType.Type.MetadataName == typeof (Task<>).Name)
             {
                 if (!method.Identifier.Text.EndsWith("Async"))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, method.Identifier.GetLocation(), method.Identifier.Text));
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, method.Identifier.GetLocation(),
+                        method.Identifier.Text));
                 }
             }
         }

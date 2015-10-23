@@ -5,20 +5,21 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class StringPlaceholdersInWrongOrderAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(StringPlaceholdersInWrongOrderAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.StringsCategory;
         private static readonly string Message = VSDiagnosticsResources.StringPlaceholdersInWrongOrderMessage;
         private static readonly string Title = VSDiagnosticsResources.StringPlaceholdersInWrongOrderTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.StringPlaceholdersInWrongOrder, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -45,7 +46,8 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
                 return;
             }
 
-            if (invokedType.Symbol.MetadataName != typeof(string).Name || invokedMethod.Symbol.MetadataName != nameof(string.Format))
+            if (invokedType.Symbol.MetadataName != typeof (string).Name ||
+                invokedMethod.Symbol.MetadataName != nameof(string.Format))
             {
                 return;
             }
@@ -62,7 +64,8 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
 
             var firstArgumentSymbol = context.SemanticModel.GetSymbolInfo(firstArgument.Expression);
             if (!(firstArgument.Expression is LiteralExpressionSyntax) &&
-                (firstArgumentSymbol.Symbol?.MetadataName == typeof(CultureInfo).Name && !(secondArgument?.Expression is LiteralExpressionSyntax)))
+                (firstArgumentSymbol.Symbol?.MetadataName == typeof (CultureInfo).Name &&
+                 !(secondArgument?.Expression is LiteralExpressionSyntax)))
             {
                 return;
             }
@@ -105,7 +108,8 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
                 //     string.Format("{0} {1} {4} {3}", a, b, c, d)
                 // it would otherwise crash because it's trying to access index 4, which we obviously don't have.
                 var argumentsToSkip = firstArgumentIsLiteral ? 1 : 2;
-                if (firstValue >= invocation.ArgumentList.Arguments.Count - argumentsToSkip || secondValue >= invocation.ArgumentList.Arguments.Count - argumentsToSkip)
+                if (firstValue >= invocation.ArgumentList.Arguments.Count - argumentsToSkip ||
+                    secondValue >= invocation.ArgumentList.Arguments.Count - argumentsToSkip)
                 {
                     return;
                 }

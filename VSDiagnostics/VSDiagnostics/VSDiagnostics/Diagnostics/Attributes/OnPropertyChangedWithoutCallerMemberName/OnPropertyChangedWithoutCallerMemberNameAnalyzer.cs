@@ -13,14 +13,18 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class OnPropertyChangedWithoutCallerMemberNameAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(OnPropertyChangedWithoutCallerMemberNameAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.AttributesCategory;
-        private static readonly string Message = VSDiagnosticsResources.OnPropertyChangedWithoutCallerMemberNameAnalyzerMessage;
-        private static readonly string Title = VSDiagnosticsResources.OnPropertyChangedWithoutCallerMemberNameAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private static readonly string Message =
+            VSDiagnosticsResources.OnPropertyChangedWithoutCallerMemberNameAnalyzerMessage;
+
+        private static readonly string Title =
+            VSDiagnosticsResources.OnPropertyChangedWithoutCallerMemberNameAnalyzerTitle;
+
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.OnPropertyChangedWithoutCallerMemberName, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -36,7 +40,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
 
 
             // class must implement INotifyPropertyChanged
-            if (!parentClass.ImplementsInterface(context.SemanticModel, typeof(INotifyPropertyChanged)))
+            if (!parentClass.ImplementsInterface(context.SemanticModel, typeof (INotifyPropertyChanged)))
             {
                 return;
             }

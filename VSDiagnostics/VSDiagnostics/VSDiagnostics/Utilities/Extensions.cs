@@ -9,7 +9,8 @@ namespace VSDiagnostics.Utilities
 {
     public static class Extensions
     {
-        public static bool ImplementsInterface(this ClassDeclarationSyntax classDeclaration, SemanticModel semanticModel, Type interfaceType)
+        public static bool ImplementsInterface(this ClassDeclarationSyntax classDeclaration, SemanticModel semanticModel,
+            Type interfaceType)
         {
             if (classDeclaration == null)
             {
@@ -20,7 +21,7 @@ namespace VSDiagnostics.Utilities
 
             return declaredSymbol != null &&
                    (declaredSymbol.Interfaces.Any(i => i.MetadataName == interfaceType.Name) ||
-                    declaredSymbol.BaseType.MetadataName == typeof(INotifyPropertyChanged).Name);
+                    declaredSymbol.BaseType.MetadataName == typeof (INotifyPropertyChanged).Name);
 
             // For some peculiar reason, "class Foo : INotifyPropertyChanged" doesn't have any interfaces,
             // But "class Foo : IFoo, INotifyPropertyChanged" has two.  "IFoo" is an interface defined by me.
@@ -37,7 +38,8 @@ namespace VSDiagnostics.Utilities
             }
 
             var baseType = typeSymbol;
-            while (baseType != null && baseType.MetadataName != typeof(object).Name && baseType.MetadataName != typeof(ValueType).Name)
+            while (baseType != null && baseType.MetadataName != typeof (object).Name &&
+                   baseType.MetadataName != typeof (ValueType).Name)
             {
                 if (baseType.MetadataName == type.Name)
                 {

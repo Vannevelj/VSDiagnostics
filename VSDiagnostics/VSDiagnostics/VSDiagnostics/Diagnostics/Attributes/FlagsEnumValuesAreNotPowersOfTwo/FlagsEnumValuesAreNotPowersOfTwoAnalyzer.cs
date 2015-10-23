@@ -5,14 +5,13 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class FlagsEnumValuesAreNotPowersOfTwoAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(FlagsEnumValuesAreNotPowersOfTwoAnalyzer);
-        private const string DiagnosticIdValuesDontFit = "AnotherIDWeHaveToInvent"; // TODO
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Error;
 
         private static readonly string Category = VSDiagnosticsResources.AttributesCategory;
@@ -24,11 +23,11 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
         private static readonly string Title = VSDiagnosticsResources.FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle;
 
         internal static DiagnosticDescriptor DefaultRule
-            => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+            => new DiagnosticDescriptor(DiagnosticId.FlagsEnumValuesAreNotPowersOfTwo, Title, Message, Category, Severity, true);
 
         internal static DiagnosticDescriptor ValuesDontFitRule
-            => new DiagnosticDescriptor(DiagnosticIdValuesDontFit, Title, MessageValuesDontFit, Category, Severity,
-                    true);
+            => new DiagnosticDescriptor(DiagnosticId.FlagsEnumValuesDontFit, Title, MessageValuesDontFit, Category, Severity,
+                true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
             => ImmutableArray.Create(DefaultRule, ValuesDontFitRule);

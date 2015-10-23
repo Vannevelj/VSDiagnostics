@@ -18,10 +18,12 @@ using VisualBasicSyntaxFactory = Microsoft.CodeAnalysis.VisualBasic.SyntaxFactor
 
 namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 {
-    [ExportCodeFixProvider(nameof(EnumCanHaveFlagsAttributeCodeFix), LanguageNames.CSharp, LanguageNames.VisualBasic), Shared]
+    [ExportCodeFixProvider(nameof(EnumCanHaveFlagsAttributeCodeFix), LanguageNames.CSharp, LanguageNames.VisualBasic),
+     Shared]
     public class EnumCanHaveFlagsAttributeCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(EnumCanHaveFlagsAttributeAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds
+            => ImmutableArray.Create(EnumCanHaveFlagsAttributeAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -32,7 +34,10 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.EnumCanHaveFlagsAttributeCodeFixTitle, x => AddFlagAttributeAsync(context.Document, root, statement), nameof(EnumCanHaveFlagsAttributeAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.EnumCanHaveFlagsAttributeCodeFixTitle,
+                    x => AddFlagAttributeAsync(context.Document, root, statement),
+                    EnumCanHaveFlagsAttributeAnalyzer.Rule.Id), diagnostic);
         }
 
         private Task<Solution> AddFlagAttributeAsync(Document document, SyntaxNode root, SyntaxNode statement)
@@ -41,11 +46,11 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 
             if (statement is EnumDeclarationSyntax)
             {
-                newRoot = AddFlagAttributeCSharp(document, root, (EnumDeclarationSyntax)statement);
+                newRoot = AddFlagAttributeCSharp(document, root, (EnumDeclarationSyntax) statement);
             }
             else if (statement is EnumStatementSyntax)
             {
-                newRoot = AddFlagAttributeVisualBasic(document, root, (EnumStatementSyntax)statement);
+                newRoot = AddFlagAttributeVisualBasic(document, root, (EnumStatementSyntax) statement);
             }
 
             var newDocument = document.WithSyntaxRoot(newRoot);
@@ -61,7 +66,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 
             var newRoot = root.ReplaceNode(statement, newStatement);
 
-            var compilationUnit = (CSharpCompilationUnitSyntax)newRoot;
+            var compilationUnit = (CSharpCompilationUnitSyntax) newRoot;
 
             var usingSystemDirective = CSharpSyntaxFactory.UsingDirective(CSharpSyntaxFactory.ParseName("System"));
             var usingDirectives = compilationUnit.Usings.Select(u => u.Name.GetText().ToString());
@@ -83,7 +88,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 
             var newRoot = root.ReplaceNode(statement, newStatement).WithAdditionalAnnotations(Formatter.Annotation);
 
-            var compilationUnit = (VisualBasicCompilationUnitSyntax)newRoot;
+            var compilationUnit = (VisualBasicCompilationUnitSyntax) newRoot;
 
             var importSystemClause =
                 VisualBasicSyntaxFactory.SimpleImportsClause(
@@ -91,10 +96,12 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
                     .WithTrailingTrivia(
                         VisualBasicSyntaxFactory.SyntaxTrivia(
                             Microsoft.CodeAnalysis.VisualBasic.SyntaxKind.EndOfLineTrivia, Environment.NewLine));
-            var importsList = VisualBasicSyntaxFactory.SeparatedList(new List<ImportsClauseSyntax> { importSystemClause });
+            var importsList = VisualBasicSyntaxFactory.SeparatedList(new List<ImportsClauseSyntax> {importSystemClause});
             var importStatement = VisualBasicSyntaxFactory.ImportsStatement(importsList);
 
-            var imports = compilationUnit.Imports.SelectMany(c => c.ImportsClauses.OfType<SimpleImportsClauseSyntax>().Select(i => i.Name.GetText().ToString()));
+            var imports =
+                compilationUnit.Imports.SelectMany(
+                    c => c.ImportsClauses.OfType<SimpleImportsClauseSyntax>().Select(i => i.Name.GetText().ToString()));
 
             if (imports.All(u => u != importSystemClause.Name.GetText().ToString()))
             {
