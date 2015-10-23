@@ -31,7 +31,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.FlagsEnumValuesAreNotPowersOfTwoCodeFixTitle,
                     x => AdjustEnumValues(context.Document, root, statement),
-                    nameof(FlagsEnumValuesAreNotPowersOfTwoAnalyzer)), diagnostic);
+                    FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.Id), diagnostic);
         }
 
         private async Task<Solution> AdjustEnumValues(Document document, SyntaxNode root, SyntaxNode statement)

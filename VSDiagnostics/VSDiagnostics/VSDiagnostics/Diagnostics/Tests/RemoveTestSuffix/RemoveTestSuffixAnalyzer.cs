@@ -4,20 +4,21 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class RemoveTestSuffixAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(RemoveTestSuffixAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.TestsCategory;
         private static readonly string Message = VSDiagnosticsResources.RemoveTestSuffixAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.RemoveTestSuffixAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.RemoveTestSuffix, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -49,7 +50,7 @@ namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
 
         private static bool IsTestMethod(MethodDeclarationSyntax method)
         {
-            var methodAttributes = new[] { "Test", "TestMethod", "Fact" };
+            var methodAttributes = new[] {"Test", "TestMethod", "Fact"};
             var attributes = method.AttributeLists.FirstOrDefault()?.Attributes;
 
             if (attributes == null)

@@ -16,7 +16,8 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
     [ExportCodeFixProvider(nameof(StringPlaceHoldersInWrongOrderCodeFix), LanguageNames.CSharp), Shared]
     public class StringPlaceHoldersInWrongOrderCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(StringPlaceholdersInWrongOrderAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds
+            => ImmutableArray.Create(StringPlaceholdersInWrongOrderAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -26,17 +27,27 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
-            var stringFormatInvocation = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<InvocationExpressionSyntax>().First();
+            var stringFormatInvocation =
+                root.FindToken(diagnosticSpan.Start)
+                    .Parent.AncestorsAndSelf()
+                    .OfType<InvocationExpressionSyntax>()
+                    .First();
             context.RegisterCodeFix(
-                CodeAction.Create(VSDiagnosticsResources.StringPlaceholdersInWrongOrderCodeFixTitle, x => ReOrderPlaceholdersAsync(context.Document, root, stringFormatInvocation),
-                    nameof(StringPlaceholdersInWrongOrderAnalyzer)),
+                CodeAction.Create(VSDiagnosticsResources.StringPlaceholdersInWrongOrderCodeFixTitle,
+                    x => ReOrderPlaceholdersAsync(context.Document, root, stringFormatInvocation),
+                    StringPlaceholdersInWrongOrderAnalyzer.Rule.Id),
                 diagnostic);
         }
 
-        private static Task<Solution> ReOrderPlaceholdersAsync(Document document, SyntaxNode root, InvocationExpressionSyntax stringFormatInvocation)
+        private static Task<Solution> ReOrderPlaceholdersAsync(Document document, SyntaxNode root,
+            InvocationExpressionSyntax stringFormatInvocation)
         {
-            var firstArgumentIsLiteral = stringFormatInvocation.ArgumentList.Arguments[0].Expression is LiteralExpressionSyntax;
-            var formatString = ((LiteralExpressionSyntax) stringFormatInvocation.ArgumentList.Arguments[firstArgumentIsLiteral ? 0 : 1].Expression).GetText().ToString();
+            var firstArgumentIsLiteral =
+                stringFormatInvocation.ArgumentList.Arguments[0].Expression is LiteralExpressionSyntax;
+            var formatString =
+                ((LiteralExpressionSyntax)
+                    stringFormatInvocation.ArgumentList.Arguments[firstArgumentIsLiteral ? 0 : 1].Expression).GetText()
+                    .ToString();
             var elements = StringPlaceholdersInWrongOrderHelper.GetPlaceholdersSplit(formatString);
             var matches = StringPlaceholdersInWrongOrderHelper.GetPlaceholders(formatString);
 
@@ -89,19 +100,23 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
             var newFormat = sb.ToString();
 
             // Create a new argument for the formatting string
-            var newArgument = stringFormatInvocation.ArgumentList.Arguments[firstArgumentIsLiteral ? 0 : 1].WithExpression(SyntaxFactory.ParseExpression(newFormat));
+            var newArgument =
+                stringFormatInvocation.ArgumentList.Arguments[firstArgumentIsLiteral ? 0 : 1].WithExpression(
+                    SyntaxFactory.ParseExpression(newFormat));
 
             // Create a new list for the arguments which are injected in the formatting string
             // In order to do this we iterate over the mapping which is in essence a guideline that tells us which index
             IEnumerable<ArgumentSyntax> args = firstArgumentIsLiteral
-                ? new[] { newArgument }
-                : new[] { stringFormatInvocation.ArgumentList.Arguments[0], newArgument };
+                ? new[] {newArgument}
+                : new[] {stringFormatInvocation.ArgumentList.Arguments[0], newArgument};
 
             // Skip the formatting literal and, if applicable, the formatprovider
             var argumentsToSkip = firstArgumentIsLiteral ? 1 : 2;
             for (var index = 0; index < placeholderIndexOrder.Count; index++)
             {
-                args = args.Concat(new[] { stringFormatInvocation.ArgumentList.Arguments[placeholderIndexOrder[index] + argumentsToSkip] });
+                args =
+                    args.Concat(new[]
+                    {stringFormatInvocation.ArgumentList.Arguments[placeholderIndexOrder[index] + argumentsToSkip]});
             }
 
             // If there are less arguments in the new list compared to the old one, it means there was an unused argument
@@ -114,7 +129,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
                 {
                     if (!args.Contains(arg))
                     {
-                        args = args.Concat(new[] { arg });
+                        args = args.Concat(new[] {arg});
                     }
                 }
             }

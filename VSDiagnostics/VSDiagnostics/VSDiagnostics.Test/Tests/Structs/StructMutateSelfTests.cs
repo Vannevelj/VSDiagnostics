@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Structs;
+using VSDiagnostics.Diagnostics.Structs.StructShouldNotMutateSelf;
 
 namespace VSDiagnostics.Test.Tests.Structs
 {
