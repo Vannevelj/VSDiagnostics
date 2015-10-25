@@ -530,6 +530,15 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [Flags] enum its values are not explicit powers of 2 and its values dont fit in the specified enum type..
+        /// </summary>
+        internal static string FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
         internal static string GeneralCategory {
