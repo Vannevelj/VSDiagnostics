@@ -19,26 +19,6 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
         private static readonly string Message = VSDiagnosticsResources.UseAliasesInsteadOfConcreteTypeAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.UseAliasesInsteadOfConcreteTypeAnalyzerTitle;
 
-        private static readonly Dictionary<string, string> MapConcreteTypeToPredefinedTypeAlias =
-            new Dictionary<string, string>
-            {
-                {nameof(Int16), "short"},
-                {nameof(Int32), "int"},
-                {nameof(Int64), "long"},
-                {nameof(UInt16), "ushort"},
-                {nameof(UInt32), "uint"},
-                {nameof(UInt64), "ulong"},
-                {nameof(Object), "object"},
-                {nameof(Byte), "byte"},
-                {nameof(SByte), "sbyte"},
-                {nameof(Char), "char"},
-                {nameof(Boolean), "bool"},
-                {nameof(Single), "float"},
-                {nameof(Double), "double"},
-                {nameof(Decimal), "decimal"},
-                {nameof(String), "string"}
-            };
-
         internal static DiagnosticDescriptor Rule
             => new DiagnosticDescriptor(DiagnosticId.UseAliasesInsteadOfConcreteType, Title, Message, Category, Severity, true);
 
@@ -64,69 +44,80 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
         {
             TypeSyntax typeExpression = null;
 
-            if (context.Node is ConversionOperatorDeclarationSyntax)
+            var conversionOperatorDeclarationSyntax = context.Node as ConversionOperatorDeclarationSyntax;
+            if (conversionOperatorDeclarationSyntax != null)
             {
-                var expression = (ConversionOperatorDeclarationSyntax) context.Node;
+                var expression = conversionOperatorDeclarationSyntax;
                 typeExpression = expression.Type;
             }
 
-            if (context.Node is DelegateDeclarationSyntax)
+            var delegateDeclarationSyntax = context.Node as DelegateDeclarationSyntax;
+            if (delegateDeclarationSyntax != null)
             {
-                var expression = (DelegateDeclarationSyntax) context.Node;
+                var expression = delegateDeclarationSyntax;
                 typeExpression = expression.ReturnType;
             }
 
-            if (context.Node is IndexerDeclarationSyntax)
+            var indexerDeclarationSyntax = context.Node as IndexerDeclarationSyntax;
+            if (indexerDeclarationSyntax != null)
             {
-                var expression = (IndexerDeclarationSyntax) context.Node;
+                var expression = indexerDeclarationSyntax;
                 typeExpression = expression.Type;
             }
 
-            if (context.Node is MethodDeclarationSyntax)
+            var methodDeclarationSyntax = context.Node as MethodDeclarationSyntax;
+            if (methodDeclarationSyntax != null)
             {
-                var expression = (MethodDeclarationSyntax) context.Node;
+                var expression = methodDeclarationSyntax;
                 typeExpression = expression.ReturnType;
             }
 
-            if (context.Node is OperatorDeclarationSyntax)
+            var operatorDeclarationSyntax = context.Node as OperatorDeclarationSyntax;
+            if (operatorDeclarationSyntax != null)
             {
-                var expression = (OperatorDeclarationSyntax) context.Node;
+                var expression = operatorDeclarationSyntax;
                 typeExpression = expression.ReturnType;
             }
 
-            if (context.Node is PropertyDeclarationSyntax)
+            var propertyDeclarationSyntax = context.Node as PropertyDeclarationSyntax;
+            if (propertyDeclarationSyntax != null)
             {
-                var expression = (PropertyDeclarationSyntax) context.Node;
+                var expression = propertyDeclarationSyntax;
                 typeExpression = expression.Type;
             }
 
-            if (context.Node is VariableDeclarationSyntax)
+            var declarationSyntax = context.Node as VariableDeclarationSyntax;
+            if (declarationSyntax != null)
             {
-                var expression = (VariableDeclarationSyntax) context.Node;
+                var expression = declarationSyntax;
                 typeExpression = expression.Type;
             }
 
-            if (context.Node is MemberAccessExpressionSyntax)
+            var expressionSyntax = context.Node as MemberAccessExpressionSyntax;
+            if (expressionSyntax != null)
             {
-                var expression = (MemberAccessExpressionSyntax) context.Node;
+                var expression = expressionSyntax;
                 typeExpression = expression.Expression as IdentifierNameSyntax;
             }
 
-            if (context.Node is ParameterSyntax)
+            var syntax = context.Node as ParameterSyntax;
+            if (syntax != null)
             {
-                var expression = (ParameterSyntax) context.Node;
+                var expression = syntax;
                 typeExpression = expression.Type;
             }
 
-            if (context.Node is TypeOfExpressionSyntax)
+            var node = context.Node as TypeOfExpressionSyntax;
+            if (node != null)
             {
-                var expression = (TypeOfExpressionSyntax) context.Node;
+                var expression = node;
                 typeExpression = expression.Type;
             }
 
-            if (context.Node is TypeArgumentListSyntax)
+            var listSyntax = context.Node as TypeArgumentListSyntax;
+            if (listSyntax != null)
             {
-                var expression = (TypeArgumentListSyntax) context.Node;
+                var expression = listSyntax;
                 foreach (var argument in expression.Arguments)
                 {
                     typeExpression = argument;
@@ -159,10 +150,9 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
                 return;
             }
 
-            if (MapConcreteTypeToPredefinedTypeAlias.ContainsKey(typeName))
+            if (typeName.IsAlias())
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, typeExpression.GetLocation(),
-                    MapConcreteTypeToPredefinedTypeAlias.First(kvp => kvp.Key == typeName).Value, typeName));
+                context.ReportDiagnostic(Diagnostic.Create(Rule, typeExpression.GetLocation(), typeName.ToAlias(), typeName));
             }
         }
     }

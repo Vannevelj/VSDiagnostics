@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -17,16 +18,29 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
         private static readonly string Category = VSDiagnosticsResources.AttributesCategory;
         private static readonly string Message = VSDiagnosticsResources.FlagsEnumValuesAreNotPowersOfTwoAnalyzerMessage;
 
-        private static readonly string MessageValuesDontFit =
+        private static readonly string ValuesDontFitMessage =
             VSDiagnosticsResources.FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerMessage;
 
         private static readonly string Title = VSDiagnosticsResources.FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle;
 
+        private static readonly string ValuesDontFitTitle =
+            VSDiagnosticsResources.FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerTitle;
+
         internal static DiagnosticDescriptor DefaultRule
-            => new DiagnosticDescriptor(DiagnosticId.FlagsEnumValuesAreNotPowersOfTwo, Title, Message, Category, Severity, true);
+            => new DiagnosticDescriptor(
+                DiagnosticId.FlagsEnumValuesAreNotPowersOfTwo,
+                Title,
+                Message,
+                Category,
+                Severity,
+                true);
 
         internal static DiagnosticDescriptor ValuesDontFitRule
-            => new DiagnosticDescriptor(DiagnosticId.FlagsEnumValuesDontFit, Title, MessageValuesDontFit, Category, Severity,
+            => new DiagnosticDescriptor(
+                DiagnosticId.FlagsEnumValuesDontFit,
+                ValuesDontFitTitle,
+                ValuesDontFitMessage,
+                Category, Severity,
                 true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
@@ -86,8 +100,16 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
             }
             else
             {
-                var x = context.SemanticModel.GetTypeInfo(enumType);
-                keyword = x.Type.Name;
+                var x = enumType as PredefinedTypeSyntax;
+                if (x != null)
+                {
+                    keyword = x.Keyword.ValueText;
+                }
+                else
+                {
+                    var enumTypeInfo = context.SemanticModel.GetTypeInfo(enumType);
+                    keyword = enumTypeInfo.Type.Name.ToAlias();
+                }
             }
 
             // We have to make sure that by moving to powers of two, we won't exceed the type's maximum value 
@@ -194,43 +216,37 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
         private bool IsPowerOfTwo(double value)
         {
             var logValue = Math.Log(value, 2);
-            return value == 0 || logValue - Math.Round(logValue) == 0;
+            return Math.Abs(value) < 0.0001 || Math.Abs(logValue - Math.Round(logValue)) < 0.0001;
         }
 
         /// <summary>
         /// Returns whether or not all values can be changed to powers of two without introducing out of range values.
         /// </summary>
         /// <param name="keyword">The type keyword that forms the base type of the enum</param>
-        /// <param name="amountOfMembers">// Indicates how many values an enum of this type can have</param>
+        /// <param name="amountOfMembers">Indicates how many values an enum of this type can have</param>
         /// <returns></returns>
         private bool IsOutsideOfRange(string keyword, int amountOfMembers)
         {
-            Func<int, bool> exceedsRange = (int amountAllowed) => amountOfMembers > amountAllowed;
-
-            switch (keyword)
+            // The value represents the amount of members an enum of the given type can contain
+            var rangeMapping = new Dictionary<string, int>
             {
-                case nameof(SByte):
+                {"sbyte", 8},
+                {"byte", 9},
+                {"short", 16},
+                {"ushort", 17},
+                {"int", 32},
+                {"uint", 33},
+                {"long", 64},
+                {"ulong", 65}
+            };
 
-                    if (exceedsRange(8))
-                    {
-                        return true;
-                    }
-                    break;
-
-
-                case nameof(Byte):
-                    if (exceedsRange(9))
-                    {
-                        return true;
-                    }
-                    break;
-
-                default:
-                    return false;
-                //throw new ArgumentException("Unsupported base enum type encountered");
+            int amountAllowed;
+            if (rangeMapping.TryGetValue(keyword, out amountAllowed))
+            {
+                return amountOfMembers > amountAllowed;
             }
 
-            return false;
+            throw new ArgumentException("Unsupported base enum type encountered");
         }
     }
 }

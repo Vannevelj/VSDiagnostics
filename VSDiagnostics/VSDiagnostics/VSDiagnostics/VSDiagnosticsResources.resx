@@ -483,4 +483,7 @@
     <comment>{0} - Enum typename
 {1} - Enum basetypename</comment>
   </data>
+  <data name="FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerTitle" xml:space="preserve">
+    <value>[Flags] enum its values are not explicit powers of 2 and its values dont fit in the specified enum type.</value>
+  </data>
 </root>
