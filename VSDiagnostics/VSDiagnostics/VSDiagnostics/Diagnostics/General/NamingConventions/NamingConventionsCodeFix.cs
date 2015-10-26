@@ -32,7 +32,7 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
                     x => RenameAsync(context.Document, identifier), NamingConventionsAnalyzer.Rule.Id), diagnostic);
         }
 
-        private async Task<Solution> RenameAsync(Document document, SyntaxToken identifier)
+        internal async Task<Solution> RenameAsync(Document document, SyntaxToken identifier)
         {
             var identifierParent = identifier.Parent;
             var newIdentifier = default(SyntaxToken);
