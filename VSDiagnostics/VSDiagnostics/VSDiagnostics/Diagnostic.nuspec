@@ -1,26 +1,24 @@
-﻿<?xml version="1.0"?>
-
-<package>
-  <metadata>
-    <id>VSDiagnostics</id>
-    <version>1.8.0</version>
-    <title>VSDiagnostics</title>
-    <authors>Jeroen Vannevel</authors>
-    <owners>Jeroen Vannevel</owners>
-    <licenseUrl>https://github.com/Vannevelj/VSDiagnostics/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/Vannevelj/VSDiagnostics</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>A collection of code-quality analyzers based on the new Roslyn platform. This project aims to ensure code-quality as you type it in your editor rather than having to do this as a separate build-step.</description>
-    <releaseNotes>For the latest releasenotes, see the Github release: https://github.com/Vannevelj/VSDiagnostics/releases/tag/v1.8.0 </releaseNotes>
-    <copyright>Jeroen Vannevel</copyright>
-    <tags>Visual Studio, Roslyn, Diagnostics, Analyzers</tags>
-    <frameworkAssemblies>
-      <frameworkAssembly assemblyName="System" targetFramework="" />
-    </frameworkAssemblies>
-  </metadata>
-  <files>
-    <file src="*.dll" target="tools\analyzers\"
-          exclude="**\Microsoft.CodeAnalysis.*;**\System.Collections.Immutable.*;**\System.Reflection.Metadata.*" />
-    <file src="tools\*.ps1" target="tools\" />
-  </files>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>VSDiagnostics</id>
+        <version>1.9.0</version>
+        <title>VSDiagnostics</title>
+        <authors>Jeroen Vannevel</authors>
+        <owners>Jeroen Vannevel</owners>
+        <licenseUrl>https://github.com/Vannevelj/VSDiagnostics/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/Vannevelj/VSDiagnostics</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>A collection of code-quality analyzers based on the new Roslyn platform. This project aims to ensure code-quality as you type it in your editor rather than having to do this as a separate build-step.</description>
+        <releaseNotes>For the latest releasenotes, see the Github release: https://github.com/Vannevelj/VSDiagnostics/releases/tag/v1.9.0</releaseNotes>
+        <copyright>Jeroen Vannevel</copyright>
+        <tags>Visual Studio, Roslyn, Diagnostics, Analyzers</tags>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="System" targetFramework="" />
+        </frameworkAssemblies>
+    </metadata>
+    <files>
+        <file src="tools\install.ps1" target="tools\install.ps1" />
+        <file src="tools\uninstall.ps1" target="tools\uninstall.ps1" />
+    </files>
 </package>
