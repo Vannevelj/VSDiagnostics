@@ -29,10 +29,10 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             var identifier = root.FindToken(diagnosticSpan.Start);
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.NamingConventionsCodeFixTitle,
-                    x => RenameAsync(context.Document, identifier), NamingConventionsAnalyzer.Rule.Id), diagnostic);
+                    x => RenameAsync(context.Document, identifier, root), NamingConventionsAnalyzer.Rule.Id), diagnostic);
         }
 
-        internal async Task<Solution> RenameAsync(Document document, SyntaxToken identifier)
+        internal async Task<Solution> RenameAsync(Document document, SyntaxToken identifier, SyntaxNode root)
         {
             var identifierParent = identifier.Parent;
             var newIdentifier = default(SyntaxToken);
@@ -84,9 +84,11 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
                 identifierParent = identifierParent.Parent;
             } while (identifierParent != null);
 
-            var semanticModel = await document.GetSemanticModelAsync();
+            //var newRoot = root.ReplaceToken(identifier, identifier.WithAdditionalAnnotations(RenameAnnotation.Create()));
+            //var newDocument = document.WithSyntaxRoot(newRoot);
+            var semanticModel = await newDocument.GetSemanticModelAsync();
             var symbol = semanticModel.GetDeclaredSymbol(identifier.Parent);
-            var solution = document.Project.Solution;
+            var solution = newDocument.Project.Solution;
             var options = solution.Workspace.Options;
 
             return await Renamer.RenameSymbolAsync(solution, symbol, newIdentifier.Text, options);

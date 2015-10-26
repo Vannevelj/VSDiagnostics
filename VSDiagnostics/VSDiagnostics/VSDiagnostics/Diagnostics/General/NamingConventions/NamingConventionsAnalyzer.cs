@@ -199,11 +199,11 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             SyntaxKind memberKind)
         {
             var codefix = new NamingConventionsCodeFix();
-            codefix.RenameAsync(context.SemanticModel.SyntaxTree.)
+            //codefix.RenameAsync(context.SemanticModel.SyntaxTree.)
 
 
-            throw new NotImplementedException();
-            
+            //throw new NotImplementedException();
+            return false;
         }
     }
 }
