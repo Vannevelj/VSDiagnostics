@@ -647,24 +647,6 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The {0} {1} does not follow naming conventions and a conflicting {0} exists. Should be {2}..
-        /// </summary>
-        internal static string NamingConventionsConflictingMemberAnalyzerMessage {
-            get {
-                return ResourceManager.GetString("NamingConventionsConflictingMemberAnalyzerMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A member does not follow naming conventions and a conflicting member exists..
-        /// </summary>
-        internal static string NamingConventionsConflictingMemberAnalyzerTitle {
-            get {
-                return ResourceManager.GetString("NamingConventionsConflictingMemberAnalyzerTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Field {0} should be turned into a property..
         /// </summary>
         internal static string NonEncapsulatedOrMutableFieldAnalyzerMessage {

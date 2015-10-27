@@ -20,26 +20,11 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
         private static readonly string Message = VSDiagnosticsResources.NamingConventionsAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.NamingConventionsAnalyzerTitle;
 
-        private static readonly string ConflictingMemberMessage =
-            VSDiagnosticsResources.NamingConventionsConflictingMemberAnalyzerMessage;
-
-        private static readonly string ConflictingMemberTitle =
-            VSDiagnosticsResources.NamingConventionsConflictingMemberAnalyzerTitle;
-
         internal static DiagnosticDescriptor Rule
             => new DiagnosticDescriptor(DiagnosticId.NamingConventions, Title, Message, Category, Severity, true);
 
-        internal static DiagnosticDescriptor ConflictingMemberRule
-            => new DiagnosticDescriptor(
-                DiagnosticId.NamingConventionsConflictingMember,
-                ConflictingMemberTitle,
-                ConflictingMemberMessage,
-                Category,
-                Severity,
-                true);
-
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
-            => ImmutableArray.Create(Rule, ConflictingMemberRule);
+            => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)
         {

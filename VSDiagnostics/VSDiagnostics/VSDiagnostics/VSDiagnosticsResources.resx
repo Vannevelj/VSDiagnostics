@@ -486,13 +486,4 @@
   <data name="FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerTitle" xml:space="preserve">
     <value>[Flags] enum its values are not explicit powers of 2 and its values dont fit in the specified enum type.</value>
   </data>
-  <data name="NamingConventionsConflictingMemberAnalyzerMessage" xml:space="preserve">
-    <value>The {0} {1} does not follow naming conventions and a conflicting {0} exists. Should be {2}.</value>
-    <comment>{0} - Member type
-{1} - Member name
-{2} - Modified member name</comment>
-  </data>
-  <data name="NamingConventionsConflictingMemberAnalyzerTitle" xml:space="preserve">
-    <value>A member does not follow naming conventions and a conflicting member exists.</value>
-  </data>
 </root>
