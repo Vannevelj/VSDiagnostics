@@ -107,6 +107,7 @@
     <Compile Include="Utilities\DiagnosticId.cs" />
     <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Utilities\NamingConvention.cs" />
+    <Compile Include="Utilities\RenameHelper.cs" />
     <Compile Include="VSDiagnosticsResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

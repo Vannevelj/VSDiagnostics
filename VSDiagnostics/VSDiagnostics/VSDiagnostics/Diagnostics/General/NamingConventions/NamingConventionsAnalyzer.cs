@@ -177,33 +177,9 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             var conventionedIdentifier = currentIdentifier.WithConvention(convention);
             if (conventionedIdentifier.Text != currentIdentifier.Text)
             {
-                if (!WillConflict(conventionedIdentifier.Text, currentIdentifier.SpanStart, memberType, context,
-                    default(SyntaxKind)))
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, currentIdentifier.GetLocation(), memberType,
+                context.ReportDiagnostic(Diagnostic.Create(Rule, currentIdentifier.GetLocation(), memberType,
                     currentIdentifier.Text, conventionedIdentifier.Text));
-                }
             }
-        }
-
-        /// <summary>
-        /// Verifies there are no existing conflicting members yet
-        /// </summary>
-        /// <param name="identifierText"></param>
-        /// <param name="location"></param>
-        /// <param name="memberType"></param>
-        /// <param name="context"></param>
-        /// <param name="memberKind"></param>
-        /// <returns></returns>
-        private static bool WillConflict(string identifierText, int location, string memberType, SyntaxNodeAnalysisContext context,
-            SyntaxKind memberKind)
-        {
-            var codefix = new NamingConventionsCodeFix();
-            //codefix.RenameAsync(context.SemanticModel.SyntaxTree.)
-
-
-            //throw new NotImplementedException();
-            return false;
         }
     }
 }
