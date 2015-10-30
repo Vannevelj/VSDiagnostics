@@ -41,5 +41,6 @@
         public const string RemoveTestSuffix = "VSD0037";
         public const string TestMethodWithoutPublicModifier = "VSD0038";
         public const string FlagsEnumValuesDontFit = "VSD0039";
+        public const string NamingConventionsConflictingMember = "VSD0040";
     }
 }

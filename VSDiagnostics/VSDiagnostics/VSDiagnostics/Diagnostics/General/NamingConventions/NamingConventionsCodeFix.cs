@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
@@ -29,10 +30,10 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             var identifier = root.FindToken(diagnosticSpan.Start);
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.NamingConventionsCodeFixTitle,
-                    x => RenameAsync(context.Document, identifier), NamingConventionsAnalyzer.Rule.Id), diagnostic);
+                    x => RenameAsync(context.Document, identifier, root, context.CancellationToken), NamingConventionsAnalyzer.Rule.Id), diagnostic);
         }
 
-        private async Task<Solution> RenameAsync(Document document, SyntaxToken identifier)
+        internal async Task<Solution> RenameAsync(Document document, SyntaxToken identifier, SyntaxNode root, CancellationToken cancellationToken)
         {
             var identifierParent = identifier.Parent;
             var newIdentifier = default(SyntaxToken);
@@ -84,12 +85,17 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
                 identifierParent = identifierParent.Parent;
             } while (identifierParent != null);
 
-            var semanticModel = await document.GetSemanticModelAsync();
-            var symbol = semanticModel.GetDeclaredSymbol(identifier.Parent);
-            var solution = document.Project.Solution;
-            var options = solution.Workspace.Options;
+            //var newRoot = root.ReplaceToken(identifier, identifier.WithAdditionalAnnotations(RenameAnnotation.Create()));
+            //var newDocument = document.WithSyntaxRoot(newRoot);
+            //var semanticModel = await newDocument.GetSemanticModelAsync();
+            //var symbol = semanticModel.GetDeclaredSymbol(identifier.Parent);
+            //var solution = newDocument.Project.Solution;
+            //var options = solution.Workspace.Options;
 
-            return await Renamer.RenameSymbolAsync(solution, symbol, newIdentifier.Text, options);
+            //return await Renamer.RenameSymbolAsync(solution, symbol, newIdentifier.Text, options);
+
+            return
+                await RenameHelper.RenameSymbolAsync(document, root, identifier, newIdentifier.Text, cancellationToken);
         }
     }
 }

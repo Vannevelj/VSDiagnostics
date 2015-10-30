@@ -1,8 +1,12 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Rename;
 using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.NamingConventions
@@ -19,7 +23,8 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
         internal static DiagnosticDescriptor Rule
             => new DiagnosticDescriptor(DiagnosticId.NamingConventions, Title, Message, Category, Severity, true);
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
+            => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -151,7 +156,7 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             }
         }
 
-        private void CheckNaming(SyntaxToken currentIdentifier, string memberType, NamingConvention convention,
+        private static void CheckNaming(SyntaxToken currentIdentifier, string memberType, NamingConvention convention,
             SyntaxNodeAnalysisContext context)
         {
             var conventionedIdentifier = currentIdentifier.WithConvention(convention);
