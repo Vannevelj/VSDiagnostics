@@ -8,7 +8,6 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Rename;
 using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.NamingConventions
@@ -84,15 +83,6 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
 
                 identifierParent = identifierParent.Parent;
             } while (identifierParent != null);
-
-            //var newRoot = root.ReplaceToken(identifier, identifier.WithAdditionalAnnotations(RenameAnnotation.Create()));
-            //var newDocument = document.WithSyntaxRoot(newRoot);
-            //var semanticModel = await newDocument.GetSemanticModelAsync();
-            //var symbol = semanticModel.GetDeclaredSymbol(identifier.Parent);
-            //var solution = newDocument.Project.Solution;
-            //var options = solution.Workspace.Options;
-
-            //return await Renamer.RenameSymbolAsync(solution, symbol, newIdentifier.Text, options);
 
             return
                 await RenameHelper.RenameSymbolAsync(document, root, identifier, newIdentifier.Text, cancellationToken);
