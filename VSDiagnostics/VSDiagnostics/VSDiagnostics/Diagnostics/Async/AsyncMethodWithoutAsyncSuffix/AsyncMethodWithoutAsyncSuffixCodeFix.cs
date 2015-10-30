@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Rename;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
 {
@@ -30,22 +29,15 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
 
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.AsyncMethodWithoutAsyncSuffixCodeFixTitle,
-                    x => AddSuffixAsync(context.Document, methodDeclaration, context.CancellationToken),
+                    x => AddSuffixAsync(context.Document, methodDeclaration, root, context.CancellationToken),
                     AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id),
                 diagnostic);
         }
 
-        private async Task<Solution> AddSuffixAsync(Document document, MethodDeclarationSyntax methodDeclaration,
+        private async Task<Solution> AddSuffixAsync(Document document, MethodDeclarationSyntax methodDeclaration, SyntaxNode root,
             CancellationToken cancellationToken)
         {
-            var methodSymbol =
-                (await document.GetSemanticModelAsync(cancellationToken)).GetDeclaredSymbol(methodDeclaration);
-            return await Renamer.RenameSymbolAsync(
-                document.Project.Solution,
-                methodSymbol,
-                methodDeclaration.Identifier.Text + "Async",
-                document.Project.Solution.Workspace.Options,
-                cancellationToken);
+            return await RenameHelper.RenameSymbolAsync(document, root, methodDeclaration.Identifier, methodDeclaration.Identifier.Text + "Async", cancellationToken);
         }
     }
 }
