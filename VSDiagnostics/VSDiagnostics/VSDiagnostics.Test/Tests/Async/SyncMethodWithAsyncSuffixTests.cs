@@ -14,6 +14,27 @@ namespace VSDiagnostics.Test.Tests.Async
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new SyncMethodWithAsyncSuffixAnalyzer();
 
         [TestMethod]
+        public void SyncMethodWithAsyncSuffix_WithoutAsyncKeywordAndNoSuffix_DoesNotDisplayWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            void Method()
+            {
+            }
+        }
+    }";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
         public void SyncMethodWithAsyncSuffix_WithoutAsyncKeywordAndSuffix_InvokesWarning()
         {
             var original = @"
@@ -48,6 +69,26 @@ namespace VSDiagnostics.Test.Tests.Async
 
             VerifyDiagnostic(original, string.Format(SyncMethodWithAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MethodAsync"));
             VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void SyncMethodWithAsyncSuffix_WithAsyncKeywordAndSuffix_DoesNotDisplayWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            async Task MethodAsync()
+            {
+            }
+        }
+    }";
+            VerifyDiagnostic(original);
         }
     }
 }
