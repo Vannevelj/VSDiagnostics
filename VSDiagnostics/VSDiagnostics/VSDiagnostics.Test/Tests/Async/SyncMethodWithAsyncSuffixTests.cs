@@ -90,5 +90,85 @@ namespace VSDiagnostics.Test.Tests.Async
     }";
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void SyncMethodWithAsyncSuffix_DefinedInInterface_WithVoidReturnType_InvokesWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApplication1
+    {
+        interface IMyInterface
+        {
+            void MyMethodAsync();
+        }
+    }";
+
+            var result = @"
+    using System;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApplication1
+    {
+        interface IMyInterface
+        {
+            void MyMethod();
+        }
+    }";
+
+            VerifyDiagnostic(original, string.Format(SyncMethodWithAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethodAsync"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInInterface_WithImplementedMember_InvokesWarning()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApplication1
+    {
+        interface IMyInterface
+        {
+            void MyMethodAsync();
+        }
+
+        class MyClass : IMyInterface
+        {
+            public void MyMethodAsync()
+            {
+            }
+        }
+    }";
+
+            var result = @"
+    using System;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApplication1
+    {
+        interface IMyInterface
+        {
+            void MyMethod();
+        }
+
+        class MyClass : IMyInterface
+        {
+            public void MyMethod()
+            {
+            }
+        }
+    }";
+
+            VerifyDiagnostic(original, string.Format(SyncMethodWithAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethodAsync"));
+            VerifyFix(original, result);
+        }
     }
 }

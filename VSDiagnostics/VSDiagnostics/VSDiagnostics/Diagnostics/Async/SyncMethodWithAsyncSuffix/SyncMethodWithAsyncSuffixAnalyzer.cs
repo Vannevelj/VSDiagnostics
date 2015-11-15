@@ -29,6 +29,7 @@ namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithSyncSuffix
         {
             context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.MethodDeclaration);
         }
+
         private static void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
             var method = context.Node as MethodDeclarationSyntax;
@@ -43,6 +44,17 @@ namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithSyncSuffix
                 return;
             }
 
+            var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(method);
+            if (declaredSymbol == null)
+            {
+                return;
+            }
+
+            if (IsDefinedInAncestor(declaredSymbol))
+            {
+                return;
+            }
+
             if (!(method.Modifiers.Any(SyntaxKind.AsyncKeyword) ||
                 returnType.Type.MetadataName == typeof(Task).Name ||
                 returnType.Type.MetadataName == typeof(Task<>).Name))
@@ -53,6 +65,27 @@ namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithSyncSuffix
                         method.Identifier.Text));
                 }
             }
+        }
+
+        private static bool IsDefinedInAncestor(IMethodSymbol methodSymbol)
+        {
+            var type = methodSymbol?.ContainingType;
+            if (type == null)
+            {
+                return false;
+            }
+
+            var interfaces = type.AllInterfaces;
+            foreach (var @interface in interfaces)
+            {
+                var interfaceMethods = @interface.GetMembers().Select(type.FindImplementationForInterfaceMember);
+                if (interfaceMethods.Any(method => method.Equals(methodSymbol)))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
