@@ -38,6 +38,11 @@ namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithSyncSuffix
                 return;
             }
 
+            if (method.Modifiers.Any(SyntaxKind.OverrideKeyword))
+            {
+                return;
+            }
+
             var returnType = context.SemanticModel.GetTypeInfo(method.ReturnType);
             if (returnType.Type == null)
             {
@@ -83,6 +88,19 @@ namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithSyncSuffix
                 {
                     return true;
                 }
+            }
+
+            // Start with the first ancestor
+            type = type.BaseType;
+            while (type != null)
+            {
+                var methods = type.GetMembers().OfType<IMethodSymbol>().ToArray();
+                if (methods.Any(method => method.Equals(methodSymbol)))
+                {
+                    return true;
+                }
+
+                type = type.BaseType;
             }
 
             return false;
