@@ -989,6 +989,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove suffix.
+        /// </summary>
+        internal static string SyncMethodWithSyncSuffixAnalyzerCodeFixTitle {
+            get {
+                return ResourceManager.GetString("SyncMethodWithSyncSuffixAnalyzerCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method &quot;{0}&quot; should not end with &apos;Async&apos;..
+        /// </summary>
+        internal static string SyncMethodWithSyncSuffixAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("SyncMethodWithSyncSuffixAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your method is not async, and should not have the &apos;Async&apos; suffix..
+        /// </summary>
+        internal static string SyncMethodWithSyncSuffixAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("SyncMethodWithSyncSuffixAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Test method &quot;{0}&quot; is not public..
         /// </summary>
         internal static string TestMethodWithoutPublicModifierAnalyzerMessage {
