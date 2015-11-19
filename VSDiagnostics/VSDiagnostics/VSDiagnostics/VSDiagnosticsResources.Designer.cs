@@ -125,7 +125,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method &quot;{0}&quot; does not end with &apos;Async&apos;..
+        ///   Looks up a localized string similar to Asynchronous method &quot;{0}&quot; does not end with &apos;Async&apos;..
         /// </summary>
         internal static string AsyncMethodWithoutAsyncSuffixAnalyzerMessage {
             get {
@@ -998,7 +998,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method &quot;{0}&quot; should not end with &apos;Async&apos;..
+        ///   Looks up a localized string similar to Synchronous method &quot;{0}&quot; should not end with &apos;Async&apos;..
         /// </summary>
         internal static string SyncMethodWithSyncSuffixAnalyzerMessage {
             get {
