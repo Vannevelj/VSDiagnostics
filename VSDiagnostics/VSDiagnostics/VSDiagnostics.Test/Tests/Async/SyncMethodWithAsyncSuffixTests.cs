@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.Async
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new SyncMethodWithAsyncSuffixAnalyzer();
 
         [TestMethod]
-        public void SyncMethodWithAsyncSuffix_WithoutAsyncKeywordAndNoSuffix_DoesNotDisplayWarning()
+        public void SyncMethodWithAsyncSuffix_WithoutAsyncKeywordAndNoSuffix()
         {
             var original = @"
     using System;
@@ -35,7 +35,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void SyncMethodWithAsyncSuffix_WithoutAsyncKeywordAndSuffix_InvokesWarning()
+        public void SyncMethodWithAsyncSuffix_WithoutAsyncKeywordAndSuffix()
         {
             var original = @"
     using System;
@@ -72,7 +72,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void SyncMethodWithAsyncSuffix_WithAsyncKeywordAndSuffix_DoesNotDisplayWarning()
+        public void SyncMethodWithAsyncSuffix_WithAsyncKeywordAndSuffix()
         {
             var original = @"
     using System;
@@ -92,7 +92,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void SyncMethodWithAsyncSuffix_DefinedInInterface_WithVoidReturnType_InvokesWarning()
+        public void SyncMethodWithAsyncSuffix_DefinedInInterface_WithVoidReturnType()
         {
             var original = @"
     using System;
@@ -125,7 +125,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInInterface_WithImplementedMember_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInInterface_WithImplementedMember()
         {
             var original = @"
     using System;
@@ -172,7 +172,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void SyncMethodWithAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromAbstractMethod_WithVoidReturnType_InvokesWarning()
+        public void SyncMethodWithAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromAbstractMethod_WithVoidReturnType()
         {
             var original = @"
     using System;
@@ -218,7 +218,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void SyncMethodWithAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromVirtualMethod_WithVoidReturnType_InvokesWarning()
+        public void SyncMethodWithAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromVirtualMethod_WithVoidReturnType()
         {
             var original = @"
     using System;
@@ -269,7 +269,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void SyncMethodWithAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_WithLongerInheritanceStructure_WithClasses_InvokesWarning()
+        public void SyncMethodWithAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_WithLongerInheritanceStructure_WithClasses()
         {
             var original = @"
     using System;
@@ -334,7 +334,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void SyncMethodWithAsyncSuffix_DefinedInBaseClass_WithLongerInheritanceStructure_WithInterfaces_InvokesWarning()
+        public void SyncMethodWithAsyncSuffix_DefinedInBaseClass_WithLongerInheritanceStructure_WithInterfaces()
         {
             var original = @"
     using System;
@@ -391,7 +391,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void SyncMethodWithAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_WithLongerInheritanceStructure_WithInterfacesAndClasses_InvokesWarning()
+        public void SyncMethodWithAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_WithLongerInheritanceStructure_WithInterfacesAndClasses()
         {
             var original = @"
     using System;
@@ -461,7 +461,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void SyncMethodWithAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_WithMultipleInterfaces_InvokesWarning()
+        public void SyncMethodWithAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_WithMultipleInterfaces()
         {
             var original = @"
     using System;
@@ -521,7 +521,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void SyncMethodWithAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_WithLongerInheritanceStructure_WithMultipleAbstractClasses_InvokesWarning()
+        public void SyncMethodWithAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_WithLongerInheritanceStructure_WithMultipleAbstractClasses()
         {
             var original = @"
     using System;
