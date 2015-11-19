@@ -42,6 +42,6 @@
         public const string TestMethodWithoutPublicModifier = "VSD0038";
         public const string FlagsEnumValuesDontFit = "VSD0039";
         public const string NamingConventionsConflictingMember = "VSD0040";
-        public const string SyncMethodWithSyncSuffix = "VSD0041";
+        public const string SyncMethodWithAsyncSuffix = "VSD0041";
     }
 }

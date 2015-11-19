@@ -20,7 +20,7 @@ namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithSyncSuffix
 
         internal static DiagnosticDescriptor Rule
             =>
-                new DiagnosticDescriptor(DiagnosticId.SyncMethodWithSyncSuffix, Title, Message, Category, Severity,
+                new DiagnosticDescriptor(DiagnosticId.SyncMethodWithAsyncSuffix, Title, Message, Category, Severity,
                     isEnabledByDefault: true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
