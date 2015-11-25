@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -130,6 +131,13 @@ namespace VSDiagnostics.Utilities
             }
 
             return _aliasMapping.ContainsKey(type);
+        }
+
+        public static bool IsAsync(this IMethodSymbol methodSymbol)
+        {
+            return methodSymbol.IsAsync
+                || methodSymbol.ReturnType.MetadataName == typeof(Task).Name
+                || methodSymbol.ReturnType.MetadataName == typeof(Task<>).Name;
         }
     }
 }
