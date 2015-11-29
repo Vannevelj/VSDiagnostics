@@ -52,7 +52,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_WithAsyncKeywordAndSuffix_DoesNotDisplayWarning()
+        public void AsyncMethodWithoutAsyncSuffix_WithAsyncKeywordAndSuffix()
         {
             var original = @"
     using System;
@@ -72,7 +72,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_WithoutAsyncKeywordAndSuffix_DoesNotDisplayWarning()
+        public void AsyncMethodWithoutAsyncSuffix_WithoutAsyncKeywordAndSuffix()
         {
             var original = @"
     using System;
@@ -92,7 +92,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_WithTaskReturnType_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_WithTaskReturnType()
         {
             var original = @"
     using System;
@@ -131,7 +131,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_WithGenericTaskReturnType_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_WithGenericTaskReturnType()
         {
             var original = @"
     using System;
@@ -170,7 +170,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInInterface_WithTaskReturnType_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInInterface_WithTaskReturnType()
         {
             var original = @"
     using System;
@@ -203,7 +203,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInInterface_WithGenericTaskReturnType_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInInterface_WithGenericTaskReturnType()
         {
             var original = @"
     using System;
@@ -236,7 +236,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInInterface_WithImplementedMember_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInInterface_WithImplementedMember()
         {
             var original = @"
     using System;
@@ -285,7 +285,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInInterface_WithImplementedMember_AndAsyncModifier_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInInterface_WithImplementedMember_AndAsyncModifier()
         {
             var original = @"
     using System;
@@ -332,7 +332,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromAbstractMethod_WithAsyncModifier_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromAbstractMethod_WithAsyncModifier()
         {
             var original = @"
     using System;
@@ -380,7 +380,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromAbstractMethod_WithTaskReturnType_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromAbstractMethod_WithTaskReturnType()
         {
             var original = @"
     using System;
@@ -429,7 +429,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromAbstractMethod_WithGenricTaskReturnType_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromAbstractMethod_WithGenricTaskReturnType()
         {
             var original = @"
     using System;
@@ -478,7 +478,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromVirtualMethod_WithAsyncModifier_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromVirtualMethod_WithAsyncModifier()
         {
             var original = @"
     using System;
@@ -531,7 +531,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromVirtualMethod_WithTaskReturnType_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromVirtualMethod_WithTaskReturnType()
         {
             var original = @"
     using System;
@@ -586,7 +586,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromVirtualMethod_WithGenericTaskReturnType_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromVirtualMethod_WithGenericTaskReturnType()
         {
             var original = @"
     using System;
@@ -641,7 +641,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_WithLongerInheritanceStructure_WithClasses_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_WithLongerInheritanceStructure_WithClasses()
         {
             var original = @"
     using System;
@@ -712,7 +712,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithLongerInheritanceStructure_WithInterfaces_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithLongerInheritanceStructure_WithInterfaces()
         {
             var original = @"
     using System;
@@ -771,7 +771,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_WithLongerInheritanceStructure_WithInterfacesAndClasses_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_WithLongerInheritanceStructure_WithInterfacesAndClasses()
         {
             var original = @"
     using System;
@@ -843,7 +843,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_WithMultipleInterfaces_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_WithMultipleInterfaces()
         {
             var original = @"
     using System;
@@ -905,7 +905,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_WithVoidReturnType_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_WithVoidReturnType()
         {
             var original = @"
     using System;
@@ -944,7 +944,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_WithLongerInheritanceStructure_WithMultipleAbstractClasses_InvokesWarning()
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_WithLongerInheritanceStructure_WithMultipleAbstractClasses()
         {
             var original = @"
     using System;
