@@ -133,6 +133,11 @@ namespace VSDiagnostics.Utilities
             return _aliasMapping.ContainsKey(type);
         }
 
+        /// <summary>
+        /// Determines whether or not the specified <see cref="IMethodSymbol"/> is the symbol of an asynchronous method. This can
+        /// be a method declared as async (e.g. returning <see cref="Task"/> or <see cref="Task{TResult}"/>), or a method with an
+        /// async implementation (using the <code>async</code> keyword).
+        /// </summary>
         public static bool IsAsync(this IMethodSymbol methodSymbol)
         {
             return methodSymbol.IsAsync
