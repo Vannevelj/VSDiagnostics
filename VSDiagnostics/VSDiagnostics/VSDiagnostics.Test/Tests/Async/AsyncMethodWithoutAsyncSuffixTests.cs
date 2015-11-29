@@ -130,44 +130,6 @@ namespace VSDiagnostics.Test.Tests.Async
             VerifyFix(original, result);
         }
 
-        [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_WithGenericTaskReturnType()
-        {
-            var original = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            Task<int> Method()
-            {
-                return Task.FromResult(5);
-            }
-        }
-    }";
-
-            var result = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            Task<int> MethodAsync()
-            {
-                return Task.FromResult(5);
-            }
-        }
-    }";
-
-            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "Method"));
-            VerifyFix(original, result);
-        }
 
         [TestMethod]
         public void AsyncMethodWithoutAsyncSuffix_DefinedInInterface_WithTaskReturnType()
@@ -195,39 +157,6 @@ namespace VSDiagnostics.Test.Tests.Async
         interface IMyInterface
         {
             Task MyMethodAsync();
-        }
-    }";
-
-            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
-            VerifyFix(original, result);
-        }
-
-        [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInInterface_WithGenericTaskReturnType()
-        {
-            var original = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        interface IMyInterface
-        {
-            Task<int> MyMethod();
-        }
-    }";
-
-            var result = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        interface IMyInterface
-        {
-            Task<int> MyMethodAsync();
         }
     }";
 
@@ -429,55 +358,6 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromAbstractMethod_WithGenricTaskReturnType()
-        {
-            var original = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        abstract class BaseClass
-        {
-            public abstract Task<int> MyMethod();
-        }
-
-        class MyClass : BaseClass
-        {
-            public override Task<int> MyMethod()
-            {
-                return Task.FromResult(5);
-            }
-        }
-    }";
-
-            var result = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        abstract class BaseClass
-        {
-            public abstract Task<int> MyMethodAsync();
-        }
-
-        class MyClass : BaseClass
-        {
-            public override Task<int> MyMethodAsync()
-            {
-                return Task.FromResult(5);
-            }
-        }
-    }";
-
-            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
-            VerifyFix(original, result);
-        }
-
-        [TestMethod]
         public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromVirtualMethod_WithAsyncModifier()
         {
             var original = @"
@@ -577,61 +457,6 @@ namespace VSDiagnostics.Test.Tests.Async
             public override Task MyMethodAsync()
             {
                 return Task.FromResult(5);
-            }
-        }
-    }";
-
-            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
-            VerifyFix(original, result);
-        }
-
-        [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromVirtualMethod_WithGenericTaskReturnType()
-        {
-            var original = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        class BaseClass
-        {
-            public virtual Task<int> MyMethod()
-            {
-                return Task.FromResult(5);
-            }
-        }
-
-        class MyClass : BaseClass
-        {
-            public override Task<int> MyMethod()
-            {
-                return Task.FromResult(8);
-            }
-        }
-    }";
-
-            var result = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        class BaseClass
-        {
-            public virtual Task<int> MyMethodAsync()
-            {
-                return Task.FromResult(5);
-            }
-        }
-
-        class MyClass : BaseClass
-        {
-            public override Task<int> MyMethodAsync()
-            {
-                return Task.FromResult(8);
             }
         }
     }";
