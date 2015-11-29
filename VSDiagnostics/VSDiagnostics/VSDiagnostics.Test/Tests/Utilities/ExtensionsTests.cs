@@ -118,15 +118,7 @@ namespace VSDiagnostics.Test.Tests.Utilities
         }
     }";
 
-            var tree = CSharpSyntaxTree.ParseText(source);
-            var mscorlib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
-            var compilation = CSharpCompilation.Create("MyCompilation", new[] { tree }, new[] { mscorlib });
-            var semanticModel = compilation.GetSemanticModel(tree);
-
-            var root = tree.GetRoot();
-            var method = root.DescendantNodes().OfType<MethodDeclarationSyntax>().First();
-            var methodSymbol = semanticModel.GetDeclaredSymbol(method);
-            Assert.IsTrue(methodSymbol.IsAsync());
+            AssertMethodIsAsync(source, expectedAsync: true);
         }
 
         [TestMethod]
@@ -147,15 +139,7 @@ namespace VSDiagnostics.Test.Tests.Utilities
             }
     }";
 
-            var tree = CSharpSyntaxTree.ParseText(source);
-            var mscorlib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
-            var compilation = CSharpCompilation.Create("MyCompilation", new[] { tree }, new[] { mscorlib });
-            var semanticModel = compilation.GetSemanticModel(tree);
-
-            var root = tree.GetRoot();
-            var method = root.DescendantNodes().OfType<MethodDeclarationSyntax>().First();
-            var methodSymbol = semanticModel.GetDeclaredSymbol(method);
-            Assert.IsTrue(methodSymbol.IsAsync());
+            AssertMethodIsAsync(source, expectedAsync: true);
         }
 
         [TestMethod]
@@ -176,15 +160,7 @@ namespace VSDiagnostics.Test.Tests.Utilities
             }
     }";
 
-            var tree = CSharpSyntaxTree.ParseText(source);
-            var mscorlib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
-            var compilation = CSharpCompilation.Create("MyCompilation", new[] { tree }, new[] { mscorlib });
-            var semanticModel = compilation.GetSemanticModel(tree);
-
-            var root = tree.GetRoot();
-            var method = root.DescendantNodes().OfType<MethodDeclarationSyntax>().First();
-            var methodSymbol = semanticModel.GetDeclaredSymbol(method);
-            Assert.IsTrue(methodSymbol.IsAsync());
+            AssertMethodIsAsync(source, expectedAsync: true);
         }
 
         [TestMethod]
@@ -204,15 +180,7 @@ namespace VSDiagnostics.Test.Tests.Utilities
             }
     }";
 
-            var tree = CSharpSyntaxTree.ParseText(source);
-            var mscorlib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
-            var compilation = CSharpCompilation.Create("MyCompilation", new[] { tree }, new[] { mscorlib });
-            var semanticModel = compilation.GetSemanticModel(tree);
-
-            var root = tree.GetRoot();
-            var method = root.DescendantNodes().OfType<MethodDeclarationSyntax>().First();
-            var methodSymbol = semanticModel.GetDeclaredSymbol(method);
-            Assert.IsTrue(methodSymbol.IsAsync());
+            AssertMethodIsAsync(source, expectedAsync: true);
         }
 
         [TestMethod]
@@ -232,6 +200,11 @@ namespace VSDiagnostics.Test.Tests.Utilities
             }
     }";
 
+            AssertMethodIsAsync(source, expectedAsync: false);
+        }
+
+        private static void AssertMethodIsAsync(string source, bool expectedAsync)
+        {
             var tree = CSharpSyntaxTree.ParseText(source);
             var mscorlib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
             var compilation = CSharpCompilation.Create("MyCompilation", new[] { tree }, new[] { mscorlib });
@@ -240,7 +213,7 @@ namespace VSDiagnostics.Test.Tests.Utilities
             var root = tree.GetRoot();
             var method = root.DescendantNodes().OfType<MethodDeclarationSyntax>().First();
             var methodSymbol = semanticModel.GetDeclaredSymbol(method);
-            Assert.IsFalse(methodSymbol.IsAsync());
+            Assert.AreEqual(expectedAsync, methodSymbol.IsAsync());
         }
     }
 }
