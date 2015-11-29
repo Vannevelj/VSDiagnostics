@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoslynTester.DiagnosticResults;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix;
 
@@ -15,84 +14,7 @@ namespace VSDiagnostics.Test.Tests.Async
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new AsyncMethodWithoutAsyncSuffixAnalyzer();
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_WithAsyncKeywordAndNoSuffix()
-        {
-            var original = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            async Task Method()
-            {
-            }
-        }
-    }";
-
-            var result = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            async Task MethodAsync()
-            {
-            }
-        }
-    }";
-
-            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "Method"));
-            VerifyFix(original, result);
-        }
-
-        [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_WithAsyncKeywordAndSuffix()
-        {
-            var original = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            async Task MethodAsync()
-            {
-            }
-        }
-    }";
-            VerifyDiagnostic(original);
-        }
-
-        [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_WithoutAsyncKeywordAndSuffix()
-        {
-            var original = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            void Method()
-            {
-            }
-        }
-    }";
-            VerifyDiagnostic(original);
-        }
-
-        [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_WithTaskReturnType()
+        public void AsyncMethodWithoutAsyncSuffix_WithAsyncMethodAndNoSuffix()
         {
             var original = @"
     using System;
@@ -130,9 +52,49 @@ namespace VSDiagnostics.Test.Tests.Async
             VerifyFix(original, result);
         }
 
+        [TestMethod]
+        public void AsyncMethodWithoutAsyncSuffix_WithAsyncMethodAndSuffix()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            Task MethodAsync()
+            {
+                return Task.CompletedTask;
+            }
+        }
+    }";
+            VerifyDiagnostic(original);
+        }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInInterface_WithTaskReturnType()
+        public void AsyncMethodWithoutAsyncSuffix_WithSynchronousMethodAndNoSuffix()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            void Method()
+            {
+            }
+        }
+    }";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInInterface()
         {
             var original = @"
     using System;
@@ -214,102 +176,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInInterface_WithImplementedMember_AndAsyncModifier()
-        {
-            var original = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        interface IMyInterface
-        {
-            Task MyMethod();
-        }
-
-        class MyClass : IMyInterface
-        {
-            public async Task MyMethod()
-            {
-            }
-        }
-    }";
-
-            var result = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        interface IMyInterface
-        {
-            Task MyMethodAsync();
-        }
-
-        class MyClass : IMyInterface
-        {
-            public async Task MyMethodAsync()
-            {
-            }
-        }
-    }";
-
-            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
-            VerifyFix(original, result);
-        }
-
-        [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromAbstractMethod_WithAsyncModifier()
-        {
-            var original = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        abstract class BaseClass
-        {
-            public abstract Task MyMethod();
-        }
-
-        class MyClass : BaseClass
-        {
-            public override async Task MyMethod()
-            {
-            }
-        }
-    }";
-
-            var result = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        abstract class BaseClass
-        {
-            public abstract Task MyMethodAsync();
-        }
-
-        class MyClass : BaseClass
-        {
-            public override async Task MyMethodAsync()
-            {
-            }
-        }
-    }";
-
-
-            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
-            VerifyFix(original, result);
-        }
-
-        [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromAbstractMethod_WithTaskReturnType()
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromAbstractMethod()
         {
             var original = @"
     using System;
@@ -358,60 +225,7 @@ namespace VSDiagnostics.Test.Tests.Async
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromVirtualMethod_WithAsyncModifier()
-        {
-            var original = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        class BaseClass
-        {
-            public virtual Task MyMethod()
-            {
-                return Task.FromResult(5);
-            }
-        }
-
-        class MyClass : BaseClass
-        {
-            public override async Task MyMethod()
-            {
-            }
-        }
-    }";
-
-            var result = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        class BaseClass
-        {
-            public virtual Task MyMethodAsync()
-            {
-                return Task.FromResult(5);
-            }
-        }
-
-        class MyClass : BaseClass
-        {
-            public override async Task MyMethodAsync()
-            {
-            }
-        }
-    }";
-
-            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
-            VerifyFix(original, result);
-        }
-
-        [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromVirtualMethod_WithTaskReturnType()
+        public void AsyncMethodWithoutAsyncSuffix_DefinedInBaseClass_WithOverriddenMember_FromVirtualMethod()
         {
             var original = @"
     using System;
@@ -726,45 +540,6 @@ namespace VSDiagnostics.Test.Tests.Async
                 original,
                 string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"),
                 string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
-            VerifyFix(original, result);
-        }
-
-        [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_WithVoidReturnType()
-        {
-            var original = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            async void Method()
-            {
-
-            }
-        }
-    }";
-
-            var result = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            async void MethodAsync()
-            {
-
-            }
-        }
-    }";
-
-            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "Method"));
             VerifyFix(original, result);
         }
 
