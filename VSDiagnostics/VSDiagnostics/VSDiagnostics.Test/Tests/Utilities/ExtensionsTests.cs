@@ -206,14 +206,22 @@ namespace VSDiagnostics.Test.Tests.Utilities
         private static void AssertMethodIsAsync(string source, bool expectedAsync)
         {
             var tree = CSharpSyntaxTree.ParseText(source);
+            var method = GetMethodNodes(tree).First();
+            var methodSymbol = GetSemanticModel(tree).GetDeclaredSymbol(method);
+
+            Assert.AreEqual(expectedAsync, methodSymbol.IsAsync());
+        }
+
+        private static IEnumerable<MethodDeclarationSyntax> GetMethodNodes(SyntaxTree tree)
+        {
+            return tree.GetRoot().DescendantNodes().OfType<MethodDeclarationSyntax>();
+        }
+
+        private static SemanticModel GetSemanticModel(SyntaxTree tree)
+        {
             var mscorlib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
             var compilation = CSharpCompilation.Create("MyCompilation", new[] { tree }, new[] { mscorlib });
-            var semanticModel = compilation.GetSemanticModel(tree);
-
-            var root = tree.GetRoot();
-            var method = root.DescendantNodes().OfType<MethodDeclarationSyntax>().First();
-            var methodSymbol = semanticModel.GetDeclaredSymbol(method);
-            Assert.AreEqual(expectedAsync, methodSymbol.IsAsync());
+            return compilation.GetSemanticModel(tree);
         }
     }
 }
