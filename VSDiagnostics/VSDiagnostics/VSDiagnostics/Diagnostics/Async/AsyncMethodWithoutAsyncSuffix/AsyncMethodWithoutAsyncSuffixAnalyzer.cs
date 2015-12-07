@@ -54,7 +54,7 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
                 return;
             }
 
-            if (IsDefinedInAncestor(declaredSymbol))
+            if (declaredSymbol.IsDefinedInAncestor())
             {
                 return;
             }
@@ -64,40 +64,6 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
                 context.ReportDiagnostic(Diagnostic.Create(Rule, method.Identifier.GetLocation(),
                     method.Identifier.Text));
             }
-        }
-
-        private static bool IsDefinedInAncestor(IMethodSymbol methodSymbol)
-        {
-            var type = methodSymbol?.ContainingType;
-            if (type == null)
-            {
-                return false;
-            }
-
-            var interfaces = type.AllInterfaces;
-            foreach (var @interface in interfaces)
-            {
-                var interfaceMethods = @interface.GetMembers().Select(type.FindImplementationForInterfaceMember);
-                if (interfaceMethods.Any(method => method.Equals(methodSymbol)))
-                {
-                    return true;
-                }
-            }
-
-            // Start with the first ancestor
-            type = type.BaseType;
-            while (type != null)
-            {
-                var methods = type.GetMembers().OfType<IMethodSymbol>().ToArray();
-                if (methods.Any(method => method.Equals(methodSymbol)))
-                {
-                    return true;
-                }
-
-                type = type.BaseType;
-            }
-
-            return false;
         }
     }
 }
