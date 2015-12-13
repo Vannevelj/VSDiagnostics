@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Shared.Extensions;
 
 namespace VSDiagnostics.Utilities
 {
@@ -143,6 +144,38 @@ namespace VSDiagnostics.Utilities
             return methodSymbol.IsAsync
                 || methodSymbol.ReturnType.MetadataName == typeof(Task).Name
                 || methodSymbol.ReturnType.MetadataName == typeof(Task<>).Name;
+        }
+
+        public static bool IsDefinedInAncestor(this IMethodSymbol methodSymbol)
+        {
+            var containingType = methodSymbol?.ContainingType;
+            if (containingType == null)
+            {
+                return false;
+            }
+
+            var interfaces = containingType.AllInterfaces;
+            foreach (var @interface in interfaces)
+            {
+                var interfaceMethods = @interface.GetMembers().Select(containingType.FindImplementationForInterfaceMember);
+                if (interfaceMethods.Any(method => method.Equals(methodSymbol)))
+                {
+                    return true;
+                }
+            }
+
+            var baseType = containingType.BaseType;
+            while (baseType != null)
+            {
+                var baseMethods = baseType.GetMembers().OfType<IMethodSymbol>();
+                if (baseMethods.Any(method => method.Equals(methodSymbol.OverriddenMethod)))
+                {
+                    return true;
+                }
+                baseType = baseType.BaseType;
+            }
+
+            return false;
         }
     }
 }
