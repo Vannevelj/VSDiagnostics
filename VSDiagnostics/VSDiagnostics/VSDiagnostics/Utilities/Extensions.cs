@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Shared.Extensions;
 
 namespace VSDiagnostics.Utilities
 {
@@ -130,6 +132,50 @@ namespace VSDiagnostics.Utilities
             }
 
             return _aliasMapping.ContainsKey(type);
+        }
+
+        /// <summary>
+        /// Determines whether or not the specified <see cref="IMethodSymbol"/> is the symbol of an asynchronous method. This can
+        /// be a method declared as async (e.g. returning <see cref="Task"/> or <see cref="Task{TResult}"/>), or a method with an
+        /// async implementation (using the <code>async</code> keyword).
+        /// </summary>
+        public static bool IsAsync(this IMethodSymbol methodSymbol)
+        {
+            return methodSymbol.IsAsync
+                || methodSymbol.ReturnType.MetadataName == typeof(Task).Name
+                || methodSymbol.ReturnType.MetadataName == typeof(Task<>).Name;
+        }
+
+        public static bool IsDefinedInAncestor(this IMethodSymbol methodSymbol)
+        {
+            var containingType = methodSymbol?.ContainingType;
+            if (containingType == null)
+            {
+                return false;
+            }
+
+            var interfaces = containingType.AllInterfaces;
+            foreach (var @interface in interfaces)
+            {
+                var interfaceMethods = @interface.GetMembers().Select(containingType.FindImplementationForInterfaceMember);
+                if (interfaceMethods.Any(method => method.Equals(methodSymbol)))
+                {
+                    return true;
+                }
+            }
+
+            var baseType = containingType.BaseType;
+            while (baseType != null)
+            {
+                var baseMethods = baseType.GetMembers().OfType<IMethodSymbol>();
+                if (baseMethods.Any(method => method.Equals(methodSymbol.OverriddenMethod)))
+                {
+                    return true;
+                }
+                baseType = baseType.BaseType;
+            }
+
+            return false;
         }
     }
 }
