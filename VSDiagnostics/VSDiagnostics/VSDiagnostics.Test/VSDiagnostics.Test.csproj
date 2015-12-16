@@ -104,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tests\Async\AsyncMethodWithoutAsyncSuffixTests.cs" />
+    <Compile Include="Tests\Async\SyncMethodWithAsyncSuffixTests.cs" />
     <Compile Include="Tests\Attributes\AttributeWithEmptyArgumentListVisualBasicTests.cs" />
     <Compile Include="Tests\Attributes\AttributeWithEmptyArgumentListCSharpTests.cs" />
     <Compile Include="Tests\Attributes\EnumCanHaveFlagsAttributeVisualBasicTests.cs" />

@@ -34,6 +34,8 @@
   <ItemGroup>
     <Compile Include="Diagnostics\Async\AsyncMethodWithoutAsyncSuffix\AsyncMethodWithoutAsyncSuffixAnalyzer.cs" />
     <Compile Include="Diagnostics\Async\AsyncMethodWithoutAsyncSuffix\AsyncMethodWithoutAsyncSuffixCodeFix.cs" />
+    <Compile Include="Diagnostics\Async\SyncMethodWithAsyncSuffix\SyncMethodWithAsyncSuffixAnalyzer.cs" />
+    <Compile Include="Diagnostics\Async\SyncMethodWithAsyncSuffix\SyncMethodWithAsyncSuffixCodeFix.cs" />
     <Compile Include="Diagnostics\Attributes\AttributeWithEmptyArgumentList\AttributeWithEmptyArgumentListAnalyzer.cs" />
     <Compile Include="Diagnostics\Attributes\AttributeWithEmptyArgumentList\AttributeWithEmptyArgumentListCodeFix.cs" />
     <Compile Include="Diagnostics\Attributes\EnumCanHaveFlagsAttribute\EnumCanHaveFlagsAttributeAnalyzer.cs" />

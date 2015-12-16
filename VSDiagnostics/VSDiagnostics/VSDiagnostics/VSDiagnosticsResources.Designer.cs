@@ -125,7 +125,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method &quot;{0}&quot; does not end with &apos;Async&apos;..
+        ///   Looks up a localized string similar to Asynchronous method &quot;{0}&quot; does not end with &apos;Async&apos;..
         /// </summary>
         internal static string AsyncMethodWithoutAsyncSuffixAnalyzerMessage {
             get {
@@ -985,6 +985,33 @@ namespace VSDiagnostics {
         internal static string StructsShouldNotMutateSelfAnalyzerTitle {
             get {
                 return ResourceManager.GetString("StructsShouldNotMutateSelfAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove suffix.
+        /// </summary>
+        internal static string SyncMethodWithSyncSuffixAnalyzerCodeFixTitle {
+            get {
+                return ResourceManager.GetString("SyncMethodWithSyncSuffixAnalyzerCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronous method &quot;{0}&quot; should not end with &apos;Async&apos;..
+        /// </summary>
+        internal static string SyncMethodWithSyncSuffixAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("SyncMethodWithSyncSuffixAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your method is not async, and should not have the &apos;Async&apos; suffix..
+        /// </summary>
+        internal static string SyncMethodWithSyncSuffixAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("SyncMethodWithSyncSuffixAnalyzerTitle", resourceCulture);
             }
         }
         

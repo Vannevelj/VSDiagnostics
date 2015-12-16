@@ -131,7 +131,7 @@
     <value>Use cast instead of as.</value>
   </data>
   <data name="AsyncMethodWithoutAsyncSuffixAnalyzerMessage" xml:space="preserve">
-    <value>Method "{0}" does not end with 'Async'.</value>
+    <value>Asynchronous method "{0}" does not end with 'Async'.</value>
     <comment>{0} - Method name</comment>
   </data>
   <data name="AsyncMethodWithoutAsyncSuffixAnalyzerTitle" xml:space="preserve">
@@ -485,5 +485,15 @@
   </data>
   <data name="FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerTitle" xml:space="preserve">
     <value>[Flags] enum its values are not explicit powers of 2 and its values dont fit in the specified enum type.</value>
+  </data>
+  <data name="SyncMethodWithSyncSuffixAnalyzerMessage" xml:space="preserve">
+    <value>Synchronous method "{0}" should not end with 'Async'.</value>
+    <comment>{0} - Method name</comment>
+  </data>
+  <data name="SyncMethodWithSyncSuffixAnalyzerTitle" xml:space="preserve">
+    <value>Your method is not async, and should not have the 'Async' suffix.</value>
+  </data>
+  <data name="SyncMethodWithSyncSuffixAnalyzerCodeFixTitle" xml:space="preserve">
+    <value>Remove suffix</value>
   </data>
 </root>
