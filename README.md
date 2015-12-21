@@ -25,6 +25,7 @@ Currently these diagnostics are implemented:
 | Category | Name | Description
 |:-:|:-:|:-:
 | Async | VSD0001 | Asynchronous methods should end with -Async.
+| Async | VSD0041 | A non-async, non-Task method should not end with -Async.
 | Attributes | VSD0002 | Attributes with empty argument lists can have the argument list removed.
 | Attributes | VSD0003 | Gives an enum the [Flags] attribute.
 | Attributes | VSD0004 | [Flags] enum its values are not explicit powers of 2
