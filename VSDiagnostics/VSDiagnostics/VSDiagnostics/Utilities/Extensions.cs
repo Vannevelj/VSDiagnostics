@@ -10,9 +10,10 @@ using Microsoft.CodeAnalysis.Shared.Extensions;
 
 namespace VSDiagnostics.Utilities
 {
+    // TODO: after null checks, throw argumentnullexceptions instead of returning false
     public static class Extensions
     {
-        private static Dictionary<string, string> _aliasMapping = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> AliasMapping = new Dictionary<string, string>
             {
                 {nameof(Int16), "short"},
                 {nameof(Int32), "int"},
@@ -105,6 +106,7 @@ namespace VSDiagnostics.Utilities
 
         public static bool IsNullable(this ITypeSymbol typeSymbol)
         {
+            //TODO: this is really ugly.
             return typeSymbol.IsValueType && typeSymbol.MetadataName.StartsWith(typeof (Nullable).Name);
         }
 
@@ -116,7 +118,7 @@ namespace VSDiagnostics.Utilities
             }
 
             string foundValue;
-            if (_aliasMapping.TryGetValue(type, out foundValue))
+            if (AliasMapping.TryGetValue(type, out foundValue))
             {
                 return foundValue;
             }
@@ -131,7 +133,7 @@ namespace VSDiagnostics.Utilities
                 throw new ArgumentNullException(nameof(type));
             }
 
-            return _aliasMapping.ContainsKey(type);
+            return AliasMapping.ContainsKey(type);
         }
 
         /// <summary>
@@ -176,6 +178,27 @@ namespace VSDiagnostics.Utilities
             }
 
             return false;
+        }
+
+        // TODO: tests
+        // NOTE: string.Format() vs Format() (current/external type)
+        public static bool IsAnInvocationOf(this InvocationExpressionSyntax invocation, Type type, string method, SemanticModel semanticModel)
+        {
+            var memberAccessExpression = invocation?.Expression as MemberAccessExpressionSyntax;
+            if (memberAccessExpression == null)
+            {
+                return false;
+            }
+
+            var invokedType = semanticModel.GetSymbolInfo(memberAccessExpression.Expression);
+            var invokedMethod = semanticModel.GetSymbolInfo(memberAccessExpression.Name);
+            if (invokedType.Symbol == null || invokedMethod.Symbol == null)
+            {
+                return false;
+            }
+
+            return invokedType.Symbol.MetadataName == type.Name && 
+                   invokedMethod.Symbol.MetadataName == method;
         }
     }
 }

@@ -31,23 +31,13 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             var invocation = context.Node as InvocationExpressionSyntax;
+            if (invocation == null)
+            {
+                return;
+            }
 
             // Verify we're dealing with a string.Format() call
-            var memberAccessExpression = invocation?.Expression as MemberAccessExpressionSyntax;
-            if (memberAccessExpression == null)
-            {
-                return;
-            }
-
-            var invokedType = context.SemanticModel.GetSymbolInfo(memberAccessExpression.Expression);
-            var invokedMethod = context.SemanticModel.GetSymbolInfo(memberAccessExpression.Name);
-            if (invokedType.Symbol == null || invokedMethod.Symbol == null)
-            {
-                return;
-            }
-
-            if (invokedType.Symbol.MetadataName != typeof (string).Name ||
-                invokedMethod.Symbol.MetadataName != nameof(string.Format))
+            if (!invocation.IsAnInvocationOf(typeof (string), nameof(string.Format), context.SemanticModel))
             {
                 return;
             }

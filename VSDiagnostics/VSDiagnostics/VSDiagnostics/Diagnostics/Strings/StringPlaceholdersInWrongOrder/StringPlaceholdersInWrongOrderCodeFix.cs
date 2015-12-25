@@ -69,9 +69,9 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
             for (var index = 0; index < elements.Length; index++)
             {
                 // If it's a numerical value, it means we're dealing with a placeholder
-                // Use Normalize() to account for formatted placeholders
+                // Use GetPlaceholderIndex() to account for formatted placeholders
                 int placeholderValue;
-                if (int.TryParse(StringPlaceholdersInWrongOrderHelper.Normalize(elements[index]), out placeholderValue))
+                if (int.TryParse(StringPlaceholdersInWrongOrderHelper.GetPlaceholderIndex(elements[index]), out placeholderValue))
                 {
                     // If we already have a new value associated with this placeholder, retrieve it and add it to our result
                     if (placeholderMapping.ContainsKey(placeholderValue))

@@ -9,7 +9,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
         /// </summary>
         /// <param name="input">The placeholder entry to parse.</param>
         /// <returns>Returns the placeholder index.</returns>
-        internal static string Normalize(string input)
+        internal static string GetPlaceholderIndex(string input)
         {
             var temp = input.Trim('{', '}');
             var colonIndex = temp.IndexOf(':');

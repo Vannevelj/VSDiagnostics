@@ -97,6 +97,7 @@
     <Compile Include="Diagnostics\General\UseAliasesInsteadOfConcreteType\UseAliasesInsteadOfConcreteTypeAnalyzer.cs" />
     <Compile Include="Diagnostics\Strings\ReplaceEmptyStringWithStringDotEmpty\ReplaceEmptyStringWithStringDotEmptyAnalyzer.cs" />
     <Compile Include="Diagnostics\Strings\ReplaceEmptyStringWithStringDotEmpty\ReplaceEmptyStringWithStringDotEmptyCodeFix.cs" />
+    <Compile Include="Diagnostics\Strings\StringDotFormatWithDifferentAmountOfArguments\StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.cs" />
     <Compile Include="Diagnostics\Strings\StringPlaceholdersInWrongOrder\StringPlaceholdersInWrongOrderAnalyzer.cs" />
     <Compile Include="Diagnostics\Strings\StringPlaceholdersInWrongOrder\StringPlaceholdersInWrongOrderCodeFix.cs" />
     <Compile Include="Diagnostics\Strings\StringPlaceholdersInWrongOrder\StringPlaceholdersInWrongOrderHelper.cs" />
