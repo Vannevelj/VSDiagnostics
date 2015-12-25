@@ -257,11 +257,11 @@ namespace VSDiagnostics.Test.Tests.Strings
             void Method()
             {
                 string name = ""Jeroen"";
-                string s = string.Format($""haha {name}, you're so {0}!"", ""funny"");
+                string s = string.Format($""haha {name}, you're so {1} {0}!"", ""funny"", ""super"");
             }
         }
     }";
-            VerifyDiagnostic(original);
+            VerifyDiagnostic(original, StringPlaceholdersInWrongOrderAnalyzer.Rule.MessageFormat.ToString());
         }
 
         [TestMethod]
