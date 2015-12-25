@@ -91,6 +91,26 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithLackingArguments_AndSkippedPlaceholderIndex()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string s = string.Format(""abc {1}, def {2}"", 123, 456);
+        }
+    }
+}";
+            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
         public void StringDotFormatWithDifferentAmountOfArguments_WithEqualAmountOfPlaceholdersAndArgumentsButDontMatchUp()
         {
             var original = @"
