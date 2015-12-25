@@ -36,7 +36,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
         }
 
         /// <summary>
-        ///     Returns all elements from the input, split on the placeholders.
+        ///     Returns all elements from the input - split on the placeholders - and includes the placeholders themselves as well.
         ///     This method is useful if you want to make use of the rest of the string as well.
         /// </summary>
         internal static string[] GetPlaceholdersSplit(string input)
