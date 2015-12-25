@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOfArguments;
@@ -112,7 +107,7 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -128,11 +123,11 @@ namespace ConsoleApplication1
     {   
         void Method(string input)
         {
-            string s = string.Format(""abc {0}, def {{1}}"", 1, 2);
+            string s = string.Format(""abc {0}, def {{1}}"", 1);
         }
     }
 }";
-            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -148,7 +143,7 @@ namespace ConsoleApplication1
     {   
         void Method(string input)
         {
-            string s = string.Format(""abc {1:00}, def {1}"", 1, 2);
+            string s = string.Format(""abc {1:00}, def {1}"", 1);
         }
     }
 }";
@@ -168,7 +163,7 @@ namespace ConsoleApplication1
     {   
         void Method(string input)
         {
-            string s = string.Format(""abc {1}, def {0}"", 1, 2, 3);
+            string s = string.Format(""abc {1}, def {0}"", 1);
         }
     }
 }";
@@ -214,7 +209,29 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithInterpolatedString_AndCultureInfo()
+        {
+            var original = @"
+using System;
+using System.Globalization;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string name = ""Jeroen"";
+            string s = string.Format(CultureInfo.InvariantCulture, $""abc {name}, def {0} ghi {1}"", 1);
+        }
+    }
+}";
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -232,6 +249,27 @@ namespace ConsoleApplication1
         void Method(string input)
         {
             string s = string.Format(CultureInfo.InvariantCulture, ""def {0} ghi {1}"", 1);
+        }
+    }
+}";
+            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithFormatProvider__AndFormat_AndNoArguments()
+        {
+            var original = @"
+using System;
+using System.Globalization;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string s = string.Format(CultureInfo.InvariantCulture, ""abc {0}"");
         }
     }
 }";
@@ -300,7 +338,7 @@ namespace ConsoleApplication1
         }
     }
 }";
-            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -321,6 +359,26 @@ namespace ConsoleApplication1
     }
 }";
             VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithoutPlaceholders()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string s = string.Format(""abc, def"");
+        }
+    }
+}";
+            VerifyDiagnostic(original);
         }
     }
 }

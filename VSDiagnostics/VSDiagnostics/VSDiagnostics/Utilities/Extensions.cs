@@ -200,5 +200,11 @@ namespace VSDiagnostics.Utilities
             return invokedType.Symbol.MetadataName == type.Name && 
                    invokedMethod.Symbol.MetadataName == method;
         }
+
+        // TODO: tests
+        public static T ElementAtOrDefault<T>(this IEnumerable<T> list, int index, T @default)
+        {
+            return index >= 0 && index < list.Count() ? list.ElementAt(index) : @default;
+        }
     }
 }

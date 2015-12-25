@@ -76,7 +76,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
             // Not all placeholders have to be used necessarily, we only re-order the ones that are actually used in the format string.
             //
             // Display a warning when the integers in question are not in ascending or equal order. 
-            var placeholders = StringPlaceholdersInWrongOrderHelper.GetPlaceholders(formatString);
+            var placeholders = PlaceholderHelpers.GetPlaceholders(formatString);
 
             // If there's no placeholder used or there's only one, there's nothing to re-order
             if (placeholders.Count <= 1)

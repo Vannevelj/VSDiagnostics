@@ -1,8 +1,9 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
+namespace VSDiagnostics.Diagnostics.Strings
 {
-    internal static class StringPlaceholdersInWrongOrderHelper
+    //TODO: tests
+    internal static class PlaceholderHelpers
     {
         /// <summary>
         ///     Removes all curly braces and formatting definitions from the placeholder
