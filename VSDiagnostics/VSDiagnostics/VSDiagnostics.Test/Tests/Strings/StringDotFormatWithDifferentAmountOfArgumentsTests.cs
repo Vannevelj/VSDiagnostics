@@ -276,7 +276,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void StringDotFormatWithDifferentAmountOfArguments_WithFormatProvider__AndFormat_AndNoArguments()
+        public void StringDotFormatWithDifferentAmountOfArguments_WithFormatProvider_AndFormat_AndNoArguments()
         {
             var original = @"
 using System;
@@ -395,6 +395,197 @@ namespace ConsoleApplication1
         void Method(string input)
         {
             string s = string.Format(""abc, def"");
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithExplicitArray()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string s = string.Format(""abc {0}"", new object[] {""hello""});
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithExplicitArrayAndLackingArguments()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string s = string.Format(""abc {0} {1}"", new object[] {""hello""});
+        }
+    }
+}";
+            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithExplicitArrayMultipleArguments()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string s = string.Format(""abc {0} {1}"", new object[] {""hello"", ""bye""});
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithExplicitArrayReferenced()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            object[] arr = new object[] {""hello"", ""bye""};
+            string s = string.Format(""abc {0} {1}"", arr);
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithExplicitArrayReferencedThroughMethodCall()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string s = string.Format(""abc {0} {1}"", getArguments());
+        }
+
+        object[] getArguments()
+        {
+            return new object[] {""hello"", ""bye""};
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithExplicitArrayAndAdditionalArguments()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string s = string.Format(""abc {0} {1} {2}"", new object[] {""hello"", ""bye"", ""uhoh""}, ""test"");
+        }
+    }
+}";
+            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithFormatProvider_AndExplicitArray()
+        {
+            var original = @"
+using System;
+using System.Globalization;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string s = string.Format(CultureInfo.InvariantCulture, ""abc {0}"", new object[] {""hello""});
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithFormatProvider_AndExplicitArrayWithLackingArguments()
+        {
+            var original = @"
+using System;
+using System.Globalization;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string s = string.Format(CultureInfo.InvariantCulture, ""abc {0}{1}"", new object[] {""hello""});
+        }
+    }
+}";
+            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithFormatProvider_AndExplicitArrayReferencedThroughVariable()
+        {
+            var original = @"
+using System;
+using System.Globalization;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            var args = new object[] {""hello""};
+            string s = string.Format(CultureInfo.InvariantCulture, ""abc {0}{1}"", args);
         }
     }
 }";

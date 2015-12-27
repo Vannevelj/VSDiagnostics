@@ -18,7 +18,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
         private static readonly string Title = VSDiagnosticsResources.StringDotFormatWithDifferentAmountOfArgumentsTitle;
 
         internal static DiagnosticDescriptor Rule =>
-                new DiagnosticDescriptor(DiagnosticId.StringDotFormatWithDifferentAmountOfArguments, Title, Message, Category, Severity, true);
+            new DiagnosticDescriptor(DiagnosticId.StringDotFormatWithDifferentAmountOfArguments, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -78,14 +78,50 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
             // Get the total amount of arguments passed in for the format
             // If the first one is the literal (aka: the format specified) then every other argument is an argument to the format
             // If not, it means the first one is the CultureInfo, the second is the format and all others are format arguments
-            int amountOfArguments;
-            if (firstArgumentIsLiteral)
+            // We also have to check whether or not the arguments are passed in through an explicit array or whether they use the params syntax
+            var formatArguments = firstArgumentIsLiteral
+                ? allArguments.Skip(1).ToArray()
+                : allArguments.Skip(2).ToArray();
+            var amountOfFormatArguments = formatArguments.Length;
+
+            if (formatArguments.Length == 1)
             {
-                amountOfArguments = allArguments.Count - 1;
-            }
-            else
-            {
-                amountOfArguments = allArguments.Count - 2;
+                // Inline array creation à la string.Format("{0}", new object[] { "test" })
+                var arrayCreation = formatArguments[0].Expression as ArrayCreationExpressionSyntax;
+                if (arrayCreation?.Initializer?.Expressions != null)
+                {
+                    amountOfFormatArguments = arrayCreation.Initializer.Expressions.Count;
+                }
+
+                // We don't handle method calls
+                var invocationExpression = formatArguments[0].Expression as InvocationExpressionSyntax;
+                if (invocationExpression != null)
+                {
+                    return;
+                }
+
+                // If it's an identifier, we don't handle those that provide an array as a single argument
+                // Other types are fine though -- think about string.Format("{0}", name);
+                var referencedIdentifier = formatArguments[0].Expression as IdentifierNameSyntax;
+                if (referencedIdentifier != null)
+                {
+                    // This is also hit by any other kind of identifier so we have to differentiate
+                    var referencedType = context.SemanticModel.GetTypeInfo(referencedIdentifier);
+                    if (referencedType.Type == null || referencedType.Type is IErrorTypeSymbol)
+                    {
+                        return;
+                    }
+
+                    if (referencedType.Type.TypeKind.HasFlag(SyntaxKind.ArrayType))
+                    {
+                        // If we got here it means the arguments are passed in through an identifier which resolves to an array 
+                        // aka: calling a method that returns an array or referencing a variable/field that is of type array
+                        // We cannot reliably get the amount of arguments if it's a method
+                        // We could get them when it's a field/variable/property but that takes some more work and thinking about it
+                        // This is tracked in workitem https://github.com/Vannevelj/VSDiagnostics/issues/330
+                        return;
+                    }
+                }
             }
 
             // Get the placeholders we use, stripped off their format specifier, get the highest value 
@@ -103,10 +139,11 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
             }
 
             var highestPlaceholder = placeholders.Max();
-            if (highestPlaceholder + 1 > amountOfArguments)
+            if (highestPlaceholder + 1 > amountOfFormatArguments)
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, firstArgumentIsLiteral ? firstArgument.GetLocation() : 
-                                                                                          secondArgument.GetLocation()));
+                context.ReportDiagnostic(Diagnostic.Create(Rule, firstArgumentIsLiteral
+                    ? firstArgument.GetLocation()
+                    : secondArgument.GetLocation()));
             }
         }
     }
