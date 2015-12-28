@@ -13,7 +13,8 @@ namespace VSDiagnostics.Diagnostics.General.LoopStatementWithoutBraces
     [ExportCodeFixProvider("LoopWithoutBraces", LanguageNames.CSharp), Shared]
     public class LoopStatementWithoutBracesCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(LoopStatementWithoutBracesAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds
+            => ImmutableArray.Create(LoopStatementWithoutBracesAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -24,7 +25,10 @@ namespace VSDiagnostics.Diagnostics.General.LoopStatementWithoutBraces
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.LoopStatementWithoutBracesCodeFixTitle, x => UseBracesNotationAsync(context.Document, root, statement), nameof(LoopStatementWithoutBracesAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.LoopStatementWithoutBracesCodeFixTitle,
+                    x => UseBracesNotationAsync(context.Document, root, statement),
+                    LoopStatementWithoutBracesAnalyzer.Rule.Id), diagnostic);
         }
 
         private Task<Solution> UseBracesNotationAsync(Document document, SyntaxNode root, SyntaxNode statement)

@@ -12,7 +12,8 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
     [ExportCodeFixProvider(nameof(ExplicitAccessModifiersCodeFix), LanguageNames.CSharp), Shared]
     public class ExplicitAccessModifiersCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(ExplicitAccessModifiersAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds
+            => ImmutableArray.Create(ExplicitAccessModifiersAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -28,10 +29,14 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             var symbol = semanticModel.GetDeclaredSymbol(statement);
             var accessibility = symbol?.DeclaredAccessibility ?? Accessibility.Private;
 
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.ExplicitAccessModifiersCodeFixTitle, x => AddModifier(context.Document, root, statement, accessibility), nameof(ExplicitAccessModifiersAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.ExplicitAccessModifiersCodeFixTitle,
+                    x => AddModifier(context.Document, root, statement, accessibility),
+                    ExplicitAccessModifiersAnalyzer.Rule.Id), diagnostic);
         }
 
-        private Task<Solution> AddModifier(Document document, SyntaxNode root, SyntaxNode statement, Accessibility accessibility)
+        private Task<Solution> AddModifier(Document document, SyntaxNode root, SyntaxNode statement,
+            Accessibility accessibility)
         {
             var generator = SyntaxGenerator.GetGenerator(document);
             var newStatement = generator.WithAccessibility(statement, accessibility);

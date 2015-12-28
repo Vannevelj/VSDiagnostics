@@ -2,8 +2,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Structs;
+using VSDiagnostics.Diagnostics.Structs.StructShouldNotMutateSelf;
 
-namespace VSDiagnostics.Test.Tests.Tests
+namespace VSDiagnostics.Test.Tests.Structs
 {
     [TestClass]
     public class StructMutateSelfTest : CSharpDiagnosticVerifier
@@ -57,28 +58,6 @@ struct Rectangle
         }
 
         // bug: Class cannot assign this - remove this test?
-        [TestMethod]
-        public void StructShouldNotMutateSelf_ClassThatMutatesSelf()
-        {
-            var original = @"
-class X
-{
-	private int x;
-
-	public X(int value)
-	{
-		x = value;
-	}
-
-	public void Mutate()
-	{
-		this = new X(5);
-	}
-}";
-
-            VerifyDiagnostic(original);
-        }
-
         [TestMethod]
         public void StructShouldNotMutateSelf_AssigningToAVariableVar()
         {

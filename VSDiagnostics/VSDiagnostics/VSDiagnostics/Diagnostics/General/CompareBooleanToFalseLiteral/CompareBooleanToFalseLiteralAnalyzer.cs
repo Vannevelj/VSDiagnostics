@@ -10,14 +10,14 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToFalseLiteral
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class CompareBooleanToFalseLiteralAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(CompareBooleanToFalseLiteralAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.CompareBooleanToFalseLiteralAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.CompareBooleanToFalseLiteralAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.CompareBooleanToFalseLiteral, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 

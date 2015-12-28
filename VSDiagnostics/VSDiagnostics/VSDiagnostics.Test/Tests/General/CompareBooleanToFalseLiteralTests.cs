@@ -28,7 +28,7 @@ namespace ConsoleApplication1
             bool isAwesome = false;
             if (isAwesome == false)
             {
-                Console.WriteLine(""awesome"");
+                System.Console.WriteLine(""awesome"");
             }
         }
     }
@@ -46,7 +46,7 @@ namespace ConsoleApplication1
             bool isAwesome = false;
             if (!isAwesome)
             {
-                Console.WriteLine(""awesome"");
+                System.Console.WriteLine(""awesome"");
             }
         }
     }
@@ -294,7 +294,7 @@ namespace ConsoleApplication1
             bool isAwesome = false;
             if (isAwesome != false)
             {
-                Console.WriteLine(""awesome"");
+                System.Console.WriteLine(""awesome"");
             }
         }
     }
@@ -312,7 +312,7 @@ namespace ConsoleApplication1
             bool isAwesome = false;
             if (isAwesome)
             {
-                Console.WriteLine(""awesome"");
+                System.Console.WriteLine(""awesome"");
             }
         }
     }
@@ -469,7 +469,7 @@ namespace ConsoleApplication1
         {
             if (""someString"" != ""false"")
             {
-
+                return true;
             }
         }
     }

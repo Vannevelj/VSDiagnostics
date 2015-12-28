@@ -138,7 +138,8 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             }
 
             // Isomething, isomething
-            if (normalizedString.Length >= 2 && (normalizedString[0] == 'I' || normalizedString[0] == 'i') && char.IsLower(normalizedString[1]))
+            if (normalizedString.Length >= 2 && (normalizedString[0] == 'I' || normalizedString[0] == 'i') &&
+                char.IsLower(normalizedString[1]))
             {
                 return "I" + char.ToUpper(normalizedString[1]) + normalizedString.Substring(2);
             }

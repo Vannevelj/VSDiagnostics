@@ -3,20 +3,21 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysTrue
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class ConditionIsAlwaysTrueAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(ConditionIsAlwaysTrueAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.ConditionIsAlwaysTrueAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.ConditionIsAlwaysTrueAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.ConditionIsAlwaysTrue, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 

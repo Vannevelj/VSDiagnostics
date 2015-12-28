@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         protected override CodeFixProvider CodeFixProvider => new ArgumentExceptionWithoutNameofOperatorCodeFix();
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithoutCorrespondingParameter()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithCorrespondingParameter()
         {
             var original = @"
     using System;
@@ -51,7 +51,7 @@ namespace VSDiagnostics.Test.Tests.Exceptions
         }
 
         [TestMethod]
-        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithoutCorrespondingParameterInDifferentCase()
+        public void ArgumentExceptionWithoutNameofOperator_WithArgumentException_WithCorrespondingParameterInDifferentCase()
         {
             var original = @"
     using System;
@@ -377,6 +377,57 @@ namespace ConsoleApplication1
             {
                 throw new ArgumentException(nameof(input));
             }
+        }
+    }";
+
+            VerifyDiagnostic(original, string.Format(ArgumentExceptionWithoutNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ArgumentExceptionWithoutNameofOperator_WithMultipleLevelSubclassException()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            void Method(string input)
+            {
+                throw new MyException(""input"");
+            }
+        }
+
+        class MyException : ArgumentNullException
+        {
+	        public MyException(string message) : base(message)
+	        {
+	        }
+        }
+    }";
+
+            var result = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            void Method(string input)
+            {
+                throw new MyException(nameof(input));
+            }
+        }
+
+        class MyException : ArgumentNullException
+        {
+	        public MyException(string message) : base(message)
+	        {
+	        }
         }
     }";
 

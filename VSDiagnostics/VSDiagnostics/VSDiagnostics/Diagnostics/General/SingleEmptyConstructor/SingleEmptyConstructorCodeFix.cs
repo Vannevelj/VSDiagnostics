@@ -12,7 +12,8 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
     [ExportCodeFixProvider(nameof(SingleEmptyConstructorCodeFix), LanguageNames.CSharp), Shared]
     internal class SingleEmptyConstructorCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(SingleEmptyConstructorAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds
+            => ImmutableArray.Create(SingleEmptyConstructorAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -23,7 +24,10 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.SingleEmptyConstructorCodeFixTitle, x => RemoveConstructorAsync(context.Document, root, statement), nameof(SingleEmptyConstructorAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.SingleEmptyConstructorCodeFixTitle,
+                    x => RemoveConstructorAsync(context.Document, root, statement),
+                    SingleEmptyConstructorAnalyzer.Rule.Id), diagnostic);
         }
 
         private Task<Solution> RemoveConstructorAsync(Document document, SyntaxNode root, SyntaxNode statement)

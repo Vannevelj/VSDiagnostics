@@ -13,7 +13,8 @@ namespace VSDiagnostics.Diagnostics.General.IfStatementWithoutBraces
     [ExportCodeFixProvider(nameof(IfStatementWithoutBracesCodeFix), LanguageNames.CSharp), Shared]
     public class IfStatementWithoutBracesCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(IfStatementWithoutBracesAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds
+            => ImmutableArray.Create(IfStatementWithoutBracesAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -24,7 +25,10 @@ namespace VSDiagnostics.Diagnostics.General.IfStatementWithoutBraces
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.IfStatementWithoutBracesCodeFixTitle, x => UseBracesNotationAsync(context.Document, root, statement), nameof(IfStatementWithoutBracesAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.IfStatementWithoutBracesCodeFixTitle,
+                    x => UseBracesNotationAsync(context.Document, root, statement),
+                    IfStatementWithoutBracesAnalyzer.Rule.Id), diagnostic);
         }
 
         private Task<Solution> UseBracesNotationAsync(Document document, SyntaxNode root, SyntaxNode statement)

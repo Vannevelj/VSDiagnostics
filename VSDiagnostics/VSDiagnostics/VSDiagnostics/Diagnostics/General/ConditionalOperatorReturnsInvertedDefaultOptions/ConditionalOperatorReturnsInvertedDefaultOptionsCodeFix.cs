@@ -11,10 +11,12 @@ using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsInvertedDefaultOptions
 {
-    [ExportCodeFixProvider(nameof(ConditionalOperatorReturnsInvertedDefaultOptionsCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(ConditionalOperatorReturnsInvertedDefaultOptionsCodeFix), LanguageNames.CSharp),
+     Shared]
     public class ConditionalOperatorReturnsInvertedDefaultOptionsCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds
+            => ImmutableArray.Create(ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -25,13 +27,17 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsInvertedDe
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.ConditionalOperatorReturnsInvertedDefaultOptionsCodeFixTitle, x => RemoveConditionalAsync(context.Document, root, statement), nameof(ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.ConditionalOperatorReturnsInvertedDefaultOptionsCodeFixTitle,
+                    x => RemoveConditionalAsync(context.Document, root, statement),
+                    ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzer.Rule.Id), diagnostic);
         }
 
         private Task<Solution> RemoveConditionalAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var conditionalExpression = (ConditionalExpressionSyntax) statement;
-            var newExpression = SyntaxFactory.PrefixUnaryExpression(SyntaxKind.LogicalNotExpression, conditionalExpression.Condition);
+            var newExpression = SyntaxFactory.PrefixUnaryExpression(SyntaxKind.LogicalNotExpression,
+                conditionalExpression.Condition);
 
             if (!(conditionalExpression.Condition is ParenthesizedExpressionSyntax) &&
                 !(conditionalExpression.Condition is IdentifierNameSyntax))
@@ -40,7 +46,8 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsInvertedDe
                     SyntaxFactory.ParenthesizedExpression(conditionalExpression.Condition));
             }
 
-            var newRoot = root.ReplaceNode(conditionalExpression, newExpression).WithAdditionalAnnotations(Formatter.Annotation);
+            var newRoot =
+                root.ReplaceNode(conditionalExpression, newExpression).WithAdditionalAnnotations(Formatter.Annotation);
 
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);

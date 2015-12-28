@@ -127,14 +127,14 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
-        // bug: modifier "static" is not valid - remove?
         [TestMethod]
+        [Ignore] // Needs RoslynTester update to allow /unsafe to be passed to the compilation
         public void ExplicitAccessModifiers_StructDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
 {
-    static struct MyStruct
+    unsafe struct MyStruct
     {
     }
 }";
@@ -142,7 +142,7 @@ namespace ConsoleApplication1
             var result = @"
 namespace ConsoleApplication1
 {
-    internal static struct MyStruct
+    internal unsafe struct MyStruct
     {
     }
 }";
@@ -219,30 +219,6 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
-        // bug: modifier "static" is not valid - remove?
-        [TestMethod]
-        public void ExplicitAccessModifiers_EnumDeclaration_ContainsNonAccessModifier()
-        {
-            var original = @"
-namespace ConsoleApplication1
-{
-    static enum MyEnum
-    {
-    }
-}";
-
-            var result = @"
-namespace ConsoleApplication1
-{
-    internal static enum MyEnum
-    {
-    }
-}";
-
-            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
-            VerifyFix(original, result);
-        }
-
         [TestMethod]
         public void ExplicitAccessModifiers_EnumDeclaration_ContainsAccessModifier()
         {
@@ -301,26 +277,6 @@ namespace ConsoleApplication1
 namespace ConsoleApplication1
 {
     internal delegate void Foo(int bar);
-}";
-
-            VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
-            VerifyFix(original, result);
-        }
-
-        // bug: modifier "static" is not valid - remove?
-        [TestMethod]
-        public void ExplicitAccessModifiers_DelegateDeclaration_ContainsNonAccessModifier()
-        {
-            var original = @"
-namespace ConsoleApplication1
-{
-    static delegate void Foo(int bar);
-}";
-
-            var result = @"
-namespace ConsoleApplication1
-{
-    internal static delegate void Foo(int bar);
 }";
 
             VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"));
@@ -387,14 +343,14 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
-        // bug: modifier "static" is not valid - remove?
         [TestMethod]
+        [Ignore] // Needs RoslynTester update to allow /unsafe to be passed to the compilation
         public void ExplicitAccessModifiers_InterfaceDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
 namespace ConsoleApplication1
 {
-    static interface IMyInterface
+    unsafe interface IMyInterface
     {
     }
 }";
@@ -402,7 +358,7 @@ namespace ConsoleApplication1
             var result = @"
 namespace ConsoleApplication1
 {
-    internal static interface IMyInterface
+    internal unsafe interface IMyInterface
     {
     }
 }";
@@ -425,7 +381,6 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original);
         }
 
-        // bug: modifier "public" is not valid - remove?
         [TestMethod]
         public void ExplicitAccessModifiers_InterfaceDeclaration_OnlyChangesAccessModifiers()
         {
@@ -437,7 +392,7 @@ namespace ConsoleApplication1
     [Obsolete]
     interface IMyInterface
     {
-        public int Position();
+        int Position();
     }
 }";
 
@@ -449,7 +404,7 @@ namespace ConsoleApplication1
     [Obsolete]
     internal interface IMyInterface
     {
-        public int Position();
+        int Position();
     }
 }";
 
@@ -548,9 +503,9 @@ namespace ConsoleApplication1
     class MyClass
     {
         [Obsolete]
-        class MyInternalClass
+        abstract class MyInternalClass
         {
-            public void Method() {}
+            public abstract void Method();
         }
     }
 }";
@@ -564,9 +519,9 @@ namespace ConsoleApplication1
     internal class MyClass
     {
         [Obsolete]
-        private class MyInternalClass
+        private abstract class MyInternalClass
         {
-            public void Method() {}
+            public abstract void Method();
         }
     }
 }";
@@ -608,8 +563,8 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
-        // bug: modifier "static" is not valid - remove?
         [TestMethod]
+        [Ignore] // Needs RoslynTester update to allow /unsafe to be passed to the compilation
         public void ExplicitAccessModifiers_NestedStructDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
@@ -617,7 +572,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        static struct MyInternalStruct
+        unsafe struct MyInternalStruct
         {
         }
     }
@@ -628,7 +583,7 @@ namespace ConsoleApplication1
 {
     internal class MyClass
     {
-        private static struct MyInternalStruct
+        private unsafe struct MyInternalStruct
         {
         }
     }
@@ -671,7 +626,9 @@ namespace ConsoleApplication1
         [Obsolete]
         struct MyInternalStruct
         {
-            public void Method() {}
+            public void Method()
+            {
+            }
         }
     }
 }";
@@ -687,7 +644,9 @@ namespace ConsoleApplication1
         [Obsolete]
         private struct MyInternalStruct
         {
-            public void Method() {}
+            public void Method()
+            {
+            }
         }
     }
 }";
@@ -718,38 +677,6 @@ namespace ConsoleApplication1
     internal class MyClass
     {
         private enum MyInternalEnum
-        {
-        }
-    }
-}";
-
-            VerifyDiagnostic(original,
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "internal"),
-                string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
-            VerifyFix(original, result);
-        }
-
-        // bug: modifier "static" is not valid - remove?
-        [TestMethod]
-        public void ExplicitAccessModifiers_NestedEnumDeclaration_ContainsNonAccessModifier()
-        {
-            var original = @"
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        static enum MyInternalEnum
-        {
-        }
-    }
-}";
-
-            var result = @"
-namespace ConsoleApplication1
-{
-    internal class MyClass
-    {
-        private static enum MyInternalEnum
         {
         }
     }
@@ -844,8 +771,8 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
-        // bug: modifier "static" is not valid - remove?
         [TestMethod]
+        [Ignore] // Needs RoslynTester update to allow /unsafe to be passed to the compilation
         public void ExplicitAccessModifiers_NestedDelegateDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
@@ -853,7 +780,7 @@ namespace ConsoleApplication1
 {
     internal class Program
     {
-        static delegate void Foo(int bar);
+        unsafe delegate void Foo(int bar);
     }
 }";
 
@@ -862,7 +789,7 @@ namespace ConsoleApplication1
 {
     internal class Program
     {
-        private static delegate void Foo(int bar);
+        private unsafe delegate void Foo(int bar);
     }
 }";
 
@@ -947,8 +874,8 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
-        // bug: modifier "static" is not valid - remove?
         [TestMethod]
+        [Ignore] // Needs RoslynTester update to allow /unsafe to be passed to the compilation
         public void ExplicitAccessModifiers_NestedInterfaceDeclaration_ContainsNonAccessModifier()
         {
             var original = @"
@@ -956,7 +883,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        static interface MyInternalInterface
+        unsafe interface MyInternalInterface
         {
         }
     }
@@ -967,7 +894,7 @@ namespace ConsoleApplication1
 {
     internal class MyClass
     {
-        private static interface MyInternalInterface
+        private unsafe interface MyInternalInterface
         {
         }
     }
@@ -996,7 +923,6 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original);
         }
 
-        // bug: modifier "public" is not valid - remove?
         [TestMethod]
         public void ExplicitAccessModifiers_NestedInterfaceDeclaration_OnlyChangesAccessModifiers()
         {
@@ -1011,7 +937,7 @@ namespace ConsoleApplication1
         [Obsolete]
         interface MyInternalInterface
         {
-            public int Buzz();
+            int Buzz();
         }
     }
 }";
@@ -1027,7 +953,7 @@ namespace ConsoleApplication1
         [Obsolete]
         private interface MyInternalInterface
         {
-            public int Buzz();
+            int Buzz();
         }
     }
 }";

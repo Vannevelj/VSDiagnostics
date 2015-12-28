@@ -25,7 +25,9 @@ namespace VSDiagnostics.Diagnostics.General.AsToCast
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.AsToCastCodeFixTitle, x => AsToCastAsync(context.Document, root, statement), nameof(AsToCastAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.AsToCastCodeFixTitle,
+                    x => AsToCastAsync(context.Document, root, statement), AsToCastAnalyzer.Rule.Id), diagnostic);
         }
 
         private Task<Solution> AsToCastAsync(Document document, SyntaxNode root, SyntaxNode statement)

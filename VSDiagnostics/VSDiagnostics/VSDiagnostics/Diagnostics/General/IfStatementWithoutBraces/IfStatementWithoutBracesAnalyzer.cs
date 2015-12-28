@@ -3,20 +3,21 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.IfStatementWithoutBraces
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class IfStatementWithoutBracesAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(IfStatementWithoutBracesAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.IfStatementWithoutBracesAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.IfStatementWithoutBracesAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.IfStatementWithoutBraces, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -59,7 +60,7 @@ namespace VSDiagnostics.Diagnostics.General.IfStatementWithoutBraces
 
             if (elseClause.Statement is IfStatementSyntax)
             {
-                return; 
+                return;
             }
 
             context.ReportDiagnostic(Diagnostic.Create(Rule, elseClause.ElseKeyword.GetLocation()));

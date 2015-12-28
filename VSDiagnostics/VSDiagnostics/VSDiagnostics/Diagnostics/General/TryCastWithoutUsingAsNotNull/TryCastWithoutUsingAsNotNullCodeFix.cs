@@ -15,7 +15,8 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
     [ExportCodeFixProvider(nameof(TryCastWithoutUsingAsNotNullCodeFix), LanguageNames.CSharp), Shared]
     public class TryCastWithoutUsingAsNotNullCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(TryCastWithoutUsingAsNotNullAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds
+            => ImmutableArray.Create(TryCastWithoutUsingAsNotNullAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -26,7 +27,10 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.TryCastWithoutUsingAsNotNullCodeFixTitle, x => UseAsAsync(context.Document, statement), nameof(TryCastWithoutUsingAsNotNullAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.TryCastWithoutUsingAsNotNullCodeFixTitle,
+                    x => UseAsAsync(context.Document, statement), TryCastWithoutUsingAsNotNullAnalyzer.Rule.Id),
+                diagnostic);
         }
 
         private async Task<Solution> UseAsAsync(Document document, SyntaxNode statement)
@@ -34,7 +38,10 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             var isExpression = (BinaryExpressionSyntax) statement;
             var ifStatement = statement.AncestorsAndSelf().OfType<IfStatementSyntax>().First();
 
-            var asExpressions = ifStatement.Statement.DescendantNodesAndSelf().OfType<BinaryExpressionSyntax>().Where(x => x.OperatorToken.IsKind(SyntaxKind.AsKeyword));
+            var asExpressions =
+                ifStatement.Statement.DescendantNodesAndSelf()
+                    .OfType<BinaryExpressionSyntax>()
+                    .Where(x => x.OperatorToken.IsKind(SyntaxKind.AsKeyword));
             var isIdentifier = ((IdentifierNameSyntax) isExpression.Left).Identifier.ValueText;
 
             foreach (var asExpression in asExpressions)
@@ -47,7 +54,8 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 
                     var variableDeclarator = asExpression.AncestorsAndSelf().OfType<VariableDeclaratorSyntax>().First();
                     var asIdentifier = variableDeclarator.Identifier.ValueText;
-                    var variableDeclaration = asExpression.AncestorsAndSelf().OfType<LocalDeclarationStatementSyntax>().First();
+                    var variableDeclaration =
+                        asExpression.AncestorsAndSelf().OfType<LocalDeclarationStatementSyntax>().First();
 
                     var editor = await DocumentEditor.CreateAsync(document);
 
@@ -57,10 +65,11 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                     if (variableDeclaration.Declaration.Variables.Count > 1) // Split variable declaration
                     {
                         // Extract the relevant variable and copy it outside the if-body
-                        var extractedDeclarator = variableDeclaration.Declaration.Variables.First(x => x.Identifier.ValueText == asIdentifier);
+                        var extractedDeclarator =
+                            variableDeclaration.Declaration.Variables.First(x => x.Identifier.ValueText == asIdentifier);
                         var newDeclaration = SyntaxFactory.VariableDeclaration(
                             extractedDeclarator.AncestorsAndSelf().OfType<VariableDeclarationSyntax>().First().Type,
-                            SyntaxFactory.SeparatedList(new[] { extractedDeclarator }));
+                            SyntaxFactory.SeparatedList(new[] {extractedDeclarator}));
                         var newStatement = SyntaxFactory.LocalDeclarationStatement(
                             SyntaxFactory.TokenList(),
                             newDeclaration,
@@ -68,7 +77,10 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                         editor.InsertBefore(ifStatement, newStatement.WithAdditionalAnnotations(Formatter.Annotation));
 
                         // Rewrite the variable declaration inside the if-body to remove the one we just copied
-                        var newVariables = variableDeclaration.Declaration.WithVariables(SyntaxFactory.SeparatedList(variableDeclaration.Declaration.Variables.Except(new[] { extractedDeclarator })));
+                        var newVariables =
+                            variableDeclaration.Declaration.WithVariables(
+                                SyntaxFactory.SeparatedList(
+                                    variableDeclaration.Declaration.Variables.Except(new[] {extractedDeclarator})));
                         var newBodyStatement = SyntaxFactory.LocalDeclarationStatement(
                             SyntaxFactory.TokenList(),
                             newVariables,
@@ -78,7 +90,8 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                     else // Move declaration outside if-body
                     {
                         editor.RemoveNode(variableDeclaration);
-                        editor.InsertBefore(ifStatement, variableDeclaration.WithAdditionalAnnotations(Formatter.Annotation));
+                        editor.InsertBefore(ifStatement,
+                            variableDeclaration.WithAdditionalAnnotations(Formatter.Annotation));
                     }
 
                     var newDocument = editor.GetChangedDocument();

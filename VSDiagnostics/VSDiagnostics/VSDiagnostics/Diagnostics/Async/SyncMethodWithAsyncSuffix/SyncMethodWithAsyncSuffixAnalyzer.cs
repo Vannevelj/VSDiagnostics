@@ -6,20 +6,20 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
 
-namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
+namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithSyncSuffix
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class AsyncMethodWithoutAsyncSuffixAnalyzer : DiagnosticAnalyzer
+    public class SyncMethodWithAsyncSuffixAnalyzer : DiagnosticAnalyzer
     {
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.AsyncCategory;
-        private static readonly string Message = VSDiagnosticsResources.AsyncMethodWithoutAsyncSuffixAnalyzerMessage;
-        private static readonly string Title = VSDiagnosticsResources.AsyncMethodWithoutAsyncSuffixAnalyzerTitle;
+        private static readonly string Message = VSDiagnosticsResources.SyncMethodWithSyncSuffixAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.SyncMethodWithSyncSuffixAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule
             =>
-                new DiagnosticDescriptor(DiagnosticId.AsyncMethodWithoutAsyncSuffix, Title, Message, Category, Severity,
+                new DiagnosticDescriptor(DiagnosticId.SyncMethodWithAsyncSuffix, Title, Message, Category, Severity,
                     isEnabledByDefault: true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
@@ -59,10 +59,10 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
                 return;
             }
 
-            if (declaredSymbol.IsAsync() && !method.Identifier.Text.EndsWith("Async"))
+            if (!declaredSymbol.IsAsync() && method.Identifier.Text.EndsWith("Async"))
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule, method.Identifier.GetLocation(),
-                    method.Identifier.Text));
+                      method.Identifier.Text));
             }
         }
     }

@@ -14,7 +14,8 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
     [ExportCodeFixProvider(nameof(ReplaceEmptyStringWithStringDotEmptyCodeFix), LanguageNames.CSharp), Shared]
     public class ReplaceEmptyStringWithStringDotEmptyCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds
+            => ImmutableArray.Create(ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -24,12 +25,17 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
-            var literalDeclaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<LiteralExpressionSyntax>().First();
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.ReplaceEmptyStringWithStringDotEmptyCodeFixTitle, x => UseStringDotEmptyAsync(context.Document, root, literalDeclaration), nameof(ReplaceEmptyStringWithStringDotEmptyAnalyzer)),
+            var literalDeclaration =
+                root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<LiteralExpressionSyntax>().First();
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.ReplaceEmptyStringWithStringDotEmptyCodeFixTitle,
+                    x => UseStringDotEmptyAsync(context.Document, root, literalDeclaration),
+                    ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.Id),
                 diagnostic);
         }
 
-        private static Task<Solution> UseStringDotEmptyAsync(Document document, SyntaxNode root, LiteralExpressionSyntax literalDeclaration)
+        private static Task<Solution> UseStringDotEmptyAsync(Document document, SyntaxNode root,
+            LiteralExpressionSyntax literalDeclaration)
         {
             var stringDotEmptyInvocation = SyntaxFactory.ParseExpression("string.Empty");
             var newRoot =

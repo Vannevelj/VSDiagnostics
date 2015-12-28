@@ -255,7 +255,7 @@ namespace ConsoleApplication1
 {
     public class MyExceptionClass : Exception
     {
-        public MyExceptionClass() : this(""message"")
+        public MyExceptionClass() : this(""some message"")
         {
         }
 

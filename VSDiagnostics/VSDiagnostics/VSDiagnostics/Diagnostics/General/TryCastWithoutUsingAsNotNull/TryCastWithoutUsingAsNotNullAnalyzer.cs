@@ -4,20 +4,21 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class TryCastWithoutUsingAsNotNullAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(TryCastWithoutUsingAsNotNullAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.TryCastWithoutUsingAsNotNullAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.TryCastWithoutUsingAsNotNullAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.TryCastWithoutUsingAsNotNull, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -43,7 +44,10 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 return;
             }
 
-            var asExpressions = ifExpression.Statement.DescendantNodes().OfType<BinaryExpressionSyntax>().Where(x => x.OperatorToken.Kind() == SyntaxKind.AsKeyword);
+            var asExpressions =
+                ifExpression.Statement.DescendantNodes()
+                    .OfType<BinaryExpressionSyntax>()
+                    .Where(x => x.OperatorToken.Kind() == SyntaxKind.AsKeyword);
             foreach (var asExpression in asExpressions)
             {
                 var asIdentifier = asExpression.Left as IdentifierNameSyntax;

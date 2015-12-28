@@ -16,7 +16,8 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
     [ExportCodeFixProvider(nameof(UseAliasesInsteadOfConcreteTypeCodeFix), LanguageNames.CSharp), Shared]
     public class UseAliasesInsteadOfConcreteTypeCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds
+            => ImmutableArray.Create(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -27,24 +28,27 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.UseAliasesInsteadOfConcreteTypeCodeFixTitle, x => AsToCastAsync(context.Document, root, statement), nameof(UseAliasesInsteadOfConcreteTypeAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.UseAliasesInsteadOfConcreteTypeCodeFixTitle,
+                    x => UseAliasAsync(context.Document, root, statement),
+                    UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.Id), diagnostic);
         }
 
-        private async Task<Solution> AsToCastAsync(Document document, SyntaxNode root, SyntaxNode statement)
+        private async Task<Solution> UseAliasAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var semanticModel = await document.GetSemanticModelAsync();
             string typeName;
 
             if (statement is IdentifierNameSyntax)
             {
-                typeName = semanticModel.GetSymbolInfo((IdentifierNameSyntax)statement).Symbol.MetadataName;
+                typeName = semanticModel.GetSymbolInfo((IdentifierNameSyntax) statement).Symbol.MetadataName;
             }
             else
             {
-                typeName = semanticModel.GetSymbolInfo((QualifiedNameSyntax)statement).Symbol.MetadataName;
+                typeName = semanticModel.GetSymbolInfo((QualifiedNameSyntax) statement).Symbol.MetadataName;
             }
 
-            var aliasToken = MapConcreteTypeToPredefinedTypeAlias.First(kvp => kvp.Key == typeName).Value;
+            var aliasToken = MapConcreteTypeToPredefinedTypeAlias[typeName];
 
             var newExpression = SyntaxFactory.PredefinedType(SyntaxFactory.Token(aliasToken));
             var newRoot = root.ReplaceNode(statement, newExpression).WithAdditionalAnnotations(Formatter.Annotation);

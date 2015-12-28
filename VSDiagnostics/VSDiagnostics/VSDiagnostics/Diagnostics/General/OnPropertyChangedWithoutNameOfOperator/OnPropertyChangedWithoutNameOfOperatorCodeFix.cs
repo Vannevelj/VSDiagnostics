@@ -14,7 +14,8 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
     [ExportCodeFixProvider(nameof(OnPropertyChangedWithoutNameOfOperatorCodeFix), LanguageNames.CSharp), Shared]
     public class OnPropertyChangedWithoutNameOfOperatorCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds
+            => ImmutableArray.Create(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -24,18 +25,30 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
-            var argumentDeclaration = root.FindNode(diagnosticSpan).AncestorsAndSelf().OfType<ArgumentSyntax>().FirstOrDefault();
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorCodeFixTitle, x => UseNameOfAsync(context.Document, root, argumentDeclaration), nameof(OnPropertyChangedWithoutNameOfOperatorAnalyzer)), diagnostic);
+            var argumentDeclaration =
+                root.FindNode(diagnosticSpan).AncestorsAndSelf().OfType<ArgumentSyntax>().FirstOrDefault();
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorCodeFixTitle,
+                    x => UseNameOfAsync(context.Document, root, argumentDeclaration),
+                    OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.Id), diagnostic);
         }
 
         private Task<Solution> UseNameOfAsync(Document document, SyntaxNode root, ArgumentSyntax argumentDeclaration)
         {
-            var properties = argumentDeclaration.Ancestors().OfType<ClassDeclarationSyntax>().First().ChildNodes().OfType<PropertyDeclarationSyntax>();
+            var properties =
+                argumentDeclaration.Ancestors()
+                    .OfType<ClassDeclarationSyntax>()
+                    .First()
+                    .ChildNodes()
+                    .OfType<PropertyDeclarationSyntax>();
             foreach (var property in properties)
             {
-                if (string.Equals(property.Identifier.ValueText, ((LiteralExpressionSyntax) argumentDeclaration.Expression).Token.ValueText, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(property.Identifier.ValueText,
+                    ((LiteralExpressionSyntax) argumentDeclaration.Expression).Token.ValueText,
+                    StringComparison.OrdinalIgnoreCase))
                 {
-                    root = root.ReplaceNode(argumentDeclaration.Expression, SyntaxFactory.ParseExpression($"nameof({property.Identifier.ValueText})"));
+                    root = root.ReplaceNode(argumentDeclaration.Expression,
+                        SyntaxFactory.ParseExpression($"nameof({property.Identifier.ValueText})"));
                     var newDocument = document.WithSyntaxRoot(root);
                     return Task.FromResult(newDocument.Project.Solution);
                 }

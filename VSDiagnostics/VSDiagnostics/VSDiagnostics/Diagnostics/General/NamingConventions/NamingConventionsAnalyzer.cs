@@ -10,16 +10,17 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class NamingConventionsAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(NamingConventionsAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.NamingConventionsAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.NamingConventionsAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.NamingConventions, Title, Message, Category, Severity, true);
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
+            => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -31,7 +32,9 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
                 SyntaxKind.InterfaceDeclaration,
                 SyntaxKind.LocalDeclarationStatement,
                 SyntaxKind.Parameter,
-                SyntaxKind.StructDeclaration);
+                SyntaxKind.StructDeclaration,
+                SyntaxKind.EnumDeclaration,
+                SyntaxKind.EnumMemberDeclaration);
         }
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
@@ -79,24 +82,29 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             if (nodeAsProperty != null)
             {
                 CheckNaming(nodeAsProperty.Identifier, "property", NamingConvention.UpperCamelCase, context);
+                return;
             }
 
             var nodeAsMethod = context.Node as MethodDeclarationSyntax;
             if (nodeAsMethod != null)
             {
                 CheckNaming(nodeAsMethod.Identifier, "method", NamingConvention.UpperCamelCase, context);
+                return;
             }
 
             var nodeAsClass = context.Node as ClassDeclarationSyntax;
             if (nodeAsClass != null)
             {
                 CheckNaming(nodeAsClass.Identifier, "class", NamingConvention.UpperCamelCase, context);
+                return;
             }
 
             var nodeAsInterface = context.Node as InterfaceDeclarationSyntax;
             if (nodeAsInterface != null)
             {
-                CheckNaming(nodeAsInterface.Identifier, "interface", NamingConvention.InterfacePrefixUpperCamelCase, context);
+                CheckNaming(nodeAsInterface.Identifier, "interface", NamingConvention.InterfacePrefixUpperCamelCase,
+                    context);
+                return;
             }
 
             var nodeAsLocal = context.Node as LocalDeclarationStatementSyntax;
@@ -126,15 +134,32 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             if (nodeAsStruct != null)
             {
                 CheckNaming(nodeAsStruct.Identifier, "struct", NamingConvention.UpperCamelCase, context);
+                return;
+            }
+
+            var nodeAsEnum = context.Node as EnumDeclarationSyntax;
+            if (nodeAsEnum != null)
+            {
+                CheckNaming(nodeAsEnum.Identifier, "enum", NamingConvention.UpperCamelCase, context);
+                return;
+            }
+
+            var nodeAsEnumMember = context.Node as EnumMemberDeclarationSyntax;
+            if (nodeAsEnumMember != null)
+            {
+                CheckNaming(nodeAsEnumMember.Identifier, "enum member", NamingConvention.UpperCamelCase, context);
+                return;
             }
         }
 
-        private void CheckNaming(SyntaxToken currentIdentifier, string memberType, NamingConvention convention, SyntaxNodeAnalysisContext context)
+        private static void CheckNaming(SyntaxToken currentIdentifier, string memberType, NamingConvention convention,
+            SyntaxNodeAnalysisContext context)
         {
             var conventionedIdentifier = currentIdentifier.WithConvention(convention);
             if (conventionedIdentifier.Text != currentIdentifier.Text)
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, currentIdentifier.GetLocation(), memberType, currentIdentifier.Text, conventionedIdentifier.Text));
+                context.ReportDiagnostic(Diagnostic.Create(Rule, currentIdentifier.GetLocation(), memberType,
+                    currentIdentifier.Text, conventionedIdentifier.Text));
             }
         }
     }

@@ -125,7 +125,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method &quot;{0}&quot; does not end with &apos;Async&apos;..
+        ///   Looks up a localized string similar to Asynchronous method &quot;{0}&quot; does not end with &apos;Async&apos;..
         /// </summary>
         internal static string AsyncMethodWithoutAsyncSuffixAnalyzerMessage {
             get {
@@ -494,7 +494,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Flags] enum {0} values are not powers of 2.
+        ///   Looks up a localized string similar to [Flags] enum {0} its values are not explicit powers of 2.
         /// </summary>
         internal static string FlagsEnumValuesAreNotPowersOfTwoAnalyzerMessage {
             get {
@@ -503,7 +503,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Flags] enum values are not powers of 2.
+        ///   Looks up a localized string similar to [Flags] enum its values are not explicit powers of 2.
         /// </summary>
         internal static string FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle {
             get {
@@ -517,6 +517,24 @@ namespace VSDiagnostics {
         internal static string FlagsEnumValuesAreNotPowersOfTwoCodeFixTitle {
             get {
                 return ResourceManager.GetString("FlagsEnumValuesAreNotPowersOfTwoCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Flags] enum {0} its values are not explicit powers of 2 and does not fit in a {1} enum type..
+        /// </summary>
+        internal static string FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Flags] enum its values are not explicit powers of 2 and its values dont fit in the specified enum type..
+        /// </summary>
+        internal static string FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerTitle", resourceCulture);
             }
         }
         
@@ -917,7 +935,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A single catch-all clause has been used..
+        ///   Looks up a localized string similar to A single catch-all clause has been used. Consider adding specific exception handlers or a comment..
         /// </summary>
         internal static string SingleGeneralExceptionAnalyzerMessage {
             get {
@@ -994,6 +1012,33 @@ namespace VSDiagnostics {
         internal static string StructsShouldNotMutateSelfAnalyzerTitle {
             get {
                 return ResourceManager.GetString("StructsShouldNotMutateSelfAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove suffix.
+        /// </summary>
+        internal static string SyncMethodWithSyncSuffixAnalyzerCodeFixTitle {
+            get {
+                return ResourceManager.GetString("SyncMethodWithSyncSuffixAnalyzerCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronous method &quot;{0}&quot; should not end with &apos;Async&apos;..
+        /// </summary>
+        internal static string SyncMethodWithSyncSuffixAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("SyncMethodWithSyncSuffixAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your method is not async, and should not have the &apos;Async&apos; suffix..
+        /// </summary>
+        internal static string SyncMethodWithSyncSuffixAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("SyncMethodWithSyncSuffixAnalyzerTitle", resourceCulture);
             }
         }
         

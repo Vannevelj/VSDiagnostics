@@ -4,20 +4,24 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ReplaceEmptyStringWithStringDotEmptyAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(ReplaceEmptyStringWithStringDotEmptyAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.StringsCategory;
-        private static readonly string Message = VSDiagnosticsResources.ReplaceEmptyStringWithStringDotEmptyAnalyzerMessage;
+
+        private static readonly string Message =
+            VSDiagnosticsResources.ReplaceEmptyStringWithStringDotEmptyAnalyzerMessage;
+
         private static readonly string Title = VSDiagnosticsResources.ReplaceEmptyStringWithStringDotEmptyAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.ReplaceEmptyStringWithStringDotEmpty, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 

@@ -4,20 +4,21 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.TypeToVar
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class TypeToVarAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(TypeToVarAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Hidden;
 
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.TypeToVarAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.TypeToVarAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.TypeToVar, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 

@@ -12,7 +12,6 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class SimplifyExpressionBodiedMemberAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(SimplifyExpressionBodiedMemberAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.SimplifyExpressionBodiedMemberAnalyzerMessage;
@@ -29,7 +28,8 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
             });
         }
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.SimplifyExpressionBodiedMember, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -67,7 +67,9 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
-            if (propertyDeclaration.DescendantNodesAndTokensAndSelf().Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
+            if (
+                propertyDeclaration.DescendantNodesAndTokensAndSelf()
+                    .Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
             {
                 return null;
             }
@@ -77,7 +79,8 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
-            var getter = propertyDeclaration.AccessorList.Accessors.FirstOrDefault(x => x.Keyword.IsKind(SyntaxKind.GetKeyword));
+            var getter =
+                propertyDeclaration.AccessorList.Accessors.FirstOrDefault(x => x.Keyword.IsKind(SyntaxKind.GetKeyword));
             if (getter == null)
             {
                 return null;
@@ -109,7 +112,9 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
-            if (methodDeclaration.DescendantNodesAndTokensAndSelf().Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
+            if (
+                methodDeclaration.DescendantNodesAndTokensAndSelf()
+                    .Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
             {
                 return null;
             }
@@ -124,7 +129,8 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
-            return Diagnostic.Create(Rule, methodDeclaration.Identifier.GetLocation(), "Method", methodDeclaration.Identifier.ValueText);
+            return Diagnostic.Create(Rule, methodDeclaration.Identifier.GetLocation(), "Method",
+                methodDeclaration.Identifier.ValueText);
         }
     }
 }

@@ -17,7 +17,8 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
     [ExportCodeFixProvider(nameof(NonEncapsulatedOrMutableFieldCodeFix), LanguageNames.CSharp), Shared]
     public class NonEncapsulatedOrMutableFieldCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds
+            => ImmutableArray.Create(NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -28,7 +29,10 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.NonEncapsulatedOrMutableFieldCodeFixTitle, x => UsePropertyAsync(context.Document, statement), nameof(NonEncapsulatedOrMutableFieldAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.NonEncapsulatedOrMutableFieldCodeFixTitle,
+                    x => UsePropertyAsync(context.Document, statement), NonEncapsulatedOrMutableFieldAnalyzer.Rule.Id),
+                diagnostic);
         }
 
         private async Task<Solution> UsePropertyAsync(Document document, SyntaxNode statement)
@@ -42,21 +46,26 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
             var fieldStatement = variableDeclarator.AncestorsAndSelf().OfType<FieldDeclarationSyntax>().First();
             var variableDeclaration = variableDeclarator.AncestorsAndSelf().OfType<VariableDeclarationSyntax>().First();
 
-            var newProperty = SyntaxFactory.PropertyDeclaration(variableDeclaration.Type, variableDeclarator.Identifier.WithConvention(NamingConvention.UpperCamelCase))
-                                           .WithAttributeLists(fieldStatement.AttributeLists)
-                                           .WithModifiers(fieldStatement.Modifiers)
-                                           .WithAdditionalAnnotations(Formatter.Annotation)
-                                           .WithAccessorList(
-                                               SyntaxFactory.AccessorList(
-                                                   SyntaxFactory.List(new[]
-                                                   {
-                                                       SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
-                                                       SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
-                                                   })));
+            var newProperty = SyntaxFactory.PropertyDeclaration(variableDeclaration.Type,
+                variableDeclarator.Identifier.WithConvention(NamingConvention.UpperCamelCase))
+                .WithAttributeLists(fieldStatement.AttributeLists)
+                .WithModifiers(fieldStatement.Modifiers)
+                .WithAdditionalAnnotations(Formatter.Annotation)
+                .WithAccessorList(
+                    SyntaxFactory.AccessorList(
+                        SyntaxFactory.List(new[]
+                        {
+                            SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
+                                .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
+                            SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration)
+                                .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
+                        })));
 
             if (variableDeclarator.Initializer != null)
             {
-                newProperty = newProperty.WithInitializer(variableDeclarator.Initializer).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+                newProperty =
+                    newProperty.WithInitializer(variableDeclarator.Initializer)
+                        .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
             }
 
             var editor = await DocumentEditor.CreateAsync(document);

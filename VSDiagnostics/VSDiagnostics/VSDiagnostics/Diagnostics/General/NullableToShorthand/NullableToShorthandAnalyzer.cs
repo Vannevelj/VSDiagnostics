@@ -4,20 +4,21 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class NullableToShorthandAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(NullableToShorthandAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.NullableToShorthandAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.NullableToShorthandAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.NullableToShorthand, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -36,7 +37,11 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
             }
 
             var identifier = "Unnamed variable";
-            var ancestorNodes = new[] { SyntaxKind.LocalDeclarationStatement, SyntaxKind.FieldDeclaration, SyntaxKind.Parameter, SyntaxKind.PropertyDeclaration };
+            var ancestorNodes = new[]
+            {
+                SyntaxKind.LocalDeclarationStatement, SyntaxKind.FieldDeclaration, SyntaxKind.Parameter,
+                SyntaxKind.PropertyDeclaration
+            };
             var parentNode = context.Node.AncestorsAndSelf().FirstOrDefault(x => ancestorNodes.Contains(x.Kind()));
 
             // We're having a return type
@@ -51,12 +56,16 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
                 {
                     case SyntaxKind.LocalDeclarationStatement:
                     {
-                        identifier = ((LocalDeclarationStatementSyntax) parentNode).Declaration?.Variables.FirstOrDefault()?.Identifier.Text;
+                        identifier =
+                            ((LocalDeclarationStatementSyntax) parentNode).Declaration?.Variables.FirstOrDefault()?
+                                .Identifier.Text;
                         break;
                     }
                     case SyntaxKind.FieldDeclaration:
                     {
-                        identifier = ((FieldDeclarationSyntax) parentNode).Declaration?.Variables.FirstOrDefault()?.Identifier.Text;
+                        identifier =
+                            ((FieldDeclarationSyntax) parentNode).Declaration?.Variables.FirstOrDefault()?
+                                .Identifier.Text;
                         break;
                     }
                     case SyntaxKind.Parameter:
@@ -81,7 +90,8 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
             Handle(identifier, context.Node.GetLocation(), argumentList, context);
         }
 
-        private void Handle(string identifier, Location location, GenericNameSyntax genericName, SyntaxNodeAnalysisContext context)
+        private void Handle(string identifier, Location location, GenericNameSyntax genericName,
+            SyntaxNodeAnalysisContext context)
         {
             // Leave if type is in nullable form
             if (genericName.IsKind(SyntaxKind.NullableType))

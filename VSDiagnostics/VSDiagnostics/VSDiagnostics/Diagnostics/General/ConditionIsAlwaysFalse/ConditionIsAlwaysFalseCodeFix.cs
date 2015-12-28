@@ -27,7 +27,8 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysFalse
             var statement = root.FindNode(diagnosticSpan);
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.ConditionIsAlwaysTrueCodeFixTitle,
-                    x => RemoveConditionAsync(context.Document, root, statement), nameof(ConditionIsAlwaysFalseAnalyzer)), diagnostic);
+                    x => RemoveConditionAsync(context.Document, root, statement), ConditionIsAlwaysFalseAnalyzer.Rule.Id),
+                diagnostic);
         }
 
         private Task<Solution> RemoveConditionAsync(Document document, SyntaxNode root, SyntaxNode statement)
@@ -36,12 +37,16 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysFalse
             var blockStatement = ifStatement.Else?.Statement as BlockSyntax;
 
             // no else
-            var newRoot = root.RemoveNode(ifStatement, SyntaxRemoveOptions.KeepNoTrivia).WithAdditionalAnnotations(Formatter.Annotation);
+            var newRoot =
+                root.RemoveNode(ifStatement, SyntaxRemoveOptions.KeepNoTrivia)
+                    .WithAdditionalAnnotations(Formatter.Annotation);
 
             // else with braces
             if (blockStatement != null)
             {
-                newRoot = root.ReplaceNode(ifStatement, blockStatement.Statements).WithAdditionalAnnotations(Formatter.Annotation);
+                newRoot =
+                    root.ReplaceNode(ifStatement, blockStatement.Statements)
+                        .WithAdditionalAnnotations(Formatter.Annotation);
             }
 
             // else without braces

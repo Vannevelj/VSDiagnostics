@@ -11,14 +11,14 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class SingleEmptyConstructorAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(SingleEmptyConstructorAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.SingleEmptyConstructorAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.SingleEmptyConstructorAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.SingleEmptyConstructor, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -87,7 +87,7 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
                     // we must return false (to avoid the parent if) only if it is the base keyword
                     // and there are no arguments.
                     return !constructorInitializer.ThisOrBaseKeyword.IsKind(SyntaxKind.BaseKeyword) ||
-                            constructorInitializer.ArgumentList.Arguments.Any();
+                           constructorInitializer.ArgumentList.Arguments.Any();
                 }
 
                 return false;
@@ -96,7 +96,8 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
                 return;
             }
 
-            context.ReportDiagnostic(Diagnostic.Create(Rule, constructorDeclaration.GetLocation(), constructorDeclaration.Identifier));
+            context.ReportDiagnostic(Diagnostic.Create(Rule, constructorDeclaration.GetLocation(),
+                constructorDeclaration.Identifier));
         }
     }
 }

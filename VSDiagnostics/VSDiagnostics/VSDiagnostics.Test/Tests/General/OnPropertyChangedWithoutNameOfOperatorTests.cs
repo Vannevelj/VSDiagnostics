@@ -19,7 +19,6 @@ namespace VSDiagnostics.Test.Tests.General
             var original = @"
 using System;
 using System.Text;
-using System.ComponentModel;
 
 namespace ConsoleApplication1
 {
@@ -53,7 +52,6 @@ namespace ConsoleApplication1
             var expected = @"
 using System;
 using System.Text;
-using System.ComponentModel;
 
 namespace ConsoleApplication1
 {
@@ -94,7 +92,6 @@ namespace ConsoleApplication1
             var original = @"
 using System;
 using System.Text;
-using System.ComponentModel;
 
 namespace ConsoleApplication1
 {
@@ -128,7 +125,6 @@ namespace ConsoleApplication1
             var expected = @"
 using System;
 using System.Text;
-using System.ComponentModel;
 
 namespace ConsoleApplication1
 {
@@ -169,7 +165,6 @@ namespace ConsoleApplication1
             var original = @"
 using System;
 using System.Text;
-using System.ComponentModel;
 
 namespace ConsoleApplication1
 {
@@ -209,7 +204,6 @@ namespace ConsoleApplication1
             var original = @"
 using System;
 using System.Text;
-using System.ComponentModel;
 
 namespace ConsoleApplication1
 {
@@ -254,7 +248,6 @@ namespace ConsoleApplication1
             var expected = @"
 using System;
 using System.Text;
-using System.ComponentModel;
 
 namespace ConsoleApplication1
 {
@@ -306,7 +299,6 @@ namespace ConsoleApplication1
             var original = @"
 using System;
 using System.Text;
-using System.ComponentModel;
 
 namespace ConsoleApplication1
 {
@@ -346,7 +338,6 @@ namespace ConsoleApplication1
             var original = @"
 using System;
 using System.Text;
-using System.ComponentModel;
 
 namespace ConsoleApplication1
 {
@@ -380,7 +371,6 @@ namespace ConsoleApplication1
             var expected = @"
 using System;
 using System.Text;
-using System.ComponentModel;
 
 namespace ConsoleApplication1
 {

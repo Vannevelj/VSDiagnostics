@@ -2,79 +2,19 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.Helpers.CSharp;
-using VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix;
+using VSDiagnostics.Diagnostics.Async.SyncMethodWithSyncSuffix;
 
 namespace VSDiagnostics.Test.Tests.Async
 {
     [TestClass]
-    public class AsyncMethodWithoutAsyncSuffixTests : CSharpCodeFixVerifier
+    public class SyncMethodWithAsyncSuffixTests : CSharpCodeFixVerifier
     {
-        protected override CodeFixProvider CodeFixProvider => new AsyncMethodWithoutAsyncSuffixCodeFix();
+        protected override CodeFixProvider CodeFixProvider => new SyncMethodWithAsyncSuffixCodeFix();
 
-        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new AsyncMethodWithoutAsyncSuffixAnalyzer();
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new SyncMethodWithAsyncSuffixAnalyzer();
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_WithAsyncMethodAndNoSuffix()
-        {
-            var original = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            Task Method()
-            {
-                return Task.CompletedTask;
-            }
-        }
-    }";
-
-            var result = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            Task MethodAsync()
-            {
-                return Task.CompletedTask;
-            }
-        }
-    }";
-
-            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "Method"));
-            VerifyFix(original, result);
-        }
-
-        [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_WithAsyncMethodAndSuffix()
-        {
-            var original = @"
-    using System;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            Task MethodAsync()
-            {
-                return Task.CompletedTask;
-            }
-        }
-    }";
-            VerifyDiagnostic(original);
-        }
-
-        [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_WithSynchronousMethodAndNoSuffix()
+        public void SyncMethodWithAsyncSuffix_WithSynchronousMethodAndNoSuffix()
         {
             var original = @"
     using System;
@@ -90,11 +30,69 @@ namespace VSDiagnostics.Test.Tests.Async
             }
         }
     }";
+
             VerifyDiagnostic(original);
         }
 
         [TestMethod]
-        public void AsyncMethodWithoutAsyncSuffix_WithInheritance()
+        public void SyncMethodWithAsyncSuffix_WithSynchronousMethodAndSuffix()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            void MethodAsync()
+            {
+            }
+        }
+    }";
+
+            var result = @"
+    using System;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            void Method()
+            {
+            }
+        }
+    }";
+
+            VerifyDiagnostic(original, string.Format(SyncMethodWithAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MethodAsync"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void SyncMethodWithAsyncSuffix_WithAsyncMethodAndSuffix()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            async Task MethodAsync()
+            {
+            }
+        }
+    }";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SyncMethodWithAsyncSuffix_WithInheritance()
         {
             var original = @"
     using System;
@@ -105,14 +103,13 @@ namespace VSDiagnostics.Test.Tests.Async
     {
         interface IMyInterface
         {
-            Task MyMethod();
+            void MyMethodAsync();
         }
 
         class MyClass : IMyInterface
         {
-            public Task MyMethod()
+            public void MyMethodAsync()
             {
-                return Task.CompletedTask;
             }
         }
     }";
@@ -126,19 +123,18 @@ namespace VSDiagnostics.Test.Tests.Async
     {
         interface IMyInterface
         {
-            Task MyMethodAsync();
+            void MyMethod();
         }
 
         class MyClass : IMyInterface
         {
-            public Task MyMethodAsync()
+            public void MyMethod()
             {
-                return Task.CompletedTask;
             }
         }
     }";
 
-            VerifyDiagnostic(original, string.Format(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethod"));
+            VerifyDiagnostic(original, string.Format(SyncMethodWithAsyncSuffixAnalyzer.Rule.MessageFormat.ToString(), "MyMethodAsync"));
             VerifyFix(original, result);
         }
     }

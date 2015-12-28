@@ -3,20 +3,25 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsInvertedDefaultOptions
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
-        private static readonly string Message = VSDiagnosticsResources.ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzerMessage;
-        private static readonly string Title = VSDiagnosticsResources.ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private static readonly string Message =
+            VSDiagnosticsResources.ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzerMessage;
+
+        private static readonly string Title =
+            VSDiagnosticsResources.ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzerTitle;
+
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.ConditionalOperatorReturnsInvertedDefaultOptions, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -41,8 +46,10 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsInvertedDe
                 return;
             }
 
-            var hasInvertedTrueLiteral = trueExpression.Token.IsKind(SyntaxKind.FalseKeyword) && trueExpression.Token.Value is bool;
-            var hasInvertedFalseLiteral = falseExpression.Token.IsKind(SyntaxKind.TrueKeyword) && falseExpression.Token.Value is bool;
+            var hasInvertedTrueLiteral = trueExpression.Token.IsKind(SyntaxKind.FalseKeyword) &&
+                                         trueExpression.Token.Value is bool;
+            var hasInvertedFalseLiteral = falseExpression.Token.IsKind(SyntaxKind.TrueKeyword) &&
+                                          falseExpression.Token.Value is bool;
 
             if (hasInvertedTrueLiteral && hasInvertedFalseLiteral)
             {

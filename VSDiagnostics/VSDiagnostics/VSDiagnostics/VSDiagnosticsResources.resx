@@ -131,7 +131,7 @@
     <value>Use cast instead of as.</value>
   </data>
   <data name="AsyncMethodWithoutAsyncSuffixAnalyzerMessage" xml:space="preserve">
-    <value>Method "{0}" does not end with 'Async'.</value>
+    <value>Asynchronous method "{0}" does not end with 'Async'.</value>
     <comment>{0} - Method name</comment>
   </data>
   <data name="AsyncMethodWithoutAsyncSuffixAnalyzerTitle" xml:space="preserve">
@@ -285,7 +285,7 @@
     <value>Your constructor is the same as a default constructor and can be removed.</value>
   </data>
   <data name="SingleGeneralExceptionAnalyzerMessage" xml:space="preserve">
-    <value>A single catch-all clause has been used.</value>
+    <value>A single catch-all clause has been used. Consider adding specific exception handlers or a comment.</value>
   </data>
   <data name="SingleGeneralExceptionAnalyzerTitle" xml:space="preserve">
     <value>Verifies whether a try-catch block does not contain just a single Exception clause.</value>
@@ -403,10 +403,11 @@
     <value>Use alias</value>
   </data>
   <data name="FlagsEnumValuesAreNotPowersOfTwoAnalyzerMessage" xml:space="preserve">
-    <value>[Flags] enum {0} values are not powers of 2</value>
+    <value>[Flags] enum {0} its values are not explicit powers of 2</value>
+    <comment>{0} - Enum typename</comment>
   </data>
   <data name="FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle" xml:space="preserve">
-    <value>[Flags] enum values are not powers of 2</value>
+    <value>[Flags] enum its values are not explicit powers of 2</value>
   </data>
   <data name="FlagsEnumValuesAreNotPowersOfTwoCodeFixTitle" xml:space="preserve">
     <value>Use powers of 2</value>
@@ -476,6 +477,24 @@
   </data>
   <data name="StructsShouldNotMutateSelfAnalyzerTitle" xml:space="preserve">
     <value>A struct should not mutate itself.</value>
+  </data>
+  <data name="FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerMessage" xml:space="preserve">
+    <value>[Flags] enum {0} its values are not explicit powers of 2 and does not fit in a {1} enum type.</value>
+    <comment>{0} - Enum typename
+{1} - Enum basetypename</comment>
+  </data>
+  <data name="FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerTitle" xml:space="preserve">
+    <value>[Flags] enum its values are not explicit powers of 2 and its values dont fit in the specified enum type.</value>
+  </data>
+  <data name="SyncMethodWithSyncSuffixAnalyzerMessage" xml:space="preserve">
+    <value>Synchronous method "{0}" should not end with 'Async'.</value>
+    <comment>{0} - Method name</comment>
+  </data>
+  <data name="SyncMethodWithSyncSuffixAnalyzerTitle" xml:space="preserve">
+    <value>Your method is not async, and should not have the 'Async' suffix.</value>
+  </data>
+  <data name="SyncMethodWithSyncSuffixAnalyzerCodeFixTitle" xml:space="preserve">
+    <value>Remove suffix</value>
   </data>
   <data name="RedundantXmlDocReturnAnalyzerMessage" xml:space="preserve">
     <value>Redundant &lt;return&gt; clause on void method in XML documentation.</value>
