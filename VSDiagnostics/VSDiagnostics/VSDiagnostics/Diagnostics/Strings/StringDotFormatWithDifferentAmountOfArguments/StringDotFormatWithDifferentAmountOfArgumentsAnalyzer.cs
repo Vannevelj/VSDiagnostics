@@ -69,7 +69,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
             }
 
             // We ignore interpolated strings for now (workitem tracked in https://github.com/Vannevelj/VSDiagnostics/issues/313)
-            if (invocation.ArgumentList.Arguments[formatIndex].Expression is InterpolatedStringExpressionSyntax)
+            if (formatExpression.Expression is InterpolatedStringExpressionSyntax)
             {
                 return;
             }
