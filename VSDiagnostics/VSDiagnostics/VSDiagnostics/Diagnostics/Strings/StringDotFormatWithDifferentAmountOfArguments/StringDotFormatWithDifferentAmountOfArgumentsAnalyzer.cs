@@ -97,18 +97,20 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
                 // Inline array creation à la string.Format("{0}", new object[] { "test" })
                 if (argumentType.Type.TypeKind == TypeKind.Array)
                 {
-                    var inlineArrayCreation = formatArguments[0].DescendantNodes().OfType<InitializerExpressionSyntax>().FirstOrDefault();
-                    if (inlineArrayCreation != null)
-                    {
-                        amountOfFormatArguments = inlineArrayCreation.Expressions.Count;
-                        goto placeholderVerification;
-                    }
-
+                    // We check for an invocation first to account for the scenario where you have both an invocation and an array initializer
+                    // Think about something like this: string.Format(""{0}{1}{2}"", new[] { 1 }.Concat(new[] {2}).ToArray());
                     var methodInvocation = formatArguments[0].DescendantNodes().OfType<InvocationExpressionSyntax>().FirstOrDefault();
                     if (methodInvocation != null)
                     {
                         // We don't handle method calls that return an array in the case of a single argument
                         return;
+                    }
+
+                    var inlineArrayCreation = formatArguments[0].DescendantNodes().OfType<InitializerExpressionSyntax>().FirstOrDefault();
+                    if (inlineArrayCreation != null)
+                    {
+                        amountOfFormatArguments = inlineArrayCreation.Expressions.Count;
+                        goto placeholderVerification;
                     }
                 }
 

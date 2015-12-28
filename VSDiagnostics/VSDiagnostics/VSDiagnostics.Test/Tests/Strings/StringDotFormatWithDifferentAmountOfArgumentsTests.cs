@@ -1042,5 +1042,68 @@ namespace ConsoleApplication1
 }";
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithConcatArgs()
+        {
+            var original = @"
+using System;
+using System.Linq;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string.Format(""{0}{1}"", new[] { 1 }.Concat(new[] {2}).ToArray());
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithLackingConcatArgs()
+        {
+            var original = @"
+using System;
+using System.Linq;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string.Format(""{0}{1}{2}"", new[] { 1 }.Concat(new[] {2}).ToArray());
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithObjectInitializer()
+        {
+            var original = @"
+using System;
+using System.Linq;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string.Format(""{0}{1}"", new MyClass { Prop1 = 5, Prop2 = 6});
+        }
+
+	    public int Prop1 { get; set; }
+	    public int Prop2 { get; set; }
+    }
+}";
+            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
     }
 }
