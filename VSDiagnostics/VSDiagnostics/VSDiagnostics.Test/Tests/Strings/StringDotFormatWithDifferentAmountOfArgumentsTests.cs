@@ -511,6 +511,58 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithExplicitArrayReferencedThroughIdentifierReferencingAnotherMethod()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            var args = getArgs();
+            string s = string.Format(""abc {0} {1}"", args);
+        }
+
+        object[] getArgs()
+        {
+            return new object[] {""hello"", ""bye""};
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithExplicitArrayReferencedThroughIdentifierReferencingAnotherMethod_WithLackingArgs()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            var args = getArgs();
+            string s = string.Format(""abc {0} {1}"", args);
+        }
+
+        object[] getArgs()
+        {
+            return new object[] {""hello""};
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
         public void StringDotFormatWithDifferentAmountOfArguments_WithExplicitArrayReferenced()
         {
             var original = @"
