@@ -104,24 +104,27 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
 
                 // If it's an identifier, we don't handle those that provide an array as a single argument
                 // Other types are fine though -- think about string.Format("{0}", name);
-                var referencedIdentifier = formatArguments[0].Expression as IdentifierNameSyntax;
-                if (referencedIdentifier != null)
+                if (hasObjectArray)
                 {
-                    // This is also hit by any other kind of identifier so we have to differentiate
-                    var referencedType = context.SemanticModel.GetTypeInfo(referencedIdentifier);
-                    if (referencedType.Type == null || referencedType.Type is IErrorTypeSymbol)
+                    var referencedIdentifier = formatArguments[0].Expression as IdentifierNameSyntax;
+                    if (referencedIdentifier != null)
                     {
-                        return;
-                    }
+                        // This is also hit by any other kind of identifier so we have to differentiate
+                        var referencedType = context.SemanticModel.GetTypeInfo(referencedIdentifier);
+                        if (referencedType.Type == null || referencedType.Type is IErrorTypeSymbol)
+                        {
+                            return;
+                        }
 
-                    if (referencedType.Type.Kind == SymbolKind.ArrayType && hasObjectArray)
-                    {
-                        // If we got here it means the arguments are passed in through an identifier which resolves to an array 
-                        // aka: calling a method that returns an array or referencing a variable/field that is of type array
-                        // We cannot reliably get the amount of arguments if it's a method
-                        // We could get them when it's a field/variable/property but that takes some more work and thinking about it
-                        // This is tracked in workitem https://github.com/Vannevelj/VSDiagnostics/issues/330
-                        return;
+                        if (referencedType.Type.Kind == SymbolKind.ArrayType)
+                        {
+                            // If we got here it means the arguments are passed in through an identifier which resolves to an array 
+                            // aka: calling a method that returns an array or referencing a variable/field that is of type array
+                            // We cannot reliably get the amount of arguments if it's a method
+                            // We could get them when it's a field/variable/property but that takes some more work and thinking about it
+                            // This is tracked in workitem https://github.com/Vannevelj/VSDiagnostics/issues/330
+                            return;
+                        }
                     }
                 }
             }
