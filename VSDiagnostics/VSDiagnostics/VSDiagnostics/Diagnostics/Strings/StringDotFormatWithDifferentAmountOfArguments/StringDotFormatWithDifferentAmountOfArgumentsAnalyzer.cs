@@ -12,7 +12,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class StringDotFormatWithDifferentAmountOfArgumentsAnalyzer : DiagnosticAnalyzer
     {
-        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Error;
         private static readonly string Category = VSDiagnosticsResources.StringsCategory;
         private static readonly string Message = VSDiagnosticsResources.StringDotFormatWithDifferentAmountOfArgumentsMessage;
         private static readonly string Title = VSDiagnosticsResources.StringDotFormatWithDifferentAmountOfArgumentsTitle;
