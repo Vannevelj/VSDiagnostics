@@ -784,5 +784,51 @@ namespace ConsoleApplication1
 }";
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithSimilarInvocation_AndExtraParameters()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            Other(""{0}{1}{2}"", new object[] { ""arg"", ""arg2"" }, 5);
+        }
+
+        void Other(string format, object[] args, int something)
+        {
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithSimilarInvocation_AndExtraObjectArrayParameters()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            Other(""{0}{1}{2}"", new object[] { ""arg"", ""arg2"" }, new object[] {});
+        }
+
+        void Other(string format, object[] args, object[] args2)
+        {
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
     }
 }

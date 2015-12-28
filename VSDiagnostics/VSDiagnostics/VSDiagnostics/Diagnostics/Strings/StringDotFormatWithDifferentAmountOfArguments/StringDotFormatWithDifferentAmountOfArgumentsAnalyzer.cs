@@ -53,19 +53,19 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
             {
                 return;
             }
+            var formatIndex = formatParam.Ordinal;
 
-            var hasObjectArray = 
-                methodSymbol.Parameters.FirstOrDefault(x => x.Type.Kind == SymbolKind.ArrayType && 
-                                                            ((IArrayTypeSymbol) x.Type).ElementType.SpecialType == SpecialType.System_Object) != null;
-            var hasObject = 
-                methodSymbol.Parameters.FirstOrDefault(x => x.Type.SpecialType == SpecialType.System_Object) != null;
+            var formatParameters = methodSymbol.Parameters.Skip(formatIndex + 1).ToArray();
+            var hasObjectArray = formatParameters.Length == 1 &&
+                                 formatParameters.All(x => x.Type.Kind == SymbolKind.ArrayType &&
+                                                           ((IArrayTypeSymbol) x.Type).ElementType.SpecialType == SpecialType.System_Object);
+            var hasObject = formatParameters.All(x => x.Type.SpecialType == SpecialType.System_Object);
 
             if (!(hasObject || hasObjectArray))
             {
                 return;
             }
 
-            var formatIndex = formatParam.Ordinal;
             var formatExpression = invocation.ArgumentList.Arguments[formatIndex];
             var formatString = context.SemanticModel.GetConstantValue(formatExpression.Expression);
             if (!formatString.HasValue)
