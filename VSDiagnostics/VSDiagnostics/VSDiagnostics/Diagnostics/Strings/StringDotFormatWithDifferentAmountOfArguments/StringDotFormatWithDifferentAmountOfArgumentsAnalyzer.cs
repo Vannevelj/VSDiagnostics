@@ -61,15 +61,15 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
                 return;
             }
 
-            var formatExpression = invocation.ArgumentList.Arguments[formatIndex];
-            var formatString = context.SemanticModel.GetConstantValue(formatExpression.Expression);
+            var formatExpression = invocation.ArgumentList.Arguments[formatIndex].Expression;
+            var formatString = context.SemanticModel.GetConstantValue(formatExpression);
             if (!formatString.HasValue)
             {
                 return;
             }
 
             // We ignore interpolated strings for now (workitem tracked in https://github.com/Vannevelj/VSDiagnostics/issues/313)
-            if (formatExpression.Expression is InterpolatedStringExpressionSyntax)
+            if (formatExpression is InterpolatedStringExpressionSyntax)
             {
                 return;
             }
