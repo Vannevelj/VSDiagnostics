@@ -641,6 +641,32 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithFormatProvider_AndExplicitArrayReferencedThroughMethod()
+        {
+            var original = @"
+using System;
+using System.Globalization;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string s = string.Format(CultureInfo.InvariantCulture, ""abc {0}{1}"", getArgs());
+        }
+
+        object[] getArgs()
+        {
+            return new object[] {""hello""};
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
         public void StringDotFormatWithDifferentAmountOfArguments_WithConstantFormat()
         {
             var original = @"
@@ -829,6 +855,26 @@ namespace ConsoleApplication1
     }
 }";
             VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithObjectArrayAsObject()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            var args = new object[] { ""a"", ""b""};
+            string s = string.Format(""{0}{1}"", (object) args);
+        }
+    }
+}";
+            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
         }
     }
 }

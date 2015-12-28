@@ -114,7 +114,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
                         return;
                     }
 
-                    if (referencedType.Type.Kind == SymbolKind.ArrayType)
+                    if (referencedType.Type.Kind == SymbolKind.ArrayType && hasObjectArray)
                     {
                         // If we got here it means the arguments are passed in through an identifier which resolves to an array 
                         // aka: calling a method that returns an array or referencing a variable/field that is of type array
