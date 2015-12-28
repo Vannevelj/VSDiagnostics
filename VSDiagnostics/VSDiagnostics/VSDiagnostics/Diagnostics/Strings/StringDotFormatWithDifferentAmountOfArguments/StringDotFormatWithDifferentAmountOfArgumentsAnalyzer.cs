@@ -68,12 +68,6 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
                 return;
             }
 
-            // We ignore interpolated strings for now (workitem tracked in https://github.com/Vannevelj/VSDiagnostics/issues/313)
-            if (formatExpression is InterpolatedStringExpressionSyntax)
-            {
-                return;
-            }
-
             // Get the total amount of arguments passed in for the format
             // If the first one is the literal (aka: the format specified) then every other argument is an argument to the format
             // If not, it means the first one is the CultureInfo, the second is the format and all others are format arguments
