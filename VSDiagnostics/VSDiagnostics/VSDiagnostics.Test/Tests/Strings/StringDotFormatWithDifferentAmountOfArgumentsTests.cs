@@ -937,5 +937,110 @@ namespace ConsoleApplication1
 }";
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithMethod_ThatDoesNotReturnAnArray_WithLackingArguments_WithOneArgument()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string s = string.Format(""abc {0}{1}"", Other());
+        }
+
+        int Other()
+        {
+            return 4;
+        }
+    }
+}";
+            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithMethod_WithParenthesizedMethodCall()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string s = string.Format(""abc {0}{1}"", (Other()));
+        }
+
+        int Other()
+        {
+            return 4;
+        }
+    }
+}";
+            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithMethod_ThatDoesNotReturnAnArray_WithLackingArguments_WithTwoArguments()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string s = string.Format(""abc {0}{1}{2}"", Other(), Other());
+        }
+
+        int Other()
+        {
+            return 4;
+        }
+    }
+}";
+            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithMethod_ThatDoesNotReturnAnArray()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string s = string.Format(""abc {0}{1}"", Other(), Another());
+        }
+
+        int Other()
+        {
+            return 4;
+        }
+
+        object Another()
+        {
+            return 5;
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
     }
 }

@@ -101,14 +101,15 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
                     if (inlineArrayCreation != null)
                     {
                         amountOfFormatArguments = inlineArrayCreation.Expressions.Count;
+                        goto placeholderVerification;
                     }
-                }
 
-                // We don't handle method calls
-                var invocationExpression = formatArguments[0].Expression as InvocationExpressionSyntax;
-                if (invocationExpression != null)
-                {
-                    return;
+                    var methodInvocation = formatArguments[0].DescendantNodes().OfType<InvocationExpressionSyntax>().FirstOrDefault();
+                    if (methodInvocation != null)
+                    {
+                        // We don't handle method calls that return an array in the case of a single argument
+                        return;
+                    }
                 }
 
                 // If it's an identifier, we don't handle those that provide an array as a single argument
@@ -138,6 +139,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
                 }
             }
 
+            placeholderVerification:
             // Get the placeholders we use stripped off their format specifier, get the highest value 
             // and verify that this value + 1 (to account for 0-based indexing) is not greater than the amount of placeholder arguments
             var placeholders = PlaceholderHelpers.GetPlaceholders((string) formatString.Value)
