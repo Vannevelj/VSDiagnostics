@@ -88,11 +88,20 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
 
             if (formatArguments.Length == 1)
             {
-                // Inline array creation à la string.Format("{0}", new object[] { "test" })
-                var arrayCreation = formatArguments[0].Expression as ArrayCreationExpressionSyntax;
-                if (arrayCreation?.Initializer?.Expressions != null)
+                var argumentType = context.SemanticModel.GetTypeInfo(formatArguments[0].Expression);
+                if (argumentType.Type == null)
                 {
-                    amountOfFormatArguments = arrayCreation.Initializer.Expressions.Count;
+                    return;
+                }
+
+                // Inline array creation à la string.Format("{0}", new object[] { "test" })
+                if (argumentType.Type.TypeKind == TypeKind.Array)
+                {
+                    var inlineArrayCreation = formatArguments[0].DescendantNodes().OfType<InitializerExpressionSyntax>().FirstOrDefault();
+                    if (inlineArrayCreation != null)
+                    {
+                        amountOfFormatArguments = inlineArrayCreation.Expressions.Count;
+                    }
                 }
 
                 // We don't handle method calls

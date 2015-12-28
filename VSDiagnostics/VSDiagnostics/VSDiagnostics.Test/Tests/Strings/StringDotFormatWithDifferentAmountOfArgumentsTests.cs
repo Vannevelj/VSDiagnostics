@@ -735,6 +735,27 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithParenthesizedExpression()
+        {
+            var original = @"
+using System;
+using System.Globalization;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string s = string.Format((""{0}{1}""), ""arg"");
+        }
+    }
+}";
+            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
         public void StringDotFormatWithDifferentAmountOfArguments_WithConsoleWriteLine_AndSingleObject()
         {
             var original = @"
@@ -875,6 +896,46 @@ namespace ConsoleApplication1
     }
 }";
             VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithParenthesizedExplicitArray()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string s = string.Format(""abc {0}{1}"", (new[] { 5 }));
+        }
+    }
+}";
+            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithParenthesizedExplicitArray_WithValidScenario()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            string s = string.Format(""abc {0}{1}"", (new[] { 5, 2 }));
+        }
+    }
+}";
+            VerifyDiagnostic(original);
         }
     }
 }
