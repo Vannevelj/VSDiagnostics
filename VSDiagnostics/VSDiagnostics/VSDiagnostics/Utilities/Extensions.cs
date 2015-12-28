@@ -184,20 +184,14 @@ namespace VSDiagnostics.Utilities
         // NOTE: string.Format() vs Format() (current/external type)
         public static bool IsAnInvocationOf(this InvocationExpressionSyntax invocation, Type type, string method, SemanticModel semanticModel)
         {
-            var memberAccessExpression = invocation?.Expression as MemberAccessExpressionSyntax;
-            if (memberAccessExpression == null)
+            var invokedMethod = semanticModel.GetSymbolInfo(invocation);
+            var invokedType = invokedMethod.Symbol?.ContainingType;
+            if (invokedType == null)
             {
                 return false;
             }
 
-            var invokedType = semanticModel.GetSymbolInfo(memberAccessExpression.Expression);
-            var invokedMethod = semanticModel.GetSymbolInfo(memberAccessExpression.Name);
-            if (invokedType.Symbol == null || invokedMethod.Symbol == null)
-            {
-                return false;
-            }
-
-            return invokedType.Symbol.MetadataName == type.Name && 
+            return invokedType.MetadataName == type.Name && 
                    invokedMethod.Symbol.MetadataName == method;
         }
 

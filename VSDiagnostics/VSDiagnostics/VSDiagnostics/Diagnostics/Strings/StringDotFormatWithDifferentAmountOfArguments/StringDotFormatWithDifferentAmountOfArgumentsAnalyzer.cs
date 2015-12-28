@@ -35,53 +35,55 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
                 return;
             }
 
-            // Verify we're dealing with a string.Format() call
-            if (!invocation.IsAnInvocationOf(typeof(string), nameof(string.Format), context.SemanticModel))
-            {
-                return;
-            }
-
             if (invocation.ArgumentList == null)
             {
                 return;
             }
 
-            // Verify the format is a literal expression and not a method invocation or an identifier
-            // The overloads are in the form string.Format(string, object[]) or string.Format(CultureInfo, string, object[])
-            var allArguments = invocation.ArgumentList.Arguments;
-            var firstArgument = allArguments.ElementAtOrDefault(0, null);
-            var secondArgument = allArguments.ElementAtOrDefault(1, null);
-            if (firstArgument == null)
+            // Get the format string
+            // This corresponds to the argument passed to the parameter with name 'format'
+            var invokedMethod = context.SemanticModel.GetSymbolInfo(invocation);
+            var methodSymbol = invokedMethod.Symbol as IMethodSymbol;
+
+            // Verify we're dealing with a call to a method that accepts a variable named 'format' and a object, params object[] or a plain object[]
+            // params object[] and object[] can both be verified by looking for the latter
+            // This allows us to support similar calls like Console.WriteLine("{0}", "test") as well which carry an implicit string.Format
+            var formatParam = methodSymbol?.Parameters.FirstOrDefault(x => x.Name == "format");
+            if (formatParam == null)
             {
                 return;
             }
 
-            var firstArgumentIsLiteral = firstArgument.Expression is LiteralExpressionSyntax;
-            var secondArgumentIsLiteral = secondArgument?.Expression is LiteralExpressionSyntax;
-            if (!firstArgumentIsLiteral && !secondArgumentIsLiteral)
+            var hasObjectArray = 
+                methodSymbol.Parameters.FirstOrDefault(x => x.Type.Kind == SymbolKind.ArrayType && 
+                                                            ((IArrayTypeSymbol) x.Type).ElementType.SpecialType == SpecialType.System_Object) != null;
+            var hasObject = 
+                methodSymbol.Parameters.FirstOrDefault(x => x.Type.SpecialType == SpecialType.System_Object) != null;
+
+            if (!(hasObject || hasObjectArray))
+            {
+                return;
+            }
+
+            var formatIndex = formatParam.Ordinal;
+            var formatExpression = invocation.ArgumentList.Arguments[formatIndex];
+            var formatString = context.SemanticModel.GetConstantValue(formatExpression.Expression);
+            if (!formatString.HasValue)
             {
                 return;
             }
 
             // We ignore interpolated strings for now (workitem tracked in https://github.com/Vannevelj/VSDiagnostics/issues/313)
-            if (firstArgument.Expression is InterpolatedStringExpressionSyntax)
+            if (invocation.ArgumentList.Arguments[formatIndex].Expression is InterpolatedStringExpressionSyntax)
             {
                 return;
             }
-
-            // If we got here, it means that the either the first or the second argument is a literal. 
-            // If the first is a literal then that is our format
-            var formatString = firstArgumentIsLiteral
-                ? ((LiteralExpressionSyntax) firstArgument.Expression).GetText().ToString()
-                : ((LiteralExpressionSyntax) secondArgument.Expression).GetText().ToString();
 
             // Get the total amount of arguments passed in for the format
             // If the first one is the literal (aka: the format specified) then every other argument is an argument to the format
             // If not, it means the first one is the CultureInfo, the second is the format and all others are format arguments
             // We also have to check whether or not the arguments are passed in through an explicit array or whether they use the params syntax
-            var formatArguments = firstArgumentIsLiteral
-                ? allArguments.Skip(1).ToArray()
-                : allArguments.Skip(2).ToArray();
+            var formatArguments = invocation.ArgumentList.Arguments.Skip(formatIndex + 1).ToArray();
             var amountOfFormatArguments = formatArguments.Length;
 
             if (formatArguments.Length == 1)
@@ -112,7 +114,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
                         return;
                     }
 
-                    if (referencedType.Type.TypeKind.HasFlag(SyntaxKind.ArrayType))
+                    if (referencedType.Type.Kind == SymbolKind.ArrayType)
                     {
                         // If we got here it means the arguments are passed in through an identifier which resolves to an array 
                         // aka: calling a method that returns an array or referencing a variable/field that is of type array
@@ -124,9 +126,9 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
                 }
             }
 
-            // Get the placeholders we use, stripped off their format specifier, get the highest value 
+            // Get the placeholders we use stripped off their format specifier, get the highest value 
             // and verify that this value + 1 (to account for 0-based indexing) is not greater than the amount of placeholder arguments
-            var placeholders = PlaceholderHelpers.GetPlaceholders(formatString)
+            var placeholders = PlaceholderHelpers.GetPlaceholders((string) formatString.Value)
                                                  .Cast<Match>()
                                                  .Select(x => x.Value)
                                                  .Select(PlaceholderHelpers.GetPlaceholderIndex)
@@ -141,9 +143,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
             var highestPlaceholder = placeholders.Max();
             if (highestPlaceholder + 1 > amountOfFormatArguments)
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, firstArgumentIsLiteral
-                    ? firstArgument.GetLocation()
-                    : secondArgument.GetLocation()));
+                context.ReportDiagnostic(Diagnostic.Create(Rule, formatExpression.GetLocation()));
             }
         }
     }

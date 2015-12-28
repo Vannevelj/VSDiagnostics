@@ -338,7 +338,7 @@ namespace ConsoleApplication1
 
 
         [TestMethod]
-        public void StringDotFormatWithDifferentAmountOfArguments_WithSimilarInvocation()
+        public void StringDotFormatWithDifferentAmountOfArguments_WithSimilarInvocation_WithWrongTypes()
         {
             var original = @"
 using System;
@@ -353,7 +353,55 @@ namespace ConsoleApplication1
             Method(""{{def {0} ghi {1}}}"", 1);
         }
 
-        void Method(string s, int x)
+        void Method(string format, int x)
+        {
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithSimilarInvocation_WithCorrectTypes()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        MyClass()
+        {
+            Method(""{{def {0} ghi {1}}}"", 1);
+        }
+
+        void Method(string format, object x)
+        {
+        }
+    }
+}";
+            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithSimilarInvocation_WithWrongFormatParamName()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        MyClass()
+        {
+            Method(""{{def {0} ghi {1}}}"", 1);
+        }
+
+        void Method(string s, object x)
         {
         }
     }
@@ -586,6 +634,151 @@ namespace ConsoleApplication1
         {
             var args = new object[] {""hello""};
             string s = string.Format(CultureInfo.InvariantCulture, ""abc {0}{1}"", args);
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithConstantFormat()
+        {
+            var original = @"
+using System;
+using System.Globalization;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            const string format = ""{0}{1}"";
+            string s = string.Format(format, ""arg"");
+        }
+    }
+}";
+            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithConstantConcatenation()
+        {
+            var original = @"
+using System;
+using System.Globalization;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            const string a = ""{0}"";
+            const string b = ""{1}"";
+            const string format = a + b;
+            string s = string.Format(format, ""arg"");
+        }
+    }
+}";
+            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithStaticImport()
+        {
+            var original = @"
+using static System.String;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            const string a = ""{0}"";
+            const string b = ""{1}"";
+            const string format = a + b;
+            string s = Format(format, ""arg"");
+        }
+    }
+}";
+            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithConsoleWriteLine_AndSingleObject()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            Console.WriteLine(""{0}{1}"", ""arg"");
+        }
+    }
+}";
+            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithConsoleWriteLine_AndParamsObject()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            Console.WriteLine(""{0}{1}{2}"", ""arg"", ""arg2"");
+        }
+    }
+}";
+            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithConsoleWriteLine_AndObjectArray()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            Console.WriteLine(""{0}{1}{2}"", new object[] { ""arg"", ""arg2"" });
+        }
+    }
+}";
+            VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithConsoleWriteLine_AndObjectArrayReference()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(string input)
+        {
+            var args = new object[] { ""arg"", ""arg2"" };
+            Console.WriteLine(""{0}{1}{2}"", args);
         }
     }
 }";
