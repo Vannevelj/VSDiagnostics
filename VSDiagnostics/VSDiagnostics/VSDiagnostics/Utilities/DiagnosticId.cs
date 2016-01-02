@@ -43,5 +43,6 @@
         public const string FlagsEnumValuesDontFit = "VSD0039";
         public const string NamingConventionsConflictingMember = "VSD0040";
         public const string SyncMethodWithAsyncSuffix = "VSD0041";
+        public const string StringDotFormatWithDifferentAmountOfArguments = "VSD0042";
     }
 }

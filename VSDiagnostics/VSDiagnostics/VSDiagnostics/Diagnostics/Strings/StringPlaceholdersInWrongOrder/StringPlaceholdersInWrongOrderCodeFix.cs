@@ -48,8 +48,8 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
                 ((LiteralExpressionSyntax)
                     stringFormatInvocation.ArgumentList.Arguments[firstArgumentIsLiteral ? 0 : 1].Expression).GetText()
                     .ToString();
-            var elements = StringPlaceholdersInWrongOrderHelper.GetPlaceholdersSplit(formatString);
-            var matches = StringPlaceholdersInWrongOrderHelper.GetPlaceholders(formatString);
+            var elements = PlaceholderHelpers.GetPlaceholdersSplit(formatString);
+            var matches = PlaceholderHelpers.GetPlaceholders(formatString);
 
             // Here we will store a key-value pair of the old placeholder value and the new value that we associate with it
             var placeholderMapping = new Dictionary<int, int>();
@@ -69,9 +69,9 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
             for (var index = 0; index < elements.Length; index++)
             {
                 // If it's a numerical value, it means we're dealing with a placeholder
-                // Use Normalize() to account for formatted placeholders
+                // Use GetPlaceholderIndex() to account for formatted placeholders
                 int placeholderValue;
-                if (int.TryParse(StringPlaceholdersInWrongOrderHelper.Normalize(elements[index]), out placeholderValue))
+                if (int.TryParse(PlaceholderHelpers.GetPlaceholderIndex(elements[index]), out placeholderValue))
                 {
                     // If we already have a new value associated with this placeholder, retrieve it and add it to our result
                     if (placeholderMapping.ContainsKey(placeholderValue))
