@@ -926,7 +926,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A string.Format() call has more arguments than its placeholders allow..
+        ///   Looks up a localized string similar to A string.Format() call lacks arguments and will cause a runtime exception.
         /// </summary>
         internal static string StringDotFormatWithDifferentAmountOfArgumentsMessage {
             get {

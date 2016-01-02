@@ -28,8 +28,8 @@ Currently these diagnostics are implemented:
 | Async | VSD0041 | A non-async, non-Task method should not end with -Async.
 | Attributes | VSD0002 | Attributes with empty argument lists can have the argument list removed.
 | Attributes | VSD0003 | Gives an enum the [Flags] attribute.
-| Attributes | VSD0004 | [Flags] enum its values are not explicit powers of 2
-| Attributes | VSD0039 | [Flags] enum its values are not explicit powers of 2 and does not fit in the specified enum type.
+| Attributes | VSD0004 | A `[Flags]` enum its values are not explicit powers of 2
+| Attributes | VSD0039 | A `[Flags]` enum its values are not explicit powers of 2 and does not fit in the specified enum type.
 | Attributes | VSD0005 | Complains if the [Obsolete] attribute is used without an explicit reason.
 | Attributes | VSD0006 | The `OnPropertyChanged()` method can automatically get the caller member name.
 | Exceptions | VSD0007 | `ArgumentException` and its subclasses should use `nameof()` when they refer to a method parameter.
@@ -44,8 +44,8 @@ Currently these diagnostics are implemented:
 | General | VSD0016 | A boolean expression doesn't have to be compared to `true`.
 | General | VSD0017 | The conditional operator shouldn't return redundant `true` and `false` literals.
 | General | VSD0018 | The conditional operator shouldn't return redundant `false` and `true` literals.
-| General | VSD0019 | Complains about `if` statements of the form `if (statement) { /* body */ }`, where "statement" is always evaluates to `false`.
-| General | VSD0020 | Complains about `if` statements of the form `if (statement) { /* body */ }`, where "statement" is always evaluates to `true`.
+| General | VSD0019 | Complains about `if` statements of the form `if (statement) { /* body */ }`, where "statement" always evaluates to `false`.
+| General | VSD0020 | Complains about `if` statements of the form `if (statement) { /* body */ }`, where "statement" always evaluates to `true`.
 | General | VSD0021 | Inserts the default access modifier for a declaration.
 | General | VSD0022 | Detects usage of the `goto` keyword.
 | General | VSD0023 | Changes one-liner `if` and `else` statements to be surrounded in a block.
@@ -58,9 +58,10 @@ Currently these diagnostics are implemented:
 | General | VSD0030 | Warns about using a redundant default constructor.
 | General | VSD0031 | A conversion can be done using `as` + a `null` comparison.
 | General | VSD0032 | Use `var` instead of an explicit type.
-| General | VSD0033 | Use the built-in type aliases instead the concrete type.
+| General | VSD0033 | Use the built-in type aliases instead of the concrete type.
 | Strings | VSD0034 | Use `string.Empty` instead of `""`.
 | Strings | VSD0035 | Adjusts the placeholders in `string.Format()` calls to be in numerical order.
+| Strings | VSD0042 | A `string.Format()` call lacks arguments and will cause a runtime exception
 | Structs | VSD0036 | Warns when a struct attempts to assign 'this' to a new instance of the struct.
 | Tests | VSD0037 | Test methods do not need to use the "Test" suffic.
 | Tests | VSD0038 | Change the access modifier to `public` for all methods annotated as test. Supports NUnit, MSTest and xUnit.net.

@@ -497,7 +497,7 @@
     <value>Remove suffix</value>
   </data>
   <data name="StringDotFormatWithDifferentAmountOfArgumentsMessage" xml:space="preserve">
-    <value>A string.Format() call has more arguments than its placeholders allow.</value>
+    <value>A string.Format() call lacks arguments and will cause a runtime exception</value>
   </data>
   <data name="StringDotFormatWithDifferentAmountOfArgumentsTitle" xml:space="preserve">
     <value>Invalid arguments for the string.Format() call.</value>
