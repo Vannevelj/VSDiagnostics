@@ -773,6 +773,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Redundant &lt;param&gt; clause in XML documentation..
+        /// </summary>
+        internal static string RedundantXmlDocParameterAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("RedundantXmlDocParameterAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &lt;param&gt; clause on XML doc..
+        /// </summary>
+        internal static string RedundantXmlDocParameterAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("RedundantXmlDocParameterAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &lt;param&gt; clause.
+        /// </summary>
+        internal static string RedundantXmlDocParameterCodeFixTitle {
+            get {
+                return ResourceManager.GetString("RedundantXmlDocParameterCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Redundant &lt;return&gt; clause on void method in XML documentation..
         /// </summary>
         internal static string RedundantXmlDocReturnAnalyzerMessage {

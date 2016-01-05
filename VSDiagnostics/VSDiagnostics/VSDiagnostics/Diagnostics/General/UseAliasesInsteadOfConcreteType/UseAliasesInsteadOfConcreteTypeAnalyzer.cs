@@ -140,7 +140,7 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
             }
 
             var typeName = symbol.MetadataName;
-            var namespaceName = symbol.ContainingNamespace.Name;
+            var namespaceName = symbol.ContainingNamespace?.Name;
 
             if (namespaceName != "System")
             {

@@ -514,4 +514,13 @@
   <data name="StringDotFormatWithDifferentAmountOfArgumentsTitle" xml:space="preserve">
     <value>Invalid arguments for the string.Format() call.</value>
   </data>
+  <data name="RedundantXmlDocParameterAnalyzerMessage" xml:space="preserve">
+    <value>Redundant &lt;param&gt; clause in XML documentation.</value>
+  </data>
+  <data name="RedundantXmlDocParameterAnalyzerTitle" xml:space="preserve">
+    <value>Remove &lt;param&gt; clause on XML doc.</value>
+  </data>
+  <data name="RedundantXmlDocParameterCodeFixTitle" xml:space="preserve">
+    <value>Remove &lt;param&gt; clause</value>
+  </data>
 </root>
