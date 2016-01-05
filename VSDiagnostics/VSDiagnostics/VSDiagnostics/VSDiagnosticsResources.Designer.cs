@@ -953,6 +953,24 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A string.Format() call lacks arguments and will cause a runtime exception.
+        /// </summary>
+        internal static string StringDotFormatWithDifferentAmountOfArgumentsMessage {
+            get {
+                return ResourceManager.GetString("StringDotFormatWithDifferentAmountOfArgumentsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid arguments for the string.Format() call..
+        /// </summary>
+        internal static string StringDotFormatWithDifferentAmountOfArgumentsTitle {
+            get {
+                return ResourceManager.GetString("StringDotFormatWithDifferentAmountOfArgumentsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Re-order placeholders.
         /// </summary>
         internal static string StringPlaceholdersInWrongOrderCodeFixTitle {

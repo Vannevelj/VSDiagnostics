@@ -469,7 +469,7 @@ namespace ConsoleApplication1
         {
             if (""someString"" != ""false"")
             {
-                return true;
+                return;
             }
         }
     }
