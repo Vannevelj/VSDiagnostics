@@ -24,8 +24,7 @@ namespace VSDiagnostics.Diagnostics.XMLDocComments.RedundantXMLDocParameter
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
-            var method =
-                root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
+            var method = root.FindNode(new Microsoft.CodeAnalysis.Text.TextSpan(diagnosticSpan.Start, diagnosticSpan.Length));
 
             var docComment =
                 method
@@ -35,17 +34,27 @@ namespace VSDiagnostics.Diagnostics.XMLDocComments.RedundantXMLDocParameter
                     .OfType<DocumentationCommentTriviaSyntax>()
                     .First();
 
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.RedundantXmlDocParameterCodeFixTitle, x => RemoveXmlParameterNode(context.Document, root, docComment), nameof(RedundantXmlDocParameterAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.RedundantXmlDocParameterCodeFixTitle,
+                    x => RemoveXmlParameterNode(context.Document, root, docComment, diagnostic.Location),
+                    nameof(RedundantXmlDocParameterAnalyzer)), diagnostic);
         }
 
-        private Task<Solution> RemoveXmlParameterNode(Document document, SyntaxNode root, DocumentationCommentTriviaSyntax docComment)
+        private Task<Solution> RemoveXmlParameterNode(Document document, SyntaxNode root, DocumentationCommentTriviaSyntax docComment, Location location)
         {
             var docCommentNodes = docComment.Content;
 
             var indexOfDocCommentNode = docCommentNodes.IndexOf(n =>
             {
-                var node = n as XmlElementSyntax;
-                return node != null && node.StartTag.Name.LocalName.Text == "param";
+                return n.GetLocation() == location;
+                /*var node = (XmlElementSyntax)n;
+                var v = n.GetLocation() == location;
+                var nodeParamName =
+                    node.StartTag.Attributes.OfType<XmlNameAttributeSyntax>()
+                        .First(a => a.Name.LocalName.Text == "name")
+                        .Identifier.Identifier.Text;
+                
+                return node.StartTag.Name.LocalName.Text == "param" && nodeParamName == paramName;*/
             });
 
             var newDocComment = docComment.RemoveNode(docCommentNodes[indexOfDocCommentNode], SyntaxRemoveOptions.KeepNoTrivia);

@@ -26,10 +26,6 @@ namespace VSDiagnostics.Diagnostics.XMLDocComments.RedundantXMLDocParameter
             context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.MethodDeclaration);
         }
         
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="context" name=""></param>
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             var method = context.Node as MethodDeclarationSyntax;
@@ -56,13 +52,14 @@ namespace VSDiagnostics.Diagnostics.XMLDocComments.RedundantXMLDocParameter
             foreach (var node in xmlParamNodes)
             {
                 var paramNames = method.ParameterList.Parameters.Select(p => p.Identifier.Text);
-                var nodeParamNames = node.StartTag.Attributes.OfType<XmlNameAttributeSyntax>()
-                        .Where(a => a.Name.LocalName.Text == "name")
-                        .Select(a => a.Identifier.Identifier.Text);
+                var nodeParamName =
+                    node.StartTag.Attributes.OfType<XmlNameAttributeSyntax>()
+                        .First(a => a.Name.LocalName.Text == "name")
+                        .Identifier.Identifier.Text;
 
-                if (nodeParamNames.Any(nodeParamName => paramNames.Contains(nodeParamName)))
+                if (paramNames.Contains(nodeParamName))
                 {
-                    return;
+                    continue;
                 }
                 
                 context.ReportDiagnostic(Diagnostic.Create(Rule, node.GetLocation()));

@@ -23,8 +23,9 @@ namespace ConsoleApplication1
         /// <summary>
         /// 
         /// </summary>
-        /// <param name=""myParam"">An unnecessary parameter</param>
-        public int Fizz(int myParam)
+        /// <param name=""myInt"">An unnecessary parameter</param>
+        /// <param name=""myString"">An unnecessary parameter</param>
+        public int Fizz(int myInt, string myString)
         {
             return 3;
         }
@@ -61,6 +62,44 @@ namespace ConsoleApplication1
         /// 
         /// </summary>
         public void Fizz()
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, RedundantXmlDocParameterAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void RedundantXmlDocParameter_RemovesSingleNodeWithoutAffectingOthers()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name=""myInt"">A nonexistent parameter</param>
+        /// <param name=""myParam"">A nonexistent parameter</param>
+        public void Fizz(int myInt)
+        {
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name=""myInt"">A nonexistent parameter</param>
+        public void Fizz(int myInt)
         {
         }
     }
