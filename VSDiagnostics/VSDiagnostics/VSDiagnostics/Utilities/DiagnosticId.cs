@@ -44,5 +44,7 @@
         public const string NamingConventionsConflictingMember = "VSD0040";
         public const string SyncMethodWithAsyncSuffix = "VSD0041";
         public const string StringDotFormatWithDifferentAmountOfArguments = "VSD0042";
+        public const string RedundantXmlDocReturn = "VSD0043";
+        public const string RedundantXmlDocParameter = "VSD0044";
     }
 }

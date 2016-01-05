@@ -4,20 +4,20 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.XMLDocComments.RedundantXMLDocParameter
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class RedundantXmlDocParameterAnalyzer : DiagnosticAnalyzer
     {
-        private const string DiagnosticId = nameof(RedundantXmlDocParameterAnalyzer);
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.XmlDocCommentsCategory;
         private static readonly string Message = VSDiagnosticsResources.RedundantXmlDocParameterAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.RedundantXmlDocParameterAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId.RedundantXmlDocParameter, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
