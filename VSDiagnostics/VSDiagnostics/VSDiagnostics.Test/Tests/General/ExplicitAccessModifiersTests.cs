@@ -2350,5 +2350,27 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, string.Format(ExplicitAccessModifiersAnalyzer.Rule.MessageFormat.ToString(), "private"));
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_PartialMethod_DoesNotProvideFix()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    public partial class Program
+    {
+        partial void Method();
+    }
+
+    public partial class Program
+    {
+        partial void Method() { }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }
