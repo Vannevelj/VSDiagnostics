@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,13 +35,14 @@ namespace VSDiagnostics.Diagnostics.XMLDocComments.RedundantXMLDocReturn
                     .OfType<DocumentationCommentTriviaSyntax>()
                     .First();
 
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.RedundantXmlDocReturnCodeFixTitle, x => RemoveXmlReturn(context.Document, root, docComment), nameof(RedundantXmlDocReturnAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.RedundantXmlDocReturnCodeFixTitle,
+                    x => RemoveXmlReturn(context.Document, root, docComment), nameof(RedundantXmlDocReturnAnalyzer)),
+                diagnostic);
         }
 
         private Task<Solution> RemoveXmlReturn(Document document, SyntaxNode root, DocumentationCommentTriviaSyntax docComment)
         {
-            DocumentationCommentTriviaSyntax newDocComment = null;
-
             var docCommentNodes = docComment.Content;
 
             var indexOfDocCommentNode = docCommentNodes.IndexOf(n =>
@@ -51,7 +51,7 @@ namespace VSDiagnostics.Diagnostics.XMLDocComments.RedundantXMLDocReturn
                 return node != null && node.StartTag.Name.LocalName.Text == "returns";
             });
 
-            newDocComment = docComment.RemoveNode(docCommentNodes[indexOfDocCommentNode], SyntaxRemoveOptions.KeepNoTrivia);
+            var newDocComment = docComment.RemoveNode(docCommentNodes[indexOfDocCommentNode], SyntaxRemoveOptions.KeepNoTrivia);
 
             if (indexOfDocCommentNode == 0 || !(newDocComment.Content[indexOfDocCommentNode - 1] is XmlTextSyntax))
             {
@@ -59,7 +59,6 @@ namespace VSDiagnostics.Diagnostics.XMLDocComments.RedundantXMLDocReturn
             }
 
             var leadingDocCommentLines = (XmlTextSyntax)newDocComment.Content[indexOfDocCommentNode - 1];
-
             var textTokens = leadingDocCommentLines.TextTokens;
 
             for (var j = textTokens.Count - 1; j >= 0; j--)
@@ -73,7 +72,6 @@ namespace VSDiagnostics.Diagnostics.XMLDocComments.RedundantXMLDocReturn
             }
 
             var newLeadingDocCommentLines = leadingDocCommentLines.WithTextTokens(textTokens);
-
             newDocComment = newDocComment.ReplaceNode(leadingDocCommentLines, newLeadingDocCommentLines);
 
             return Task.FromResult(document.WithSyntaxRoot(root.ReplaceNode(docComment, newDocComment)).Project.Solution);

@@ -43,20 +43,7 @@ namespace VSDiagnostics.Diagnostics.XMLDocComments.RedundantXMLDocParameter
         private Task<Solution> RemoveXmlParameterNode(Document document, SyntaxNode root, DocumentationCommentTriviaSyntax docComment, Location location)
         {
             var docCommentNodes = docComment.Content;
-
-            var indexOfDocCommentNode = docCommentNodes.IndexOf(n =>
-            {
-                return n.GetLocation() == location;
-                /*var node = (XmlElementSyntax)n;
-                var v = n.GetLocation() == location;
-                var nodeParamName =
-                    node.StartTag.Attributes.OfType<XmlNameAttributeSyntax>()
-                        .First(a => a.Name.LocalName.Text == "name")
-                        .Identifier.Identifier.Text;
-                
-                return node.StartTag.Name.LocalName.Text == "param" && nodeParamName == paramName;*/
-            });
-
+            var indexOfDocCommentNode = docCommentNodes.IndexOf(n => n.GetLocation() == location);
             var newDocComment = docComment.RemoveNode(docCommentNodes[indexOfDocCommentNode], SyntaxRemoveOptions.KeepNoTrivia);
 
             if (indexOfDocCommentNode == 0 || !(newDocComment.Content[indexOfDocCommentNode - 1] is XmlTextSyntax))
@@ -65,21 +52,19 @@ namespace VSDiagnostics.Diagnostics.XMLDocComments.RedundantXMLDocParameter
             }
 
             var leadingDocCommentLines = (XmlTextSyntax)newDocComment.Content[indexOfDocCommentNode - 1];
-
             var textTokens = leadingDocCommentLines.TextTokens;
 
-            for (var j = textTokens.Count - 1; j >= 0; j--)
+            for (var i = textTokens.Count - 1; i >= 0; i--)
             {
-                if (textTokens[j].Text.Trim() != "")
+                if (textTokens[i].Text.Trim() != "")
                 {
                     break;
                 }
 
-                textTokens = textTokens.RemoveAt(j);
+                textTokens = textTokens.RemoveAt(i);
             }
 
             var newLeadingDocCommentLines = leadingDocCommentLines.WithTextTokens(textTokens);
-
             newDocComment = newDocComment.ReplaceNode(leadingDocCommentLines, newLeadingDocCommentLines);
 
             return Task.FromResult(document.WithSyntaxRoot(root.ReplaceNode(docComment, newDocComment)).Project.Solution);
