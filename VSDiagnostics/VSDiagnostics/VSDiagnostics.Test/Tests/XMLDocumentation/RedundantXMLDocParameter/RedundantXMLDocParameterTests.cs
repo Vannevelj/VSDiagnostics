@@ -2,18 +2,18 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.Helpers.CSharp;
-using VSDiagnostics.Diagnostics.XMLDocComments.RedundantXMLDocReturn;
+using VSDiagnostics.Diagnostics.XMLDocumentation.RedundantXMLDocParameter;
 
-namespace VSDiagnostics.Test.Tests.XMLDocComments.RedundantXMLDocReturn
+namespace VSDiagnostics.Test.Tests.XMLDocumentation.RedundantXMLDocParameter
 {
     [TestClass]
-    public class RedundantXmlDocReturnTests : CSharpCodeFixVerifier
+    public class RedundantXmlDocParameterTests : CSharpCodeFixVerifier
     {
-        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new RedundantXmlDocReturnAnalyzer();
-        protected override CodeFixProvider CodeFixProvider => new RedundantXmlDocReturnCodeFix();
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new RedundantXmlDocParameterAnalyzer();
+        protected override CodeFixProvider CodeFixProvider => new RedundantXmlDocParameterCodeFix();
 
         [TestMethod]
-        public void RedundantXmlDocReturn_DoesNotFireForNonVoidMethod()
+        public void RedundantXmlDocParameter_DoesNotFireForValidNodes()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -23,8 +23,9 @@ namespace ConsoleApplication1
         /// <summary>
         /// 
         /// </summary>
-        /// <returns></returns>
-        public int Fizz()
+        /// <param name=""myInt"">An unnecessary parameter</param>
+        /// <param name=""myString"">An unnecessary parameter</param>
+        public int Fizz(int myInt, string myString)
         {
             return 3;
         }
@@ -35,7 +36,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void RedundantXmlDocReturn_FiresForNonVoidMethod()
+        public void RedundantXmlDocParameter_FiresForNodeWithNonexistentParameter()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -45,7 +46,7 @@ namespace ConsoleApplication1
         /// <summary>
         /// 
         /// </summary>
-        /// <returns></returns>
+        /// <param name=""myParam"">A nonexistent parameter</param>
         public void Fizz()
         {
         }
@@ -66,19 +67,57 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, RedundantXmlDocReturnAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, RedundantXmlDocParameterAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 
         [TestMethod]
-        public void RedundantXmlDocReturn_DoesNotThrowIfOnlyReturnsElementExists()
+        public void RedundantXmlDocParameter_RemovesSingleNodeWithoutAffectingOthers()
         {
             var original = @"
 namespace ConsoleApplication1
 {
     class MyClass
     {
-        /// <returns></returns>
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name=""myInt"">A nonexistent parameter</param>
+        /// <param name=""myParam"">A nonexistent parameter</param>
+        public void Fizz(int myInt)
+        {
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name=""myInt"">A nonexistent parameter</param>
+        public void Fizz(int myInt)
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, RedundantXmlDocParameterAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void RedundantXmlDocParameter_RemovesWhenOnlyParamNodeExists()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        /// <param name=""myParam"">A nonexistent parameter</param>
         public void Fizz()
         {
         }
@@ -97,12 +136,12 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, RedundantXmlDocReturnAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, RedundantXmlDocParameterAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 
         [TestMethod]
-        public void RedundantXmlDocReturn_FiresForNonVoidMethod_OnlyRemovesReturnClause()
+        public void RedundantXmlDocParameter_OnlyRemovesParamClause()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -112,7 +151,7 @@ namespace ConsoleApplication1
         /// <summary>
         /// 
         /// </summary>
-        /// <returns></returns>
+        /// <param name=""myParam"">A nonexistent parameter</param>
         [System.Obsolete("""")]
         public void Fizz()
         {
@@ -135,12 +174,12 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, RedundantXmlDocReturnAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, RedundantXmlDocParameterAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 
         [TestMethod]
-        public void RedundantXmlDocReturn_FiresForNonVoidMethod_OnlyRemovesReturnClause_DoesNotRemoveOtherClauses()
+        public void RedundantXmlDocParameter_OnlyRemovesParamClause_DoesNotRemoveOtherClauses()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -149,7 +188,7 @@ namespace ConsoleApplication1
     {
         /// <summary>
         /// 
-        /// </summary> <returns></returns>
+        /// </summary> <param name=""myParam"">A nonexistent parameter</param>
         [System.Obsolete("""")]
         public void Fizz()
         {
@@ -172,12 +211,12 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, RedundantXmlDocReturnAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, RedundantXmlDocParameterAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
 
         [TestMethod]
-        public void RedundantXmlDocReturn_FiresForNonVoidMethod_OnlyRemovesExplicitReturnsNode()
+        public void RedundantXmlDocParameter_OnlyRemovesExplicitReturnsNode()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -185,7 +224,7 @@ namespace ConsoleApplication1
     class MyClass
     {
         /// <summary>
-        /// <returns></returns>
+        /// <param name=""myParam"">A nonexistent parameter</param>
         /// </summary>
         public void Fizz()
         {
@@ -197,7 +236,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void RedundantXmlDocReturn_FiresForNonVoidMethod_OnlyRemovesReturnClause_DocumentAllTextBeforeNodeRemoved()
+        public void RedundantXmlDocParameter_OnlyRemovesParamClause_DocumentAllTextBeforeNodeRemoved()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -208,7 +247,7 @@ namespace ConsoleApplication1
         /// 
         /// </summary>
         /// text isn't usually outside XML nodes...
-        /// <returns></returns>
+        /// <param name=""myParam"">A nonexistent parameter</param>
         [System.Obsolete("""")]
         public void Fizz()
         {
@@ -232,7 +271,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, RedundantXmlDocReturnAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, RedundantXmlDocParameterAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
     }

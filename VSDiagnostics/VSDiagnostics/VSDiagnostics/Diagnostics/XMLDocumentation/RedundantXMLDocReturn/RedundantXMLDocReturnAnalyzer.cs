@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
 
-namespace VSDiagnostics.Diagnostics.XMLDocComments.RedundantXMLDocReturn
+namespace VSDiagnostics.Diagnostics.XMLDocumentation.RedundantXMLDocReturn
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class RedundantXmlDocReturnAnalyzer : DiagnosticAnalyzer

@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace VSDiagnostics.Diagnostics.XMLDocComments.RedundantXMLDocReturn
+namespace VSDiagnostics.Diagnostics.XMLDocumentation.RedundantXMLDocReturn
 {
     [ExportCodeFixProvider(nameof(RedundantXmlDocReturnCodeFix), LanguageNames.CSharp), Shared]
     public class RedundantXmlDocReturnCodeFix : CodeFixProvider
