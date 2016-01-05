@@ -51,6 +51,49 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void ReplaceEmptyStringsWithStringDotEmpty_KeepsWhitespaceTrivia()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var ret = new Dictionary<string, string>
+            {
+                {""writeClientsPoolSize"", """" + ""test""}
+            };
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var ret = new Dictionary<string, string>
+            {
+                {""writeClientsPoolSize"", string.Empty + ""test""}
+            };
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
         public void ReplaceEmptyStringsWithStringDotEmpty_WithDefaultParameterEmptyStringLiteral()
         {
             var original = @"
