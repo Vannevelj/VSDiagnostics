@@ -117,7 +117,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        public void Fizz()
+        public void Fizz(int myParam)
         {
         }
     }
@@ -127,7 +127,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void MissingXmlDocParameter_OnlyRemovesExplicitReturnsNode()
+        public void MissingXmlDocParameter_AddsNodeWhenNodeExistsInIncorrectPlace()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -137,17 +137,33 @@ namespace ConsoleApplication1
         /// <summary>
         /// <param name=""myParam"">A nonexistent parameter</param>
         /// </summary>
-        public void Fizz()
+        public void Fizz(int myParam)
         {
         }
     }
 }";
 
-            VerifyDiagnostic(original);
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        /// <summary>
+        /// <param name=""myParam"">A nonexistent parameter</param>
+        /// </summary>
+        /// <param name=""myParam""></param>
+        public void Fizz(int myParam)
+        {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, MissingXmlDocParameterAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
 
         [TestMethod]
-        public void MissingXmlDocParameter_OnlyRemovesParamClause_DocumentAllTextBeforeNodeRemoved()
+        public void MissingXmlDocParameter_SavesAllTextBeforeNodeRemoved()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -158,6 +174,7 @@ namespace ConsoleApplication1
         /// 
         /// </summary>
         /// text isn't usually outside XML nodes...
+        /// more text outside a node...
         [System.Obsolete("""")]
         public void Fizz(int myInt)
         {
@@ -175,9 +192,55 @@ namespace ConsoleApplication1
         /// </summary>
         /// <param name=""myInt""></param>
         /// text isn't usually outside XML nodes...
+        /// more text outside a node...
         [System.Obsolete("""")]
         public void Fizz(int myInt)
         {
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, MissingXmlDocParameterAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void MissingXmlDocParameter_AddsManyInCorrectOrder()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name=""myInt""></param>
+        /// <param name=""myDouble""></param>
+        /// <returns></returns>
+        public int Fizz(int myInt, string myString, char myChar, double myDouble)
+        {
+            return 0;
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name=""myInt""></param>
+        /// <param name=""myString""></param>
+        /// <param name=""myChar""></param>
+        /// <param name=""myDouble""></param>
+        /// <returns></returns>
+        public int Fizz(int myInt, string myString, char myChar, double myDouble)
+        {
+            return 0;
         }
     }
 }";

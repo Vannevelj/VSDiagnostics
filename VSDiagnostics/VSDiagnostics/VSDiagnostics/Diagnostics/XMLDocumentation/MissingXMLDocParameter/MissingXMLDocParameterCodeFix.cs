@@ -61,7 +61,8 @@ namespace VSDiagnostics.Diagnostics.XMLDocumentation.MissingXMLDocParameter
             {
                 var attribute = SyntaxFactory.XmlNameAttribute(SyntaxFactory.XmlName("name"),
                     SyntaxFactory.Token(SyntaxKind.DoubleQuoteToken), missingNodeParamName,
-                    SyntaxFactory.Token(SyntaxKind.DoubleQuoteToken)).WithLeadingTrivia(SyntaxFactory.SyntaxTrivia(SyntaxKind.WhitespaceTrivia, " "));
+                    SyntaxFactory.Token(SyntaxKind.DoubleQuoteToken))
+                    .WithLeadingTrivia(SyntaxFactory.SyntaxTrivia(SyntaxKind.WhitespaceTrivia, " "));
 
                 var paramNode = SyntaxFactory.XmlElement(
                     SyntaxFactory.XmlElementStartTag(SyntaxFactory.XmlName("param"),
@@ -79,14 +80,36 @@ namespace VSDiagnostics.Diagnostics.XMLDocumentation.MissingXMLDocParameter
 
         private SyntaxList<SyntaxNode> GetNodes(DocumentationCommentTriviaSyntax docComment, List<XmlElementSyntax> xmlParamNodes, XmlElementSyntax summaryBlock)
         {
-            var nodes = SyntaxFactory.List<SyntaxNode>();
+            var nodes = SyntaxFactory.List<SyntaxNode>().Add(docComment.Content.First());
+
+            var newLineToken = SyntaxFactory.Token(default(SyntaxTriviaList),
+                SyntaxKind.XmlTextLiteralNewLineToken,
+                Environment.NewLine, Environment.NewLine, default(SyntaxTriviaList));
+
+            var docCommentToken = SyntaxFactory.Token(SyntaxFactory.TriviaList(
+                SyntaxFactory.SyntaxTrivia(SyntaxKind.DocumentationCommentExteriorTrivia, "///")),
+                SyntaxKind.XmlTextLiteralToken, " ", " ", default(SyntaxTriviaList));
+
+            var xmlTextElement = SyntaxFactory.XmlText(SyntaxFactory.TokenList(newLineToken, docCommentToken));
 
             var paramListInserted = false;
-            for (var i = 0; i < docComment.Content.Count; i++)
+            // We already added the first one.
+            for (var i = 1; i < docComment.Content.Count; i++)
             {
+                var syntax = docComment.Content[i] as XmlTextSyntax;
+                
+                // Skip XmlTextSyntax nodes - we will re-add them
+                if (syntax != null &&
+                    syntax.TextTokens.All(t => t.Text.Trim() == string.Empty))
+                {
+                    continue;
+                }
+
                 if (!xmlParamNodes.Contains(docComment.Content[i]))
                 {
-                    nodes = nodes.Add(docComment.Content[i]);
+                    nodes = i == 1 || docComment.Content[i] is XmlTextSyntax
+                        ? nodes.Add(docComment.Content[i])
+                        : nodes.AddRange(new SyntaxNode[] {xmlTextElement, docComment.Content[i]});
                 }
 
                 if (docComment.Content[i] != summaryBlock && (i != docComment.Content.Count - 1 || paramListInserted))
@@ -94,27 +117,8 @@ namespace VSDiagnostics.Diagnostics.XMLDocumentation.MissingXMLDocParameter
                     continue;
                 }
 
-                var newLineToken = SyntaxFactory.Token(default(SyntaxTriviaList),
-                    SyntaxKind.XmlTextLiteralNewLineToken,
-                    Environment.NewLine, Environment.NewLine, default(SyntaxTriviaList));
-
-                var docCommentToken = SyntaxFactory.Token(SyntaxFactory.TriviaList(
-                    SyntaxFactory.SyntaxTrivia(SyntaxKind.DocumentationCommentExteriorTrivia, "///")),
-                    SyntaxKind.XmlTextLiteralToken, " ", " ", default(SyntaxTriviaList));
-
-                var xmlTextElement = SyntaxFactory.XmlText(SyntaxFactory.TokenList(newLineToken, docCommentToken));
                 nodes = xmlParamNodes.Aggregate(nodes, (current, paramNode) => current.AddRange(new SyntaxNode[] { xmlTextElement, paramNode }));
-
                 paramListInserted = true;
-
-                if (i != docComment.Content.Count - 1 && docComment.Content[i + 1] is XmlTextSyntax)
-                {
-                    var textSyntax = (XmlTextSyntax)docComment.Content[i + 1];
-                    if (textSyntax.TextTokens.All(t => t.Text.Trim() == string.Empty))
-                    {
-                        i++;    // skip this item
-                    }
-                }
             }
 
             var lastXmlTextSyntax = nodes.Last() as XmlTextSyntax;
