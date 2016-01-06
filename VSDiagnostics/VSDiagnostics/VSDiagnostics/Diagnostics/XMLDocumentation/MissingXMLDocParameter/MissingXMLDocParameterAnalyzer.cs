@@ -6,18 +6,18 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
 
-namespace VSDiagnostics.Diagnostics.XMLDocumentation.RedundantXMLDocParameter
+namespace VSDiagnostics.Diagnostics.XMLDocumentation.MissingXMLDocParameter
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class RedundantXmlDocParameterAnalyzer : DiagnosticAnalyzer
+    public class MissingXmlDocParameterAnalyzer : DiagnosticAnalyzer
     {
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.XmlDocCommentsCategory;
-        private static readonly string Message = VSDiagnosticsResources.RedundantXmlDocParameterAnalyzerMessage;
-        private static readonly string Title = VSDiagnosticsResources.RedundantXmlDocParameterAnalyzerTitle;
+        private static readonly string Message = VSDiagnosticsResources.MissingXmlDocParameterAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.MissingXmlDocParameterAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId.RedundantXmlDocParameter, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId.MissingXmlDocParameter, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -48,21 +48,17 @@ namespace VSDiagnostics.Diagnostics.XMLDocumentation.RedundantXMLDocParameter
             }
 
             var paramNames = method.ParameterList.Parameters.Select(p => p.Identifier.Text).ToList();
-            var xmlParamNodes = docNodes.SelectMany(n => n.Content.OfType<XmlElementSyntax>()).Where(e => e.StartTag.Name.LocalName.Text == "param");
+            var xmlParamNodes = docNodes.SelectMany(n => n.Content.OfType<XmlElementSyntax>()).Where(e => e.StartTag.Name.LocalName.Text == "param").ToList();
 
-            foreach (var node in xmlParamNodes)
+            var xmlParamNodeNames =
+                xmlParamNodes.SelectMany(n =>
+                        n.StartTag.Attributes.OfType<XmlNameAttributeSyntax>()
+                            .Where(a => a.Name.LocalName.Text == "name")
+                            .Select(t => t.Identifier.Identifier.Text)).ToList();
+
+            if (!paramNames.All(n => xmlParamNodeNames.Contains(n)))
             {
-                var nodeParamName =
-                    node.StartTag.Attributes.OfType<XmlNameAttributeSyntax>()
-                        .First(a => a.Name.LocalName.Text == "name")
-                        .Identifier.Identifier.Text;
-
-                if (paramNames.Contains(nodeParamName))
-                {
-                    continue;
-                }
-                
-                context.ReportDiagnostic(Diagnostic.Create(Rule, node.GetLocation()));
+                context.ReportDiagnostic(Diagnostic.Create(Rule, method.Identifier.GetLocation()));
             }
         }
     }

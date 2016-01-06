@@ -523,4 +523,13 @@
   <data name="RedundantXmlDocParameterCodeFixTitle" xml:space="preserve">
     <value>Remove &lt;param&gt; clause</value>
   </data>
+  <data name="MissingXmlDocParameterAnalyzerMessage" xml:space="preserve">
+    <value>Missing &lt;param&gt; clause in XML documentation.</value>
+  </data>
+  <data name="MissingXmlDocParameterAnalyzerTitle" xml:space="preserve">
+    <value>Add emtpy &lt;param&gt; clause on XML doc.</value>
+  </data>
+  <data name="MissingXmlDocParameterCodeFixTitle" xml:space="preserve">
+    <value>Add &lt;param&gt; clause</value>
+  </data>
 </root>

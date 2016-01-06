@@ -46,5 +46,6 @@
         public const string StringDotFormatWithDifferentAmountOfArguments = "VSD0042";
         public const string RedundantXmlDocReturn = "VSD0043";
         public const string RedundantXmlDocParameter = "VSD0044";
+        public const string MissingXmlDocParameter = "VSD0045";
     }
 }
