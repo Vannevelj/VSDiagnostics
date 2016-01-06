@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
@@ -8,7 +9,6 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.XMLDocumentation.MissingXMLDocParameter
 {
@@ -72,8 +72,15 @@ namespace VSDiagnostics.Diagnostics.XMLDocumentation.MissingXMLDocParameter
                 xmlParamNodes.Insert(paramNames.IndexOf(missingNodeParamName), paramNode);
             }
 
+            var newDocComment = SyntaxFactory.DocumentationCommentTrivia(
+                SyntaxKind.SingleLineDocumentationCommentTrivia, GetNodes(docComment, xmlParamNodes, summaryBlock));
+            return Task.FromResult(document.WithSyntaxRoot(root.ReplaceNode(docComment, newDocComment)).Project.Solution);
+        }
+
+        private SyntaxList<SyntaxNode> GetNodes(DocumentationCommentTriviaSyntax docComment, List<XmlElementSyntax> xmlParamNodes, XmlElementSyntax summaryBlock)
+        {
             var nodes = SyntaxFactory.List<SyntaxNode>();
-            
+
             var paramListInserted = false;
             for (var i = 0; i < docComment.Content.Count; i++)
             {
@@ -82,65 +89,45 @@ namespace VSDiagnostics.Diagnostics.XMLDocumentation.MissingXMLDocParameter
                     nodes = nodes.Add(docComment.Content[i]);
                 }
 
-                if (docComment.Content[i] == summaryBlock)
+                if (docComment.Content[i] != summaryBlock && (i != docComment.Content.Count - 1 || paramListInserted))
                 {
-                    var xmlTextElement =
-                        SyntaxFactory.XmlText(
-                            SyntaxFactory.TokenList(
-                                SyntaxFactory.Token(default(SyntaxTriviaList), SyntaxKind.XmlTextLiteralNewLineToken,
-                                    Environment.NewLine, Environment.NewLine, default(SyntaxTriviaList)),
-                                SyntaxFactory.Token(
-                                    SyntaxFactory.TriviaList(
-                                        SyntaxFactory.SyntaxTrivia(SyntaxKind.DocumentationCommentExteriorTrivia, "///")),
-                                    SyntaxKind.XmlTextLiteralToken, " ", " ", default(SyntaxTriviaList))));
+                    continue;
+                }
 
-                    nodes = xmlParamNodes.Aggregate(nodes, (current, paramNode) => current.AddRange(new SyntaxNode[] {xmlTextElement, paramNode}));
+                var newLineToken = SyntaxFactory.Token(default(SyntaxTriviaList),
+                    SyntaxKind.XmlTextLiteralNewLineToken,
+                    Environment.NewLine, Environment.NewLine, default(SyntaxTriviaList));
 
-                    paramListInserted = true;
+                var docCommentToken = SyntaxFactory.Token(SyntaxFactory.TriviaList(
+                    SyntaxFactory.SyntaxTrivia(SyntaxKind.DocumentationCommentExteriorTrivia, "///")),
+                    SyntaxKind.XmlTextLiteralToken, " ", " ", default(SyntaxTriviaList));
 
-                    if (i != docComment.Content.Count - 1 && docComment.Content[i + 1] is XmlTextSyntax)
+                var xmlTextElement = SyntaxFactory.XmlText(SyntaxFactory.TokenList(newLineToken, docCommentToken));
+                nodes = xmlParamNodes.Aggregate(nodes, (current, paramNode) => current.AddRange(new SyntaxNode[] { xmlTextElement, paramNode }));
+
+                paramListInserted = true;
+
+                if (i != docComment.Content.Count - 1 && docComment.Content[i + 1] is XmlTextSyntax)
+                {
+                    var textSyntax = (XmlTextSyntax)docComment.Content[i + 1];
+                    if (textSyntax.TextTokens.All(t => t.Text.Trim() == string.Empty))
                     {
-                        var textSyntax = (XmlTextSyntax)docComment.Content[i + 1];
-
-                        if (textSyntax.TextTokens.All(t => t.Text.Trim() == string.Empty))
-                        {
-                            i++;    // skip this item
-                        }
+                        i++;    // skip this item
                     }
                 }
             }
-            
-            if (!paramListInserted)
-            {
-                var xmlTextElement =
-                    SyntaxFactory.XmlText(
-                        SyntaxFactory.TokenList(
-                            SyntaxFactory.Token(default(SyntaxTriviaList), SyntaxKind.XmlTextLiteralNewLineToken,
-                                Environment.NewLine, Environment.NewLine, default(SyntaxTriviaList)),
-                            SyntaxFactory.Token(
-                                SyntaxFactory.TriviaList(
-                                    SyntaxFactory.SyntaxTrivia(SyntaxKind.DocumentationCommentExteriorTrivia, "///")),
-                                SyntaxKind.XmlTextLiteralToken, " ", " ", default(SyntaxTriviaList))));
 
-                nodes = xmlParamNodes.Aggregate(nodes,
-                    (current, paramNode) => current.AddRange(new SyntaxNode[] { xmlTextElement, paramNode }));
-            }
-
-            if (!(nodes.Last() is XmlTextSyntax) ||
-                !((XmlTextSyntax) nodes.Last()).TextTokens.Last().IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+            var lastXmlTextSyntax = nodes.Last() as XmlTextSyntax;
+            if (lastXmlTextSyntax == null || !lastXmlTextSyntax.TextTokens.Last().IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
             {
                 var endNode = SyntaxFactory.XmlText(
                         SyntaxFactory.TokenList(SyntaxFactory.Token(default(SyntaxTriviaList), SyntaxKind.XmlTextLiteralNewLineToken,
                             Environment.NewLine, Environment.NewLine, default(SyntaxTriviaList))));
 
-                nodes = nodes.Add(endNode);
+                return nodes.Add(endNode);
             }
 
-            var newDocComment =
-                SyntaxFactory.DocumentationCommentTrivia(SyntaxKind.SingleLineDocumentationCommentTrivia, nodes);
-
-            return Task.FromResult(
-                    document.WithSyntaxRoot(root.ReplaceNode(docComment, newDocComment)).Project.Solution);
+            return nodes;
         }
     }
 }
