@@ -29,14 +29,12 @@ namespace VSDiagnostics.Diagnostics.XMLDocumentation.MissingXMLDocParameter
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             var method = context.Node as MethodDeclarationSyntax;
-            
             if (method == null)
             {
                 return; 
             }
 
-            var docNodes =
-                method.GetLeadingTrivia()
+            var docNodes = method.GetLeadingTrivia()
                     .Where(n => n.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
                     .Select(t => t.GetStructure())
                     .OfType<DocumentationCommentTriviaSyntax>()
@@ -48,7 +46,9 @@ namespace VSDiagnostics.Diagnostics.XMLDocumentation.MissingXMLDocParameter
             }
 
             var paramNames = method.ParameterList.Parameters.Select(p => p.Identifier.Text).ToList();
-            var xmlParamNodes = docNodes.SelectMany(n => n.Content.OfType<XmlElementSyntax>()).Where(e => e.StartTag.Name.LocalName.Text == "param").ToList();
+            var xmlParamNodes = docNodes.SelectMany(n => n.Content.OfType<XmlElementSyntax>())
+                        .Where(e => e.StartTag.Name.LocalName.Text == "param")
+                        .ToList();
 
             var xmlParamNodeNames =
                 xmlParamNodes.SelectMany(n =>
