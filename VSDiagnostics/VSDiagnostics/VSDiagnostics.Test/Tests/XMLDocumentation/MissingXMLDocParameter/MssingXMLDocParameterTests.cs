@@ -127,6 +127,40 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void MissingXmlDocParameter_SummaryNodeDoesNotExist()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        /// <returns></returns>
+        public int Fizz(int myParam)
+        {
+            return 0;
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        /// <returns></returns>
+        /// <param name=""myParam""></param>
+        public int Fizz(int myParam)
+        {
+            return 0;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, MissingXmlDocParameterAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
         public void MissingXmlDocParameter_AddsNodeWhenNodeExistsInIncorrectPlace()
         {
             var original = @"

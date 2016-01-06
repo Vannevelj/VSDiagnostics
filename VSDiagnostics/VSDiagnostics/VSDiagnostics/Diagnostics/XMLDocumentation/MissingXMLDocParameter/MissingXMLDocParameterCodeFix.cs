@@ -43,7 +43,7 @@ namespace VSDiagnostics.Diagnostics.XMLDocumentation.MissingXMLDocParameter
                                .First();
 
             var summaryBlock = docComment.Content.OfType<XmlElementSyntax>()
-                    .First(node => node.StartTag.Name.LocalName.Text == "summary");
+                    .FirstOrDefault(node => node.StartTag.Name.LocalName.Text == "summary");
 
             var paramNames = method.ParameterList.Parameters.Select(param => param.Identifier.Text).ToList();
             var xmlParamNodes = docComment.Content.OfType<XmlElementSyntax>()
@@ -68,7 +68,7 @@ namespace VSDiagnostics.Diagnostics.XMLDocumentation.MissingXMLDocParameter
                     SyntaxFactory.XmlElementStartTag(SyntaxFactory.XmlName("param"),
                         SyntaxFactory.List<XmlAttributeSyntax>()
                             .Add(attribute)), SyntaxFactory.XmlElementEndTag(SyntaxFactory.XmlName("param")))
-                    .WithLeadingTrivia(summaryBlock.GetLeadingTrivia());
+                    .WithLeadingTrivia(summaryBlock?.GetLeadingTrivia());
 
                 xmlParamNodes.Insert(paramNames.IndexOf(missingNodeParamName), paramNode);
             }
@@ -119,6 +119,11 @@ namespace VSDiagnostics.Diagnostics.XMLDocumentation.MissingXMLDocParameter
 
                 nodes = xmlParamNodes.Aggregate(nodes, (current, paramNode) => current.AddRange(new SyntaxNode[] { xmlTextElement, paramNode }));
                 paramListInserted = true;
+            }
+
+            if (!paramListInserted)
+            {
+                nodes = xmlParamNodes.Aggregate(nodes, (current, paramNode) => current.AddRange(new SyntaxNode[] { xmlTextElement, paramNode }));
             }
 
             var lastXmlTextSyntax = nodes.Last() as XmlTextSyntax;
