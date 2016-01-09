@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Shared.Extensions;
 
 namespace VSDiagnostics.Utilities
 {
@@ -14,27 +13,27 @@ namespace VSDiagnostics.Utilities
     public static class Extensions
     {
         private static readonly Dictionary<string, string> AliasMapping = new Dictionary<string, string>
-            {
-                {nameof(Int16), "short"},
-                {nameof(Int32), "int"},
-                {nameof(Int64), "long"},
-                {nameof(UInt16), "ushort"},
-                {nameof(UInt32), "uint"},
-                {nameof(UInt64), "ulong"},
-                {nameof(Object), "object"},
-                {nameof(Byte), "byte"},
-                {nameof(SByte), "sbyte"},
-                {nameof(Char), "char"},
-                {nameof(Boolean), "bool"},
-                {nameof(Single), "float"},
-                {nameof(Double), "double"},
-                {nameof(Decimal), "decimal"},
-                {nameof(String), "string"}
-            };
+        {
+            { nameof(Int16), "short" },
+            { nameof(Int32), "int" },
+            { nameof(Int64), "long" },
+            { nameof(UInt16), "ushort" },
+            { nameof(UInt32), "uint" },
+            { nameof(UInt64), "ulong" },
+            { nameof(Object), "object" },
+            { nameof(Byte), "byte" },
+            { nameof(SByte), "sbyte" },
+            { nameof(Char), "char" },
+            { nameof(Boolean), "bool" },
+            { nameof(Single), "float" },
+            { nameof(Double), "double" },
+            { nameof(Decimal), "decimal" },
+            { nameof(String), "string" }
+        };
 
 
         public static bool ImplementsInterface(this ClassDeclarationSyntax classDeclaration, SemanticModel semanticModel,
-            Type interfaceType)
+                                               Type interfaceType)
         {
             if (classDeclaration == null)
             {
@@ -45,7 +44,7 @@ namespace VSDiagnostics.Utilities
 
             return declaredSymbol != null &&
                    (declaredSymbol.Interfaces.Any(i => i.MetadataName == interfaceType.Name) ||
-                    declaredSymbol.BaseType.MetadataName == typeof (INotifyPropertyChanged).Name);
+                    declaredSymbol.BaseType.MetadataName == typeof(INotifyPropertyChanged).Name);
 
             // For some peculiar reason, "class Foo : INotifyPropertyChanged" doesn't have any interfaces,
             // But "class Foo : IFoo, INotifyPropertyChanged" has two.  "IFoo" is an interface defined by me.
@@ -62,8 +61,8 @@ namespace VSDiagnostics.Utilities
             }
 
             var baseType = typeSymbol;
-            while (baseType != null && baseType.MetadataName != typeof (object).Name &&
-                   baseType.MetadataName != typeof (ValueType).Name)
+            while (baseType != null && baseType.MetadataName != typeof(object).Name &&
+                   baseType.MetadataName != typeof(ValueType).Name)
             {
                 if (baseType.MetadataName == type.Name)
                 {
@@ -107,7 +106,7 @@ namespace VSDiagnostics.Utilities
         public static bool IsNullable(this ITypeSymbol typeSymbol)
         {
             //TODO: this is really ugly.
-            return typeSymbol.IsValueType && typeSymbol.MetadataName.StartsWith(typeof (Nullable).Name);
+            return typeSymbol.IsValueType && typeSymbol.MetadataName.StartsWith(typeof(Nullable).Name);
         }
 
         public static string ToAlias(this string type)
@@ -126,26 +125,26 @@ namespace VSDiagnostics.Utilities
             throw new ArgumentException("Could not find the type specified", nameof(type));
         }
 
-        public static bool IsAlias(this string type)
+        public static bool HasAlias(this string type, out string alias)
         {
             if (type == null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
 
-            return AliasMapping.ContainsKey(type);
+            return AliasMapping.TryGetValue(type, out alias);
         }
 
         /// <summary>
-        /// Determines whether or not the specified <see cref="IMethodSymbol"/> is the symbol of an asynchronous method. This can
-        /// be a method declared as async (e.g. returning <see cref="Task"/> or <see cref="Task{TResult}"/>), or a method with an
-        /// async implementation (using the <code>async</code> keyword).
+        ///     Determines whether or not the specified <see cref="IMethodSymbol" /> is the symbol of an asynchronous method. This
+        ///     can be a method declared as async (e.g. returning <see cref="Task" /> or <see cref="Task{TResult}" />), or a method
+        ///     with an async implementation (using the <code>async</code> keyword).
         /// </summary>
         public static bool IsAsync(this IMethodSymbol methodSymbol)
         {
             return methodSymbol.IsAsync
-                || methodSymbol.ReturnType.MetadataName == typeof(Task).Name
-                || methodSymbol.ReturnType.MetadataName == typeof(Task<>).Name;
+                   || methodSymbol.ReturnType.MetadataName == typeof(Task).Name
+                   || methodSymbol.ReturnType.MetadataName == typeof(Task<>).Name;
         }
 
         public static bool IsDefinedInAncestor(this IMethodSymbol methodSymbol)
@@ -159,7 +158,8 @@ namespace VSDiagnostics.Utilities
             var interfaces = containingType.AllInterfaces;
             foreach (var @interface in interfaces)
             {
-                var interfaceMethods = @interface.GetMembers().Select(containingType.FindImplementationForInterfaceMember);
+                var interfaceMethods =
+                    @interface.GetMembers().Select(containingType.FindImplementationForInterfaceMember);
                 if (interfaceMethods.Any(method => method.Equals(methodSymbol)))
                 {
                     return true;
@@ -182,7 +182,8 @@ namespace VSDiagnostics.Utilities
 
         // TODO: tests
         // NOTE: string.Format() vs Format() (current/external type)
-        public static bool IsAnInvocationOf(this InvocationExpressionSyntax invocation, Type type, string method, SemanticModel semanticModel)
+        public static bool IsAnInvocationOf(this InvocationExpressionSyntax invocation, Type type, string method,
+                                            SemanticModel semanticModel)
         {
             var invokedMethod = semanticModel.GetSymbolInfo(invocation);
             var invokedType = invokedMethod.Symbol?.ContainingType;
@@ -191,7 +192,7 @@ namespace VSDiagnostics.Utilities
                 return false;
             }
 
-            return invokedType.MetadataName == type.Name && 
+            return invokedType.MetadataName == type.Name &&
                    invokedMethod.Symbol.MetadataName == method;
         }
 
