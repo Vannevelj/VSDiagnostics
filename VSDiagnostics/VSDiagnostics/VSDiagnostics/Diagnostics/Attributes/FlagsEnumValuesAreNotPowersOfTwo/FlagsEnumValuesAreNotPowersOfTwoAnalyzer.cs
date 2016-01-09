@@ -59,7 +59,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
                     t =>
                     {
                         var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
-                        return symbol == null || symbol.ContainingType.MetadataName == typeof (FlagsAttribute).Name;
+                        return symbol == null || symbol.ContainingType.MetadataName == typeof(FlagsAttribute).Name;
                     }) != null);
 
 
@@ -209,7 +209,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
         }
 
         /// <summary>
-        /// Determines whether a given value is a power of two
+        ///     Determines whether a given value is a power of two
         /// </summary>
         /// <param name="value">The value to check</param>
         /// <returns></returns>
@@ -220,7 +220,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
         }
 
         /// <summary>
-        /// Returns whether or not all values can be changed to powers of two without introducing out of range values.
+        ///     Returns whether or not all values can be changed to powers of two without introducing out of range values.
         /// </summary>
         /// <param name="keyword">The type keyword that forms the base type of the enum</param>
         /// <param name="amountOfMembers">Indicates how many values an enum of this type can have</param>
@@ -230,14 +230,14 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
             // The value represents the amount of members an enum of the given type can contain
             var rangeMapping = new Dictionary<string, int>
             {
-                {"sbyte", 8},
-                {"byte", 9},
-                {"short", 16},
-                {"ushort", 17},
-                {"int", 32},
-                {"uint", 33},
-                {"long", 64},
-                {"ulong", 65}
+                { "sbyte", 8 },
+                { "byte", 9 },
+                { "short", 16 },
+                { "ushort", 17 },
+                { "int", 32 },
+                { "uint", 33 },
+                { "long", 64 },
+                { "ulong", 65 }
             };
 
             int amountAllowed;
