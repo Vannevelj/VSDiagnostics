@@ -1355,7 +1355,7 @@ namespace ConsoleApplication1
     {
         void Method()
         {
-            int x = (int) Int32.Parse(""5"");
+            int x = (int)Int32.Parse(""5"");
         }
     }
 }";
@@ -1369,7 +1369,7 @@ namespace ConsoleApplication1
     {
         void Method()
         {
-            int x = (int) int.Parse(""5"");
+            int x = (int)int.Parse(""5"");
         }
     }
 }";
