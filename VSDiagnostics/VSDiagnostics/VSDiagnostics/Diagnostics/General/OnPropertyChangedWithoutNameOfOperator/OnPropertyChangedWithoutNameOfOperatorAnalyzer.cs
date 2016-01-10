@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Globalization;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -91,7 +93,13 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
             {
                 if (string.Equals(property.Name, (string) invocationArgument.Value, StringComparison.OrdinalIgnoreCase))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, invokedProperty.GetLocation(), property.Name));
+                    var location = invokedProperty.Expression.DescendantNodesAndSelf().Last().GetLocation();
+                    var data = ImmutableDictionary.CreateRange(new[]
+                    {
+                        new KeyValuePair<string, string>("parameterName", property.Name),
+                        new KeyValuePair<string, string>("startLocation", location.SourceSpan.Start.ToString(CultureInfo.InvariantCulture)),
+                    });
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, location, data, property.Name));
                 }
             }
         }

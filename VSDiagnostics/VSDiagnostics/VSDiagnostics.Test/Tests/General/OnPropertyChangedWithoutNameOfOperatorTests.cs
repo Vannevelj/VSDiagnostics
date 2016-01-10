@@ -613,7 +613,7 @@ namespace ConsoleApplication1
 		    set
 		    {
 			    _isEnabled = value;
-			    OnPropertyChanged(nameof(OtherBoolean)));
+			    OnPropertyChanged(nameof(OtherBoolean));
             }
         }
     }
