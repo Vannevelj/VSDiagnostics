@@ -201,5 +201,20 @@ namespace VSDiagnostics.Utilities
         {
             return index >= 0 && index < list.Count() ? list.ElementAt(index) : @default;
         }
+
+        // TODO: tests
+        public static bool IsNameofInvocation(this InvocationExpressionSyntax invocation)
+        {
+            if (invocation == null)
+            {
+                throw new ArgumentNullException(nameof(invocation));
+            }
+
+            var identifier = invocation.Expression.DescendantNodesAndSelf()
+                                       .OfType<IdentifierNameSyntax>()
+                                       .FirstOrDefault();
+
+            return identifier != null && identifier.Identifier.ValueText == "nameof";
+        }
     }
 }

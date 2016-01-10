@@ -23,7 +23,9 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
             VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule
-            => new DiagnosticDescriptor(DiagnosticId.OnPropertyChangedWithoutNameofOperator, Title, Message, Category, Severity, true);
+            =>
+                new DiagnosticDescriptor(DiagnosticId.OnPropertyChangedWithoutNameofOperator, Title, Message, Category,
+                    Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -54,23 +56,32 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
             }
 
             var invokedProperty = invocation.ArgumentList.Arguments.FirstOrDefault();
-            var argumentLiteralExpression = invokedProperty.Expression as LiteralExpressionSyntax;
-            if (argumentLiteralExpression == null)
+            if (invokedProperty == null)
             {
                 return;
             }
 
-            var invocationArgument = argumentLiteralExpression.Token.ValueText;
+            // We use the descendent nodes in case it's wrapped in another level. For example: OnPropertyChanged(((nameof(MyProperty))))
+            var descendentInvocation = invokedProperty.DescendantNodesAndSelf().OfType<InvocationExpressionSyntax>();
+            if (descendentInvocation.Any(x => x.IsNameofInvocation()))
+            {
+                return;
+            }
 
-            var properties =
-                invocation.Ancestors()
-                    .OfType<ClassDeclarationSyntax>()
-                    .FirstOrDefault()
-                    .ChildNodes()
-                    .OfType<PropertyDeclarationSyntax>();
+            var invocationArgument = context.SemanticModel.GetConstantValue(invokedProperty.Expression);
+            if (!invocationArgument.HasValue)
+            {
+                return;
+            }
+
+            var properties = invocation.Ancestors()
+                                       .OfType<ClassDeclarationSyntax>()
+                                       .FirstOrDefault()
+                                       .ChildNodes()
+                                       .OfType<PropertyDeclarationSyntax>();
             foreach (var property in properties)
             {
-                if (string.Equals(property.Identifier.ValueText, invocationArgument, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(property.Identifier.ValueText, (string) invocationArgument.Value, StringComparison.OrdinalIgnoreCase))
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, invokedProperty.GetLocation(),
                         property.Identifier.ValueText));

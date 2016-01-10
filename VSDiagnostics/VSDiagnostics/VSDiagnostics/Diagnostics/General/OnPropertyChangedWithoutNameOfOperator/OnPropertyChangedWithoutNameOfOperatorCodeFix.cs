@@ -35,17 +35,14 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
 
         private Task<Solution> UseNameOfAsync(Document document, SyntaxNode root, ArgumentSyntax argumentDeclaration)
         {
-            var properties =
-                argumentDeclaration.Ancestors()
-                    .OfType<ClassDeclarationSyntax>()
-                    .First()
-                    .ChildNodes()
-                    .OfType<PropertyDeclarationSyntax>();
+            var properties = argumentDeclaration.Ancestors()
+                                                .OfType<ClassDeclarationSyntax>()
+                                                .First()
+                                                .ChildNodes()
+                                                .OfType<PropertyDeclarationSyntax>();
             foreach (var property in properties)
             {
-                if (string.Equals(property.Identifier.ValueText,
-                    ((LiteralExpressionSyntax) argumentDeclaration.Expression).Token.ValueText,
-                    StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(property.Identifier.ValueText, ((LiteralExpressionSyntax) argumentDeclaration.Expression).Token.ValueText, StringComparison.OrdinalIgnoreCase))
                 {
                     root = root.ReplaceNode(argumentDeclaration.Expression,
                         SyntaxFactory.ParseExpression($"nameof({property.Identifier.ValueText})"));
