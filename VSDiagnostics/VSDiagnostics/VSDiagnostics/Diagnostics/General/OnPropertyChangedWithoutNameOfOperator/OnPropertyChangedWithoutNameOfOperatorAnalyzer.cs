@@ -62,8 +62,7 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
             }
 
             // We use the descendent nodes in case it's wrapped in another level. For example: OnPropertyChanged(((nameof(MyProperty))))
-            var descendentInvocation = invokedProperty.DescendantNodesAndSelf().OfType<InvocationExpressionSyntax>();
-            if (descendentInvocation.Any(x => x.IsNameofInvocation()))
+            if (invokedProperty.DescendantNodesAndSelf().OfType<InvocationExpressionSyntax>().Any(x => x.IsNameofInvocation()))
             {
                 return;
             }
@@ -74,17 +73,25 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
                 return;
             }
 
-            var properties = invocation.Ancestors()
-                                       .OfType<ClassDeclarationSyntax>()
-                                       .FirstOrDefault()
-                                       .ChildNodes()
-                                       .OfType<PropertyDeclarationSyntax>();
-            foreach (var property in properties)
+            // Get all the properties defined in this type
+            // We can't just get all the descendents of the classdeclaration because that would some of a partial class' properties
+            var classDeclaration = invocation.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+            if (classDeclaration == null)
             {
-                if (string.Equals(property.Identifier.ValueText, (string) invocationArgument.Value, StringComparison.OrdinalIgnoreCase))
+                return;
+            }
+
+            var classSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration);
+            if (classSymbol == null)
+            {
+                return;
+            }
+
+            foreach (var property in classSymbol.GetMembers().OfType<IPropertySymbol>())
+            {
+                if (string.Equals(property.Name, (string) invocationArgument.Value, StringComparison.OrdinalIgnoreCase))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, invokedProperty.GetLocation(),
-                        property.Identifier.ValueText));
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, invokedProperty.GetLocation(), property.Name));
                 }
             }
         }
