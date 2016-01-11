@@ -149,6 +149,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\Utilities\ExtensionsTests.cs" />
     <Compile Include="Tests\Utilities\NamingConventionsTests.cs" />
+    <Compile Include="Tests\XMLDocumentation\MissingXMLDocReturn\MssingXMLDocReturnTests.cs" />
     <Compile Include="Tests\XMLDocumentation\MissingXMLDocParameter\MssingXMLDocParameterTests.cs" />
     <Compile Include="Tests\XMLDocumentation\RedundantXMLDocParameter\RedundantXMLDocParameterTests.cs" />
     <Compile Include="Tests\XMLDocumentation\RedundantXMLDocReturn\RedundantXMLDocReturnTests.cs" />

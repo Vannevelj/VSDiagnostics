@@ -197,7 +197,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void MissingXmlDocParameter_SavesAllTextBeforeNodeRemoved()
+        public void MissingXmlDocParameter_SavesAllTextBeforeNodeAdded()
         {
             var original = @"
 namespace ConsoleApplication1

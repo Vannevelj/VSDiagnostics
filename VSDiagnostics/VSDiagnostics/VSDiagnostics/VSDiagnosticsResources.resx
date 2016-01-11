@@ -532,4 +532,13 @@
   <data name="MissingXmlDocParameterCodeFixTitle" xml:space="preserve">
     <value>Add &lt;param&gt; clause</value>
   </data>
+  <data name="MissingXmlDocReturnAnalyzerMessage" xml:space="preserve">
+    <value>Missing &lt;return&gt; clause in XML documentation.</value>
+  </data>
+  <data name="MissingXmlDocReturnAnalyzerTitle" xml:space="preserve">
+    <value>Add emtpy &lt;return&gt; clause on XML doc.</value>
+  </data>
+  <data name="MissingXmlDocReturnCodeFixTitle" xml:space="preserve">
+    <value>Add &lt;return&gt; clause</value>
+  </data>
 </root>

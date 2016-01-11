@@ -108,6 +108,8 @@
     <Compile Include="Diagnostics\Tests\TestMethodWithoutPublicModifier\TestMethodWithoutPublicModifierCodeFix.cs" />
     <Compile Include="Diagnostics\XMLDocumentation\MissingXMLDocParameter\MissingXMLDocParameterAnalyzer.cs" />
     <Compile Include="Diagnostics\XMLDocumentation\MissingXMLDocParameter\MissingXMLDocParameterCodeFix.cs" />
+    <Compile Include="Diagnostics\XMLDocumentation\MisssingXmlDocReturn\MissingXMLDocReturnAnalyzer.cs" />
+    <Compile Include="Diagnostics\XMLDocumentation\MisssingXmlDocReturn\MissingXMLDocReturnCodeFix.cs" />
     <Compile Include="Diagnostics\XMLDocumentation\RedundantXMLDocParameter\RedundantXMLDocParameterAnalyzer.cs" />
     <Compile Include="Diagnostics\XMLDocumentation\RedundantXMLDocParameter\RedundantXMLDocParameterCodeFix.cs" />
     <Compile Include="Diagnostics\XMLDocumentation\RedundantXMLDocReturn\RedundantXMLDocReturnAnalyzer.cs" />

@@ -647,6 +647,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing &lt;return&gt; clause in XML documentation..
+        /// </summary>
+        internal static string MissingXmlDocReturnAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("MissingXmlDocReturnAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add emtpy &lt;return&gt; clause on XML doc..
+        /// </summary>
+        internal static string MissingXmlDocReturnAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("MissingXmlDocReturnAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add &lt;return&gt; clause.
+        /// </summary>
+        internal static string MissingXmlDocReturnCodeFixTitle {
+            get {
+                return ResourceManager.GetString("MissingXmlDocReturnCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The {0} {1} does not follow naming conventions. Should be {2}..
         /// </summary>
         internal static string NamingConventionsAnalyzerMessage {
