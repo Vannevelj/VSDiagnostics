@@ -541,4 +541,13 @@
   <data name="MissingXmlDocReturnCodeFixTitle" xml:space="preserve">
     <value>Add &lt;return&gt; clause</value>
   </data>
+  <data name="MisssingXmlDocSummaryAnalyzerMessage" xml:space="preserve">
+    <value>Missing &lt;summary&gt; clause in XML documentation.</value>
+  </data>
+  <data name="MisssingXmlDocSummaryAnalyzerTitle" xml:space="preserve">
+    <value>Add emtpy &lt;summary&gt; clause on XML doc.</value>
+  </data>
+  <data name="MisssingXmlDocSummaryCodeFixTitle" xml:space="preserve">
+    <value>Add &lt;summary&gt; clause</value>
+  </data>
 </root>

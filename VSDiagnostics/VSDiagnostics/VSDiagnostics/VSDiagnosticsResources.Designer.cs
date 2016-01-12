@@ -674,6 +674,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing &lt;summary&gt; clause in XML documentation..
+        /// </summary>
+        internal static string MisssingXmlDocSummaryAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("MisssingXmlDocSummaryAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add emtpy &lt;summary&gt; clause on XML doc..
+        /// </summary>
+        internal static string MisssingXmlDocSummaryAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("MisssingXmlDocSummaryAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add &lt;summary&gt; clause.
+        /// </summary>
+        internal static string MisssingXmlDocSummaryCodeFixTitle {
+            get {
+                return ResourceManager.GetString("MisssingXmlDocSummaryCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The {0} {1} does not follow naming conventions. Should be {2}..
         /// </summary>
         internal static string NamingConventionsAnalyzerMessage {

@@ -9,12 +9,12 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace VSDiagnostics.Diagnostics.XMLDocumentation.MisssingXmlDocReturn
+namespace VSDiagnostics.Diagnostics.XMLDocumentation.MisssingXmlDocSummary
 {
-    [ExportCodeFixProvider(nameof(MissingXmlDocReturnCodeFix), LanguageNames.CSharp), Shared]
-    public class MissingXmlDocReturnCodeFix : CodeFixProvider
+    [ExportCodeFixProvider(nameof(MissingXmlDocSummaryCodeFix), LanguageNames.CSharp), Shared]
+    public class MissingXmlDocSummaryCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(MissingXmlDocReturnAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(MissingXmlDocSummaryAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -28,9 +28,9 @@ namespace VSDiagnostics.Diagnostics.XMLDocumentation.MisssingXmlDocReturn
             var method = root.FindNode(new Microsoft.CodeAnalysis.Text.TextSpan(diagnosticSpan.Start, diagnosticSpan.Length)) as MethodDeclarationSyntax;
 
             context.RegisterCodeFix(
-                CodeAction.Create(VSDiagnosticsResources.MissingXmlDocReturnCodeFixTitle,
+                CodeAction.Create(VSDiagnosticsResources.MisssingXmlDocSummaryCodeFixTitle,
                     x => RemoveXmlParameterNode(context.Document, root, method),
-                    nameof(MissingXmlDocReturnAnalyzer)), diagnostic);
+                    nameof(MissingXmlDocSummaryAnalyzer)), diagnostic);
         }
 
         private Task<Solution> RemoveXmlParameterNode(Document document, SyntaxNode root, MethodDeclarationSyntax method)
@@ -41,9 +41,15 @@ namespace VSDiagnostics.Diagnostics.XMLDocumentation.MisssingXmlDocReturn
                 .OfType<DocumentationCommentTriviaSyntax>()
                 .First();
 
-            var returnNode = SyntaxFactory.XmlElement(
-                SyntaxFactory.XmlElementStartTag(SyntaxFactory.XmlName("returns")),
-                SyntaxFactory.XmlElementEndTag(SyntaxFactory.XmlName("returns")));
+            var summaryBodyLine = Environment.NewLine + method.GetLeadingTrivia().First() + "/// ";
+
+            var startTag = SyntaxFactory.XmlElementStartTag(SyntaxFactory.XmlName("summary"));
+            var endTag = SyntaxFactory.XmlElementEndTag(SyntaxFactory.XmlName("summary"));
+
+            var content = SyntaxFactory.XmlText(
+                    SyntaxFactory.TokenList(SyntaxFactory.ParseTokens(summaryBodyLine + summaryBodyLine)));
+
+            var summaryNode = SyntaxFactory.XmlElement(startTag, SyntaxFactory.List<XmlNodeSyntax>(new[] {content}), endTag);
 
             var docCommentToken = SyntaxFactory.Token(SyntaxFactory.TriviaList(
                 SyntaxFactory.SyntaxTrivia(SyntaxKind.DocumentationCommentExteriorTrivia, "///")),
@@ -51,7 +57,14 @@ namespace VSDiagnostics.Diagnostics.XMLDocumentation.MisssingXmlDocReturn
 
             var xmlTextElement = SyntaxFactory.XmlText(SyntaxFactory.TokenList(docCommentToken));
 
-            var newDocComment = docComment.WithContent(docComment.Content.AddRange(new XmlNodeSyntax[] {xmlTextElement, returnNode.WithTrailingTrivia(SyntaxFactory.SyntaxTrivia(SyntaxKind.WhitespaceTrivia, Environment.NewLine))}));
+            var newDocComment =
+                docComment.WithContent(docComment.Content.InsertRange(0,
+                    new XmlNodeSyntax[]
+                    {
+                        xmlTextElement,
+                        summaryNode.WithTrailingTrivia(SyntaxFactory.SyntaxTrivia(SyntaxKind.WhitespaceTrivia,
+                            Environment.NewLine))
+                    }));
             return Task.FromResult(document.WithSyntaxRoot(root.ReplaceNode(docComment, newDocComment)).Project.Solution);
         }
     }
