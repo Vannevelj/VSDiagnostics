@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Globalization;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -23,7 +25,9 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
             VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule
-            => new DiagnosticDescriptor(DiagnosticId.OnPropertyChangedWithoutNameofOperator, Title, Message, Category, Severity, true);
+            =>
+                new DiagnosticDescriptor(DiagnosticId.OnPropertyChangedWithoutNameofOperator, Title, Message, Category,
+                    Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -54,26 +58,48 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
             }
 
             var invokedProperty = invocation.ArgumentList.Arguments.FirstOrDefault();
-            var argumentLiteralExpression = invokedProperty.Expression as LiteralExpressionSyntax;
-            if (argumentLiteralExpression == null)
+            if (invokedProperty == null)
             {
                 return;
             }
 
-            var invocationArgument = argumentLiteralExpression.Token.ValueText;
-
-            var properties =
-                invocation.Ancestors()
-                    .OfType<ClassDeclarationSyntax>()
-                    .FirstOrDefault()
-                    .ChildNodes()
-                    .OfType<PropertyDeclarationSyntax>();
-            foreach (var property in properties)
+            // We use the descendent nodes in case it's wrapped in another level. For example: OnPropertyChanged(((nameof(MyProperty))))
+            if (invokedProperty.DescendantNodesAndSelf().OfType<InvocationExpressionSyntax>().Any(x => x.IsNameofInvocation()))
             {
-                if (string.Equals(property.Identifier.ValueText, invocationArgument, StringComparison.OrdinalIgnoreCase))
+                return;
+            }
+
+            var invocationArgument = context.SemanticModel.GetConstantValue(invokedProperty.Expression);
+            if (!invocationArgument.HasValue)
+            {
+                return;
+            }
+
+            // Get all the properties defined in this type
+            // We can't just get all the descendents of the classdeclaration because that would pass by some of a partial class' properties
+            var classDeclaration = invocation.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+            if (classDeclaration == null)
+            {
+                return;
+            }
+
+            var classSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration);
+            if (classSymbol == null)
+            {
+                return;
+            }
+
+            foreach (var property in classSymbol.GetMembers().OfType<IPropertySymbol>())
+            {
+                if (string.Equals(property.Name, (string) invocationArgument.Value, StringComparison.OrdinalIgnoreCase))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, invokedProperty.GetLocation(),
-                        property.Identifier.ValueText));
+                    var location = invokedProperty.Expression.DescendantNodesAndSelf().Last().GetLocation();
+                    var data = ImmutableDictionary.CreateRange(new[]
+                    {
+                        new KeyValuePair<string, string>("parameterName", property.Name),
+                        new KeyValuePair<string, string>("startLocation", location.SourceSpan.Start.ToString(CultureInfo.InvariantCulture)),
+                    });
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, location, data, property.Name));
                 }
             }
         }
