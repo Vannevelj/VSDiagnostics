@@ -40,7 +40,7 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
             var typeName = semanticModel.GetSymbolInfo(statement).Symbol.MetadataName;
             var aliasToken = MapConcreteTypeToPredefinedTypeAlias[typeName];
 
-            var newExpression = SyntaxFactory.PredefinedType(SyntaxFactory.Token(aliasToken));
+            var newExpression = SyntaxFactory.PredefinedType(SyntaxFactory.Token(aliasToken)).WithTriviaFrom(statement);
             var newRoot = root.ReplaceNode(statement, newExpression);
             var newDocument = document.WithSyntaxRoot(newRoot);
 

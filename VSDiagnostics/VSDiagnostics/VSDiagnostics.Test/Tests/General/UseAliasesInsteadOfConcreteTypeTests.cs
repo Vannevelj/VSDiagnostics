@@ -940,7 +940,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        public static explicit operator int (MyClass c)
+        public static explicit operator int(MyClass c)
         {
             return 5;
         }
@@ -1410,6 +1410,47 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "int", "Int32"));
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
+        }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_WithSurroundingTrivia()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            string s = string.Format(
+                            ""{0}"",
+                            String.Format(""{0}"", DateTime.Now)
+            );
+        }
+    }
+}";
+
+            var result = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            string s = string.Format(
+                            ""{0}"",
+                            string.Format(""{0}"", DateTime.Now)
+            );
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "string", "String"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
     }

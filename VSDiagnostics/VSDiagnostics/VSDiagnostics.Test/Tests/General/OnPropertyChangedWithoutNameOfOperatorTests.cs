@@ -404,5 +404,278 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.MessageFormat.ToString(), "IsEnabled"));
             VerifyFix(original, expected);
         }
+
+        [TestMethod]
+        public void OnPropertyChangedWithoutNameOfOperator_WithPartialClass()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    partial class MyClass : INotifyPropertyChanged
+    {
+	    private bool _isEnabled;
+	    public bool IsEnabled
+	    {
+		    get { return _isEnabled; }
+		    set
+		    {
+			    _isEnabled = value;
+			    OnPropertyChanged(""IsEnabled"");
+            }
+        }
+    }
+
+    partial class MyClass
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    partial class MyClass : INotifyPropertyChanged
+    {
+	    private bool _isEnabled;
+	    public bool IsEnabled
+	    {
+		    get { return _isEnabled; }
+		    set
+		    {
+			    _isEnabled = value;
+			    OnPropertyChanged(nameof(IsEnabled));
+            }
+        }
+    }
+
+    partial class MyClass
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.MessageFormat.ToString(), "IsEnabled"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void OnPropertyChangedWithoutNameOfOperator_ParenthesizedExpression()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass : INotifyPropertyChanged
+    {
+        private bool _isEnabled;
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            set
+            {
+                _isEnabled = value;
+                OnPropertyChanged((""IsEnabled""));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            if(handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }                
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass : INotifyPropertyChanged
+    {
+        private bool _isEnabled;
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            set
+            {
+                _isEnabled = value;
+                OnPropertyChanged((nameof(IsEnabled)));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            if(handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }                
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.MessageFormat.ToString(), "IsEnabled"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void OnPropertyChangedWithoutNameOfOperator_WithPartialClass_AndDifferentProperty()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    partial class MyClass : INotifyPropertyChanged
+    {
+	    private bool _isEnabled;
+	    public bool IsEnabled
+	    {
+		    get { return _isEnabled; }
+		    set
+		    {
+			    _isEnabled = value;
+			    OnPropertyChanged(""OtherBoolean"");
+            }
+        }
+    }
+
+    partial class MyClass
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public bool OtherBoolean { get; set; }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    partial class MyClass : INotifyPropertyChanged
+    {
+	    private bool _isEnabled;
+	    public bool IsEnabled
+	    {
+		    get { return _isEnabled; }
+		    set
+		    {
+			    _isEnabled = value;
+			    OnPropertyChanged(nameof(OtherBoolean));
+            }
+        }
+    }
+
+    partial class MyClass
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public bool OtherBoolean { get; set; }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.MessageFormat.ToString(), "OtherBoolean"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void OnPropertyChangedWithoutNameOfOperator_ParenthesizedExpression_WithNameof()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass : INotifyPropertyChanged
+    {
+        private bool _isEnabled;
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            set
+            {
+                _isEnabled = value;
+                OnPropertyChanged(((nameof(IsEnabled))));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            if(handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }                
+    }
+}";
+            VerifyDiagnostic(original);
+        }
     }
 }

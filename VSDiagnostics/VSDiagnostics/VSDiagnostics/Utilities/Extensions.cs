@@ -159,7 +159,8 @@ namespace VSDiagnostics.Utilities
             foreach (var @interface in interfaces)
             {
                 var interfaceMethods =
-                    @interface.GetMembers().Select(containingType.FindImplementationForInterfaceMember);
+                    @interface.GetMembers().Select(containingType.FindImplementationForInterfaceMember).Where(x => x != null);
+
                 if (interfaceMethods.Any(method => method.Equals(methodSymbol)))
                 {
                     return true;
@@ -200,6 +201,21 @@ namespace VSDiagnostics.Utilities
         public static T ElementAtOrDefault<T>(this IEnumerable<T> list, int index, T @default)
         {
             return index >= 0 && index < list.Count() ? list.ElementAt(index) : @default;
+        }
+
+        // TODO: tests
+        public static bool IsNameofInvocation(this InvocationExpressionSyntax invocation)
+        {
+            if (invocation == null)
+            {
+                throw new ArgumentNullException(nameof(invocation));
+            }
+
+            var identifier = invocation.Expression.DescendantNodesAndSelf()
+                                       .OfType<IdentifierNameSyntax>()
+                                       .FirstOrDefault();
+
+            return identifier != null && identifier.Identifier.ValueText == "nameof";
         }
     }
 }

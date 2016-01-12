@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +6,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperator
 {
@@ -23,38 +21,27 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
             var diagnostic = context.Diagnostics.First();
-            var diagnosticSpan = diagnostic.Location.SourceSpan;
 
-            var argumentDeclaration =
-                root.FindNode(diagnosticSpan).AncestorsAndSelf().OfType<ArgumentSyntax>().FirstOrDefault();
             context.RegisterCodeFix(
-                CodeAction.Create(VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorCodeFixTitle,
-                    x => UseNameOfAsync(context.Document, root, argumentDeclaration),
+                    CodeAction.Create(VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorCodeFixTitle,
+                    x => UseNameOfAsync(context.Document, root, diagnostic),
                     OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.Id), diagnostic);
         }
 
-        private Task<Solution> UseNameOfAsync(Document document, SyntaxNode root, ArgumentSyntax argumentDeclaration)
+        private Task<Solution> UseNameOfAsync(Document document, SyntaxNode root, Diagnostic diagnostic)
         {
-            var properties =
-                argumentDeclaration.Ancestors()
-                    .OfType<ClassDeclarationSyntax>()
-                    .First()
-                    .ChildNodes()
-                    .OfType<PropertyDeclarationSyntax>();
-            foreach (var property in properties)
-            {
-                if (string.Equals(property.Identifier.ValueText,
-                    ((LiteralExpressionSyntax) argumentDeclaration.Expression).Token.ValueText,
-                    StringComparison.OrdinalIgnoreCase))
-                {
-                    root = root.ReplaceNode(argumentDeclaration.Expression,
-                        SyntaxFactory.ParseExpression($"nameof({property.Identifier.ValueText})"));
-                    var newDocument = document.WithSyntaxRoot(root);
-                    return Task.FromResult(newDocument.Project.Solution);
-                }
-            }
+            var propertyName = diagnostic.Properties["parameterName"];
+            var startLocation = int.Parse(diagnostic.Properties["startLocation"]);
 
-            return null;
+            // We have to use LastOrDefault because encompassing nodes will have the same start location
+            // For example in our scenario of OnPropertyChanged("test"), the ArgumentSyntaxNode will have 
+            // the same start location as the following LiteralExpressionNode
+            // We are interested in the inner-most node therefore we need to take the last one with that start location
+            var nodeToReplace = root.DescendantNodesAndSelf().LastOrDefault(x => x.SpanStart == startLocation);
+
+            var newRoot = root.ReplaceNode(nodeToReplace, SyntaxFactory.ParseExpression($"nameof({propertyName})"));
+            var newDocument = document.WithSyntaxRoot(newRoot);
+            return Task.FromResult(newDocument.Project.Solution);
         }
     }
 }
