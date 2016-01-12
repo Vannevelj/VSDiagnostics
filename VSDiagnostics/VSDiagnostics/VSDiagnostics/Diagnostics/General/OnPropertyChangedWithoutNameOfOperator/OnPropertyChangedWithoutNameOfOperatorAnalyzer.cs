@@ -76,7 +76,7 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
             }
 
             // Get all the properties defined in this type
-            // We can't just get all the descendents of the classdeclaration because that would some of a partial class' properties
+            // We can't just get all the descendents of the classdeclaration because that would pass by some of a partial class' properties
             var classDeclaration = invocation.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault();
             if (classDeclaration == null)
             {
