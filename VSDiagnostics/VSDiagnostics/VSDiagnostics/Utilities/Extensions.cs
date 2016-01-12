@@ -159,7 +159,8 @@ namespace VSDiagnostics.Utilities
             foreach (var @interface in interfaces)
             {
                 var interfaceMethods =
-                    @interface.GetMembers().Select(containingType.FindImplementationForInterfaceMember);
+                    @interface.GetMembers().Select(containingType.FindImplementationForInterfaceMember).Where(x => x != null);
+
                 if (interfaceMethods.Any(method => method.Equals(methodSymbol)))
                 {
                     return true;
