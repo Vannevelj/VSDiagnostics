@@ -71,6 +71,11 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
                     context.Node.AncestorsAndSelf().FirstOrDefault(x => variableAncestorNodes.Contains(x.Kind())) ??
                     context.Node.AncestorsAndSelf().OfType<ExpressionStatementSyntax>().FirstOrDefault();
 
+                if (parentNode == null)
+                {
+                    return;
+                }
+
                 if (parentNode.Kind() == SyntaxKind.LocalDeclarationStatement)
                 {
                     identifier = ((LocalDeclarationStatementSyntax) parentNode).Declaration?
