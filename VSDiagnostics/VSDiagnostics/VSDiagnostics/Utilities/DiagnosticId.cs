@@ -47,5 +47,7 @@
         public const string RedundantXmlDocReturn = "VSD0043";
         public const string RedundantXmlDocParameter = "VSD0044";
         public const string MissingXmlDocParameter = "VSD0045";
+        public const string MissingXmlDocReturn = "VSD0046";
+        public const string MissingXmlDocSummary = "VSD0047";
     }
 }

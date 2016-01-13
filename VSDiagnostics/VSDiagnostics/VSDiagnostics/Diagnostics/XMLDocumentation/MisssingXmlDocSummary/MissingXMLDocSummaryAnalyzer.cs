@@ -17,7 +17,7 @@ namespace VSDiagnostics.Diagnostics.XMLDocumentation.MisssingXmlDocSummary
         private static readonly string Message = VSDiagnosticsResources.MisssingXmlDocSummaryAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.MisssingXmlDocSummaryAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId.MissingXmlDocParameter, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId.MissingXmlDocSummary, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
