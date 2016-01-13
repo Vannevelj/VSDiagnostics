@@ -100,10 +100,10 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
             }
             else
             {
-                var x = enumType as PredefinedTypeSyntax;
-                if (x != null)
+                var typeSyntax = enumType as PredefinedTypeSyntax;
+                if (typeSyntax != null)
                 {
-                    keyword = x.Keyword.ValueText;
+                    keyword = typeSyntax.Keyword.ValueText;
                 }
                 else
                 {
