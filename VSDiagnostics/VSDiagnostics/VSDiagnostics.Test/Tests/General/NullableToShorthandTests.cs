@@ -394,7 +394,7 @@ namespace ConsoleApplication1
         {   
             void Method()
             {
-                new MyClass<Nullable<int>>();
+                new Nullable<float>();
             }
         }
     }";
@@ -409,12 +409,12 @@ namespace ConsoleApplication1
         {   
             void Method()
             {
-                new MyClass<int?>();
+                new float?();
             }
         }
     }";
 
-            VerifyDiagnostic(original, string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "Unnamed variable"));
+            VerifyDiagnostic(original, string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "Type declaration"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
@@ -510,6 +510,47 @@ namespace ConsoleApplication1
     }
 }";
 
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void NullableToShorthand_XmlDocumentation()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            /// <summary>
+            /// The required name for the <see cref=""Nullable{T}.Value""/> property used in
+            /// a ForEach statement when the collection is a nullable struct.
+            /// </summary>
+            void Method()
+            {
+                
+            }
+        }
+    }";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void NullableToShorthand_NullableLiteral()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+           private int Nullable = 5;
+        }
+    }";
             VerifyDiagnostic(original);
         }
     }
