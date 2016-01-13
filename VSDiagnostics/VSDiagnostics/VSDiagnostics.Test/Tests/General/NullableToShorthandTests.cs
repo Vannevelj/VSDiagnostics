@@ -54,36 +54,36 @@ namespace ConsoleApplication1
         public void NullableToShorthand_WithNullableField()
         {
             var original = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
+namespace ConsoleApplication1
+{
+    class MyClass
     {
-        class MyClass
+        private Nullable<int> myVar = 5;
+        void Method()
         {
-            private Nullable<int> myVar = 5;
-            void Method()
-            {
                 
-            }
         }
-    }";
+    }
+}";
 
             var result = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
+namespace ConsoleApplication1
+{
+    class MyClass
     {
-        class MyClass
+        private int? myVar = 5;
+        void Method()
         {
-            private int? myVar = 5;
-            void Method()
-            {
                 
-            }
         }
-    }";
+    }
+}";
 
             VerifyDiagnostic(original, string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
@@ -93,34 +93,34 @@ namespace ConsoleApplication1
         public void NullableToShorthand_WithNullableParameter()
         {
             var original = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            void Method(Nullable<double> myVar)
-            {
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(Nullable<double> myVar)
+        {
                 
-            }
         }
-    }";
+    }
+}";
 
             var result = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            void Method(double? myVar)
-            {
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(double? myVar)
+        {
                 
-            }
         }
-    }";
+    }
+}";
 
             VerifyDiagnostic(original, string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
@@ -130,34 +130,34 @@ namespace ConsoleApplication1
         public void NullableToShorthand_WithNullableTypeParameter()
         {
             var original = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        class MyClass<T>
-        {   
-            void Method()
-            {
-                var myVar = new MyClass<Nullable<int>>();
-            }
+namespace ConsoleApplication1
+{
+    class MyClass<T>
+    {   
+        void Method()
+        {
+            var myVar = new MyClass<Nullable<int>>();
         }
-    }";
+    }
+}";
 
             var result = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        class MyClass<T>
-        {   
-            void Method()
-            {
-                var myVar = new MyClass<int?>();
-            }
+namespace ConsoleApplication1
+{
+    class MyClass<T>
+    {   
+        void Method()
+        {
+            var myVar = new MyClass<int?>();
         }
-    }";
+    }
+}";
 
             VerifyDiagnostic(original, string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
@@ -206,24 +206,25 @@ namespace ConsoleApplication1
         public void NullableToShorthand_WithNonNullableNestedTypeParameter()
         {
             var original = @"
-    using System;
-    using System.Text;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        class MyClass<T>
-        {   
-            void Method()
-            {
-                var myVar = new MyClass<Dictionary<MyOtherClass, string>>();
-            }
-        }
-
-        class MyOtherClass
+namespace ConsoleApplication1
+{
+    class MyClass<T>
+    {   
+        void Method()
         {
-
+            var myVar = new MyClass<Dictionary<MyOtherClass, string>>();
         }
-    }";
+    }
+
+    class MyOtherClass
+    {
+
+    }
+}";
             VerifyDiagnostic(original);
         }
 
@@ -231,20 +232,20 @@ namespace ConsoleApplication1
         public void NullableToShorthand_WithShorthandNotation()
         {
             var original = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            public int? myVar { get; set; }
-            void Method()
-            {
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        public int? myVar { get; set; }
+        void Method()
+        {
                 
-            }
         }
-    }";
+    }
+}";
             VerifyDiagnostic(original);
         }
 
@@ -252,19 +253,19 @@ namespace ConsoleApplication1
         public void NullableToShorthand_WithChainedShorthandNotation()
         {
             var original = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            void Method()
-            {
-                int? myVar, mySecondVar = 5;
-            }
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            int? myVar, mySecondVar = 5;
         }
-    }";
+    }
+}";
             VerifyDiagnostic(original);
         }
 
@@ -309,34 +310,34 @@ namespace ConsoleApplication1
         public void NullableToShorthand_WithNullableDefaultParameter()
         {
             var original = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            void Method(Nullable<int> myVar = 5)
-            {
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(Nullable<int> myVar = 5)
+        {
                 
-            }
         }
-    }";
+    }
+}";
 
             var result = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            void Method(int? myVar = 5)
-            {
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method(int? myVar = 5)
+        {
                 
-            }
         }
-    }";
+    }
+}";
 
             VerifyDiagnostic(original, string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
@@ -346,34 +347,36 @@ namespace ConsoleApplication1
         public void NullableToShorthand_WithMultipleNullablesAsGenericParameters()
         {
             var original = @"
-    using System;
-    using System.Text;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            void Method()
-            {
-                Dictionary<Nullable<int>, Nullable<int>> myVar = null;
-            }
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            Dictionary<Nullable<int>, Nullable<int>> myVar = null;
         }
-    }";
+    }
+}";
 
             var result = @"
-    using System;
-    using System.Text;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        class MyClass
-        {   
-            void Method()
-            {
-                Dictionary<int?, int?> myVar = null;
-            }
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            Dictionary<int?, int?> myVar = null;
         }
-    }";
+    }
+}";
 
             VerifyDiagnostic(original,
                 string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "myVar"),
@@ -385,34 +388,34 @@ namespace ConsoleApplication1
         public void NullableToShorthand_WithUnassignedNullableAsLocalVariable()
         {
             var original = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        class MyClass<T>
-        {   
-            void Method()
-            {
-                new MyClass<Nullable<int>>();
-            }
+namespace ConsoleApplication1
+{
+    class MyClass<T>
+    {   
+        void Method()
+        {
+            new MyClass<Nullable<int>>();
         }
-    }";
+    }
+}";
 
             var result = @"
-    using System;
-    using System.Text;
+using System;
+using System.Text;
 
-    namespace ConsoleApplication1
-    {
-        class MyClass<T>
-        {   
-            void Method()
-            {
-                new MyClass<int?>();
-            }
+namespace ConsoleApplication1
+{
+    class MyClass<T>
+    {   
+        void Method()
+        {
+            new MyClass<int?>();
         }
-    }";
+    }
+}";
 
             VerifyDiagnostic(original, string.Format(NullableToShorthandAnalyzer.Rule.MessageFormat.ToString(), "Unnamed variable"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
@@ -423,6 +426,7 @@ namespace ConsoleApplication1
         {
             var original = @"
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace ConsoleApplication1
@@ -438,6 +442,7 @@ namespace ConsoleApplication1
 
             var result = @"
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace ConsoleApplication1

@@ -13,7 +13,7 @@ namespace VSDiagnostics.Utilities
     public static class Extensions
     {
         private static readonly Dictionary<string, string> AliasMapping = new Dictionary<string, string>
-        {
+            {
             { nameof(Int16), "short" },
             { nameof(Int32), "int" },
             { nameof(Int64), "long" },
@@ -29,11 +29,11 @@ namespace VSDiagnostics.Utilities
             { nameof(Double), "double" },
             { nameof(Decimal), "decimal" },
             { nameof(String), "string" }
-        };
+            };
 
 
         public static bool ImplementsInterface(this ClassDeclarationSyntax classDeclaration, SemanticModel semanticModel,
-                                               Type interfaceType)
+            Type interfaceType)
         {
             if (classDeclaration == null)
             {
@@ -143,8 +143,8 @@ namespace VSDiagnostics.Utilities
         public static bool IsAsync(this IMethodSymbol methodSymbol)
         {
             return methodSymbol.IsAsync
-                   || methodSymbol.ReturnType.MetadataName == typeof(Task).Name
-                   || methodSymbol.ReturnType.MetadataName == typeof(Task<>).Name;
+                || methodSymbol.ReturnType.MetadataName == typeof(Task).Name
+                || methodSymbol.ReturnType.MetadataName == typeof(Task<>).Name;
         }
 
         public static bool IsDefinedInAncestor(this IMethodSymbol methodSymbol)
@@ -193,7 +193,7 @@ namespace VSDiagnostics.Utilities
                 return false;
             }
 
-            return invokedType.MetadataName == type.Name &&
+            return invokedType.MetadataName == type.Name && 
                    invokedMethod.Symbol.MetadataName == method;
         }
 

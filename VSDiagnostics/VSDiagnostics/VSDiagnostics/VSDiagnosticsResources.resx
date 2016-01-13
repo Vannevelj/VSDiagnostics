@@ -496,10 +496,58 @@
   <data name="SyncMethodWithSyncSuffixAnalyzerCodeFixTitle" xml:space="preserve">
     <value>Remove suffix</value>
   </data>
+  <data name="RedundantXmlDocReturnAnalyzerMessage" xml:space="preserve">
+    <value>Redundant &lt;return&gt; clause on void method in XML documentation.</value>
+  </data>
+  <data name="RedundantXmlDocReturnAnalyzerTitle" xml:space="preserve">
+    <value>Remove &lt;return&gt; clause on XML doc.</value>
+  </data>
+  <data name="RedundantXmlDocReturnCodeFixTitle" xml:space="preserve">
+    <value>Remove &lt;return&gt; clause</value>
+  </data>
+  <data name="XmlDocCommentsCategory" xml:space="preserve">
+    <value>XML Docs</value>
+  </data>
   <data name="StringDotFormatWithDifferentAmountOfArgumentsMessage" xml:space="preserve">
     <value>A string.Format() call lacks arguments and will cause a runtime exception</value>
   </data>
   <data name="StringDotFormatWithDifferentAmountOfArgumentsTitle" xml:space="preserve">
     <value>Invalid arguments for the string.Format() call.</value>
+  </data>
+  <data name="RedundantXmlDocParameterAnalyzerMessage" xml:space="preserve">
+    <value>Redundant &lt;param&gt; clause in XML documentation.</value>
+  </data>
+  <data name="RedundantXmlDocParameterAnalyzerTitle" xml:space="preserve">
+    <value>Remove &lt;param&gt; clause on XML doc.</value>
+  </data>
+  <data name="RedundantXmlDocParameterCodeFixTitle" xml:space="preserve">
+    <value>Remove &lt;param&gt; clause</value>
+  </data>
+  <data name="MissingXmlDocParameterAnalyzerMessage" xml:space="preserve">
+    <value>Missing &lt;param&gt; clause in XML documentation.</value>
+  </data>
+  <data name="MissingXmlDocParameterAnalyzerTitle" xml:space="preserve">
+    <value>Add emtpy &lt;param&gt; clause on XML doc.</value>
+  </data>
+  <data name="MissingXmlDocParameterCodeFixTitle" xml:space="preserve">
+    <value>Add &lt;param&gt; clause</value>
+  </data>
+  <data name="MissingXmlDocReturnAnalyzerMessage" xml:space="preserve">
+    <value>Missing &lt;returns&gt; clause in XML documentation.</value>
+  </data>
+  <data name="MissingXmlDocReturnAnalyzerTitle" xml:space="preserve">
+    <value>Add emtpy &lt;returns&gt; clause on XML doc.</value>
+  </data>
+  <data name="MissingXmlDocReturnCodeFixTitle" xml:space="preserve">
+    <value>Add &lt;returns&gt; clause</value>
+  </data>
+  <data name="MisssingXmlDocSummaryAnalyzerMessage" xml:space="preserve">
+    <value>Missing &lt;summary&gt; clause in XML documentation.</value>
+  </data>
+  <data name="MisssingXmlDocSummaryAnalyzerTitle" xml:space="preserve">
+    <value>Add emtpy &lt;summary&gt; clause on XML doc.</value>
+  </data>
+  <data name="MisssingXmlDocSummaryCodeFixTitle" xml:space="preserve">
+    <value>Add &lt;summary&gt; clause</value>
   </data>
 </root>

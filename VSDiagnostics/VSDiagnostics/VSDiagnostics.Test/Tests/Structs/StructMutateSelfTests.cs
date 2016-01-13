@@ -56,7 +56,8 @@ struct Rectangle
 
             VerifyDiagnostic(original, string.Format(StructShouldNotMutateSelfAnalyzer.Rule.MessageFormat.ToString()));
         }
- 
+
+        // bug: Class cannot assign this - remove this test?
         [TestMethod]
         public void StructShouldNotMutateSelf_AssigningToAVariableVar()
         {

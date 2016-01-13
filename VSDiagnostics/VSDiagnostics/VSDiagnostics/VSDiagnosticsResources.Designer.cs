@@ -620,6 +620,87 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing &lt;param&gt; clause in XML documentation..
+        /// </summary>
+        internal static string MissingXmlDocParameterAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("MissingXmlDocParameterAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add emtpy &lt;param&gt; clause on XML doc..
+        /// </summary>
+        internal static string MissingXmlDocParameterAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("MissingXmlDocParameterAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add &lt;param&gt; clause.
+        /// </summary>
+        internal static string MissingXmlDocParameterCodeFixTitle {
+            get {
+                return ResourceManager.GetString("MissingXmlDocParameterCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing &lt;returns&gt; clause in XML documentation..
+        /// </summary>
+        internal static string MissingXmlDocReturnAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("MissingXmlDocReturnAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add emtpy &lt;returns&gt; clause on XML doc..
+        /// </summary>
+        internal static string MissingXmlDocReturnAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("MissingXmlDocReturnAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add &lt;returns&gt; clause.
+        /// </summary>
+        internal static string MissingXmlDocReturnCodeFixTitle {
+            get {
+                return ResourceManager.GetString("MissingXmlDocReturnCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing &lt;summary&gt; clause in XML documentation..
+        /// </summary>
+        internal static string MisssingXmlDocSummaryAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("MisssingXmlDocSummaryAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add emtpy &lt;summary&gt; clause on XML doc..
+        /// </summary>
+        internal static string MisssingXmlDocSummaryAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("MisssingXmlDocSummaryAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add &lt;summary&gt; clause.
+        /// </summary>
+        internal static string MisssingXmlDocSummaryCodeFixTitle {
+            get {
+                return ResourceManager.GetString("MisssingXmlDocSummaryCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The {0} {1} does not follow naming conventions. Should be {2}..
         /// </summary>
         internal static string NamingConventionsAnalyzerMessage {
@@ -769,6 +850,60 @@ namespace VSDiagnostics {
         internal static string OnPropertyChangedWithoutNameOfOperatorCodeFixTitle {
             get {
                 return ResourceManager.GetString("OnPropertyChangedWithoutNameOfOperatorCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Redundant &lt;param&gt; clause in XML documentation..
+        /// </summary>
+        internal static string RedundantXmlDocParameterAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("RedundantXmlDocParameterAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &lt;param&gt; clause on XML doc..
+        /// </summary>
+        internal static string RedundantXmlDocParameterAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("RedundantXmlDocParameterAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &lt;param&gt; clause.
+        /// </summary>
+        internal static string RedundantXmlDocParameterCodeFixTitle {
+            get {
+                return ResourceManager.GetString("RedundantXmlDocParameterCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Redundant &lt;return&gt; clause on void method in XML documentation..
+        /// </summary>
+        internal static string RedundantXmlDocReturnAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("RedundantXmlDocReturnAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &lt;return&gt; clause on XML doc..
+        /// </summary>
+        internal static string RedundantXmlDocReturnAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("RedundantXmlDocReturnAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &lt;return&gt; clause.
+        /// </summary>
+        internal static string RedundantXmlDocReturnCodeFixTitle {
+            get {
+                return ResourceManager.GetString("RedundantXmlDocReturnCodeFixTitle", resourceCulture);
             }
         }
         
@@ -1147,6 +1282,15 @@ namespace VSDiagnostics {
         internal static string UseAliasesInsteadOfConcreteTypeCodeFixTitle {
             get {
                 return ResourceManager.GetString("UseAliasesInsteadOfConcreteTypeCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML Docs.
+        /// </summary>
+        internal static string XmlDocCommentsCategory {
+            get {
+                return ResourceManager.GetString("XmlDocCommentsCategory", resourceCulture);
             }
         }
     }
