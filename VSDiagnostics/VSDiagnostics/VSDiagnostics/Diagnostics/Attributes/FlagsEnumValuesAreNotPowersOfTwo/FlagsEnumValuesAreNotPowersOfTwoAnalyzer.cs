@@ -144,6 +144,8 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
                 var symbol = context.SemanticModel.GetDeclaredSymbol(member);
                 var value = symbol.ConstantValue;
 
+                if (value == null) { return; }  // check for "foo = "
+
                 switch (value.GetType().Name)
                 {
                     case nameof(Int16):
