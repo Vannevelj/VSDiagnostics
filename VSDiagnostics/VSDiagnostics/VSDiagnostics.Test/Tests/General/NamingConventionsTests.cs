@@ -1785,5 +1785,97 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void NamingConventions_PartialMethods_RenamesBothDefinitions()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    partial class X
+    {
+	    partial void method() { }
+    }
+
+    partial class X
+    {
+	    partial void method();
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    partial class X
+    {
+	    partial void Method() { }
+    }
+
+    partial class X
+    {
+	    partial void Method();
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "method", "method", "Method"),
+                string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "method", "method", "Method"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void NamingConventions_PartialClasses_RenamesBothDefinitions()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    partial class myClass
+    {
+	    void MyMethod() { }
+    }
+
+    partial class myClass
+    {
+	    int Method()
+        {
+            return 0;
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    partial class MyClass
+    {
+	    void MyMethod() { }
+    }
+
+    partial class MyClass
+    {
+	    int Method()
+        {
+            return 0;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "class", "myClass", "MyClass"),
+                string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "class", "myClass", "MyClass"));
+            VerifyFix(original, result);
+        }
     }
 }

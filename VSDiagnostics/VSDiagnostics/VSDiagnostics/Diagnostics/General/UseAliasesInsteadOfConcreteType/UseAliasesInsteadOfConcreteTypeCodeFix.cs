@@ -37,21 +37,11 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
         private async Task<Solution> UseAliasAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var semanticModel = await document.GetSemanticModelAsync();
-            string typeName;
-
-            if (statement is IdentifierNameSyntax)
-            {
-                typeName = semanticModel.GetSymbolInfo((IdentifierNameSyntax) statement).Symbol.MetadataName;
-            }
-            else
-            {
-                typeName = semanticModel.GetSymbolInfo((QualifiedNameSyntax) statement).Symbol.MetadataName;
-            }
-
+            var typeName = semanticModel.GetSymbolInfo(statement).Symbol.MetadataName;
             var aliasToken = MapConcreteTypeToPredefinedTypeAlias[typeName];
 
-            var newExpression = SyntaxFactory.PredefinedType(SyntaxFactory.Token(aliasToken));
-            var newRoot = root.ReplaceNode(statement, newExpression).WithAdditionalAnnotations(Formatter.Annotation);
+            var newExpression = SyntaxFactory.PredefinedType(SyntaxFactory.Token(aliasToken)).WithTriviaFrom(statement);
+            var newRoot = root.ReplaceNode(statement, newExpression);
             var newDocument = document.WithSyntaxRoot(newRoot);
 
             return newDocument.Project.Solution;
