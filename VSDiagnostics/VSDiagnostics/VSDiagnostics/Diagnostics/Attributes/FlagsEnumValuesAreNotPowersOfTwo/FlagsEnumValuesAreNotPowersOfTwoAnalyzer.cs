@@ -100,10 +100,10 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
             }
             else
             {
-                var x = enumType as PredefinedTypeSyntax;
-                if (x != null)
+                var typeSyntax = enumType as PredefinedTypeSyntax;
+                if (typeSyntax != null)
                 {
-                    keyword = x.Keyword.ValueText;
+                    keyword = typeSyntax.Keyword.ValueText;
                 }
                 else
                 {
@@ -143,6 +143,8 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 
                 var symbol = context.SemanticModel.GetDeclaredSymbol(member);
                 var value = symbol.ConstantValue;
+
+                if (value == null) { return; }  // check for "foo = "
 
                 switch (value.GetType().Name)
                 {
