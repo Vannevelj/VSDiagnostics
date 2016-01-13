@@ -647,7 +647,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Missing &lt;return&gt; clause in XML documentation..
+        ///   Looks up a localized string similar to Missing &lt;returns&gt; clause in XML documentation..
         /// </summary>
         internal static string MissingXmlDocReturnAnalyzerMessage {
             get {
@@ -656,7 +656,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add emtpy &lt;return&gt; clause on XML doc..
+        ///   Looks up a localized string similar to Add emtpy &lt;returns&gt; clause on XML doc..
         /// </summary>
         internal static string MissingXmlDocReturnAnalyzerTitle {
             get {
@@ -665,7 +665,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add &lt;return&gt; clause.
+        ///   Looks up a localized string similar to Add &lt;returns&gt; clause.
         /// </summary>
         internal static string MissingXmlDocReturnCodeFixTitle {
             get {

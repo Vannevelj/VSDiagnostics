@@ -13,7 +13,7 @@ namespace VSDiagnostics.Test.Tests.XMLDocumentation.MissingXmlDocSummary
         protected override CodeFixProvider CodeFixProvider => new MissingXmlDocSummaryCodeFix();
 
         [TestMethod]
-        public void MissingXmlDocReturn_DoesNotFireForMethodsWithSummaryInDoc()
+        public void MissingXmlDocSummary_DoesNotFireForMethodsWithSummaryInDoc()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -37,7 +37,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void MissingXmlDocReturn_AddsSummaryNodeWithoutAffectingOthers()
+        public void MissingXmlDocSummary_AddsSummaryNodeWithoutAffectingOthers()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -60,7 +60,7 @@ namespace ConsoleApplication1
     class MyClass
     {
         /// <summary>
-        /// 
+        /// {summaryInfo}
         /// </summary>
         /// <param name=""myInt"">An unnecessary parameter</param>
         /// <param name=""myString"">An unnecessary parameter</param>
@@ -77,7 +77,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void MissingXmlDocReturn_DoesNotFireWhenNoDocExists()
+        public void MissingXmlDocSummary_DoesNotFireWhenNoDocExists()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -95,7 +95,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void MissingXmlDocReturn_SavesAllTextBeforeNodeAdded()
+        public void MissingXmlDocSummary_SavesAllTextBeforeNodeAdded()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -120,7 +120,7 @@ namespace ConsoleApplication1
     class MyClass
     {
         /// <summary>
-        /// 
+        /// {summaryInfo}
         /// </summary>
         /// <param name=""myInt""></param>
         /// text isn't usually outside XML nodes...

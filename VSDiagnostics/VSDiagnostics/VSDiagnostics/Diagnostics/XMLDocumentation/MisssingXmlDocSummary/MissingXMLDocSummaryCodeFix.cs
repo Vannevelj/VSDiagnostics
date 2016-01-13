@@ -47,7 +47,7 @@ namespace VSDiagnostics.Diagnostics.XMLDocumentation.MisssingXmlDocSummary
             var endTag = SyntaxFactory.XmlElementEndTag(SyntaxFactory.XmlName("summary"));
 
             var content = SyntaxFactory.XmlText(
-                    SyntaxFactory.TokenList(SyntaxFactory.ParseTokens(summaryBodyLine + summaryBodyLine)));
+                    SyntaxFactory.TokenList(SyntaxFactory.ParseTokens(summaryBodyLine + "{summaryInfo}" + summaryBodyLine)));
 
             var summaryNode = SyntaxFactory.XmlElement(startTag, SyntaxFactory.List<XmlNodeSyntax>(new[] {content}), endTag);
 
