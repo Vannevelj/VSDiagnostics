@@ -71,11 +71,6 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
             var enumName = context.SemanticModel.GetDeclaredSymbol(declarationExpression).Name;
             var enumMemberDeclarations =
                 declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>().ToList();
-            Action reportDiagnostic =
-                () =>
-                    context.ReportDiagnostic(Diagnostic.Create(DefaultRule,
-                        declarationExpression.Identifier.GetLocation(),
-                        enumName));
 
             foreach (var member in enumMemberDeclarations)
             {
@@ -100,10 +95,10 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
             }
             else
             {
-                var x = enumType as PredefinedTypeSyntax;
-                if (x != null)
+                var typeSyntax = enumType as PredefinedTypeSyntax;
+                if (typeSyntax != null)
                 {
-                    keyword = x.Keyword.ValueText;
+                    keyword = typeSyntax.Keyword.ValueText;
                 }
                 else
                 {
@@ -122,13 +117,14 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
                 return;
             }
 
+            var createDiagnostic = false;
             foreach (var member in enumMemberDeclarations)
             {
                 // member doesn't have defined value - "foo" instead of "foo = 4"
                 if (member.EqualsValue == null)
                 {
-                    reportDiagnostic();
-                    return;
+                    createDiagnostic = true;
+                    continue;
                 }
 
                 if (member.EqualsValue.Value is BinaryExpressionSyntax)
@@ -146,67 +142,20 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 
                 if (value == null) { return; }
 
-                switch (value.GetType().Name)
+                /* `value` is an `object`.  Casting it to `dynamic`
+                 * will allow us to avoid a huge `switch` statement
+                 * and allow us to just pass the value to `IsPowerOfTwo()`
+                 */
+                if (!IsPowerOfTwo((dynamic) value))
                 {
-                    case nameof(Int16):
-                        if (!IsPowerOfTwo((short) value))
-                        {
-                            reportDiagnostic();
-                            return;
-                        }
-                        break;
-                    case nameof(UInt16):
-                        if (!IsPowerOfTwo((ushort) value))
-                        {
-                            reportDiagnostic();
-                            return;
-                        }
-                        break;
-                    case nameof(Int32):
-                        if (!IsPowerOfTwo((int) value))
-                        {
-                            reportDiagnostic();
-                            return;
-                        }
-                        break;
-                    case nameof(UInt32):
-                        if (!IsPowerOfTwo((uint) value))
-                        {
-                            reportDiagnostic();
-                            return;
-                        }
-                        break;
-                    case nameof(Int64):
-                        if (!IsPowerOfTwo((long) value))
-                        {
-                            reportDiagnostic();
-                            return;
-                        }
-                        break;
-                    case nameof(UInt64):
-                        if (!IsPowerOfTwo((ulong) value))
-                        {
-                            reportDiagnostic();
-                            return;
-                        }
-                        break;
-                    case nameof(Byte):
-                        if (!IsPowerOfTwo((byte) value))
-                        {
-                            reportDiagnostic();
-                            return;
-                        }
-                        break;
-                    case nameof(SByte):
-                        if (!IsPowerOfTwo((sbyte) value))
-                        {
-                            reportDiagnostic();
-                            return;
-                        }
-                        break;
-                    default:
-                        throw new ArgumentException("This enum-backing type is not supported.");
+                    createDiagnostic = true;
                 }
+            }
+
+            if (createDiagnostic)
+            {
+                context.ReportDiagnostic(Diagnostic.Create(DefaultRule, declarationExpression.Identifier.GetLocation(),
+                    enumName));
             }
         }
 
