@@ -1157,5 +1157,94 @@ namespace ConsoleApplication1
 }";
             VerifyDiagnostic(original, StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.Rule.MessageFormat.ToString());
         }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithNonStringFormatType()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        string Method(SymbolDisplayFormat format)
+        {
+            string s = Method(new SymbolDisplayFormat());
+            return s;
+        }
+    }
+
+    class SymbolDisplayFormat
+    {
+        
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithNonStringLiteralFormatType()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        string Method(int format)
+        {
+            string s = Method(5);
+            return s;
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithOptionalFormat()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        string Method(string format = null)
+        {
+            string s = Method();
+            return s;
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void StringDotFormatWithDifferentAmountOfArguments_WithOptionalFormatAndArguments()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        string Format(string format = null, object[] param = null)
+        {
+            string s = Format();
+            return s;
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
     }
 }
