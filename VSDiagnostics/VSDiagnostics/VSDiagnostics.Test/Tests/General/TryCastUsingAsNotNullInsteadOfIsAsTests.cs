@@ -620,5 +620,225 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
             VerifyFix(original, expected);
         }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_ReferencingParameter()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            if (o is string)
+            {
+                string oAsString = o as string;
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            string oAsString = o as string;
+            if (oAsString != null)
+            {
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_AsCastInIfCondition()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            if (o is string && (o as string).Length > 1)
+            {
+                
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            string oAsString = o as string;
+            if (oAsString != null && oAsString.Length > 1)
+            {
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_DirectCastInIfCondition()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            if (o is string && ((string) o).Length > 1)
+            {
+                
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            string oAsString = o as string;
+            if (oAsString != null && oAsString.Length > 1)
+            {
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_CastInSeparateExpression()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            if (o is string)
+            {
+                bool contains = new[] { ""test"", ""test"", ""test"" }.Contains(o as string);
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            var oAsString = o as string;
+            if (oAsString != null)
+            {
+                bool contains = new[] { ""test"", ""test"", ""test"" }.Contains(oAsString);
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_CastToSelfdefinedType()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            if (o is Other)
+            {
+                Other myVar = o as Other;
+            }
+        }
+    }
+
+    class Other { }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            Other myVar = o as Other;
+            if (myVar != null)
+            {
+            }
+        }
+    }
+
+    class Other { }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
     }
 }

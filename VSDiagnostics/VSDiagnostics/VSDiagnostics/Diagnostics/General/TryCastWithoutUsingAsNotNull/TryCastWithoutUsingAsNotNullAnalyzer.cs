@@ -47,11 +47,13 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 
             var asExpressions = ifStatement.Statement
                                            .DescendantNodes()
+                                           .Concat(ifStatement.Condition.DescendantNodesAndSelf())
                                            .OfType<BinaryExpressionSyntax>()
                                            .Where(x => x.OperatorToken.IsKind(SyntaxKind.AsKeyword));
 
             var castExpressions = ifStatement.Statement
                                              .DescendantNodes()
+                                             .Concat(ifStatement.Condition.DescendantNodesAndSelf())
                                              .OfType<CastExpressionSyntax>();
 
             Action<string> checkIdentifier = bodyIdentifier =>

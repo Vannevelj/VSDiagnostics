@@ -40,15 +40,20 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             var isIdentifier = ((IdentifierNameSyntax) isExpression.Left).Identifier.ValueText;
             var ifStatement = statement.AncestorsAndSelf().OfType<IfStatementSyntax>().First();
 
+            SemanticModel semanticModel;
+            document.TryGetSemanticModel(out semanticModel);
+
             // We filter out the descendent if statements to avoid executing the code fix on all nested ifs
             var asExpressions = ifStatement.Statement
                                            .DescendantNodes()
+                                           .Concat(ifStatement.Condition.DescendantNodesAndSelf())
                                            .Where(x => !(x is IfStatementSyntax))
                                            .OfType<BinaryExpressionSyntax>()
                                            .Where(x => x.OperatorToken.IsKind(SyntaxKind.AsKeyword));
 
             var castExpressions = ifStatement.Statement
                                              .DescendantNodes()
+                                             .Concat(ifStatement.Condition.DescendantNodesAndSelf())
                                              .Where(x => !(x is IfStatementSyntax))
                                              .OfType<CastExpressionSyntax>();
 
@@ -57,6 +62,41 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             var editor = await DocumentEditor.CreateAsync(document);
             var isConditionReplaced = false;
 
+            // First we check whether there is an applicable scenario in our if condition itself
+            // e.g.: if (o is string && ((string) o).Length > 1)
+            foreach (
+                var expression in
+                    ifStatement.Condition.DescendantNodesAndSelf()
+                               .Where(x => x is CastExpressionSyntax || (x is BinaryExpressionSyntax && ((BinaryExpressionSyntax) x).OperatorToken.IsKind(SyntaxKind.AsKeyword))))
+            {
+                var asExpression = expression as BinaryExpressionSyntax;
+                var castExpression = expression as CastExpressionSyntax;
+                var castedType = semanticModel.GetTypeInfo(asExpression != null ? asExpression.Right : castExpression.Type);
+
+                // We create a new variable name with format identifierAsType
+                // In the above example that would become oAsString
+                if (!isConditionReplaced)
+                {
+                    
+                    string newIdentifier = $"{isIdentifier}As{castedType.Type.Name}"; ;
+                    var newCondition = SyntaxFactory.ParseExpression($"{newIdentifier} != null").WithAdditionalAnnotations(Formatter.Annotation);
+                    editor.ReplaceNode(isExpression, newCondition);
+                    isConditionReplaced = true;
+                }
+
+                // Create a variable outside the if statement and use the as cast
+                // We also apply the renamer annotation so the user immediately gets to give it a different name at the point of declaration
+                VariableDeclarationSyntax newDeclaration;
+                if (asExpression != null)
+                {
+                    //newDeclaration = SyntaxFactory.VariableDeclaration(asExpression.Right.DescendantNodesAndSelf().OfType<Type>(),)
+                    //TODO: find out the type of that inline as
+                    // Add test case with a cast to a self defined type
+                    // Don't separate this -- combine it with the rest so we can support the CastInSeparateExpression test case 
+                }
+            }
+
+            // All the body statements
             foreach (var expression in castExpressions.Concat<ExpressionSyntax>(asExpressions))
             {
                 // Verifying that we're actually assigning to a variable
@@ -101,20 +141,18 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 if (asExpression != null)
                 {
                     // The existing local was an as statement
-                    newDeclaration = SyntaxFactory.VariableDeclaration(existingDeclaration.Type, SyntaxFactory.SeparatedList(new[] { variableDeclarator }));
+                    var newDeclarator = variableDeclarator.WithIdentifier(variableDeclarator.Identifier.WithAdditionalAnnotations(RenameAnnotation.Create()));
+                    newDeclaration = SyntaxFactory.VariableDeclaration(existingDeclaration.Type, SyntaxFactory.SeparatedList(new[] { newDeclarator }));
                 }
                 else
                 {
                     // The existing local was a direct cast
-                    SemanticModel semanticModel;
-                    document.TryGetSemanticModel(out semanticModel);
-
                     var castedType = semanticModel.GetTypeInfo(castExpression.Type);
                     var typeToCast = castedType.Type.IsNullable() || castedType.Type.IsReferenceType ? castExpression.Type : SyntaxFactory.NullableType(castExpression.Type);
 
                     var newAsClause = SyntaxFactory.BinaryExpression(SyntaxKind.AsExpression, castExpression.Expression, typeToCast);
                     var newEqualsClause = SyntaxFactory.EqualsValueClause(newAsClause);
-                    var newDeclarator = SyntaxFactory.VariableDeclarator(variableDeclarator.Identifier, null, newEqualsClause);
+                    var newDeclarator = SyntaxFactory.VariableDeclarator(variableDeclarator.Identifier.WithAdditionalAnnotations(RenameAnnotation.Create()), null, newEqualsClause);
                     newDeclaration = SyntaxFactory.VariableDeclaration(existingDeclaration.Type, SyntaxFactory.SeparatedList(new[] { newDeclarator }));
                 }
 
