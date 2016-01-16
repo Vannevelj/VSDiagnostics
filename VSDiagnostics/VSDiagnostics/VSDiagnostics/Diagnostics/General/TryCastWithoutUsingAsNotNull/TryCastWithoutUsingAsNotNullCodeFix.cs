@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 {
@@ -36,70 +37,105 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
         private async Task<Solution> UseAsAsync(Document document, SyntaxNode statement)
         {
             var isExpression = (BinaryExpressionSyntax) statement;
+            var isIdentifier = ((IdentifierNameSyntax) isExpression.Left).Identifier.ValueText;
             var ifStatement = statement.AncestorsAndSelf().OfType<IfStatementSyntax>().First();
 
-            var asExpressions =
-                ifStatement.Statement.DescendantNodesAndSelf()
-                    .OfType<BinaryExpressionSyntax>()
-                    .Where(x => x.OperatorToken.IsKind(SyntaxKind.AsKeyword));
-            var isIdentifier = ((IdentifierNameSyntax) isExpression.Left).Identifier.ValueText;
+            // We filter out the descendent if statements to avoid executing the code fix on all nested ifs
+            var asExpressions = ifStatement.Statement
+                                           .DescendantNodes()
+                                           .Where(x => !(x is IfStatementSyntax))
+                                           .OfType<BinaryExpressionSyntax>()
+                                           .Where(x => x.OperatorToken.IsKind(SyntaxKind.AsKeyword));
 
-            foreach (var asExpression in asExpressions)
+            var castExpressions = ifStatement.Statement
+                                             .DescendantNodes()
+                                             .Where(x => !(x is IfStatementSyntax))
+                                             .OfType<CastExpressionSyntax>();
+
+            // Editor is created outside the loop so we can apply multiple fixes to one "document"
+            // In our scenario this boils down to applying one fix for every if statement
+            var editor = await DocumentEditor.CreateAsync(document);
+            var isConditionReplaced = false;
+
+            foreach (var expression in castExpressions.Concat<ExpressionSyntax>(asExpressions))
             {
-                var isIdentifierInAsContext = ((IdentifierNameSyntax) asExpression.Left).Identifier.ValueText;
-                if (string.Equals(isIdentifier, isIdentifierInAsContext))
+                // Verifying that we're actually assigning to a variable
+                var variableDeclarator = expression.Ancestors().OfType<VariableDeclaratorSyntax>().FirstOrDefault();
+                if (variableDeclarator == null)
                 {
-                    // Move the as statement before the if block
-                    // Change the if-condition to "NewAsIdentifier != null"
+                    continue;
+                }
 
-                    var variableDeclarator = asExpression.AncestorsAndSelf().OfType<VariableDeclaratorSyntax>().First();
-                    var asIdentifier = variableDeclarator.Identifier.ValueText;
-                    var variableDeclaration =
-                        asExpression.AncestorsAndSelf().OfType<LocalDeclarationStatementSyntax>().First();
+                IdentifierNameSyntax localVariableBeingCast = null;
+                var castedIdentifier = variableDeclarator.Identifier.ValueText;
 
-                    var editor = await DocumentEditor.CreateAsync(document);
+                var asExpression = expression as BinaryExpressionSyntax;
+                if (asExpression != null)
+                {
+                    localVariableBeingCast = (IdentifierNameSyntax) asExpression.Left;
+                }
 
-                    var newCondition = SyntaxFactory.ParseExpression($"{asIdentifier} != null");
-                    editor.ReplaceNode(ifStatement.Condition, newCondition);
+                var castExpression = expression as CastExpressionSyntax;
+                if (castExpression != null)
+                {
+                    localVariableBeingCast = (IdentifierNameSyntax) castExpression.Expression;
+                }
 
-                    if (variableDeclaration.Declaration.Variables.Count > 1) // Split variable declaration
-                    {
-                        // Extract the relevant variable and copy it outside the if-body
-                        var extractedDeclarator =
-                            variableDeclaration.Declaration.Variables.First(x => x.Identifier.ValueText == asIdentifier);
-                        var newDeclaration = SyntaxFactory.VariableDeclaration(
-                            extractedDeclarator.AncestorsAndSelf().OfType<VariableDeclarationSyntax>().First().Type,
-                            SyntaxFactory.SeparatedList(new[] {extractedDeclarator}));
-                        var newStatement = SyntaxFactory.LocalDeclarationStatement(
-                            SyntaxFactory.TokenList(),
-                            newDeclaration,
-                            SyntaxFactory.Token(SyntaxKind.SemicolonToken));
-                        editor.InsertBefore(ifStatement, newStatement.WithAdditionalAnnotations(Formatter.Annotation));
+                if (localVariableBeingCast == null || localVariableBeingCast.Identifier.ValueText != isIdentifier)
+                {
+                    continue;
+                }
 
-                        // Rewrite the variable declaration inside the if-body to remove the one we just copied
-                        var newVariables =
-                            variableDeclaration.Declaration.WithVariables(
-                                SyntaxFactory.SeparatedList(
-                                    variableDeclaration.Declaration.Variables.Except(new[] {extractedDeclarator})));
-                        var newBodyStatement = SyntaxFactory.LocalDeclarationStatement(
-                            SyntaxFactory.TokenList(),
-                            newVariables,
-                            SyntaxFactory.Token(SyntaxKind.SemicolonToken));
-                        editor.ReplaceNode(variableDeclaration, newBodyStatement);
-                    }
-                    else // Move declaration outside if-body
-                    {
-                        editor.RemoveNode(variableDeclaration);
-                        editor.InsertBefore(ifStatement,
-                            variableDeclaration.WithAdditionalAnnotations(Formatter.Annotation));
-                    }
+                // Change if condition
+                // This should only happen once
+                if (!isConditionReplaced)
+                {
+                    var newCondition = SyntaxFactory.ParseExpression($"{castedIdentifier} != null").WithAdditionalAnnotations(Formatter.Annotation);
+                    editor.ReplaceNode(isExpression, newCondition);
+                    isConditionReplaced = true;
+                }
 
-                    var newDocument = editor.GetChangedDocument();
-                    return newDocument.Project.Solution;
+                // Create as statement before if block
+                var existingDeclaration = variableDeclarator.Ancestors().OfType<VariableDeclarationSyntax>().FirstOrDefault();
+                VariableDeclarationSyntax newDeclaration;
+                if (asExpression != null)
+                {
+                    // The existing local was an as statement
+                    newDeclaration = SyntaxFactory.VariableDeclaration(existingDeclaration.Type, SyntaxFactory.SeparatedList(new[] { variableDeclarator }));
+                }
+                else
+                {
+                    // The existing local was a direct cast
+                    SemanticModel semanticModel;
+                    document.TryGetSemanticModel(out semanticModel);
+
+                    var castedType = semanticModel.GetTypeInfo(castExpression.Type);
+                    var typeToCast = castedType.Type.IsNullable() || castedType.Type.IsReferenceType ? castExpression.Type : SyntaxFactory.NullableType(castExpression.Type);
+
+                    var newAsClause = SyntaxFactory.BinaryExpression(SyntaxKind.AsExpression, castExpression.Expression, typeToCast);
+                    var newEqualsClause = SyntaxFactory.EqualsValueClause(newAsClause);
+                    var newDeclarator = SyntaxFactory.VariableDeclarator(variableDeclarator.Identifier, null, newEqualsClause);
+                    newDeclaration = SyntaxFactory.VariableDeclaration(existingDeclaration.Type, SyntaxFactory.SeparatedList(new[] { newDeclarator }));
+                }
+
+                var newLocal = SyntaxFactory.LocalDeclarationStatement(newDeclaration).WithAdditionalAnnotations(Formatter.Annotation);
+                editor.InsertBefore(ifStatement, newLocal);
+
+                // Rewrite body to remove variable declarator (and declaration if necessary)
+                if (existingDeclaration.Variables.Count > 1)
+                {
+                    // Multiple variables defined in one line e.g.
+                    // int x, y = 1;
+                    editor.RemoveNode(variableDeclarator);
+                }
+                else
+                {
+                    editor.RemoveNode(existingDeclaration.Ancestors().OfType<LocalDeclarationStatementSyntax>().First());
                 }
             }
 
-            return null;
+            var newDocument = editor.GetChangedDocument();
+            return newDocument.Project.Solution;
         }
     }
 }

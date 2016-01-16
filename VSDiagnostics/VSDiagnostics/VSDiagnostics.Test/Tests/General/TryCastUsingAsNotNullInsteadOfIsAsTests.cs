@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new TryCastWithoutUsingAsNotNullCodeFix();
 
         [TestMethod]
-        public void TryCastWithoutUsingAsNotNull_WithIsAs_AndReferenceType()
+        public void TryCastWithoutUsingAsNotNull_IsAs_AndReferenceType()
         {
             var original = @"
 using System;
@@ -59,7 +59,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TryCastWithoutUsingAsNotNull_WithIsAs_AndValueType()
+        public void TryCastWithoutUsingAsNotNull_IsAs_AndValueType()
         {
             var original = @"
 using System;
@@ -104,7 +104,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TryCastWithoutUsingAsNotNull_WithIsAs_AndObjectIsUsedBeforeIs()
+        public void TryCastWithoutUsingAsNotNull_IsAs_AndObjectIsUsedBeforeIs()
         {
             var original = @"
 using System;
@@ -151,7 +151,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TryCastWithoutUsingAsNotNull_WithIsAs_AndObjectIsMethodParameter()
+        public void TryCastWithoutUsingAsNotNull_IsAs_AndObjectIsMethodParameter()
         {
             var original = @"
 using System;
@@ -194,7 +194,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TryCastWithoutUsingAsNotNull_WithIsAs_AndElseClause()
+        public void TryCastWithoutUsingAsNotNull_IsAs_AndElseClause()
         {
             var original = @"
 using System;
@@ -247,7 +247,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TryCastWithoutUsingAsNotNull_WithMultipleCasts()
+        public void TryCastWithoutUsingAsNotNull_MultipleIrrelevantCasts()
         {
             var original = @"
 using System;
@@ -296,7 +296,52 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TryCastWithoutUsingAsNotNull_WithDirectCast()
+        public void TryCastWithoutUsingAsNotNull_DirectCast_ReferenceType()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = ""test"";
+            if (o is string)
+            {
+                var oAsString = (string) o;
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = ""test"";
+            var oAsString = o as string;
+            if (oAsString != null)
+            {
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_DirectCast_Struct()
         {
             var original = @"
 using System;
@@ -317,7 +362,72 @@ namespace ConsoleApplication1
     }
 }";
 
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = 5;
+            var oAsInt = o as int?;
+            if (oAsInt != null)
+            {
+            }
+        }
+    }
+}";
+
             VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_DirectCast_NullableStruct()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = 5;
+            if (o is int)
+            {
+                var oAsInt = (int?) o;
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = 5;
+            var oAsInt = o as int?;
+            if (oAsInt != null)
+            {
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
         }
 
         [TestMethod]
@@ -347,7 +457,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TryCastWithoutUsingAsNotNull_WithChainedVariableDeclaration()
+        public void TryCastWithoutUsingAsNotNull_ChainedVariableDeclaration()
         {
             var original = @"
 using System;
@@ -383,6 +493,125 @@ namespace ConsoleApplication1
             if (oAsInt != null)
             {
                 int? x = 10;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_TryCastNullCheck()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = 5;
+            int? oAsInt = o as int?;
+            if (oAsInt != null)
+            {
+
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_MultipleRelevantCasts()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = ""sample"";
+            if (o is string)
+            {
+                string oAsString = o as string;
+                string anotherString = o as string;
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = ""sample"";
+            string oAsString = o as string;
+            string anotherString = o as string;
+            if (oAsString != null)
+            {
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"),
+                string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_MultipleIfConditions()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = ""sample"";
+            if (o is string && 1 == 1)
+            {
+                string oAsString = o as string;
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = ""sample"";
+            string oAsString = o as string;
+            if (oAsString != null && 1 == 1)
+            {
             }
         }
     }

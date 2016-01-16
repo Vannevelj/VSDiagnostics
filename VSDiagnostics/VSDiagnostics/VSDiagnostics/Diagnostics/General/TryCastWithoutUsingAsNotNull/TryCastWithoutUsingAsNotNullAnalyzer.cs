@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -38,47 +39,45 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             }
             var isIdentifier = isIdentifierExpression.Identifier.ValueText;
 
-            var ifExpression = isExpression.AncestorsAndSelf().OfType<IfStatementSyntax>().FirstOrDefault();
-            if (ifExpression == null)
+            var ifStatement = isExpression.AncestorsAndSelf().OfType<IfStatementSyntax>().FirstOrDefault();
+            if (ifStatement == null)
             {
                 return;
             }
 
-            var asExpressions =
-                ifExpression.Statement.DescendantNodes()
-                    .OfType<BinaryExpressionSyntax>()
-                    .Where(x => x.OperatorToken.Kind() == SyntaxKind.AsKeyword);
-            foreach (var asExpression in asExpressions)
+            var asExpressions = ifStatement.Statement
+                                           .DescendantNodes()
+                                           .OfType<BinaryExpressionSyntax>()
+                                           .Where(x => x.OperatorToken.IsKind(SyntaxKind.AsKeyword));
+
+            var castExpressions = ifStatement.Statement
+                                             .DescendantNodes()
+                                             .OfType<CastExpressionSyntax>();
+
+            Action<string> checkIdentifier = bodyIdentifier =>
             {
-                var asIdentifier = asExpression.Left as IdentifierNameSyntax;
-                if (asIdentifier == null)
+                if (bodyIdentifier == isIdentifier)
                 {
-                    continue;
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, isExpression.GetLocation(), isIdentifier));
                 }
+            };
 
-                if (!string.Equals(asIdentifier.Identifier.ValueText, isIdentifier))
-                {
-                    continue;
-                }
-
-                context.ReportDiagnostic(Diagnostic.Create(Rule, isExpression.GetLocation(), isIdentifier));
-            }
-
-            var castExpressions = ifExpression.Statement.DescendantNodes().OfType<CastExpressionSyntax>().ToArray();
-            foreach (var castExpression in castExpressions)
+            foreach (var expression in asExpressions.Concat<ExpressionSyntax>(castExpressions))
             {
-                var castIdentifier = castExpression.Expression as IdentifierNameSyntax;
-                if (castIdentifier == null)
+                var binaryExpression = expression as BinaryExpressionSyntax;
+                var binaryIdentifier = binaryExpression?.Left as IdentifierNameSyntax;
+                if (binaryIdentifier != null)
                 {
+                    checkIdentifier(binaryIdentifier.Identifier.ValueText);
                     continue;
                 }
 
-                if (!string.Equals(castIdentifier.Identifier.ValueText, isIdentifier))
+                var castExpression = expression as CastExpressionSyntax;
+                var castIdentifier = castExpression?.Expression as IdentifierNameSyntax;
+                if (castIdentifier != null)
                 {
-                    continue;
+                    checkIdentifier(castIdentifier.Identifier.ValueText);
                 }
-
-                context.ReportDiagnostic(Diagnostic.Create(Rule, isExpression.GetLocation(), isIdentifier));
             }
         }
     }
