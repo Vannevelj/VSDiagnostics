@@ -91,7 +91,12 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 ReplaceIdentifier(asExpression, newIdentifier, editor);
 
                 // Remove the local variable
-                RemoveLocal(asExpression, editor);
+                // If the expression is surrounded by an invocation we just swap the expression for the identifier
+                // e.g.: bool contains = new[] { ""test"", ""test"", ""test"" }.Contains(o as string);
+                if (!asExpression.Ancestors().OfType<InvocationExpressionSyntax>().Any())
+                {
+                    RemoveLocal(asExpression, editor);
+                }
             }
 
             foreach (var castExpression in castExpressions)
@@ -122,7 +127,12 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 ReplaceIdentifier(castExpression, newIdentifier, editor);
 
                 // Remove the local variable
-                RemoveLocal(castExpression, editor);
+                // If the expression is surrounded by an invocation we just swap the expression for the identifier
+                // e.g.: bool contains = new[] { ""test"", ""test"", ""test"" }.Contains(o as string);
+                if (!castExpression.Ancestors().OfType<InvocationExpressionSyntax>().Any())
+                {
+                    RemoveLocal(castExpression, editor);
+                }
             }
 
             var newDocument = editor.GetChangedDocument();
@@ -176,6 +186,12 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 
         private void ReplaceIdentifier(ExpressionSyntax expression, SyntaxToken newIdentifier, DocumentEditor editor)
         {
+            if (expression.Ancestors().OfType<InvocationExpressionSyntax>().Any())
+            {
+                editor.ReplaceNode(expression, SyntaxFactory.IdentifierName(newIdentifier));
+                return;
+            }
+
             if (!expression.Ancestors().OfType<VariableDeclaratorSyntax>().Any())
             {
                 editor.ReplaceNode(expression, SyntaxFactory.IdentifierName(newIdentifier));
