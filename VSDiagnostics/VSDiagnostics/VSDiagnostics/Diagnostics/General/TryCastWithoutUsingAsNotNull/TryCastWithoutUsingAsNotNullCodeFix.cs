@@ -49,131 +49,153 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                                            .Concat(ifStatement.Condition.DescendantNodesAndSelf())
                                            .Where(x => !(x is IfStatementSyntax))
                                            .OfType<BinaryExpressionSyntax>()
-                                           .Where(x => x.OperatorToken.IsKind(SyntaxKind.AsKeyword));
+                                           .Where(x => x.OperatorToken.IsKind(SyntaxKind.AsKeyword))
+                                           .ToArray();
 
             var castExpressions = ifStatement.Statement
                                              .DescendantNodes()
                                              .Concat(ifStatement.Condition.DescendantNodesAndSelf())
                                              .Where(x => !(x is IfStatementSyntax))
-                                             .OfType<CastExpressionSyntax>();
+                                             .OfType<CastExpressionSyntax>()
+                                             .ToArray();
 
             // Editor is created outside the loop so we can apply multiple fixes to one "document"
             // In our scenario this boils down to applying one fix for every if statement
             var editor = await DocumentEditor.CreateAsync(document);
-            var isConditionReplaced = false;
+            var conditionAlreadyReplaced = false;
+            var variableAlreadyExtracted = false;
 
-            // First we check whether there is an applicable scenario in our if condition itself
-            // e.g.: if (o is string && ((string) o).Length > 1)
-            foreach (
-                var expression in
-                    ifStatement.Condition.DescendantNodesAndSelf()
-                               .Where(x => x is CastExpressionSyntax || (x is BinaryExpressionSyntax && ((BinaryExpressionSyntax) x).OperatorToken.IsKind(SyntaxKind.AsKeyword))))
+            foreach (var asExpression in asExpressions)
             {
-                var asExpression = expression as BinaryExpressionSyntax;
-                var castExpression = expression as CastExpressionSyntax;
-                var castedType = semanticModel.GetTypeInfo(asExpression != null ? asExpression.Right : castExpression.Type);
-
-                // We create a new variable name with format identifierAsType
-                // In the above example that would become oAsString
-                if (!isConditionReplaced)
-                {
-                    
-                    string newIdentifier = $"{isIdentifier}As{castedType.Type.Name}"; ;
-                    var newCondition = SyntaxFactory.ParseExpression($"{newIdentifier} != null").WithAdditionalAnnotations(Formatter.Annotation);
-                    editor.ReplaceNode(isExpression, newCondition);
-                    isConditionReplaced = true;
-                }
-
-                // Create a variable outside the if statement and use the as cast
-                // We also apply the renamer annotation so the user immediately gets to give it a different name at the point of declaration
-                VariableDeclarationSyntax newDeclaration;
-                if (asExpression != null)
-                {
-                    //newDeclaration = SyntaxFactory.VariableDeclaration(asExpression.Right.DescendantNodesAndSelf().OfType<Type>(),)
-                    //TODO: find out the type of that inline as
-                    // Add test case with a cast to a self defined type
-                    // Don't separate this -- combine it with the rest so we can support the CastInSeparateExpression test case 
-                }
-            }
-
-            // All the body statements
-            foreach (var expression in castExpressions.Concat<ExpressionSyntax>(asExpressions))
-            {
-                // Verifying that we're actually assigning to a variable
-                var variableDeclarator = expression.Ancestors().OfType<VariableDeclaratorSyntax>().FirstOrDefault();
-                if (variableDeclarator == null)
+                var identifier = asExpression.Left as IdentifierNameSyntax;
+                if (identifier == null || identifier.Identifier.ValueText != isIdentifier)
                 {
                     continue;
                 }
 
-                IdentifierNameSyntax localVariableBeingCast = null;
-                var castedIdentifier = variableDeclarator.Identifier.ValueText;
+                var castedType = semanticModel.GetTypeInfo(asExpression.Right);
+                var newIdentifier = SyntaxFactory.Identifier(GetNewIdentifier(isIdentifier, (TypeSyntax) asExpression.Right, semanticModel));
 
-                var asExpression = expression as BinaryExpressionSyntax;
-                if (asExpression != null)
-                {
-                    localVariableBeingCast = (IdentifierNameSyntax) asExpression.Left;
-                }
-
-                var castExpression = expression as CastExpressionSyntax;
-                if (castExpression != null)
-                {
-                    localVariableBeingCast = (IdentifierNameSyntax) castExpression.Expression;
-                }
-
-                if (localVariableBeingCast == null || localVariableBeingCast.Identifier.ValueText != isIdentifier)
-                {
-                    continue;
-                }
-
-                // Change if condition
-                // This should only happen once
-                if (!isConditionReplaced)
-                {
-                    var newCondition = SyntaxFactory.ParseExpression($"{castedIdentifier} != null").WithAdditionalAnnotations(Formatter.Annotation);
-                    editor.ReplaceNode(isExpression, newCondition);
-                    isConditionReplaced = true;
-                }
+                // Replace condition if it hasn't happened yet
+                ReplaceCondition(newIdentifier.ValueText, isExpression, editor, ref conditionAlreadyReplaced);
 
                 // Create as statement before if block
-                var existingDeclaration = variableDeclarator.Ancestors().OfType<VariableDeclarationSyntax>().FirstOrDefault();
-                VariableDeclarationSyntax newDeclaration;
-                if (asExpression != null)
-                {
-                    // The existing local was an as statement
-                    var newDeclarator = variableDeclarator.WithIdentifier(variableDeclarator.Identifier.WithAdditionalAnnotations(RenameAnnotation.Create()));
-                    newDeclaration = SyntaxFactory.VariableDeclaration(existingDeclaration.Type, SyntaxFactory.SeparatedList(new[] { newDeclarator }));
-                }
-                else
-                {
-                    // The existing local was a direct cast
-                    var castedType = semanticModel.GetTypeInfo(castExpression.Type);
-                    var typeToCast = castedType.Type.IsNullable() || castedType.Type.IsReferenceType ? castExpression.Type : SyntaxFactory.NullableType(castExpression.Type);
+                InsertNewVariableDeclaration(
+                    asExpression: asExpression,
+                    newIdentifier: newIdentifier,
+                    nodeLocation: ifStatement,
+                    editor: editor,
+                    variableAlreadyExtracted: ref variableAlreadyExtracted);
 
-                    var newAsClause = SyntaxFactory.BinaryExpression(SyntaxKind.AsExpression, castExpression.Expression, typeToCast);
-                    var newEqualsClause = SyntaxFactory.EqualsValueClause(newAsClause);
-                    var newDeclarator = SyntaxFactory.VariableDeclarator(variableDeclarator.Identifier.WithAdditionalAnnotations(RenameAnnotation.Create()), null, newEqualsClause);
-                    newDeclaration = SyntaxFactory.VariableDeclaration(existingDeclaration.Type, SyntaxFactory.SeparatedList(new[] { newDeclarator }));
+                // If the expression does not have a variable declarator as parent, we just swap the entire expression for the newly generated identifier
+                ReplaceIdentifier(asExpression, newIdentifier, editor);
+
+                // Remove the local variable
+                RemoveLocal(asExpression, editor);
+            }
+
+            foreach (var castExpression in castExpressions)
+            {
+                var identifier = castExpression.Expression as IdentifierNameSyntax;
+                if (identifier == null || identifier.Identifier.ValueText != isIdentifier)
+                {
+                    continue;
                 }
 
-                var newLocal = SyntaxFactory.LocalDeclarationStatement(newDeclaration).WithAdditionalAnnotations(Formatter.Annotation);
-                editor.InsertBefore(ifStatement, newLocal);
+                var castedType = semanticModel.GetTypeInfo(castExpression.Type);
+                var newIdentifier = SyntaxFactory.Identifier(GetNewIdentifier(isIdentifier, castExpression.Type, semanticModel));
 
-                // Rewrite body to remove variable declarator (and declaration if necessary)
-                if (existingDeclaration.Variables.Count > 1)
-                {
-                    // Multiple variables defined in one line e.g.
-                    // int x, y = 1;
-                    editor.RemoveNode(variableDeclarator);
-                }
-                else
-                {
-                    editor.RemoveNode(existingDeclaration.Ancestors().OfType<LocalDeclarationStatementSyntax>().First());
-                }
+                // Replace condition if it hasn't happened yet
+                ReplaceCondition(newIdentifier.ValueText, isExpression, editor, ref conditionAlreadyReplaced);
+
+                // Create as statement before if block
+                var typeToCast = castedType.Type.IsNullable() || castedType.Type.IsReferenceType ? castExpression.Type : SyntaxFactory.NullableType(castExpression.Type);
+                var newAsClause = SyntaxFactory.BinaryExpression(SyntaxKind.AsExpression, castExpression.Expression, typeToCast);
+                InsertNewVariableDeclaration(
+                    asExpression: newAsClause,
+                    newIdentifier: newIdentifier,
+                    nodeLocation: ifStatement,
+                    editor: editor,
+                    variableAlreadyExtracted: ref variableAlreadyExtracted);
+
+                // If the expression does not have a variable declarator as parent, we just swap the entire expression for the newly generated identifier
+                ReplaceIdentifier(castExpression, newIdentifier, editor);
+
+                // Remove the local variable
+                RemoveLocal(castExpression, editor);
             }
 
             var newDocument = editor.GetChangedDocument();
             return newDocument.Project.Solution;
+        }
+
+        private void ReplaceCondition(string newIdentifier, SyntaxNode isExpression, DocumentEditor editor, ref bool conditionAlreadyReplaced)
+        {
+            if (!conditionAlreadyReplaced)
+            {
+                var newCondition = SyntaxFactory.ParseExpression($"{newIdentifier} != null").WithAdditionalAnnotations(Formatter.Annotation);
+                editor.ReplaceNode(isExpression, newCondition);
+                conditionAlreadyReplaced = true;
+            }
+        }
+
+        private string GetNewIdentifier(string currentIdentifier, TypeSyntax type, SemanticModel semanticModel)
+        {
+            string typeName;
+            var nullableType = type as NullableTypeSyntax;
+            if (nullableType != null)
+            {
+                typeName = semanticModel.GetTypeInfo(nullableType.ElementType).Type.Name;
+            }
+            else
+            {
+                typeName = semanticModel.GetTypeInfo(type).Type.Name;
+            }
+
+            return $"{currentIdentifier}As{typeName}";
+        }
+
+        private void RemoveLocal(ExpressionSyntax expression, DocumentEditor editor)
+        {
+            var variableDeclaration = expression.Ancestors().OfType<VariableDeclarationSyntax>().FirstOrDefault();
+            if (variableDeclaration != null)
+            {
+                if (variableDeclaration.Variables.Count > 1)
+                {
+                    // Remove the appropriate variabledeclarator
+                    var declaratorToRemove = expression.Ancestors().OfType<VariableDeclaratorSyntax>().First();
+                    editor.RemoveNode(declaratorToRemove);
+                }
+                else
+                {
+                    // Remove the entire variabledeclaration
+                    editor.RemoveNode(variableDeclaration.Ancestors().OfType<LocalDeclarationStatementSyntax>().First());
+                }
+            }
+        }
+
+        private void ReplaceIdentifier(ExpressionSyntax expression, SyntaxToken newIdentifier, DocumentEditor editor)
+        {
+            if (!expression.Ancestors().OfType<VariableDeclaratorSyntax>().Any())
+            {
+                editor.ReplaceNode(expression, SyntaxFactory.IdentifierName(newIdentifier));
+            }
+        }
+
+        private void InsertNewVariableDeclaration(BinaryExpressionSyntax asExpression, SyntaxToken newIdentifier, SyntaxNode nodeLocation, DocumentEditor editor,
+                                                  ref bool variableAlreadyExtracted)
+        {
+            if (variableAlreadyExtracted)
+            {
+                return;
+            }
+
+            var newEqualsClause = SyntaxFactory.EqualsValueClause(asExpression);
+            var newDeclarator = SyntaxFactory.VariableDeclarator(newIdentifier.WithAdditionalAnnotations(RenameAnnotation.Create()), null, newEqualsClause);
+            var newDeclaration = SyntaxFactory.VariableDeclaration(SyntaxFactory.IdentifierName("var"), SyntaxFactory.SeparatedList(new[] { newDeclarator }));
+            var newLocal = SyntaxFactory.LocalDeclarationStatement(newDeclaration).WithAdditionalAnnotations(Formatter.Annotation);
+            editor.InsertBefore(nodeLocation, newLocal);
+            variableAlreadyExtracted = true;
         }
     }
 }

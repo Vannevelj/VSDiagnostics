@@ -46,7 +46,7 @@ namespace ConsoleApplication1
         void Method()
         {
             object o = ""sample"";
-            string oAsString = o as string;
+            var oAsString = o as string;
             if (oAsString != null)
             {
             }
@@ -91,8 +91,8 @@ namespace ConsoleApplication1
         void Method()
         {
             object o = 5;
-            var oAsInt = o as int?;
-            if (oAsInt != null)
+            var oAsInt32 = o as int?;
+            if (oAsInt32 != null)
             {
             }
         }
@@ -138,7 +138,7 @@ namespace ConsoleApplication1
         {
             object o = ""sample"";
             Console.Write(o.GetType());
-            string oAsString = o as string;
+            var oAsString = o as string;
             if (oAsString != null)
             {
             }
@@ -181,7 +181,7 @@ namespace ConsoleApplication1
     {
         void Method(object o)
         {
-            string oAsString = o as string;
+            var oAsString = o as string;
             if (oAsString != null)
             {
             }
@@ -230,7 +230,7 @@ namespace ConsoleApplication1
         void Method()
         {
             object o = ""sample"";
-            string oAsString = o as string;
+            var oAsString = o as string;
             if (oAsString != null)
             {
             }
@@ -281,8 +281,8 @@ namespace ConsoleApplication1
         void Method()
         {
             object o = 5;
-            var oAsInt = o as int?;
-            if (oAsInt != null)
+            var oAsInt32 = o as int?;
+            if (oAsInt32 != null)
             {
                 object irrelevant = 10.0;
                 var irrelevantAsDouble = irrelevant as double?;
@@ -373,8 +373,8 @@ namespace ConsoleApplication1
         void Method()
         {
             object o = 5;
-            var oAsInt = o as int?;
-            if (oAsInt != null)
+            var oAsInt32 = o as int?;
+            if (oAsInt32 != null)
             {
             }
         }
@@ -418,8 +418,8 @@ namespace ConsoleApplication1
         void Method()
         {
             object o = 5;
-            var oAsInt = o as int?;
-            if (oAsInt != null)
+            var oAsInt32 = o as int?;
+            if (oAsInt32 != null)
             {
             }
         }
@@ -489,8 +489,8 @@ namespace ConsoleApplication1
         void Method()
         {
             object o = 5;
-            int? oAsInt = o as int?;
-            if (oAsInt != null)
+            var oAsInt32 = o as int?;
+            if (oAsInt32 != null)
             {
                 int? x = 10;
             }
@@ -562,8 +562,7 @@ namespace ConsoleApplication1
         void Method()
         {
             object o = ""sample"";
-            string oAsString = o as string;
-            string anotherString = o as string;
+            var oAsString = o as string;
             if (oAsString != null)
             {
             }
@@ -609,7 +608,7 @@ namespace ConsoleApplication1
         void Method()
         {
             object o = ""sample"";
-            string oAsString = o as string;
+            var oAsString = o as string;
             if (oAsString != null && 1 == 1)
             {
             }
@@ -652,7 +651,7 @@ namespace ConsoleApplication1
     {
         void Method(object o)
         {
-            string oAsString = o as string;
+            var oAsString = o as string;
             if (oAsString != null)
             {
             }
@@ -679,7 +678,6 @@ namespace ConsoleApplication1
         {
             if (o is string && (o as string).Length > 1)
             {
-                
             }
         }
     }
@@ -695,8 +693,8 @@ namespace ConsoleApplication1
     {
         void Method(object o)
         {
-            string oAsString = o as string;
-            if (oAsString != null && oAsString.Length > 1)
+            var oAsString = o as string;
+            if (oAsString != null && (oAsString).Length > 1)
             {
             }
         }
@@ -722,7 +720,6 @@ namespace ConsoleApplication1
         {
             if (o is string && ((string) o).Length > 1)
             {
-                
             }
         }
     }
@@ -738,8 +735,8 @@ namespace ConsoleApplication1
     {
         void Method(object o)
         {
-            string oAsString = o as string;
-            if (oAsString != null && oAsString.Length > 1)
+            var oAsString = o as string;
+            if (oAsString != null && (oAsString).Length > 1)
             {
             }
         }
@@ -756,6 +753,7 @@ namespace ConsoleApplication1
             var original = @"
 using System;
 using System.Text;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -774,6 +772,7 @@ namespace ConsoleApplication1
             var expected = @"
 using System;
 using System.Text;
+using System.Linq;
 
 namespace ConsoleApplication1
 {
@@ -827,14 +826,88 @@ namespace ConsoleApplication1
     {
         void Method(object o)
         {
-            Other myVar = o as Other;
-            if (myVar != null)
+            var oAsOther = o as Other;
+            if (oAsOther != null)
             {
             }
         }
     }
 
     class Other { }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_CastUsingMethodReference()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            if (Get() is string)
+            {
+                string myVar = Get() as string;
+            }
+        }
+
+        object Get()
+        {
+            return null;
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_SplitVariableDefinitionAndAssignment()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            string myVar = null;
+            if (o is string)
+            {
+                myVar = o as string;
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            string myVar = null;
+            var oAsString = o as string;
+            if (oAsString != null)
+            {
+                myVar = oAsString;
+            }
+        }
+    }
 }";
 
             VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
