@@ -34,7 +34,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 diagnostic);
         }
 
-        private async Task<Solution> UseAsAsync(Document document, SyntaxNode statement)
+        private async Task<Document> UseAsAsync(Document document, SyntaxNode statement)
         {
             var isExpression = (BinaryExpressionSyntax) statement;
             var isIdentifier = ((IdentifierNameSyntax) isExpression.Left).Identifier.ValueText;
@@ -73,7 +73,6 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                     continue;
                 }
 
-                var castedType = semanticModel.GetTypeInfo(asExpression.Right);
                 var newIdentifier = SyntaxFactory.Identifier(GetNewIdentifier(isIdentifier, (TypeSyntax) asExpression.Right, semanticModel));
 
                 // Replace condition if it hasn't happened yet
@@ -135,32 +134,28 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 }
             }
 
-            var newDocument = editor.GetChangedDocument();
-            return newDocument.Project.Solution;
+            return editor.GetChangedDocument();
         }
 
         private void ReplaceCondition(string newIdentifier, SyntaxNode isExpression, DocumentEditor editor, ref bool conditionAlreadyReplaced)
         {
-            if (!conditionAlreadyReplaced)
+            if (conditionAlreadyReplaced)
             {
-                var newCondition = SyntaxFactory.ParseExpression($"{newIdentifier} != null").WithAdditionalAnnotations(Formatter.Annotation);
-                editor.ReplaceNode(isExpression, newCondition);
-                conditionAlreadyReplaced = true;
+                return;
             }
+
+            var newCondition = SyntaxFactory.ParseExpression($"{newIdentifier} != null").WithAdditionalAnnotations(Formatter.Annotation);
+            editor.ReplaceNode(isExpression, newCondition);
+            conditionAlreadyReplaced = true;
+            var newDoc = editor.GetChangedDocument();
         }
 
         private string GetNewIdentifier(string currentIdentifier, TypeSyntax type, SemanticModel semanticModel)
         {
-            string typeName;
             var nullableType = type as NullableTypeSyntax;
-            if (nullableType != null)
-            {
-                typeName = semanticModel.GetTypeInfo(nullableType.ElementType).Type.Name;
-            }
-            else
-            {
-                typeName = semanticModel.GetTypeInfo(type).Type.Name;
-            }
+            var typeName = nullableType != null
+                ? semanticModel.GetTypeInfo(nullableType.ElementType).Type.Name
+                : semanticModel.GetTypeInfo(type).Type.Name;
 
             return $"{currentIdentifier}As{typeName}";
         }
@@ -168,20 +163,23 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
         private void RemoveLocal(ExpressionSyntax expression, DocumentEditor editor)
         {
             var variableDeclaration = expression.Ancestors().OfType<VariableDeclarationSyntax>().FirstOrDefault();
-            if (variableDeclaration != null)
+            if (variableDeclaration == null)
             {
-                if (variableDeclaration.Variables.Count > 1)
-                {
-                    // Remove the appropriate variabledeclarator
-                    var declaratorToRemove = expression.Ancestors().OfType<VariableDeclaratorSyntax>().First();
-                    editor.RemoveNode(declaratorToRemove);
-                }
-                else
-                {
-                    // Remove the entire variabledeclaration
-                    editor.RemoveNode(variableDeclaration.Ancestors().OfType<LocalDeclarationStatementSyntax>().First());
-                }
+                return;
             }
+
+            if (variableDeclaration.Variables.Count > 1)
+            {
+                // Remove the appropriate variabledeclarator
+                var declaratorToRemove = expression.Ancestors().OfType<VariableDeclaratorSyntax>().First();
+                editor.RemoveNode(declaratorToRemove);
+            }
+            else
+            {
+                // Remove the entire variabledeclaration
+                editor.RemoveNode(variableDeclaration.Ancestors().OfType<LocalDeclarationStatementSyntax>().First());
+            }
+            var newDoc = editor.GetChangedDocument();
         }
 
         private void ReplaceIdentifier(ExpressionSyntax expression, SyntaxToken newIdentifier, DocumentEditor editor)
@@ -196,10 +194,15 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             {
                 editor.ReplaceNode(expression, SyntaxFactory.IdentifierName(newIdentifier));
             }
+            var newDoc = editor.GetChangedDocument();
         }
 
-        private void InsertNewVariableDeclaration(BinaryExpressionSyntax asExpression, SyntaxToken newIdentifier, SyntaxNode nodeLocation, DocumentEditor editor,
-                                                  ref bool variableAlreadyExtracted)
+        private void InsertNewVariableDeclaration(
+            BinaryExpressionSyntax asExpression,
+            SyntaxToken newIdentifier,
+            SyntaxNode nodeLocation,
+            DocumentEditor editor,
+            ref bool variableAlreadyExtracted)
         {
             if (variableAlreadyExtracted)
             {
@@ -212,6 +215,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             var newLocal = SyntaxFactory.LocalDeclarationStatement(newDeclaration).WithAdditionalAnnotations(Formatter.Annotation);
             editor.InsertBefore(nodeLocation, newLocal);
             variableAlreadyExtracted = true;
+            var newDoc = editor.GetChangedDocument();
         }
     }
 }

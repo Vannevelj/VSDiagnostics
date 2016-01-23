@@ -748,7 +748,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TryCastWithoutUsingAsNotNull_CastInSeparateExpression()
+        public void TryCastWithoutUsingAsNotNull_CastInSeparateExpression_ReferenceType()
         {
             var original = @"
 using System;
@@ -784,6 +784,98 @@ namespace ConsoleApplication1
             if (oAsString != null)
             {
                 bool contains = new[] { ""test"", ""test"", ""test"" }.Contains(oAsString);
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_CastInSeparateExpression_ValueType()
+        {
+            var original = @"
+using System;
+using System.Text;
+using System.Linq;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            if (o is int)
+            {
+                bool contains = new[] { 5, 6, 7 }.Contains((o as int?).Value);
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+using System.Linq;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            var oAsInt32 = o as int?;
+            if (oAsInt32 != null)
+            {
+                bool contains = new[] { 5, 6, 7 }.Contains((oAsInt32).Value);
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_CastInSeparateExpression_ValueType_NullableCollectionElements()
+        {
+            var original = @"
+using System;
+using System.Text;
+using System.Linq;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            if (o is int)
+            {
+                bool contains = new int?[] { 5, 6, 7 }.Contains(o as int?);
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+using System.Linq;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            var oAsInt32 = o as int?;
+            if (oAsInt32 != null)
+            {
+                bool contains = new int?[] { 5, 6, 7 }.Contains(oAsInt32);
             }
         }
     }
@@ -912,6 +1004,30 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
             VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_DifferentTypes()
+        {
+            var original = @"
+using System;
+using System.Text;
+using System.Linq;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            if (o is int)
+            {
+                var x = o as string;
+            }
+        }
+    }
+}";
+            VerifyDiagnostic(original);
         }
     }
 }
