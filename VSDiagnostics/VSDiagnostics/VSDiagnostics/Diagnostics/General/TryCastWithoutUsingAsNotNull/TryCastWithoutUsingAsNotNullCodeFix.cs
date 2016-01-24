@@ -9,9 +9,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
-using Microsoft.CodeAnalysis.FindSymbols;
 using Microsoft.CodeAnalysis.Formatting;
-using Microsoft.CodeAnalysis.Rename;
 using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
@@ -37,7 +35,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 diagnostic);
         }
 
-        private async Task<Solution> UseAsAsync(Document document, SyntaxNode statement, CancellationToken cancellationToken)
+        private async Task<Document> UseAsAsync(Document document, SyntaxNode statement, CancellationToken cancellationToken)
         {
             var isExpression = (BinaryExpressionSyntax) statement;
             var isIdentifier = ((IdentifierNameSyntax) isExpression.Left).Identifier.ValueText;
@@ -65,9 +63,6 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             var editor = await DocumentEditor.CreateAsync(document, cancellationToken);
             var conditionAlreadyReplaced = false;
             var variableAlreadyExtracted = false;
-            var symbolToRename = default(ISymbol);
-            var newName = string.Empty;
-            var shouldRename = false;
 
             foreach (var asExpression in asExpressions)
             {
@@ -77,22 +72,10 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                     continue;
                 }
 
-                var newIdentifier = SyntaxFactory.Identifier(GetNewIdentifier(isIdentifier, (TypeSyntax)asExpression.Right, semanticModel));
+                var newIdentifier = SyntaxFactory.Identifier(GetNewIdentifier(isIdentifier, (TypeSyntax) asExpression.Right, semanticModel));
 
-                // If there is a local variable declared, we have to update its usages
-                var declarator = asExpression.Ancestors().OfType<VariableDeclaratorSyntax>().FirstOrDefault();
-                if (declarator != null)
-                {
-                    var existingIdentifier = semanticModel.GetDeclaredSymbol(declarator);
-                    if (existingIdentifier == null)
-                    {
-                        continue;
-                    }
-                    symbolToRename = existingIdentifier;
-                    newName = newIdentifier.ValueText;
-                    var references = await SymbolFinder.FindReferencesAsync(symbolToRename, document.Project.Solution, cancellationToken);
-                    shouldRename = references.First().Locations.Any();
-                }
+                // If there is a local variable declared, we have to update its usages to point them to the new identifier
+                UpdateUsages(asExpression, ifStatement, SyntaxFactory.IdentifierName(newIdentifier), editor, semanticModel);
 
                 // Replace condition if it hasn't happened yet
                 ReplaceCondition(newIdentifier.ValueText, isExpression, editor, ref conditionAlreadyReplaced);
@@ -128,20 +111,8 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 var castedType = semanticModel.GetTypeInfo(castExpression.Type);
                 var newIdentifier = SyntaxFactory.Identifier(GetNewIdentifier(isIdentifier, castExpression.Type, semanticModel));
 
-                // If there is a local variable declared, we have to update its usages
-                var declarator = castExpression.Ancestors().OfType<VariableDeclaratorSyntax>().FirstOrDefault();
-                if (declarator != null)
-                {
-                    var existingIdentifier = semanticModel.GetDeclaredSymbol(declarator);
-                    if (existingIdentifier == null)
-                    {
-                        continue;
-                    }
-                    symbolToRename = existingIdentifier;
-                    newName = newIdentifier.ValueText;
-                    var references = await SymbolFinder.FindReferencesAsync(symbolToRename, document.Project.Solution, cancellationToken);
-                    shouldRename = references.First().Locations.Any();
-                }
+                // If there is a local variable declared, we have to update its usages to point them to the new identifier
+                UpdateUsages(castExpression, ifStatement, SyntaxFactory.IdentifierName(newIdentifier), editor, semanticModel);
 
                 // Replace condition if it hasn't happened yet
                 ReplaceCondition(newIdentifier.ValueText, isExpression, editor, ref conditionAlreadyReplaced);
@@ -168,20 +139,28 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 }
             }
 
-            var newDocument = editor.GetChangedDocument();
+            return editor.GetChangedDocument();
+        }
 
-            Solution newSolution;
-            if (shouldRename)
+        private void UpdateUsages(ExpressionSyntax expression, IfStatementSyntax ifStatement, IdentifierNameSyntax newIdentifier, DocumentEditor editor, SemanticModel semanticModel)
+        {
+            var declarator = expression.Ancestors().OfType<VariableDeclaratorSyntax>().FirstOrDefault();
+            if (declarator != null)
             {
-                newSolution = await Renamer.RenameSymbolAsync(newDocument.Project.Solution, symbolToRename, newName, null, cancellationToken);
-            }
-            else
-            {
-                newSolution = newDocument.Project.Solution;
-            }
-            
+                var existingIdentifier = semanticModel.GetDeclaredSymbol(declarator);
+                if (existingIdentifier == null)
+                {
+                    return;
+                }
 
-            return newSolution;
+                foreach (var reference in ifStatement.DescendantNodes().OfType<IdentifierNameSyntax>().Where(x => x.Identifier.ValueText == declarator.Identifier.ValueText))
+                {
+                    if (semanticModel.GetSymbolInfo(reference).Symbol.Equals(existingIdentifier))
+                    {
+                        editor.ReplaceNode(reference, newIdentifier);
+                    }
+                }
+            }
         }
 
         private void ReplaceCondition(string newIdentifier, SyntaxNode isExpression, DocumentEditor editor, ref bool conditionAlreadyReplaced)

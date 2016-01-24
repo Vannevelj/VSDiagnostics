@@ -1049,6 +1049,7 @@ namespace ConsoleApplication1
                 var oAsInt = o as int?;
 
                 Console.Write(oAsInt);
+                Console.Write(oAsInt);
             }
         }
     }
@@ -1068,6 +1069,7 @@ namespace ConsoleApplication1
             var oAsInt32 = o as int?;
             if (oAsInt32 != null)
             {
+                Console.Write(oAsInt32);
                 Console.Write(oAsInt32);
             }
         }
@@ -1097,6 +1099,7 @@ namespace ConsoleApplication1
                 var oAsInt = (int) o;
 
                 Console.Write(oAsInt);
+                Console.Write(oAsInt);
             }
         }
     }
@@ -1116,6 +1119,7 @@ namespace ConsoleApplication1
             var oAsInt32 = o as int?;
             if (oAsInt32 != null)
             {
+                Console.Write(oAsInt32);
                 Console.Write(oAsInt32);
             }
         }
