@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
@@ -8,7 +9,9 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
+using Microsoft.CodeAnalysis.FindSymbols;
 using Microsoft.CodeAnalysis.Formatting;
+using Microsoft.CodeAnalysis.Rename;
 using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
@@ -30,18 +33,16 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             var statement = root.FindNode(diagnosticSpan);
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.TryCastWithoutUsingAsNotNullCodeFixTitle,
-                    x => UseAsAsync(context.Document, statement), TryCastWithoutUsingAsNotNullAnalyzer.Rule.Id),
+                    x => UseAsAsync(context.Document, statement, context.CancellationToken), TryCastWithoutUsingAsNotNullAnalyzer.Rule.Id),
                 diagnostic);
         }
 
-        private async Task<Document> UseAsAsync(Document document, SyntaxNode statement)
+        private async Task<Solution> UseAsAsync(Document document, SyntaxNode statement, CancellationToken cancellationToken)
         {
             var isExpression = (BinaryExpressionSyntax) statement;
             var isIdentifier = ((IdentifierNameSyntax) isExpression.Left).Identifier.ValueText;
             var ifStatement = statement.AncestorsAndSelf().OfType<IfStatementSyntax>().First();
-
-            SemanticModel semanticModel;
-            document.TryGetSemanticModel(out semanticModel);
+            var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
 
             // We filter out the descendent if statements to avoid executing the code fix on all nested ifs
             var asExpressions = ifStatement.Statement
@@ -61,9 +62,12 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 
             // Editor is created outside the loop so we can apply multiple fixes to one "document"
             // In our scenario this boils down to applying one fix for every if statement
-            var editor = await DocumentEditor.CreateAsync(document);
+            var editor = await DocumentEditor.CreateAsync(document, cancellationToken);
             var conditionAlreadyReplaced = false;
             var variableAlreadyExtracted = false;
+            var symbolToRename = default(ISymbol);
+            var newName = string.Empty;
+            var shouldRename = false;
 
             foreach (var asExpression in asExpressions)
             {
@@ -73,7 +77,22 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                     continue;
                 }
 
-                var newIdentifier = SyntaxFactory.Identifier(GetNewIdentifier(isIdentifier, (TypeSyntax) asExpression.Right, semanticModel));
+                var newIdentifier = SyntaxFactory.Identifier(GetNewIdentifier(isIdentifier, (TypeSyntax)asExpression.Right, semanticModel));
+
+                // If there is a local variable declared, we have to update its usages
+                var declarator = asExpression.Ancestors().OfType<VariableDeclaratorSyntax>().FirstOrDefault();
+                if (declarator != null)
+                {
+                    var existingIdentifier = semanticModel.GetDeclaredSymbol(declarator);
+                    if (existingIdentifier == null)
+                    {
+                        continue;
+                    }
+                    symbolToRename = existingIdentifier;
+                    newName = newIdentifier.ValueText;
+                    var references = await SymbolFinder.FindReferencesAsync(symbolToRename, document.Project.Solution, cancellationToken);
+                    shouldRename = references.First().Locations.Any();
+                }
 
                 // Replace condition if it hasn't happened yet
                 ReplaceCondition(newIdentifier.ValueText, isExpression, editor, ref conditionAlreadyReplaced);
@@ -109,6 +128,21 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 var castedType = semanticModel.GetTypeInfo(castExpression.Type);
                 var newIdentifier = SyntaxFactory.Identifier(GetNewIdentifier(isIdentifier, castExpression.Type, semanticModel));
 
+                // If there is a local variable declared, we have to update its usages
+                var declarator = castExpression.Ancestors().OfType<VariableDeclaratorSyntax>().FirstOrDefault();
+                if (declarator != null)
+                {
+                    var existingIdentifier = semanticModel.GetDeclaredSymbol(declarator);
+                    if (existingIdentifier == null)
+                    {
+                        continue;
+                    }
+                    symbolToRename = existingIdentifier;
+                    newName = newIdentifier.ValueText;
+                    var references = await SymbolFinder.FindReferencesAsync(symbolToRename, document.Project.Solution, cancellationToken);
+                    shouldRename = references.First().Locations.Any();
+                }
+
                 // Replace condition if it hasn't happened yet
                 ReplaceCondition(newIdentifier.ValueText, isExpression, editor, ref conditionAlreadyReplaced);
 
@@ -134,7 +168,20 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 }
             }
 
-            return editor.GetChangedDocument();
+            var newDocument = editor.GetChangedDocument();
+
+            Solution newSolution;
+            if (shouldRename)
+            {
+                newSolution = await Renamer.RenameSymbolAsync(newDocument.Project.Solution, symbolToRename, newName, null, cancellationToken);
+            }
+            else
+            {
+                newSolution = newDocument.Project.Solution;
+            }
+            
+
+            return newSolution;
         }
 
         private void ReplaceCondition(string newIdentifier, SyntaxNode isExpression, DocumentEditor editor, ref bool conditionAlreadyReplaced)
@@ -147,7 +194,6 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             var newCondition = SyntaxFactory.ParseExpression($"{newIdentifier} != null").WithAdditionalAnnotations(Formatter.Annotation);
             editor.ReplaceNode(isExpression, newCondition);
             conditionAlreadyReplaced = true;
-            var newDoc = editor.GetChangedDocument();
         }
 
         private string GetNewIdentifier(string currentIdentifier, TypeSyntax type, SemanticModel semanticModel)
@@ -179,7 +225,6 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 // Remove the entire variabledeclaration
                 editor.RemoveNode(variableDeclaration.Ancestors().OfType<LocalDeclarationStatementSyntax>().First());
             }
-            var newDoc = editor.GetChangedDocument();
         }
 
         private void ReplaceIdentifier(ExpressionSyntax expression, SyntaxToken newIdentifier, DocumentEditor editor)
@@ -194,7 +239,6 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             {
                 editor.ReplaceNode(expression, SyntaxFactory.IdentifierName(newIdentifier));
             }
-            var newDoc = editor.GetChangedDocument();
         }
 
         private void InsertNewVariableDeclaration(
@@ -215,7 +259,6 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             var newLocal = SyntaxFactory.LocalDeclarationStatement(newDeclaration).WithAdditionalAnnotations(Formatter.Annotation);
             editor.InsertBefore(nodeLocation, newLocal);
             variableAlreadyExtracted = true;
-            var newDoc = editor.GetChangedDocument();
         }
     }
 }

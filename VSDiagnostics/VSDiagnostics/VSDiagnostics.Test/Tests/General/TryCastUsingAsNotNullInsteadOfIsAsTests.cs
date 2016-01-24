@@ -1029,5 +1029,101 @@ namespace ConsoleApplication1
 }";
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_IsAs_UsagesOfCastedVariable()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = 5;
+            if (o is int)
+            {
+                var oAsInt = o as int?;
+
+                Console.Write(oAsInt);
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = 5;
+            var oAsInt32 = o as int?;
+            if (oAsInt32 != null)
+            {
+                Console.Write(oAsInt32);
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_DirectCast_UsagesOfCastedVariable()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = 5;
+            if (o is int)
+            {
+                var oAsInt = (int) o;
+
+                Console.Write(oAsInt);
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = 5;
+            var oAsInt32 = o as int?;
+            if (oAsInt32 != null)
+            {
+                Console.Write(oAsInt32);
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
     }
 }
