@@ -1131,7 +1131,7 @@ namespace ConsoleApplication1
         }
 
         /// <summary>
-        /// Known issue, see issue #### for more info
+        /// Known issue, see issue https://github.com/Vannevelj/VSDiagnostics/issues/379 for more info
         /// </summary>
         [TestMethod]
         [Ignore]
