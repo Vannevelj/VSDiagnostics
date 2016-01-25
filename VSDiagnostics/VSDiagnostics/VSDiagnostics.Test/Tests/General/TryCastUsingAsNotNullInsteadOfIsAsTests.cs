@@ -1129,5 +1129,163 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
             VerifyFix(original, expected);
         }
+
+        /// <summary>
+        /// Known issue, see issue #### for more info
+        /// </summary>
+        [TestMethod]
+        [Ignore]
+        public void TryCastWithoutUsingAsNotNull_AnonymousTypeRenaming()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = 5;
+            if (o is int)
+            {
+                var x = (int) o;
+                var y = new { x };
+                var z = y.x;
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = 5;
+            var oAsInt32 = o as int?;
+            if (oAsInt32 != null)
+            {
+                var y = new { oAsInt32 };
+                var z = y.oAsInt32;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_ConflictingLocalReferringToField()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int oAsInt32;
+
+        void Method(object o)
+        {
+            if (o is int)
+            {
+                var someVar = (int)o;
+
+                Console.Write(someVar);
+                Console.Write(oAsInt32);
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int oAsInt32;
+
+        void Method(object o)
+        {
+            var oAsInt32 = o as int?;
+            if (oAsInt32 != null)
+            {
+                Console.Write(oAsInt32);
+                Console.Write(this.oAsInt32);
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_ConflictingLocalExplicitlyReferringToField()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int oAsInt32;
+
+        void Method(object o)
+        {
+            if (o is int)
+            {
+                var someVar = (int)o;
+
+                Console.Write(someVar);
+                Console.Write(this.oAsInt32);
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int oAsInt32;
+
+        void Method(object o)
+        {
+            var oAsInt32 = o as int?;
+            if (oAsInt32 != null)
+            {
+                Console.Write(oAsInt32);
+                Console.Write(this.oAsInt32);
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
     }
 }

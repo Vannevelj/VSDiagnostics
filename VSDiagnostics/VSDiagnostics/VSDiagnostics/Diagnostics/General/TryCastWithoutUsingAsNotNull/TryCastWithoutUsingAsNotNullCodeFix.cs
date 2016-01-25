@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Threading;
@@ -10,6 +11,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
+using Microsoft.CodeAnalysis.Rename;
 using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
@@ -37,30 +39,100 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 
         private async Task<Document> UseAsAsync(Document document, SyntaxNode statement, CancellationToken cancellationToken)
         {
-            var isExpression = (BinaryExpressionSyntax) statement;
-            var isIdentifier = ((IdentifierNameSyntax) isExpression.Left).Identifier.ValueText;
-            var ifStatement = statement.AncestorsAndSelf().OfType<IfStatementSyntax>().First();
-            var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
-
-            // We filter out the descendent if statements to avoid executing the code fix on all nested ifs
-            var asExpressions = ifStatement.Statement
-                                           .DescendantNodes()
-                                           .Concat(ifStatement.Condition.DescendantNodesAndSelf())
-                                           .Where(x => !(x is IfStatementSyntax))
-                                           .OfType<BinaryExpressionSyntax>()
-                                           .Where(x => x.OperatorToken.IsKind(SyntaxKind.AsKeyword))
-                                           .ToArray();
-
-            var castExpressions = ifStatement.Statement
-                                             .DescendantNodes()
-                                             .Concat(ifStatement.Condition.DescendantNodesAndSelf())
-                                             .Where(x => !(x is IfStatementSyntax))
-                                             .OfType<CastExpressionSyntax>()
-                                             .ToArray();
-
             // Editor is created outside the loop so we can apply multiple fixes to one "document"
             // In our scenario this boils down to applying one fix for every if statement
+            var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
             var editor = await DocumentEditor.CreateAsync(document, cancellationToken);
+            var isExpression = (BinaryExpressionSyntax) statement;
+            var isIdentifier = ((IdentifierNameSyntax) isExpression.Left).Identifier.ValueText;
+            var newIdentifier = SyntaxFactory.Identifier(GetNewIdentifier(isIdentifier, (TypeSyntax) isExpression.Right, semanticModel));
+            var ifStatement = statement.AncestorsAndSelf().OfType<IfStatementSyntax>().First();
+
+            // We filter out the descendent if statements to avoid executing the code fix on all nested ifs
+            var asExpressions = GetDescendantBinaryAs(ifStatement);
+            var castExpressions = GetDescendantCasts(ifStatement);
+
+            editor.ReplaceNode(isExpression, isExpression.WithAdditionalAnnotations(new SyntaxAnnotation("MyIsStatement")));
+
+            // First step: we give every eligible expression a custom annotation to indicate the identifiers that need to be renamed
+            var documentId = document.Id;
+            var projectId = document.Project.Id;
+            foreach (var expression in asExpressions.Concat<ExpressionSyntax>(castExpressions))
+            {
+                var identifier = default(IdentifierNameSyntax);
+                var binaryExpression = expression as BinaryExpressionSyntax;
+                if (binaryExpression != null)
+                {
+                    identifier = binaryExpression.Left as IdentifierNameSyntax;
+                }
+
+                var castExpression = expression as CastExpressionSyntax;
+                if (castExpression != null)
+                {
+                    identifier = castExpression.Expression as IdentifierNameSyntax;
+                }
+
+                if (identifier != null && identifier.Identifier.ValueText == isIdentifier)
+                {
+                    // !!Important!!
+                    // We add the annotation on top of the identifier we find but this is *not* the identifier we want to rename
+                    // var myVar x = (int) o;
+                    // Here we place the annotation on "o" but we want to rename "x"
+                    // We can't place it on "x" because VariableDeclarators can't be replaced using DocumentEditor just yet
+                    // See https://github.com/dotnet/roslyn/issues/8154 for more info
+                    if (identifier.Ancestors().OfType<VariableDeclaratorSyntax>().Any())
+                    {
+                        editor.ReplaceNode(identifier, identifier.WithAdditionalAnnotations(new SyntaxAnnotation("QueueRename")));
+                    }
+                }
+            }
+            document = editor.GetChangedDocument();
+
+            // Second step: rename all identifiers
+            while (true)
+            {
+                var root = await document.GetSyntaxRootAsync(cancellationToken);
+                var tempSemanticModel = await document.GetSemanticModelAsync(cancellationToken);
+                VariableDeclaratorSyntax nodeToRename = null;
+                foreach (var node in root.GetAnnotatedNodes("QueueRename").Cast<IdentifierNameSyntax>())
+                {
+                    var declarator = node.AncestorsAndSelf().OfType<VariableDeclaratorSyntax>().Single();
+                    // We have to find the first node that isn't renamed yet
+                    if (declarator.Identifier.ValueText != newIdentifier.ValueText)
+                    {
+                        // We only rename the VariableDeclarators that are directly assigned the casted variable in question
+                        // If the variable is used in a separate expression, we don't have to rename our declarator
+                        if (!IsSurroundedByInvocation(node))
+                        {
+                            nodeToRename = declarator;
+                            break;
+                        }
+                    }
+                }
+                if (nodeToRename == null)
+                {
+                    break;
+                }
+                var nodeToRenameSymbol = tempSemanticModel.GetDeclaredSymbol(nodeToRename);
+                if (nodeToRenameSymbol == null)
+                {
+                    break;
+                }
+
+
+                var renamedSolution = await Renamer.RenameSymbolAsync(document.Project.Solution, nodeToRenameSymbol, newIdentifier.ValueText, null, cancellationToken);
+                document = renamedSolution.Projects.Single(x => x.Id == projectId).GetDocument(documentId);
+            }
+
+            // Third step: use the newly created document
+            editor = await DocumentEditor.CreateAsync(document, cancellationToken);
+            semanticModel = await document.GetSemanticModelAsync(cancellationToken);
+            var newRoot = await document.GetSyntaxRootAsync(cancellationToken);
+            isExpression = (BinaryExpressionSyntax) newRoot.GetAnnotatedNodes("MyIsStatement").Single();
+            ifStatement = isExpression.Ancestors().OfType<IfStatementSyntax>().First();
+            asExpressions = GetDescendantBinaryAs(ifStatement);
+            castExpressions = GetDescendantCasts(ifStatement);
+
             var conditionAlreadyReplaced = false;
             var variableAlreadyExtracted = false;
 
@@ -71,11 +143,6 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 {
                     continue;
                 }
-
-                var newIdentifier = SyntaxFactory.Identifier(GetNewIdentifier(isIdentifier, (TypeSyntax) asExpression.Right, semanticModel));
-
-                // If there is a local variable declared, we have to update its usages to point them to the new identifier
-                UpdateUsages(asExpression, ifStatement, SyntaxFactory.IdentifierName(newIdentifier), editor, semanticModel);
 
                 // Replace condition if it hasn't happened yet
                 ReplaceCondition(newIdentifier.ValueText, isExpression, editor, ref conditionAlreadyReplaced);
@@ -94,7 +161,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 // Remove the local variable
                 // If the expression is surrounded by an invocation we just swap the expression for the identifier
                 // e.g.: bool contains = new[] { ""test"", ""test"", ""test"" }.Contains(o as string);
-                if (!asExpression.Ancestors().OfType<InvocationExpressionSyntax>().Any())
+                if (!IsSurroundedByInvocation(asExpression))
                 {
                     RemoveLocal(asExpression, editor);
                 }
@@ -109,10 +176,6 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 }
 
                 var castedType = semanticModel.GetTypeInfo(castExpression.Type);
-                var newIdentifier = SyntaxFactory.Identifier(GetNewIdentifier(isIdentifier, castExpression.Type, semanticModel));
-
-                // If there is a local variable declared, we have to update its usages to point them to the new identifier
-                UpdateUsages(castExpression, ifStatement, SyntaxFactory.IdentifierName(newIdentifier), editor, semanticModel);
 
                 // Replace condition if it hasn't happened yet
                 ReplaceCondition(newIdentifier.ValueText, isExpression, editor, ref conditionAlreadyReplaced);
@@ -133,7 +196,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 // Remove the local variable
                 // If the expression is surrounded by an invocation we just swap the expression for the identifier
                 // e.g.: bool contains = new[] { ""test"", ""test"", ""test"" }.Contains(o as string);
-                if (!castExpression.Ancestors().OfType<InvocationExpressionSyntax>().Any())
+                if (!IsSurroundedByInvocation(castExpression))
                 {
                     RemoveLocal(castExpression, editor);
                 }
@@ -142,25 +205,29 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             return editor.GetChangedDocument();
         }
 
-        private void UpdateUsages(ExpressionSyntax expression, IfStatementSyntax ifStatement, IdentifierNameSyntax newIdentifier, DocumentEditor editor, SemanticModel semanticModel)
+        private bool IsSurroundedByInvocation(ExpressionSyntax expression)
         {
-            var declarator = expression.Ancestors().OfType<VariableDeclaratorSyntax>().FirstOrDefault();
-            if (declarator != null)
-            {
-                var existingIdentifier = semanticModel.GetDeclaredSymbol(declarator);
-                if (existingIdentifier == null)
-                {
-                    return;
-                }
+            return expression.Ancestors().OfType<InvocationExpressionSyntax>().Any();
+        }
 
-                foreach (var reference in ifStatement.DescendantNodes().OfType<IdentifierNameSyntax>().Where(x => x.Identifier.ValueText == declarator.Identifier.ValueText))
-                {
-                    if (semanticModel.GetSymbolInfo(reference).Symbol.Equals(existingIdentifier))
-                    {
-                        editor.ReplaceNode(reference, newIdentifier);
-                    }
-                }
-            }
+        private IEnumerable<CastExpressionSyntax> GetDescendantCasts(IfStatementSyntax ifStatement)
+        {
+            return ifStatement.Statement.DescendantNodes()
+                              .Concat(ifStatement.Condition.DescendantNodesAndSelf())
+                              .Where(x => !(x is IfStatementSyntax))
+                              .OfType<CastExpressionSyntax>()
+                              .ToArray();
+        }
+
+        private IEnumerable<BinaryExpressionSyntax> GetDescendantBinaryAs(IfStatementSyntax ifStatement)
+        {
+            return ifStatement.Statement
+                              .DescendantNodes()
+                              .Concat(ifStatement.Condition.DescendantNodesAndSelf())
+                              .Where(x => !(x is IfStatementSyntax))
+                              .OfType<BinaryExpressionSyntax>()
+                              .Where(x => x.OperatorToken.IsKind(SyntaxKind.AsKeyword))
+                              .ToArray();
         }
 
         private void ReplaceCondition(string newIdentifier, SyntaxNode isExpression, DocumentEditor editor, ref bool conditionAlreadyReplaced)
