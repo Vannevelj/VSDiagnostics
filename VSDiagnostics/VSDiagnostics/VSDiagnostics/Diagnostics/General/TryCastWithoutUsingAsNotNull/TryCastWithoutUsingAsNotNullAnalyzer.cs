@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -37,48 +38,82 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 return;
             }
             var isIdentifier = isIdentifierExpression.Identifier.ValueText;
-
-            var ifExpression = isExpression.AncestorsAndSelf().OfType<IfStatementSyntax>().FirstOrDefault();
-            if (ifExpression == null)
+            var isType = context.SemanticModel.GetTypeInfo(isExpression.Right).Type;
+            if (isType == null)
             {
                 return;
             }
 
-            var asExpressions =
-                ifExpression.Statement.DescendantNodes()
-                    .OfType<BinaryExpressionSyntax>()
-                    .Where(x => x.OperatorToken.Kind() == SyntaxKind.AsKeyword);
-            foreach (var asExpression in asExpressions)
+            var ifStatement = isExpression.AncestorsAndSelf().OfType<IfStatementSyntax>().FirstOrDefault();
+            if (ifStatement == null)
             {
-                var asIdentifier = asExpression.Left as IdentifierNameSyntax;
-                if (asIdentifier == null)
-                {
-                    continue;
-                }
-
-                if (!string.Equals(asIdentifier.Identifier.ValueText, isIdentifier))
-                {
-                    continue;
-                }
-
-                context.ReportDiagnostic(Diagnostic.Create(Rule, isExpression.GetLocation(), isIdentifier));
+                return;
             }
 
-            var castExpressions = ifExpression.Statement.DescendantNodes().OfType<CastExpressionSyntax>().ToArray();
-            foreach (var castExpression in castExpressions)
+            var asExpressions = ifStatement.Statement
+                                           .DescendantNodes()
+                                           .Concat(ifStatement.Condition.DescendantNodesAndSelf())
+                                           .OfType<BinaryExpressionSyntax>()
+                                           .Where(x => x.OperatorToken.IsKind(SyntaxKind.AsKeyword));
+
+            var castExpressions = ifStatement.Statement
+                                             .DescendantNodes()
+                                             .Concat(ifStatement.Condition.DescendantNodesAndSelf())
+                                             .OfType<CastExpressionSyntax>();
+
+            Action reportDiagnostic = () => context.ReportDiagnostic(Diagnostic.Create(Rule, isExpression.GetLocation(), isIdentifier));
+
+            Action<string, TypeInfo> checkRequirements = (bodyIdentifier, castedType) =>
             {
-                var castIdentifier = castExpression.Expression as IdentifierNameSyntax;
-                if (castIdentifier == null)
+                if (castedType.Type == null)
                 {
+                    return;
+                }
+
+                if (bodyIdentifier == isIdentifier)
+                {
+                    // If the cast is of type Nullable<T> then we have to look at the generic argument
+                    // A direct cast and an 'is' operator will use 'int' but the corresponding 'as' cast uses 'Nullable<int>'
+                    if (castedType.Type.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T)
+                    {
+                        var nullableType = castedType.Type as INamedTypeSymbol;
+                        var argument = nullableType?.TypeArguments.FirstOrDefault();
+                        if (argument == null)
+                        {
+                            return;
+                        }
+
+                        if (argument.Equals(isType))
+                        {
+                            reportDiagnostic();
+                        }
+                    }
+                    else if (castedType.Type.Equals(isType))
+                    {
+                        reportDiagnostic();
+                    }
+                }
+            };
+
+            foreach (var expression in asExpressions.Concat<ExpressionSyntax>(castExpressions))
+            {
+                var binaryExpression = expression as BinaryExpressionSyntax;
+                var binaryIdentifier = binaryExpression?.Left as IdentifierNameSyntax;
+                if (binaryIdentifier != null)
+                {
+                    var castedType = context.SemanticModel.GetTypeInfo(binaryExpression.Right);
+                    checkRequirements(binaryIdentifier.Identifier.ValueText, castedType);
                     continue;
                 }
 
-                if (!string.Equals(castIdentifier.Identifier.ValueText, isIdentifier))
+                var castExpression = expression as CastExpressionSyntax;
+                var castIdentifier = castExpression?.Expression as IdentifierNameSyntax;
+                if (castIdentifier != null)
                 {
+                    var castedType = context.SemanticModel.GetTypeInfo(castExpression.Type);
+                    checkRequirements(castIdentifier.Identifier.ValueText, castedType);
                     continue;
                 }
-
-                context.ReportDiagnostic(Diagnostic.Create(Rule, isExpression.GetLocation(), isIdentifier));
             }
         }
     }
