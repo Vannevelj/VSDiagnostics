@@ -1287,5 +1287,319 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
             VerifyFix(original, expected);
         }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_BranchedIfStatement()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            if (o is int)
+            {
+                var someVar = (int)o;
+            }
+            else if (o is string)
+            {
+                var someVar = (string)o;
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            var oAsInt32 = o as int?;
+            var oAsString = o as string;
+            if (oAsInt32 != null)
+            {
+            }
+            else if (oAsString != null)
+            {
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"),
+                                       string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_DirectCast_ValueType_SeparateExpression()
+        {
+            var original = @"
+using System;
+using System.Text;
+using System.Linq;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            if (o is double && (new double[] { 5.0, 6.0, 7.0 }.Contains((double) o)))
+            {
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+using System.Linq;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            var oAsDouble = o as double?;
+            if (oAsDouble != null && (new double[] { 5.0, 6.0, 7.0 }.Contains(oAsDouble.Value)))
+            {
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_BranchedIfStatement_ConflictingField_CastInExpression()
+        {
+            var original = @"
+using System;
+using System.Text;
+using System.Linq;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int oAsInt32;
+
+        void Method(object o)
+        {
+            if (o is int)
+            {
+                var someVar = (int) o;
+                Console.WriteLine(oAsInt32);
+            }
+            else if (o is string)
+            {
+                var someVar = (string) o;
+            } 
+            else if (o is double && (new double[] { 5.0, 6.0, 7.0 }.Contains((double) o)))
+            {
+                Console.WriteLine(oAsInt32);
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+using System.Linq;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int oAsInt32;
+
+        void Method(object o)
+        {
+            var oAsInt32 = o as int?;
+            var oAsString = o as string;
+            var oAsDouble = o as double?;
+            if (oAsInt32 != null)
+            {
+                Console.WriteLine(this.oAsInt32);
+            }
+            else if (oAsString != null)
+            {
+            }
+            else if (oAsDouble != null && (new double[] { 5.0, 6.0, 7.0 }.Contains(oAsDouble.Value)))
+            {
+                Console.WriteLine(this.oAsInt32);
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"),
+                                       string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"),
+                                       string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_DirectCast_ValueType_SeparateExpression_NullableCollection()
+        {
+            var original = @"
+using System;
+using System.Text;
+using System.Linq;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            if (o is double && (new double?[] { 5.0, 6.0, 7.0 }.Contains((double) o)))
+            {
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+using System.Linq;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            var oAsDouble = o as double?;
+            if (oAsDouble != null && (new double?[] { 5.0, 6.0, 7.0 }.Contains(oAsDouble.Value)))
+            {
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_ConflictingLocal_InSeparateBranch()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int oAsInt32;
+
+        void Method(object o)
+        {
+            if (o is int)
+            {
+                Console.Write((int) o);
+            } else {
+                Console.Write(oAsInt32);
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int oAsInt32;
+
+        void Method(object o)
+        {
+            var oAsInt32 = o as int?;
+            if (oAsInt32 != null)
+            {
+                Console.Write(oAsInt32.Value);
+            } else {
+                Console.Write(this.oAsInt32);
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_ConflictingLocal_InSeparateBranch_WithExplicitThis()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int oAsInt32;
+
+        void Method(object o)
+        {
+            if (o is int)
+            {
+                Console.Write((int) o);
+            } else {
+                Console.Write(this.oAsInt32);
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int oAsInt32;
+
+        void Method(object o)
+        {
+            var oAsInt32 = o as int?;
+            if (oAsInt32 != null)
+            {
+                Console.Write(oAsInt32.Value);
+            } else {
+                Console.Write(this.oAsInt32);
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
     }
 }
