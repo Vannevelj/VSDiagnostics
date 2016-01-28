@@ -989,7 +989,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Warns when a struct replaces the &apos;this&apos; with a new instance, causing the values to be replaced everywhere they are used..
+        ///   Looks up a localized string similar to Struct {0} should not re-assign &apos;this&apos;..
         /// </summary>
         internal static string StructsShouldNotMutateSelfAnalyzerMessage {
             get {
@@ -998,7 +998,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A struct should not mutate itself..
+        ///   Looks up a localized string similar to Warns when a struct replaces &apos;this&apos; with a new instance..
         /// </summary>
         internal static string StructsShouldNotMutateSelfAnalyzerTitle {
             get {
