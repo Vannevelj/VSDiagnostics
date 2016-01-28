@@ -39,24 +39,39 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 
         private async Task<Document> UseAsAsync(Document document, SyntaxNode statement, CancellationToken cancellationToken)
         {
+            var documentId = document.Id;
+            var projectId = document.Project.Id;
+            var editor = await DocumentEditor.CreateAsync(document, cancellationToken);
+
+            editor.ReplaceNode(statement, statement.WithAdditionalAnnotations(new SyntaxAnnotation("MyIsStatement")));
+
+            // Remove all existing to-rename annotations
+            // This is needed because after renaming one branch in an `if` statement, the extraction is done succesfully but the annotation remains on the extracted declarator
+            // Therefore we have to remove all appropriate annotations so we can start fresh from the new situation
+            // This should only be done for the extracted variable declarator(s): the is-statement is removed so no annotation for that remains
+            var root = await document.GetSyntaxRootAsync(cancellationToken);
+            foreach (var annotatedNode in root.GetAnnotatedNodes("QueueRename"))
+            {
+                editor.ReplaceNode(annotatedNode, annotatedNode.WithoutAnnotations("QueueRename"));
+            }
+            document = editor.GetChangedDocument();
+
             // Editor is created outside the loop so we can apply multiple fixes to one "document"
             // In our scenario this boils down to applying one fix for every if statement
             var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
-            var editor = await DocumentEditor.CreateAsync(document, cancellationToken);
-            var isExpression = (BinaryExpressionSyntax) statement;
+            editor = await DocumentEditor.CreateAsync(document, cancellationToken);
+            root = await document.GetSyntaxRootAsync(cancellationToken);
+            var isExpression = (BinaryExpressionSyntax) root.GetAnnotatedNodes("MyIsStatement").Single();
             var isIdentifier = ((IdentifierNameSyntax) isExpression.Left).Identifier.ValueText;
-            var newIdentifier = SyntaxFactory.Identifier(GetNewIdentifier(isIdentifier, (TypeSyntax) isExpression.Right, semanticModel));
-            var ifStatement = statement.AncestorsAndSelf().OfType<IfStatementSyntax>().First();
+            var ifStatement = isExpression.Ancestors().OfType<IfStatementSyntax>().First();
+            var newIdentifier = SyntaxFactory.Identifier(GetNewIdentifier(isIdentifier, (TypeSyntax) isExpression.Right, semanticModel, GetOuterIfStatement(ifStatement).Parent));
+
 
             // We filter out the descendent if statements to avoid executing the code fix on all nested ifs
             var asExpressions = GetDescendantBinaryAs(ifStatement);
             var castExpressions = GetDescendantCasts(ifStatement);
 
-            editor.ReplaceNode(isExpression, isExpression.WithAdditionalAnnotations(new SyntaxAnnotation("MyIsStatement")));
-
             // First step: we give every eligible expression a custom annotation to indicate the identifiers that need to be renamed
-            var documentId = document.Id;
-            var projectId = document.Project.Id;
             foreach (var expression in asExpressions.Concat<ExpressionSyntax>(castExpressions))
             {
                 var identifier = default(IdentifierNameSyntax);
@@ -91,8 +106,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             // Second step: rename all identifiers
             while (true)
             {
-                var root = await document.GetSyntaxRootAsync(cancellationToken);
-                var tempSemanticModel = await document.GetSemanticModelAsync(cancellationToken);
+                root = await document.GetSyntaxRootAsync(cancellationToken);
                 VariableDeclaratorSyntax nodeToRename = null;
                 foreach (var node in root.GetAnnotatedNodes("QueueRename").Cast<IdentifierNameSyntax>())
                 {
@@ -113,12 +127,13 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 {
                     break;
                 }
+
+                var tempSemanticModel = await document.GetSemanticModelAsync(cancellationToken);
                 var nodeToRenameSymbol = tempSemanticModel.GetDeclaredSymbol(nodeToRename);
                 if (nodeToRenameSymbol == null)
                 {
                     break;
                 }
-
 
                 var renamedSolution = await Renamer.RenameSymbolAsync(document.Project.Solution, nodeToRenameSymbol, newIdentifier.ValueText, null, cancellationToken);
                 document = renamedSolution.Projects.Single(x => x.Id == projectId).GetDocument(documentId);
@@ -191,7 +206,11 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                     variableAlreadyExtracted: ref variableAlreadyExtracted);
 
                 // If the expression does not have a variable declarator as parent, we just swap the entire expression for the newly generated identifier
-                ReplaceIdentifier(castExpression, newIdentifier, editor);
+                // If we have a direct cast (yes) and the existing type was a non-nullable value type, we have to add the `.Value` property accessor ourselves
+                // While it is not necessary to add the property access in the case of a nullable collection, we do it anyway because that's a very difficult thing to calculate otherwise
+                // e.g. new double?[] { 5.0, 6.0, 7.0 }.Contains(oAsDouble.Value)
+                // The above can be written with or without `.Value` when the collection is double?[] but requires `.Value` in the case of double[]
+                ReplaceIdentifier(castExpression, newIdentifier, editor, requiresNullableValueAccess: castedType.Type.IsValueType && !castedType.Type.IsNullable());
 
                 // Remove the local variable
                 // If the expression is surrounded by an invocation we just swap the expression for the identifier
@@ -242,14 +261,35 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             conditionAlreadyReplaced = true;
         }
 
-        private string GetNewIdentifier(string currentIdentifier, TypeSyntax type, SemanticModel semanticModel)
+        private string GetNewIdentifier(string currentIdentifier, TypeSyntax type, SemanticModel semanticModel, SyntaxNode context)
         {
             var nullableType = type as NullableTypeSyntax;
             var typeName = nullableType != null
                 ? semanticModel.GetTypeInfo(nullableType.ElementType).Type.Name
                 : semanticModel.GetTypeInfo(type).Type.Name;
 
-            return $"{currentIdentifier}As{typeName}";
+            var newName = $"{currentIdentifier}As{typeName}";
+
+            // We add a suffix counter in case there are naming collisions. 
+            var collidingIdentifier = context.DescendantNodesAndSelf()
+                                             .OfType<IdentifierNameSyntax>()
+                                             .Select(x => x.Identifier.ValueText)
+                                             .Where(x => x.StartsWith(newName))
+                                             .OrderByDescending(x => x)
+                                             .FirstOrDefault();
+
+            if (collidingIdentifier != null)
+            {
+                var indexOfUnderscore = collidingIdentifier.LastIndexOf('_');
+                int index;
+                if (indexOfUnderscore > 0 && int.TryParse(collidingIdentifier.Substring(indexOfUnderscore + 1), out index))
+                {
+                    return $"{newName}_{++index}";
+                }
+                return $"{newName}_1";
+            }
+
+            return newName;
         }
 
         private void RemoveLocal(ExpressionSyntax expression, DocumentEditor editor)
@@ -273,17 +313,41 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             }
         }
 
-        private void ReplaceIdentifier(ExpressionSyntax expression, SyntaxToken newIdentifier, DocumentEditor editor)
+        /// <summary>
+        ///     Replaces a certain expression for an identifier if the context is appropriate.
+        /// </summary>
+        /// <param name="expression">The expression (cast or binary as) to be replaced</param>
+        /// <param name="newIdentifier">The new identifier that refers to the extracted variable</param>
+        /// <param name="editor">The <see cref="DocumentEditor" /> used to edit the tree</param>
+        /// <param name="requiresNullableValueAccess">
+        ///     <code>true</code> if a <code>.Value</code> property access needs to be added to the new identifier.
+        ///     This is needed in the case of a direct cast inside a larger invocation expression that needs to be replaced with an
+        ///     identifier.
+        ///     If this <code>.Value</code> wouldn't be added, it would create uncompilable code because you've changed the type
+        ///     from int to int?.
+        ///     Note that this should only happen in the case of a value type.
+        /// </param>
+        private void ReplaceIdentifier(ExpressionSyntax expression, SyntaxToken newIdentifier, DocumentEditor editor, bool requiresNullableValueAccess = false)
         {
+            var newIdentifierName = SyntaxFactory.IdentifierName(newIdentifier);
+
             if (expression.Ancestors().OfType<InvocationExpressionSyntax>().Any())
             {
-                editor.ReplaceNode(expression, SyntaxFactory.IdentifierName(newIdentifier));
+                if (requiresNullableValueAccess)
+                {
+                    var newAccess = SyntaxFactory.ParseExpression($"{newIdentifier.ValueText}.Value");
+                    editor.ReplaceNode(expression, newAccess);
+                }
+                else
+                {
+                    editor.ReplaceNode(expression, newIdentifierName);
+                }
                 return;
             }
 
             if (!expression.Ancestors().OfType<VariableDeclaratorSyntax>().Any())
             {
-                editor.ReplaceNode(expression, SyntaxFactory.IdentifierName(newIdentifier));
+                editor.ReplaceNode(expression, newIdentifierName);
             }
         }
 
@@ -303,8 +367,41 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             var newDeclarator = SyntaxFactory.VariableDeclarator(newIdentifier.WithAdditionalAnnotations(RenameAnnotation.Create()), null, newEqualsClause);
             var newDeclaration = SyntaxFactory.VariableDeclaration(SyntaxFactory.IdentifierName("var"), SyntaxFactory.SeparatedList(new[] { newDeclarator }));
             var newLocal = SyntaxFactory.LocalDeclarationStatement(newDeclaration).WithAdditionalAnnotations(Formatter.Annotation);
+
+            // If we are in an else statement, we have to add the new local before the initial if-statement. e.g.:
+            //   if(o is int) { }
+            //   else if(o is string) { }
+            // If we are currently handling the second statement, we have to add the local before the first
+            // However because there can be multiple chained if-else statements, we have to go up to the first one and add it there.
+            nodeLocation = GetOuterIfStatement(nodeLocation);
+
             editor.InsertBefore(nodeLocation, newLocal);
             variableAlreadyExtracted = true;
+        }
+
+        private SyntaxNode GetOuterIfStatement(SyntaxNode nodeLocation)
+        {
+            while (true)
+            {
+                var oneTrue = false;
+
+                if (nodeLocation is IfStatementSyntax && nodeLocation.Parent is ElseClauseSyntax)
+                {
+                    nodeLocation = nodeLocation.Parent;
+                    oneTrue = true;
+                }
+
+                if (nodeLocation is ElseClauseSyntax && nodeLocation.Parent is IfStatementSyntax)
+                {
+                    nodeLocation = nodeLocation.Parent;
+                    oneTrue = true;
+                }
+
+                if (!oneTrue)
+                {
+                    return nodeLocation;
+                }
+            }
         }
     }
 }

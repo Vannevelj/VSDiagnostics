@@ -112,7 +112,6 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 {
                     var castedType = context.SemanticModel.GetTypeInfo(castExpression.Type);
                     checkRequirements(castIdentifier.Identifier.ValueText, castedType);
-                    continue;
                 }
             }
         }
