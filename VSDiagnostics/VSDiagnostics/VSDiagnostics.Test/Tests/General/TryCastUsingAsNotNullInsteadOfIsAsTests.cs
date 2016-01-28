@@ -1131,7 +1131,7 @@ namespace ConsoleApplication1
         }
 
         /// <summary>
-        /// Known issue, see issue https://github.com/Vannevelj/VSDiagnostics/issues/379 for more info
+        ///     Known issue, see issue https://github.com/Vannevelj/VSDiagnostics/issues/379 for more info
         /// </summary>
         [TestMethod]
         [Ignore]
@@ -1222,11 +1222,11 @@ namespace ConsoleApplication1
 
         void Method(object o)
         {
-            var oAsInt32 = o as int?;
-            if (oAsInt32 != null)
+            var oAsInt32_1 = o as int?;
+            if (oAsInt32_1 != null)
             {
+                Console.Write(oAsInt32_1);
                 Console.Write(oAsInt32);
-                Console.Write(this.oAsInt32);
             }
         }
     }
@@ -1274,10 +1274,10 @@ namespace ConsoleApplication1
 
         void Method(object o)
         {
-            var oAsInt32 = o as int?;
-            if (oAsInt32 != null)
+            var oAsInt32_1 = o as int?;
+            if (oAsInt32_1 != null)
             {
-                Console.Write(oAsInt32);
+                Console.Write(oAsInt32_1);
                 Console.Write(this.oAsInt32);
             }
         }
@@ -1336,7 +1336,7 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"),
-                                       string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+                string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
             VerifyFix(original, expected);
         }
 
@@ -1430,27 +1430,27 @@ namespace ConsoleApplication1
 
         void Method(object o)
         {
-            var oAsInt32 = o as int?;
+            var oAsInt32_1 = o as int?;
             var oAsString = o as string;
             var oAsDouble = o as double?;
-            if (oAsInt32 != null)
+            if (oAsInt32_1 != null)
             {
-                Console.WriteLine(this.oAsInt32);
+                Console.WriteLine(oAsInt32);
             }
             else if (oAsString != null)
             {
             }
             else if (oAsDouble != null && (new double[] { 5.0, 6.0, 7.0 }.Contains(oAsDouble.Value)))
             {
-                Console.WriteLine(this.oAsInt32);
+                Console.WriteLine(oAsInt32);
             }
         }
     }
 }";
 
             VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"),
-                                       string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"),
-                                       string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+                string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"),
+                string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
             VerifyFix(original, expected);
         }
 
@@ -1535,12 +1535,12 @@ namespace ConsoleApplication1
 
         void Method(object o)
         {
-            var oAsInt32 = o as int?;
-            if (oAsInt32 != null)
+            var oAsInt32_1 = o as int?;
+            if (oAsInt32_1 != null)
             {
-                Console.Write(oAsInt32.Value);
+                Console.Write(oAsInt32_1.Value);
             } else {
-                Console.Write(this.oAsInt32);
+                Console.Write(oAsInt32);
             }
         }
     }
@@ -1587,12 +1587,162 @@ namespace ConsoleApplication1
 
         void Method(object o)
         {
-            var oAsInt32 = o as int?;
-            if (oAsInt32 != null)
+            var oAsInt32_1 = o as int?;
+            if (oAsInt32_1 != null)
             {
-                Console.Write(oAsInt32.Value);
+                Console.Write(oAsInt32_1.Value);
             } else {
                 Console.Write(this.oAsInt32);
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_ConflictingName_1()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int oAsInt32;
+
+        void Method(object o)
+        {
+            if (o is int)
+            {
+                Console.Write((int) o);
+                Console.Write(oAsInt32);
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int oAsInt32;
+
+        void Method(object o)
+        {
+            var oAsInt32_1 = o as int?;
+            if (oAsInt32_1 != null)
+            {
+                Console.Write(oAsInt32_1.Value);
+                Console.Write(oAsInt32);
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_ConflictingName_2()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int oAsInt32_1;
+
+        void Method(object o)
+        {
+            if (o is int)
+            {
+                Console.Write((int) o);
+                Console.Write(oAsInt32_1);
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int oAsInt32_1;
+
+        void Method(object o)
+        {
+            var oAsInt32_2 = o as int?;
+            if (oAsInt32_2 != null)
+            {
+                Console.Write(oAsInt32_2.Value);
+                Console.Write(oAsInt32_1);
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_ConflictingName_3()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int oAsInt32_10;
+
+        void Method(object o)
+        {
+            if (o is int)
+            {
+                Console.Write((int) o);
+                Console.Write(oAsInt32_10);
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private int oAsInt32_10;
+
+        void Method(object o)
+        {
+            var oAsInt32_11 = o as int?;
+            if (oAsInt32_11 != null)
+            {
+                Console.Write(oAsInt32_11.Value);
+                Console.Write(oAsInt32_10);
             }
         }
     }

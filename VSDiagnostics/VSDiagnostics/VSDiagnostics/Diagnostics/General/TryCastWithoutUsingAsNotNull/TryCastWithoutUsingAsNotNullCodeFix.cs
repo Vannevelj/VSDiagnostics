@@ -63,8 +63,9 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             root = await document.GetSyntaxRootAsync(cancellationToken);
             var isExpression = (BinaryExpressionSyntax) root.GetAnnotatedNodes("MyIsStatement").Single();
             var isIdentifier = ((IdentifierNameSyntax) isExpression.Left).Identifier.ValueText;
-            var newIdentifier = SyntaxFactory.Identifier(GetNewIdentifier(isIdentifier, (TypeSyntax) isExpression.Right, semanticModel));
             var ifStatement = isExpression.Ancestors().OfType<IfStatementSyntax>().First();
+            var newIdentifier = SyntaxFactory.Identifier(GetNewIdentifier(isIdentifier, (TypeSyntax) isExpression.Right, semanticModel, GetOuterIfStatement(ifStatement).Parent));
+
 
             // We filter out the descendent if statements to avoid executing the code fix on all nested ifs
             var asExpressions = GetDescendantBinaryAs(ifStatement);
@@ -260,14 +261,35 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             conditionAlreadyReplaced = true;
         }
 
-        private string GetNewIdentifier(string currentIdentifier, TypeSyntax type, SemanticModel semanticModel)
+        private string GetNewIdentifier(string currentIdentifier, TypeSyntax type, SemanticModel semanticModel, SyntaxNode context)
         {
             var nullableType = type as NullableTypeSyntax;
             var typeName = nullableType != null
                 ? semanticModel.GetTypeInfo(nullableType.ElementType).Type.Name
                 : semanticModel.GetTypeInfo(type).Type.Name;
 
-            return $"{currentIdentifier}As{typeName}";
+            var newName = $"{currentIdentifier}As{typeName}";
+
+            // We add a suffix counter in case there are naming collisions. 
+            var collidingIdentifier = context.DescendantNodesAndSelf()
+                                             .OfType<IdentifierNameSyntax>()
+                                             .Select(x => x.Identifier.ValueText)
+                                             .Where(x => x.StartsWith(newName))
+                                             .OrderByDescending(x => x)
+                                             .FirstOrDefault();
+
+            if (collidingIdentifier != null)
+            {
+                var indexOfUnderscore = collidingIdentifier.LastIndexOf('_');
+                int index;
+                if (indexOfUnderscore > 0 && int.TryParse(collidingIdentifier.Substring(indexOfUnderscore + 1), out index))
+                {
+                    return $"{newName}_{++index}";
+                }
+                return $"{newName}_1";
+            }
+
+            return newName;
         }
 
         private void RemoveLocal(ExpressionSyntax expression, DocumentEditor editor)
@@ -351,9 +373,17 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             //   else if(o is string) { }
             // If we are currently handling the second statement, we have to add the local before the first
             // However because there can be multiple chained if-else statements, we have to go up to the first one and add it there.
+            nodeLocation = GetOuterIfStatement(nodeLocation);
+
+            editor.InsertBefore(nodeLocation, newLocal);
+            variableAlreadyExtracted = true;
+        }
+
+        private SyntaxNode GetOuterIfStatement(SyntaxNode nodeLocation)
+        {
             while (true)
             {
-                bool oneTrue = false;
+                var oneTrue = false;
 
                 if (nodeLocation is IfStatementSyntax && nodeLocation.Parent is ElseClauseSyntax)
                 {
@@ -369,12 +399,9 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 
                 if (!oneTrue)
                 {
-                    break;
+                    return nodeLocation;
                 }
             }
-
-            editor.InsertBefore(nodeLocation, newLocal);
-            variableAlreadyExtracted = true;
         }
     }
 }
