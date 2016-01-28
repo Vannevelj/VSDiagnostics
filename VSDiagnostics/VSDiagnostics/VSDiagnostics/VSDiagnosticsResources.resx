@@ -473,10 +473,11 @@
     <value>Structs</value>
   </data>
   <data name="StructsShouldNotMutateSelfAnalyzerMessage" xml:space="preserve">
-    <value>Warns when a struct replaces the 'this' with a new instance, causing the values to be replaced everywhere they are used.</value>
+    <value>Struct {0} should not re-assign 'this'.</value>
+    <comment>{0} - Type name</comment>
   </data>
   <data name="StructsShouldNotMutateSelfAnalyzerTitle" xml:space="preserve">
-    <value>A struct should not mutate itself.</value>
+    <value>Warns when a struct replaces 'this' with a new instance.</value>
   </data>
   <data name="FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerMessage" xml:space="preserve">
     <value>[Flags] enum {0} its values are not explicit powers of 2 and does not fit in a {1} enum type.</value>
