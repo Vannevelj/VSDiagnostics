@@ -25,7 +25,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
 
             var statement = root.FindNode(diagnosticSpan);
 
-            var semanticModel = context.Document.GetSemanticModelAsync().Result;
+            var semanticModel = await context.Document.GetSemanticModelAsync();
             var symbol = semanticModel.GetDeclaredSymbol(statement);
             var accessibility = symbol?.DeclaredAccessibility ?? Accessibility.Private;
 
