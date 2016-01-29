@@ -11,7 +11,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class ExplicitAccessModifiersAnalyzer : DiagnosticAnalyzer
     {
-        private const DiagnosticSeverity Severity = DiagnosticSeverity.Info;
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Hidden;
 
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.ExplicitAccessModifiersAnalyzerMessage;
