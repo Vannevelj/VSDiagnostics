@@ -124,7 +124,8 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node is PropertyDeclarationSyntax)
             {
                 var declarationExpression = (PropertyDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())) &&
+                    declarationExpression.ExplicitInterfaceSpecifier == null)
                 {
                     var accessibility =
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
@@ -138,7 +139,8 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             {
                 var declarationExpression = (MethodDeclarationSyntax) context.Node;
                 if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())) &&
-                    declarationExpression.Modifiers.All(m => m.Kind() != SyntaxKind.PartialKeyword))
+                    declarationExpression.Modifiers.All(m => m.Kind() != SyntaxKind.PartialKeyword) &&
+                    declarationExpression.ExplicitInterfaceSpecifier == null)
                 {
                     var accessibility =
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
@@ -189,7 +191,8 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node is IndexerDeclarationSyntax)
             {
                 var declarationExpression = (IndexerDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())) &&
+                     declarationExpression.ExplicitInterfaceSpecifier == null)
                 {
                     var accessibility =
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
