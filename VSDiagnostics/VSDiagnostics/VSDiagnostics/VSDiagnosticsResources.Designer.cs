@@ -413,7 +413,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Empty catch block detected..
+        ///   Looks up a localized string similar to Empty catch block detected. Consider adding a comment or a logging statement..
         /// </summary>
         internal static string EmptyCatchClauseAnalyzerMessage {
             get {
