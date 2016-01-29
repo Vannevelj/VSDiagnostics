@@ -183,7 +183,7 @@
     <value>Verifies whether an ArgumentException is thrown with a message.</value>
   </data>
   <data name="EmptyCatchClauseAnalyzerMessage" xml:space="preserve">
-    <value>Empty catch block detected.</value>
+    <value>Empty catch block detected. Consider adding a comment or a logging statement.</value>
   </data>
   <data name="EmptyCatchClauseAnalyzerTitle" xml:space="preserve">
     <value>Warns when an exception catch block is empty.</value>
