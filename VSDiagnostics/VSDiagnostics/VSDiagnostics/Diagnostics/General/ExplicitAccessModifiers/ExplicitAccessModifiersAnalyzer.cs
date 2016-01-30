@@ -55,7 +55,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
 
@@ -68,7 +68,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
 
@@ -81,7 +81,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
 
@@ -94,7 +94,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
 
@@ -107,7 +107,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
 
@@ -131,7 +131,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
 
@@ -146,7 +146,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
 
@@ -161,7 +161,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
 
@@ -184,7 +184,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
 
@@ -198,7 +198,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
         }
