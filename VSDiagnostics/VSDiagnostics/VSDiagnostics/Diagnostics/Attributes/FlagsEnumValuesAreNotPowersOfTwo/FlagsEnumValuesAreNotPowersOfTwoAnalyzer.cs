@@ -113,7 +113,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
             {
                 context.ReportDiagnostic(Diagnostic.Create(ValuesDontFitRule,
                     declarationExpression.Identifier.GetLocation(),
-                    enumName, keyword.ToLower()));
+                    enumName, keyword.ToLowerInvariant()));
                 return;
             }
 
