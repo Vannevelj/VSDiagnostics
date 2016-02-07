@@ -368,5 +368,59 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "\\u0061ss"));
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void NonEncapsulatedOrMutableField_Ref()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public int myField;
+
+        void DoSomething()
+        {
+            MyMethod(ref myField);
+        }
+
+        void MyMethod(ref int x)
+        {
+
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void NonEncapsulatedOrMutableField_Out()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public int myField;
+
+        void DoSomething()
+        {
+            MyMethod(out myField);
+        }
+
+        void MyMethod(out int x)
+        {
+            x = 5;
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
     }
 }
