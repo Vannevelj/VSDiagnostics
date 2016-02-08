@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 // Found at https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/StyleCop.Analyzers/StyleCop.Analyzers.CodeFixes/Helpers/RenameHelper.cs
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +14,31 @@ namespace VSDiagnostics.Utilities
 {
     internal static class RenameHelper
     {
-        private static readonly string[] NamingConflictDiagnosticIds = {"CS0102", "CS0128", "CS0101", "CS0542"};
+        private static readonly HashSet<string> NamingConflictDiagnosticIds = new HashSet<string>(new[]
+        {
+            "CS0015", // The name of type 'type' is too long
+            "CS0041", // The fully qualified name for 'type' is too long for debug information.
+            "CS0076", // The enumerator name 'value__' is reserved and cannot be used
+            "CS0082", // Type 'type' already reserves a member called 'name' with the same parameter types
+            "CS0100", // The parameter name 'parameter name' is a duplicate
+            "CS0101", // The namespace 'namespace' already contains a definition for 'type'
+            "CS0102", // The type 'type name' already contains a definition for 'identifier'
+            "CS0104", // 'reference' is an ambiguous reference between 'identifier' and 'identifier'
+            "CS0111", // Type 'class' already defines a member called 'member' with the same parameter types,
+            "CS0121", // The call is ambiguous between the following methods or properties: 'method1' and 'method2'
+            "CS0128", // A local variable named 'variable' is already defined in this scope
+            "CS0135", // 'declaration1' conflicts with the declaration 'declaration2'
+            "CS0136", // A local variable named 'var' cannot be declared in this scope (..)
+            "CS0140", // The label 'label' is a duplicate
+            "CS0158", // The label 'label' shadows another label by the same name in a contained scope
+            "CS0202", // foreach requires that the return type 'type' of 'type.GetEnumerator()' must have a (..)
+            "CS0229", // Ambiguity between 'member1' and 'member2'
+            "CS0316", // The parameter name 'name' conflicts with an automatically-generated parameter name.
+            "CS0412", // 'generic': a parameter or local variable cannot have the same name as a method type parameter
+            "CS0473", // Explicit interface implementation 'method name' matches more than one interface member.
+            "CS0542", // 'user-defined type' : member names cannot be the same as their enclosing type,
+            "CS1061", // 'type' does not contain a definition for 'member' and no extension method 'name' accepting (..)
+        });
 
         public static async Task<Solution> RenameSymbolAsync(Document document, SyntaxNode root, SyntaxToken declarationToken, string newName, CancellationToken cancellationToken)
         {
