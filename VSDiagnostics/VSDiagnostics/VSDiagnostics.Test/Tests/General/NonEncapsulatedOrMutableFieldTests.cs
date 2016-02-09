@@ -36,7 +36,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        internal int X { get; set; } = 5;
+        internal int x { get; set; } = 5;
     }
 }";
 
@@ -67,7 +67,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        public int X { get; set; } = 5;
+        public int x { get; set; } = 5;
     }
 }";
 
@@ -98,7 +98,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        public int X { get; set; }
+        public int x { get; set; }
     }
 }";
 
@@ -147,7 +147,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        protected internal int X { get; set; }
+        protected internal int x { get; set; }
     }
 }";
 
@@ -214,9 +214,9 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        internal int X { get; set; }
+        internal int x { get; set; }
 
-        internal int Y { get; set; }
+        internal int y { get; set; }
     }
 }";
 
@@ -249,9 +249,9 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        internal int X { get; set; } = 5;
+        internal int x { get; set; } = 5;
 
-        internal int Y { get; set; }
+        internal int y { get; set; }
     }
 }";
 
@@ -290,10 +290,10 @@ namespace ConsoleApplication1
     class MyClass
     {
         [MyAttribute]
-        public int X { get; set; }
+        public int x { get; set; }
 
         [MyAttribute]
-        public int Y { get; set; }
+        public int y { get; set; }
     }
 
     class MyAttribute : Attribute
@@ -421,6 +421,47 @@ namespace ConsoleApplication1
     }
 }";
             VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void NonEncapsulatedOrMutableField_WithReferencedIdentifier()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public int myExampleField;
+
+        void Method()
+        {
+            myExampleField = 5;
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public int myExampleField { get; set; }
+
+        void Method()
+        {
+            myExampleField = 5;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "myExampleField"));
+            VerifyFix(original, result);
         }
     }
 }
