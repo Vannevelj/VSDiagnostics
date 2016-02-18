@@ -52,7 +52,7 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
         ///     others use <see cref="NamingConvention.UpperCamelCase" />.
         ///     For example:
         ///     input = "_allo_ello"; first section = "allo"
-        ///     input = "IBufferMyBuffer"; first section = "IBufferMyBuffer"
+        ///     input = "IBufferMyBuffer"; first section = "IBuffer"
         ///     input = "MY_SNAKE_CASE"; first section = "MY"
         ///     This allows us to remove things like underscores and have the individual sections they denoted in a proper
         ///     convention as well
