@@ -308,6 +308,12 @@ namespace VSDiagnostics.Test.Tests.Utilities
             TestOutput(NamingConventionExtensions.Lower, "MyVariable2", "myVariable2");
         }
 
+        [TestMethod]
+        public void GetNormalizedString_17()
+        {
+            TestOutput(NamingConventionExtensions.IUpper, "IBufferMyBuffer", "IBufferMyBuffer");
+        }
+
         private void TestOutput(Func<string, string> func, string input, string expected)
         {
             var result = NamingConventionExtensions.GetNormalizedString(input, func);
