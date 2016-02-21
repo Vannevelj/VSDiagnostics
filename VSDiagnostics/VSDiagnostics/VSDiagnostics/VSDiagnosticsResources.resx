@@ -497,6 +497,18 @@
   <data name="SyncMethodWithSyncSuffixAnalyzerCodeFixTitle" xml:space="preserve">
     <value>Remove suffix</value>
   </data>
+  <data name="RedundantXmlDocReturnAnalyzerMessage" xml:space="preserve">
+    <value>Redundant &lt;return&gt; clause on void method in XML documentation.</value>
+  </data>
+  <data name="RedundantXmlDocReturnAnalyzerTitle" xml:space="preserve">
+    <value>Remove &lt;return&gt; clause on XML doc.</value>
+  </data>
+  <data name="RedundantXmlDocReturnCodeFixTitle" xml:space="preserve">
+    <value>Remove &lt;return&gt; clause</value>
+  </data>
+  <data name="XmlDocCommentsCategory" xml:space="preserve">
+    <value>XML Docs</value>
+  </data>
   <data name="StringDotFormatWithDifferentAmountOfArgumentsMessage" xml:space="preserve">
     <value>A string.Format() call lacks arguments and will cause a runtime exception</value>
   </data>

@@ -149,11 +149,11 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
                 if (!IsPowerOfTwo((dynamic) value))
                 {
                     createDiagnostic = true;
-                }
-            }
+                        }
+                        }
 
             if (createDiagnostic)
-            {
+                        {
                 context.ReportDiagnostic(Diagnostic.Create(DefaultRule, declarationExpression.Identifier.GetLocation(),
                     enumName));
             }

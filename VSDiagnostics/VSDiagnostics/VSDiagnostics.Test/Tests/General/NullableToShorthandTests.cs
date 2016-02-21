@@ -207,6 +207,7 @@ namespace ConsoleApplication1
         {
             var original = @"
     using System;
+using System.Collections.Generic;
     using System.Text;
 
     namespace ConsoleApplication1
@@ -347,6 +348,7 @@ namespace ConsoleApplication1
         {
             var original = @"
     using System;
+using System.Collections.Generic;
     using System.Text;
 
     namespace ConsoleApplication1
@@ -362,6 +364,7 @@ namespace ConsoleApplication1
 
             var result = @"
     using System;
+using System.Collections.Generic;
     using System.Text;
 
     namespace ConsoleApplication1
@@ -423,6 +426,7 @@ namespace ConsoleApplication1
         {
             var original = @"
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace ConsoleApplication1
@@ -438,6 +442,7 @@ namespace ConsoleApplication1
 
             var result = @"
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace ConsoleApplication1

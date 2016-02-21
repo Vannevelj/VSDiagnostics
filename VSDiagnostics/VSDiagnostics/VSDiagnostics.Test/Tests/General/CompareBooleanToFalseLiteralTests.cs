@@ -17,6 +17,8 @@ namespace VSDiagnostics.Test.Tests.General
         public void CompareBooleanToFalseLiteral_WithSimpleFalseLiteralComparison()
         {
             var original = @"
+using System;
+
 namespace ConsoleApplication1
 {
     class MyClass
@@ -33,6 +35,8 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
+using System;
+
 namespace ConsoleApplication1
 {
     class MyClass
@@ -279,6 +283,8 @@ namespace ConsoleApplication1
         public void CompareBooleanToFalseLiteral_WithSimpleFalseLiteralComparison_NotEqualsOperator()
         {
             var original = @"
+using System;
+
 namespace ConsoleApplication1
 {
     class MyClass
@@ -295,6 +301,8 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
+using System;
+
 namespace ConsoleApplication1
 {
     class MyClass
@@ -457,11 +465,11 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        bool Method()
+        void Method()
         {
             if (""someString"" != ""false"")
             {
-                return true;
+                return;
             }
         }
     }

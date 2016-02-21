@@ -1133,22 +1133,26 @@ namespace ConsoleApplication1
         public void ExplicitAccessModifiers_PropertyDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
+using System;
+
 namespace ConsoleApplication1
 {
     class MyClass
     {
         [Obsolete]
-        int Foo { get; set; }    // I know this is bad, but we might as well test it
+        int Foo { get; set; }
     }
 }";
 
             var result = @"
+using System;
+
 namespace ConsoleApplication1
 {
     internal class MyClass
     {
         [Obsolete]
-        private int Foo { get; set; }    // I know this is bad, but we might as well test it
+        private int Foo { get; set; }
     }
 }";
 
@@ -1227,6 +1231,8 @@ namespace ConsoleApplication1
         public void ExplicitAccessModifiers_MethodDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
+using System;
+
 namespace ConsoleApplication1
 {
     internal class MyClass
@@ -1240,6 +1246,8 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
+using System;
+
 namespace ConsoleApplication1
 {
     internal class MyClass
@@ -1325,6 +1333,8 @@ namespace ConsoleApplication1
         public void ExplicitAccessModifiers_ClassConstructorDeclaration_OnlyChangesAccessModifiers()
         {
             var original = @"
+using System;
+
 namespace ConsoleApplication1
 {
     internal class MyClass
@@ -1338,6 +1348,8 @@ namespace ConsoleApplication1
 }";
 
             var result = @"
+using System;
+
 namespace ConsoleApplication1
 {
     internal class MyClass

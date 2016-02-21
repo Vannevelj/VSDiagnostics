@@ -105,6 +105,8 @@ namespace ConsoleApplication1
         public void RemoveTestSuffix_AttributedMethodEndsWithTest()
         {
             var original = @"
+using System;
+
 namespace ConsoleApplication1
 {
     class MyClass
