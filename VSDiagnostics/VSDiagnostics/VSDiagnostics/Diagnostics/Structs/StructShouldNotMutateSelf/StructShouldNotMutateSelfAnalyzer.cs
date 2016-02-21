@@ -30,24 +30,29 @@ namespace VSDiagnostics.Diagnostics.Structs.StructShouldNotMutateSelf
         {
             // Looking for
             // this = someValueType;
-            var eq = context.Node as AssignmentExpressionSyntax;
-            if (eq == null)
+            var assignmentExpression = context.Node as AssignmentExpressionSyntax;
+            if (assignmentExpression == null)
+            {
+                return;
+            }
+            
+            if (!(assignmentExpression.Left is ThisExpressionSyntax))
             {
                 return;
             }
 
-            if (!(eq.Left is ThisExpressionSyntax))
+            var type = context.SemanticModel.GetTypeInfo(assignmentExpression.Left).Type;
+            if (type == null)
             {
                 return;
             }
 
-            var type = context.SemanticModel.GetTypeInfo(eq.Left);
-            if (type.Type != null && !type.Type.IsValueType)
+            if (!type.IsValueType)
             {
                 return;
             }
 
-            context.ReportDiagnostic(Diagnostic.Create(Rule, eq.Left.GetLocation()));
+            context.ReportDiagnostic(Diagnostic.Create(Rule, assignmentExpression.Left.GetLocation(), type.Name));
         }
     }
 }

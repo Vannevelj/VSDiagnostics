@@ -11,7 +11,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class ExplicitAccessModifiersAnalyzer : DiagnosticAnalyzer
     {
-        private const DiagnosticSeverity Severity = DiagnosticSeverity.Info;
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Hidden;
 
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.ExplicitAccessModifiersAnalyzerMessage;
@@ -55,7 +55,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
 
@@ -68,7 +68,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
 
@@ -81,7 +81,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
 
@@ -94,7 +94,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
 
@@ -107,7 +107,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
 
@@ -124,13 +124,14 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node is PropertyDeclarationSyntax)
             {
                 var declarationExpression = (PropertyDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())) &&
+                    declarationExpression.ExplicitInterfaceSpecifier == null)
                 {
                     var accessibility =
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
 
@@ -138,13 +139,14 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             {
                 var declarationExpression = (MethodDeclarationSyntax) context.Node;
                 if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())) &&
-                    declarationExpression.Modifiers.All(m => m.Kind() != SyntaxKind.PartialKeyword))
+                    declarationExpression.Modifiers.All(m => m.Kind() != SyntaxKind.PartialKeyword) &&
+                    declarationExpression.ExplicitInterfaceSpecifier == null)
                 {
                     var accessibility =
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
 
@@ -159,7 +161,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
 
@@ -182,20 +184,21 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
 
             if (context.Node is IndexerDeclarationSyntax)
             {
                 var declarationExpression = (IndexerDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())) &&
+                     declarationExpression.ExplicitInterfaceSpecifier == null)
                 {
                     var accessibility =
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
 
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLower()));
+                        accessibility.ToString().ToLowerInvariant()));
                 }
             }
         }

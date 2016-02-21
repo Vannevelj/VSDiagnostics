@@ -2364,7 +2364,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ExplicitAccessModifiers_PartialMethod_DoesNotProvideFix()
+        public void ExplicitAccessModifiers_PartialMethod()
         {
             var original = @"
 using System;
@@ -2379,6 +2379,66 @@ namespace ConsoleApplication1
     public partial class Program
     {
         partial void Method() { }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_ExplicitInterfaceMethod()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public interface MyInterface
+    {
+        void MyMethod();
+    }
+
+    public class MyClass : MyInterface
+    {
+        void MyInterface.MyMethod() { }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_ExplicitInterfaceProperty()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public interface MyInterface
+    {
+        string MyProperty { get; set; }
+    }
+
+    public class MyClass : MyInterface
+    {
+        string MyInterface.MyProperty { get; set; }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ExplicitAccessModifiers_ExplicitInterfaceIndexer()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public interface MyInterface
+    {
+	    string this[int index] { get; set; }
+    }
+
+    public class MyClass : MyInterface
+    {
+	    string MyInterface.this[int index] { get { return string.Empty; } set { } }
     }
 }";
 

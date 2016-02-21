@@ -62,8 +62,8 @@
       <HintPath>..\..\packages\Microsoft.CodeAnalysis.Workspaces.Common.1.0.0\lib\net45\Microsoft.CodeAnalysis.Workspaces.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="RoslynTester, Version=1.6.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\RoslynTester.1.6.1\lib\RoslynTester.dll</HintPath>
+    <Reference Include="RoslynTester, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\RoslynTester.1.6.2\lib\RoslynTester.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -149,7 +149,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\Utilities\ExtensionsTests.cs" />
     <Compile Include="Tests\Utilities\NamingConventionsTests.cs" />
-    <Compile Include="Tests\XMLDocComments\RedundantXMLDocReturn\RedundantXMLDocReturnTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -158,8 +159,10 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             var conventionedIdentifier = currentIdentifier.WithConvention(convention);
             if (conventionedIdentifier.Text != currentIdentifier.Text)
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, currentIdentifier.GetLocation(), memberType,
-                    currentIdentifier.Text, conventionedIdentifier.Text));
+                context.ReportDiagnostic(
+                    Diagnostic.Create(Rule, currentIdentifier.GetLocation(), 
+                    ImmutableDictionary.CreateRange( new[] { new KeyValuePair<string, string>("convention", convention.ToString()) }), 
+                    memberType, currentIdentifier.Text, conventionedIdentifier.Text));
             }
         }
     }

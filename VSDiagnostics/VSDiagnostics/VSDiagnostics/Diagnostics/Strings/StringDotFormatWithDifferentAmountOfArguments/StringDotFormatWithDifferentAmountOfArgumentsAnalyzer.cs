@@ -48,15 +48,32 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
             {
                 return;
             }
-            var formatIndex = formatParam.Ordinal;
 
+            var formatIndex = formatParam.Ordinal;
             var formatParameters = methodSymbol.Parameters.Skip(formatIndex + 1).ToArray();
+
+            // If the method definition doesn't contain any parameter to pass format arguments, we ignore it
+            if (!formatParameters.Any())
+            {
+                return;
+            }
+
             var hasObjectArray = formatParameters.Length == 1 &&
                                  formatParameters.All(x => x.Type.Kind == SymbolKind.ArrayType &&
                                                            ((IArrayTypeSymbol) x.Type).ElementType.SpecialType == SpecialType.System_Object);
             var hasObject = formatParameters.All(x => x.Type.SpecialType == SpecialType.System_Object);
 
             if (!(hasObject || hasObjectArray))
+            {
+                return;
+            }
+
+            // In case less arguments are passed in than the format definition, we escape
+            // This can occur when dealing with optional arguments
+            // Definition: string MyMethod(string format = null, object[] args = null) { }
+            // Invocation: MyMethod();
+            // Result: ArgumentOutOfRangeException when trying to access the format argument based on the format parameter's index
+            if (invocation.ArgumentList.Arguments.Count <= formatIndex)
             {
                 return;
             }
@@ -75,7 +92,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
             var formatArguments = invocation.ArgumentList.Arguments.Skip(formatIndex + 1).ToArray();
             var amountOfFormatArguments = formatArguments.Length;
 
-            if (formatArguments.Length == 1)
+            if (amountOfFormatArguments == 1)
             {
                 var argumentType = context.SemanticModel.GetTypeInfo(formatArguments[0].Expression);
                 if (argumentType.Type == null)

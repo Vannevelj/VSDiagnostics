@@ -30,7 +30,7 @@ struct X
 	}
 }";
 
-            VerifyDiagnostic(original, string.Format(StructShouldNotMutateSelfAnalyzer.Rule.MessageFormat.ToString()));
+            VerifyDiagnostic(original, string.Format(StructShouldNotMutateSelfAnalyzer.Rule.MessageFormat.ToString(), "X"));
         }
 
         [TestMethod]
@@ -54,7 +54,7 @@ struct Rectangle
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(StructShouldNotMutateSelfAnalyzer.Rule.MessageFormat.ToString()));
+            VerifyDiagnostic(original, string.Format(StructShouldNotMutateSelfAnalyzer.Rule.MessageFormat.ToString(), "Rectangle"));
         }
 
         // bug: Class cannot assign this - remove this test?

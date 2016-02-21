@@ -1,7 +1,7 @@
 # VSDiagnostics
 A collection of code-quality analyzers based on the new Roslyn platform. This project aims to ensure code-quality as you type it in your editor rather than having to do this as a separate build-step. Likewise it also tries to help avoid some common pitfalls.
 
-<img src="https://cloud.githubusercontent.com/assets/2777107/7789534/a06db792-0264-11e5-955f-11cbf3261d4f.gif" />
+<img src="https://cloud.githubusercontent.com/assets/2777107/12633986/2e05fc66-c576-11e5-92a2-3c192f2f0d89.gif" />
 
 [Get it from NuGet!](https://www.nuget.org/packages/VSDiagnostics/)
 

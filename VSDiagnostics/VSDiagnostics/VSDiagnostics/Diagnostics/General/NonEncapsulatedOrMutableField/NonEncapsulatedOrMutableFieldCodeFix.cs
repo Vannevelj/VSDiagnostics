@@ -46,8 +46,7 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
             var fieldStatement = variableDeclarator.AncestorsAndSelf().OfType<FieldDeclarationSyntax>().First();
             var variableDeclaration = variableDeclarator.AncestorsAndSelf().OfType<VariableDeclarationSyntax>().First();
 
-            var newProperty = SyntaxFactory.PropertyDeclaration(variableDeclaration.Type,
-                variableDeclarator.Identifier.WithConvention(NamingConvention.UpperCamelCase))
+            var newProperty = SyntaxFactory.PropertyDeclaration(variableDeclaration.Type, variableDeclarator.Identifier)
                 .WithAttributeLists(fieldStatement.AttributeLists)
                 .WithModifiers(fieldStatement.Modifiers)
                 .WithAdditionalAnnotations(Formatter.Annotation)

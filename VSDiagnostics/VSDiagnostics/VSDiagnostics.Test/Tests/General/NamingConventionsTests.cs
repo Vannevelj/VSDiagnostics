@@ -1877,5 +1877,66 @@ namespace ConsoleApplication1
                 string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "class", "myClass", "MyClass"));
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void NamingConventions_SnakeUpperCase()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private const int INDENT_SIZE = 4;
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private const int IndentSize = 4;
+    }
+}";
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "INDENT_SIZE", "IndentSize"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void NamingConventions_SnakeLowerCase()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private const int Indent_Size = 4;
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private const int IndentSize = 4;
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(NamingConventionsAnalyzer.Rule.MessageFormat.ToString(), "field", "Indent_Size", "IndentSize"));
+            VerifyFix(original, result);
+        }
     }
 }
