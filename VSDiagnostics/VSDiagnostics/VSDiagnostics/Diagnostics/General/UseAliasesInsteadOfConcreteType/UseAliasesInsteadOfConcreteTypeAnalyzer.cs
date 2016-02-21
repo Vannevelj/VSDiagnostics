@@ -71,9 +71,9 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
             }
 
             string alias;
-            if (typeSymbol.MetadataName.HasAlias(out alias))
+            if (identifier.Identifier.Text.HasAlias() && typeSymbol.MetadataName.HasAlias(out alias))
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, location, alias, identifier.Identifier.ValueText));
+                context.ReportDiagnostic(Diagnostic.Create(Rule, location, alias, typeSymbol.MetadataName));
             }
         }
     }

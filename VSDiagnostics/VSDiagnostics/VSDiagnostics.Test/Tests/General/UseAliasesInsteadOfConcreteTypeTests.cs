@@ -1569,5 +1569,40 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_DisplaysCorrectWarning()
+        {
+            var original = @"
+using Single = System.String;
+
+namespace ConsoleApplication1
+{
+    class Foo
+    {
+        static void Main()
+        {
+            Single bar = ""test"";
+        }
+    }
+}";
+
+            var result = @"
+using Single = System.String;
+
+namespace ConsoleApplication1
+{
+    class Foo
+    {
+        static void Main()
+        {
+            string bar = ""test"";
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "string", "String"));
+            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
+        }
     }
 }
