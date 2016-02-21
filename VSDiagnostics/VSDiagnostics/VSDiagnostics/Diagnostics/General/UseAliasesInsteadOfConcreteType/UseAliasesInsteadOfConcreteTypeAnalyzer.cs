@@ -49,8 +49,27 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
                 return;
             }
 
+            var typeSymbols = new[]
+            {
+                SpecialType.System_Int16,
+                SpecialType.System_Int32,
+                SpecialType.System_Int64,
+                SpecialType.System_UInt16,
+                SpecialType.System_UInt32,
+                SpecialType.System_UInt64,
+                SpecialType.System_Object,
+                SpecialType.System_Byte,
+                SpecialType.System_SByte,
+                SpecialType.System_Char,
+                SpecialType.System_Boolean,
+                SpecialType.System_Single,
+                SpecialType.System_Double,
+                SpecialType.System_Decimal,
+                SpecialType.System_String
+            };
+
             var typeSymbol = identifierSymbol.Symbol as INamedTypeSymbol;
-            if (typeSymbol != null && typeSymbol.SpecialType == SpecialType.None)
+            if (typeSymbol == null || !typeSymbols.Contains(typeSymbol.SpecialType))
             {
                 return;
             }
@@ -64,7 +83,7 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
             {
                 location = qualifiedName.GetLocation();
             }
-
+            
             string alias;
             if (identifier.Identifier.Text.HasAlias(out alias))
             {
