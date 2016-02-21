@@ -315,5 +315,29 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, ReplaceEmptyStringWithStringDotEmptyAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void ReplaceEmptyStringsWithStringDotEmpty_SwitchLabel()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            switch(""test"")
+            {
+                case """": break;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }

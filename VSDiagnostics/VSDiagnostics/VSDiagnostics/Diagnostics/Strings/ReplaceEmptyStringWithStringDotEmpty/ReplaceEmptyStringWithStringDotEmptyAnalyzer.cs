@@ -62,6 +62,17 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
                 }
             }
 
+            // A switch label in the scenario of 
+            // switch(var)
+            // {
+            //     case "": break;
+            // }
+            // Cannot be changed since it has to be a constant
+            if (stringLiteral.AncestorsAndSelf().OfType<SwitchLabelSyntax>().Any())
+            {
+                return;
+            }
+
             context.ReportDiagnostic(Diagnostic.Create(Rule, stringLiteral.GetLocation()));
         }
     }
