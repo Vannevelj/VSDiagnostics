@@ -50,7 +50,7 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
             }
 
             var typeSymbol = identifierSymbol.Symbol as INamedTypeSymbol;
-            if (typeSymbol != null && typeSymbol.SpecialType == SpecialType.None)
+            if (typeSymbol == null || typeSymbol.SpecialType == SpecialType.None)
             {
                 return;
             }
@@ -60,6 +60,11 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
             // This will make sure that we accept the entire qualified name in the code fix
             var location = identifier.GetLocation();
             var qualifiedName = identifier.AncestorsAndSelf().OfType<QualifiedNameSyntax>().FirstOrDefault();
+            if (qualifiedName?.Parent is UsingDirectiveSyntax)
+            {
+                return;
+            }
+
             if (qualifiedName != null)
             {
                 location = qualifiedName.GetLocation();

@@ -1075,7 +1075,6 @@ namespace ConsoleApplication1
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
         }
 
-
         [TestMethod]
         public void UseAliasesInsteadOfConcreteType_Int32BecomesInt_Int32DotMaxValue()
         {
@@ -1452,6 +1451,123 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "string", "String"));
             VerifyFix(original, result, allowNewCompilerDiagnostics: true);
+        }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_DoesNotCatchLinqSingle()
+        {
+            var original = @"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            List<string> list = new List<string> { ""test"", ""test1"" };
+            string str = list.Single(s => s == ""test"");
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_DoesNotCatchEnumValuesWithSameNameAsAliasableType()
+        {
+            var original = @"
+using System;
+using System.Linq;
+
+namespace ConsoleApplication1
+{
+    public enum TypeCode
+    {
+            Object = 1,
+            DBNull = 2,
+            Boolean = 3,
+            Char = 4,
+            SByte = 5,
+            Byte = 6,
+    }
+
+    class MyClass
+    {
+        void Method()
+        {
+            var type = TypeCode.Boolean;
+            if (type == TypeCode.Boolean) {}
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_DoesNotCatchVariablesWithSameNameAsAliasableType()
+        {
+            var original = @"
+using System;
+using System.Linq;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var Boolean = ""Boolean"";
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_DoesNotCatchClassWithSameNameAsAliasableType()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class Single
+    {
+    }
+
+    class Foo
+    {
+        void Method()
+        {
+            Single bar = new Single();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void UseAliasesInsteadOfConcreteType_DoesNotCatchUsingDirective()
+        {
+            var original = @"
+using Single = System.Single;
+
+namespace ConsoleApplication1
+{
+    class Foo
+    {
+        static void Main() { }
+    }
+}";
+
+            VerifyDiagnostic(original);
         }
     }
 }
