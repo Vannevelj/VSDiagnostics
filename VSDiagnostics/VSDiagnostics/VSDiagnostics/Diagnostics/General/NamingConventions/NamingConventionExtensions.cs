@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -29,16 +29,16 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             switch (namingConvention)
             {
                 case NamingConvention.LowerCamelCase:
-                    newValue = GetLowerCamelCaseIdentifier(originalValue);
+                    newValue = GetNormalizedString(originalValue, Lower);
                     break;
                 case NamingConvention.UpperCamelCase:
-                    newValue = GetUpperCamelCaseIdentifier(originalValue);
+                    newValue = GetNormalizedString(originalValue, Upper);
                     break;
                 case NamingConvention.UnderscoreLowerCamelCase:
-                    newValue = GetUnderscoreLowerCamelCaseIdentifier(originalValue);
+                    newValue = GetNormalizedString(originalValue, UnderscoreLower);
                     break;
                 case NamingConvention.InterfacePrefixUpperCamelCase:
-                    newValue = GetInterfacePrefixUpperCamelCaseIdentifier(originalValue);
+                    newValue = GetNormalizedString(originalValue, IUpper);
                     break;
                 default:
                     throw new ArgumentException(nameof(namingConvention));
@@ -47,126 +47,128 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             return SyntaxFactory.Identifier(identifier.LeadingTrivia, newValue, identifier.TrailingTrivia);
         }
 
-        // lowerCamelCase
-        internal static string GetLowerCamelCaseIdentifier(string identifier)
+        /// <summary>
+        ///     Removes all non-digit, non-alphabetic characters. The naming convention of the first section can be specified, all
+        ///     others use <see cref="NamingConvention.UpperCamelCase" />.
+        ///     For example:
+        ///     input = "_allo_ello"; first section = "allo"
+        ///     input = "IBufferMyBuffer"; first section = "IBuffer"
+        ///     input = "MY_SNAKE_CASE"; first section = "MY"
+        ///     This allows us to remove things like underscores and have the individual sections they denoted in a proper
+        ///     convention as well
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="getFirstEntryConventioned"></param>
+        /// <returns></returns>
+        internal static string GetNormalizedString(string input, Func<string, string> getFirstEntryConventioned)
         {
-            if (ContainsSpecialCharacters(identifier, '_'))
+            var sections = new List<string>();
+            var tempBuffer = new StringBuilder();
+
+            Action addSection = () =>
             {
-                return identifier;
-            }
+                if (tempBuffer.Length != 0)
+                {
+                    sections.Add(tempBuffer.ToString());
+                }
 
-            var normalizedString = GetNormalizedString(identifier);
+                tempBuffer.Clear();
+            };
 
-            if (normalizedString.Length >= 1)
-            {
-                return char.ToLower(normalizedString[0]) + normalizedString.Substring(1);
-            }
-            return identifier;
-        }
-
-        // UpperCamelCase
-        internal static string GetUpperCamelCaseIdentifier(string identifier)
-        {
-            if (ContainsSpecialCharacters(identifier, '_'))
-            {
-                return identifier;
-            }
-
-            var normalizedString = GetNormalizedString(identifier);
-
-            if (normalizedString.Length == 0)
-            {
-                return identifier;
-            }
-            return char.ToUpper(normalizedString[0]) + normalizedString.Substring(1);
-        }
-
-        // _lowerCamelCase
-        internal static string GetUnderscoreLowerCamelCaseIdentifier(string identifier)
-        {
-            if (ContainsSpecialCharacters(identifier, '_'))
-            {
-                return identifier;
-            }
-
-            var normalizedString = GetNormalizedString(identifier);
-            if (normalizedString.Length == 0)
-            {
-                return identifier;
-            }
-
-            // Var
-            if (char.IsUpper(normalizedString[0]))
-            {
-                return "_" + char.ToLower(normalizedString[0]) + normalizedString.Substring(1);
-            }
-
-            // var
-            if (char.IsLower(normalizedString[0]))
-            {
-                return "_" + normalizedString;
-            }
-
-            return normalizedString;
-        }
-
-        // IInterface
-        internal static string GetInterfacePrefixUpperCamelCaseIdentifier(string identifier)
-        {
-            if (ContainsSpecialCharacters(identifier, '_'))
-            {
-                return identifier;
-            }
-
-            var normalizedString = GetNormalizedString(identifier);
-
-            if (normalizedString.Length == 0)
-            {
-                return identifier;
-            }
-
-            // iSomething
-            if (normalizedString.Length >= 2 && normalizedString[0] == 'i' && char.IsUpper(normalizedString[1]))
-            {
-                return "I" + normalizedString.Substring(1);
-            }
-
-            // Something, something, isomething
-            if (normalizedString[0] != 'I')
-            {
-                return "I" + char.ToUpper(normalizedString[0]) + normalizedString.Substring(1);
-            }
-
-            // Isomething
-            if (normalizedString[0] == 'I' && char.IsLower(normalizedString[1]))
-            {
-                return "I" + char.ToUpper(normalizedString[1]) + normalizedString.Substring(2);
-            }
-
-            return normalizedString;
-        }
-
-        private static string GetNormalizedString(string input)
-        {
-            var sb = new StringBuilder();
+            var previousCharWasUpper = false;
             for (var i = 0; i < input.Length; i++)
             {
-                if (char.IsLetter(input[i]) || char.IsNumber(input[i]))
-                {
-                    sb.Append(input[i]);
-                }
+                var currChar = input[i];
 
-                if (input[i] == '_' && i + 1 < input.Length && input[i + 1] != '_')
+                if (char.IsLetter(currChar) || char.IsNumber(currChar))
                 {
-                    sb.Append(char.ToUpper(input[++i]));
+                    var isCurrentCharUpper = char.IsUpper(currChar);
+                    if (isCurrentCharUpper && !previousCharWasUpper)
+                    {
+                        addSection();
+                    }
+
+                    previousCharWasUpper = isCurrentCharUpper;
+                    tempBuffer.Append(currChar);
                 }
+                else
+                {
+                    // We already have data to add
+                    // Existing data gets added but the current character is being ignored
+                    addSection();
+                }
+            }
+
+            // If there is stuff remaining in the buffer, flush it as the last section
+            addSection();
+
+            // Identifiers that consist solely of underscores, e.g. _____
+            if (sections.Count == 0)
+            {
+                return input;
+            }
+
+            var sb = new StringBuilder(getFirstEntryConventioned(sections[0]));
+            for (var i = 1; i < sections.Count; i++)
+            {
+                sb.Append(Upper(sections[i]));
             }
             return sb.ToString();
         }
 
-        private static bool ContainsSpecialCharacters(string input, params char[] allowedCharacters)
+        internal static string Upper(string input)
         {
-            return !input.ToCharArray().All(x => char.IsLetter(x) || char.IsNumber(x) || allowedCharacters.Contains(x));
+            if (input.Length == 0)
+            {
+                return string.Empty;
+            }
+
+            return char.ToUpper(input[0]) + input.Substring(1).ToLowerInvariant();
+        }
+
+        internal static string Lower(string input)
+        {
+            if (input.Length == 0)
+            {
+                return string.Empty;
+            }
+
+            return input.ToLowerInvariant();
+        }
+
+        internal static string IUpper(string input)
+        {
+            if (input.Length == 0)
+            {
+                return string.Empty;
+            }
+
+            if (input.Length == 1)
+            {
+                if (string.Equals("I", input, StringComparison.OrdinalIgnoreCase))
+                {
+                    return "I";
+                }
+
+                return "I" + input.ToUpperInvariant();
+            }
+
+            if (input.StartsWith("I", StringComparison.OrdinalIgnoreCase))
+            {
+                return "I" + char.ToUpper(input[1]) + input.Substring(2).ToLowerInvariant();
+            }
+
+            return "I" + char.ToUpper(input[0]) + input.Substring(1).ToLowerInvariant();
+        }
+
+        internal static string UnderscoreLower(string input)
+        {
+            if (input.Length == 0)
+            {
+                return string.Empty;
+            }
+
+            return "_" + Lower(input);
         }
     }
 }

@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 
 namespace VSDiagnostics.Diagnostics.General.TypeToVar
 {
-    [ExportCodeFixProvider("TypeToVar", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(TypeToVarCodeFix), LanguageNames.CSharp), Shared]
     public class TypeToVarCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(TypeToVarAnalyzer.Rule.Id);
@@ -23,14 +23,16 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Use var", x => UseVarAsync(context.Document, root, statement), nameof(TypeToVarAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.TypeToVarCodeFixTitle,
+                    x => UseVarAsync(context.Document, root, statement), TypeToVarAnalyzer.Rule.Id), diagnostic);
         }
 
         private Task<Solution> UseVarAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var varIdentifier = SyntaxFactory.IdentifierName("var")
-                                             .WithLeadingTrivia(statement.GetLeadingTrivia())
-                                             .WithTrailingTrivia(statement.GetTrailingTrivia());
+                .WithLeadingTrivia(statement.GetLeadingTrivia())
+                .WithTrailingTrivia(statement.GetTrailingTrivia());
 
             var newRoot = root.ReplaceNode(statement, varIdentifier);
 

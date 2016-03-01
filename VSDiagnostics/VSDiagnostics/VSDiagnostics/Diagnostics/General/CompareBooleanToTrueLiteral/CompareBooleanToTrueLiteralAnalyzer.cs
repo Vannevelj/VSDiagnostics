@@ -3,19 +3,21 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class CompareBooleanToTrueLiteralAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "General";
-        private const string DiagnosticId = nameof(CompareBooleanToTrueLiteralAnalyzer);
-        private const string Message = "A boolean expression can be simplified.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "A boolean expression doesn't have to be compared to true.";
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Message = VSDiagnosticsResources.CompareBooleanToTrueLiteralAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.CompareBooleanToTrueLiteralAnalyzerTitle;
+
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.CompareBooleanToTrueLiteral, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -26,29 +28,53 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var equalsExpression = context.Node as LiteralExpressionSyntax;
-            if (equalsExpression == null)
+            var literalExpression = context.Node as LiteralExpressionSyntax;
+            if (literalExpression == null)
             {
                 return;
             }
 
-            if (!(equalsExpression.Token.ValueText == "true" && equalsExpression.Token.Value is bool))
+            if (!(literalExpression.Token.IsKind(SyntaxKind.TrueKeyword) && literalExpression.Token.Value is bool))
             {
                 return;
             }
 
-            var parentExpression = equalsExpression.Parent as BinaryExpressionSyntax;
-            if (parentExpression == null)
+            var binaryExpression = literalExpression.Parent as BinaryExpressionSyntax;
+            if (binaryExpression == null)
             {
                 return;
             }
 
-            if (parentExpression.OperatorToken.ValueText != "==")
+            if (binaryExpression.Left == literalExpression)
             {
-                return;
+                // Check the right-hand side
+                var rightSymbol = context.SemanticModel.GetTypeInfo(binaryExpression.Right);
+                if (rightSymbol.Type == null)
+                {
+                    return;
+                }
+
+                if (rightSymbol.Type.IsNullable())
+                {
+                    return;
+                }
+            }
+            else
+            {
+                // Check the left-hand side
+                var leftSymbol = context.SemanticModel.GetTypeInfo(binaryExpression.Left);
+                if (leftSymbol.Type == null)
+                {
+                    return;
+                }
+
+                if (leftSymbol.Type.IsNullable())
+                {
+                    return;
+                }
             }
 
-            context.ReportDiagnostic(Diagnostic.Create(Rule, equalsExpression.GetLocation()));
+            context.ReportDiagnostic(Diagnostic.Create(Rule, literalExpression.GetLocation()));
         }
     }
 }

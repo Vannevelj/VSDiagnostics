@@ -5,19 +5,25 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStacktrace
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class RethrowExceptionWithoutLosingStacktraceAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "Exceptions";
-        private const string DiagnosticId = nameof(RethrowExceptionWithoutLosingStacktraceAnalyzer);
-        private const string Message = "Rethrown exception loses the stacktrace.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Warns when an exception is rethrown in a way that it loses the stacktrace.";
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private static readonly string Category = VSDiagnosticsResources.ExceptionsCategory;
+
+        private static readonly string Message =
+            VSDiagnosticsResources.RethrowExceptionWithoutLosingStacktraceAnalyzerMessage;
+
+        private static readonly string Title =
+            VSDiagnosticsResources.RethrowExceptionWithoutLosingStacktraceAnalyzerTitle;
+
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.RethrowExceptionWithoutLosingStacktrace, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 

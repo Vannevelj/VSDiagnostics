@@ -11,10 +11,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOperator
 {
-    [ExportCodeFixProvider("ArgumentExceptionWithoutNameofOperator", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(ArgumentExceptionWithoutNameofOperatorCodeFix), LanguageNames.CSharp), Shared]
     public class ArgumentExceptionWithoutNameofOperatorCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(ArgumentExceptionWithoutNameofOperatorAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds
+            => ImmutableArray.Create(ArgumentExceptionWithoutNameofOperatorAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -23,22 +24,33 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOpe
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
-            var objectCreationExpression = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<ObjectCreationExpressionSyntax>().First();
+            var objectCreationExpression =
+                root.FindToken(diagnosticSpan.Start)
+                    .Parent.AncestorsAndSelf()
+                    .OfType<ObjectCreationExpressionSyntax>()
+                    .First();
 
-            context.RegisterCodeFix(CodeAction.Create("Use nameof", x => UseNameofAsync(context.Document, root, objectCreationExpression), nameof(ArgumentExceptionWithoutNameofOperatorAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.ArgumentExceptionWithoutNameofOperatorCodeFixTitle,
+                    x => UseNameofAsync(context.Document, root, objectCreationExpression),
+                    ArgumentExceptionWithoutNameofOperatorAnalyzer.Rule.Id), diagnostic);
         }
 
-        private Task<Solution> UseNameofAsync(Document document, SyntaxNode root, ObjectCreationExpressionSyntax objectCreationExpression)
+        private Task<Solution> UseNameofAsync(Document document, SyntaxNode root,
+            ObjectCreationExpressionSyntax objectCreationExpression)
         {
             var method = objectCreationExpression.Ancestors().OfType<MethodDeclarationSyntax>().First();
             var methodParameters = method.ParameterList.Parameters;
-            var expressionArguments = objectCreationExpression.ArgumentList.Arguments.Select(x => x.Expression).OfType<LiteralExpressionSyntax>();
+            var expressionArguments =
+                objectCreationExpression.ArgumentList.Arguments.Select(x => x.Expression)
+                    .OfType<LiteralExpressionSyntax>();
 
             foreach (var expressionArgument in expressionArguments)
             {
                 foreach (var methodParameter in methodParameters)
                 {
-                    if (string.Equals((string) methodParameter.Identifier.Value, (string) expressionArgument.Token.Value, StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals((string) methodParameter.Identifier.Value, (string) expressionArgument.Token.Value,
+                        StringComparison.OrdinalIgnoreCase))
                     {
                         var newExpression = SyntaxFactory.ParseExpression($"nameof({methodParameter.Identifier})");
                         var newParent = objectCreationExpression.ReplaceNode(expressionArgument, newExpression);

@@ -10,10 +10,11 @@ using Microsoft.CodeAnalysis.Editing;
 
 namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
 {
-    [ExportCodeFixProvider("TestMethodWithoutPublicModifier", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(TestMethodWithoutPublicModifierCodeFix), LanguageNames.CSharp), Shared]
     public class TestMethodWithoutPublicModifierCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(TestMethodWithoutPublicModifierAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds
+            => ImmutableArray.Create(TestMethodWithoutPublicModifierAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -24,9 +25,13 @@ namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
-            var methodDeclaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
+            var methodDeclaration =
+                root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
 
-            context.RegisterCodeFix(CodeAction.Create("Make public", x => MakePublicAsync(context.Document, root, methodDeclaration), nameof(TestMethodWithoutPublicModifierAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.TestMethodWithoutPublicModifierCodeFixTitle,
+                    x => MakePublicAsync(context.Document, root, methodDeclaration),
+                    TestMethodWithoutPublicModifierAnalyzer.Rule.Id), diagnostic);
         }
 
         private Task<Solution> MakePublicAsync(Document document, SyntaxNode root, MethodDeclarationSyntax method)

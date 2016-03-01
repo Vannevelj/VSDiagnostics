@@ -4,19 +4,23 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AsyncMethodWithoutAsyncSuffixAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "Async";
-        private const string DiagnosticId = nameof(AsyncMethodWithoutAsyncSuffixAnalyzer);
-        private const string Message = "Method \"{0}\" does not end with 'Async'.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Verifies whether an async method has the 'Async' suffix.";
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, isEnabledByDefault: true);
+        private static readonly string Category = VSDiagnosticsResources.AsyncCategory;
+        private static readonly string Message = VSDiagnosticsResources.AsyncMethodWithoutAsyncSuffixAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.AsyncMethodWithoutAsyncSuffixAnalyzerTitle;
+
+        internal static DiagnosticDescriptor Rule
+            =>
+                new DiagnosticDescriptor(DiagnosticId.AsyncMethodWithoutAsyncSuffix, Title, Message, Category, Severity,
+                    isEnabledByDefault: true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -33,12 +37,32 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
                 return;
             }
 
-            if (method.Modifiers.Any(x => x.IsKind(SyntaxKind.AsyncKeyword)))
+            if (method.Modifiers.Any(SyntaxKind.OverrideKeyword))
             {
-                if (!method.Identifier.Text.EndsWith("Async"))
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, method.Identifier.GetLocation(), method.Identifier.Text));
-                }
+                return;
+            }
+
+            var returnType = context.SemanticModel.GetTypeInfo(method.ReturnType);
+            if (returnType.Type == null)
+            {
+                return;
+            }
+
+            var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(method);
+            if (declaredSymbol == null)
+            {
+                return;
+            }
+
+            if (declaredSymbol.IsDefinedInAncestor())
+            {
+                return;
+            }
+
+            if (declaredSymbol.IsAsync() && !method.Identifier.Text.EndsWith("Async"))
+            {
+                context.ReportDiagnostic(Diagnostic.Create(Rule, method.Identifier.GetLocation(),
+                    method.Identifier.Text));
             }
         }
     }

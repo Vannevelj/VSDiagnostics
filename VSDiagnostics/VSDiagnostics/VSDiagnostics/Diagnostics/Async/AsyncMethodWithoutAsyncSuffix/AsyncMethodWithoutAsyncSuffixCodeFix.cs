@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Rename;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
 {
-    [ExportCodeFixProvider("AsyncMethodWithoutAsyncSuffix", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(AsyncMethodWithoutAsyncSuffixCodeFix), LanguageNames.CSharp), Shared]
     public class AsyncMethodWithoutAsyncSuffixCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds
+            => ImmutableArray.Create(AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -24,20 +24,20 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
-            var methodDeclaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
+            var methodDeclaration =
+                root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
 
-            context.RegisterCodeFix(CodeAction.Create("Add suffix", x => AddSuffixAsync(context.Document, methodDeclaration, context.CancellationToken), nameof(AsyncMethodWithoutAsyncSuffixAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.AsyncMethodWithoutAsyncSuffixCodeFixTitle,
+                    x => AddSuffixAsync(context.Document, methodDeclaration, root, context.CancellationToken),
+                    AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id),
+                diagnostic);
         }
 
-        private async Task<Solution> AddSuffixAsync(Document document, MethodDeclarationSyntax methodDeclaration, CancellationToken cancellationToken)
+        private async Task<Solution> AddSuffixAsync(Document document, MethodDeclarationSyntax methodDeclaration, SyntaxNode root,
+            CancellationToken cancellationToken)
         {
-            var methodSymbol = (await document.GetSemanticModelAsync(cancellationToken)).GetDeclaredSymbol(methodDeclaration);
-            return await Renamer.RenameSymbolAsync(
-                document.Project.Solution,
-                methodSymbol,
-                methodDeclaration.Identifier.Text + "Async",
-                document.Project.Solution.Workspace.Options,
-                cancellationToken);
+            return await RenameHelper.RenameSymbolAsync(document, root, methodDeclaration.Identifier, methodDeclaration.Identifier.Text + "Async", cancellationToken);
         }
     }
 }

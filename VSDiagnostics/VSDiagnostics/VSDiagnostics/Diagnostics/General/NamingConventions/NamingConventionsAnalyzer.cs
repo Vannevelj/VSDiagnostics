@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,15 +11,17 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class NamingConventionsAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "General";
-        private const string DiagnosticId = nameof(NamingConventionsAnalyzer);
-        private const string Message = "The {0} {1} does not follow naming conventions. Should be {2}.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "A member does not follow naming conventions.";
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Message = VSDiagnosticsResources.NamingConventionsAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.NamingConventionsAnalyzerTitle;
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.NamingConventions, Title, Message, Category, Severity, true);
+
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
+            => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -30,7 +33,9 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
                 SyntaxKind.InterfaceDeclaration,
                 SyntaxKind.LocalDeclarationStatement,
                 SyntaxKind.Parameter,
-                SyntaxKind.StructDeclaration);
+                SyntaxKind.StructDeclaration,
+                SyntaxKind.EnumDeclaration,
+                SyntaxKind.EnumMemberDeclaration);
         }
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
@@ -56,13 +61,14 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
                     else if (modifiers.Any(SyntaxKind.PrivateKeyword) ||
                              nodeAsField.Modifiers.Count == 0 /* no access modifier defaults to private */)
                     {
-                        if(modifiers.Any(SyntaxKind.StaticKeyword) || modifiers.Any(SyntaxKind.ConstKeyword))
+                        if (modifiers.Any(SyntaxKind.StaticKeyword) || modifiers.Any(SyntaxKind.ConstKeyword))
                         {
                             CheckNaming(variable.Identifier, "field", NamingConvention.UpperCamelCase, context);
-                        } else
+                        }
+                        else
                         {
                             CheckNaming(variable.Identifier, "field", NamingConvention.UnderscoreLowerCamelCase, context);
-                        }                        
+                        }
                     }
                     else
                     {
@@ -77,24 +83,29 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             if (nodeAsProperty != null)
             {
                 CheckNaming(nodeAsProperty.Identifier, "property", NamingConvention.UpperCamelCase, context);
+                return;
             }
 
             var nodeAsMethod = context.Node as MethodDeclarationSyntax;
             if (nodeAsMethod != null)
             {
                 CheckNaming(nodeAsMethod.Identifier, "method", NamingConvention.UpperCamelCase, context);
+                return;
             }
 
             var nodeAsClass = context.Node as ClassDeclarationSyntax;
             if (nodeAsClass != null)
             {
                 CheckNaming(nodeAsClass.Identifier, "class", NamingConvention.UpperCamelCase, context);
+                return;
             }
 
             var nodeAsInterface = context.Node as InterfaceDeclarationSyntax;
             if (nodeAsInterface != null)
             {
-                CheckNaming(nodeAsInterface.Identifier, "interface", NamingConvention.InterfacePrefixUpperCamelCase, context);
+                CheckNaming(nodeAsInterface.Identifier, "interface", NamingConvention.InterfacePrefixUpperCamelCase,
+                    context);
+                return;
             }
 
             var nodeAsLocal = context.Node as LocalDeclarationStatementSyntax;
@@ -124,15 +135,34 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             if (nodeAsStruct != null)
             {
                 CheckNaming(nodeAsStruct.Identifier, "struct", NamingConvention.UpperCamelCase, context);
+                return;
+            }
+
+            var nodeAsEnum = context.Node as EnumDeclarationSyntax;
+            if (nodeAsEnum != null)
+            {
+                CheckNaming(nodeAsEnum.Identifier, "enum", NamingConvention.UpperCamelCase, context);
+                return;
+            }
+
+            var nodeAsEnumMember = context.Node as EnumMemberDeclarationSyntax;
+            if (nodeAsEnumMember != null)
+            {
+                CheckNaming(nodeAsEnumMember.Identifier, "enum member", NamingConvention.UpperCamelCase, context);
+                return;
             }
         }
 
-        private void CheckNaming(SyntaxToken currentIdentifier, string memberType, NamingConvention convention, SyntaxNodeAnalysisContext context)
+        private static void CheckNaming(SyntaxToken currentIdentifier, string memberType, NamingConvention convention,
+            SyntaxNodeAnalysisContext context)
         {
             var conventionedIdentifier = currentIdentifier.WithConvention(convention);
             if (conventionedIdentifier.Text != currentIdentifier.Text)
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, currentIdentifier.GetLocation(), memberType, currentIdentifier.Text, conventionedIdentifier.Text));
+                context.ReportDiagnostic(
+                    Diagnostic.Create(Rule, currentIdentifier.GetLocation(), 
+                    ImmutableDictionary.CreateRange( new[] { new KeyValuePair<string, string>("convention", convention.ToString()) }), 
+                    memberType, currentIdentifier.Text, conventionedIdentifier.Text));
             }
         }
     }

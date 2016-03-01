@@ -10,10 +10,11 @@ using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsDefaultOptions
 {
-    [ExportCodeFixProvider("ConditionalOperatorReturnsDefaultOptions", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(ConditionalOperatorReturnsDefaultOptionsCodeFix), LanguageNames.CSharp), Shared]
     public class ConditionalOperatorReturnsDefaultOptionsCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(ConditionalOperatorReturnsDefaultOptionsAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds
+            => ImmutableArray.Create(ConditionalOperatorReturnsDefaultOptionsAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -24,14 +25,19 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsDefaultOpt
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create("Remove conditional", x => RemoveConditionalAsync(context.Document, root, statement), nameof(ConditionalOperatorReturnsDefaultOptionsAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.ConditionalOperatorReturnsDefaultOptionsCodeFixTitle,
+                    x => RemoveConditionalAsync(context.Document, root, statement),
+                    ConditionalOperatorReturnsDefaultOptionsAnalyzer.Rule.Id), diagnostic);
         }
 
         private Task<Solution> RemoveConditionalAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var conditionalExpression = (ConditionalExpressionSyntax) statement;
 
-            var newRoot = root.ReplaceNode(conditionalExpression, conditionalExpression.Condition).WithAdditionalAnnotations(Formatter.Annotation);
+            var newRoot =
+                root.ReplaceNode(conditionalExpression, conditionalExpression.Condition)
+                    .WithAdditionalAnnotations(Formatter.Annotation);
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);
         }

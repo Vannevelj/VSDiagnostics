@@ -1,5 +1,5 @@
 version: 1.6.{build}
-os: Visual Studio 2015 RC
+os: Visual Studio 2015
 init:
 - git config --global core.autocrlf true
 assembly_info:

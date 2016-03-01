@@ -1,21 +1,24 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Exceptions.SingleGeneralException
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class SingleGeneralExceptionAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "Exceptions";
-        private const string DiagnosticId = nameof(SingleGeneralExceptionAnalyzer);
-        private const string Message = "A single catch-all clause has been used.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Verifies whether a try-catch block does not contain just a single Exception clause.";
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private static readonly string Category = VSDiagnosticsResources.ExceptionsCategory;
+        private static readonly string Message = VSDiagnosticsResources.SingleGeneralExceptionAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.SingleGeneralExceptionAnalyzerTitle;
+
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.SingleGeneralException, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -42,7 +45,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.SingleGeneralException
             var symbol = context.SemanticModel.GetSymbolInfo(declaredException).Symbol;
             if (symbol != null)
             {
-                if (symbol.MetadataName == "Exception")
+                if (symbol.MetadataName == typeof (Exception).Name)
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declaredException.GetLocation()));
                 }

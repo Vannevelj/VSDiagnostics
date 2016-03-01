@@ -1,23 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Globalization;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperator
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class OnPropertyChangedWithoutNameOfOperatorAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "General";
-        private const string DiagnosticId = nameof(OnPropertyChangedWithoutNameOfOperatorAnalyzer);
-        private const string Message = "OnPropertyChanged({0}) can use the nameof() operator.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Use the nameof() operator in conjunection with OnPropertyChanged";
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+
+        private static readonly string Message =
+            VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorAnalyzerMessage;
+
+        private static readonly string Title =
+            VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorAnalyzerTitle;
+
+        internal static DiagnosticDescriptor Rule
+            =>
+                new DiagnosticDescriptor(DiagnosticId.OnPropertyChangedWithoutNameofOperator, Title, Message, Category,
+                    Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -42,22 +52,54 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
                 return;
             }
 
-            var invokedProperty = invocation.ArgumentList.Arguments.FirstOrDefault();
-
-            var argumentLiteralExpression = invokedProperty?.Expression as LiteralExpressionSyntax;
-            if (argumentLiteralExpression == null)
+            if (invocation.ArgumentList == null || !invocation.ArgumentList.Arguments.Any())
             {
                 return;
             }
 
-            var invocationArgument = argumentLiteralExpression.Token.ValueText;
-
-            var properties = invocation.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault().ChildNodes().OfType<PropertyDeclarationSyntax>();
-            foreach (var property in properties)
+            var invokedProperty = invocation.ArgumentList.Arguments.FirstOrDefault();
+            if (invokedProperty == null)
             {
-                if (string.Equals(property.Identifier.ValueText, invocationArgument, StringComparison.OrdinalIgnoreCase))
+                return;
+            }
+
+            // We use the descendent nodes in case it's wrapped in another level. For example: OnPropertyChanged(((nameof(MyProperty))))
+            if (invokedProperty.DescendantNodesAndSelf().OfType<InvocationExpressionSyntax>().Any(x => x.IsNameofInvocation()))
+            {
+                return;
+            }
+
+            var invocationArgument = context.SemanticModel.GetConstantValue(invokedProperty.Expression);
+            if (!invocationArgument.HasValue)
+            {
+                return;
+            }
+
+            // Get all the properties defined in this type
+            // We can't just get all the descendents of the classdeclaration because that would pass by some of a partial class' properties
+            var classDeclaration = invocation.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+            if (classDeclaration == null)
+            {
+                return;
+            }
+
+            var classSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration);
+            if (classSymbol == null)
+            {
+                return;
+            }
+
+            foreach (var property in classSymbol.GetMembers().OfType<IPropertySymbol>())
+            {
+                if (string.Equals(property.Name, (string) invocationArgument.Value, StringComparison.OrdinalIgnoreCase))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, invokedProperty.GetLocation(), property.Identifier.ValueText));
+                    var location = invokedProperty.Expression.DescendantNodesAndSelf().Last().GetLocation();
+                    var data = ImmutableDictionary.CreateRange(new[]
+                    {
+                        new KeyValuePair<string, string>("parameterName", property.Name),
+                        new KeyValuePair<string, string>("startLocation", location.SourceSpan.Start.ToString(CultureInfo.InvariantCulture)),
+                    });
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, location, data, property.Name));
                 }
             }
         }

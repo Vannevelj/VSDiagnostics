@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -11,13 +12,24 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class SimplifyExpressionBodiedMemberAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "General";
-        private const string DiagnosticId = nameof(SimplifyExpressionBodiedMemberAnalyzer);
-        private const string Message = "{0} {1} can be written using an expression-bodied member";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Simplify the expression using an expression-bodied member.";
+        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Message = VSDiagnosticsResources.SimplifyExpressionBodiedMemberAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.SimplifyExpressionBodiedMemberAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private static readonly List<SyntaxKind> Nodes = new List<SyntaxKind>();
+
+        static SimplifyExpressionBodiedMemberAnalyzer()
+        {
+            Nodes.AddRange(new[]
+            {
+                SyntaxKind.ExpressionStatement,
+                SyntaxKind.ReturnStatement
+            });
+        }
+
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.SimplifyExpressionBodiedMember, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -55,12 +67,20 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
-            if (propertyDeclaration.DescendantNodesAndTokensAndSelf().Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
+            if (
+                propertyDeclaration.DescendantNodesAndTokensAndSelf()
+                    .Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
             {
                 return null;
             }
 
-            var getter = propertyDeclaration.AccessorList.Accessors.FirstOrDefault(x => x.Keyword.ValueText == "get");
+            if (propertyDeclaration.AccessorList.Accessors.Any(x => x.Keyword.IsKind(SyntaxKind.SetKeyword)))
+            {
+                return null;
+            }
+
+            var getter =
+                propertyDeclaration.AccessorList.Accessors.FirstOrDefault(x => x.Keyword.IsKind(SyntaxKind.GetKeyword));
             if (getter == null)
             {
                 return null;
@@ -76,6 +96,11 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
+            if (!Nodes.Contains(getter.Body.Statements[0].Kind()))
+            {
+                return null;
+            }
+
             var statement = getter.Body.Statements.First();
             return Diagnostic.Create(Rule, statement.GetLocation(), "Property", propertyDeclaration.Identifier);
         }
@@ -87,7 +112,9 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
-            if (methodDeclaration.DescendantNodesAndTokensAndSelf().Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
+            if (
+                methodDeclaration.DescendantNodesAndTokensAndSelf()
+                    .Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
             {
                 return null;
             }
@@ -97,14 +124,13 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
-            var statement = methodDeclaration.Body.Statements.FirstOrDefault();
-            var returnStatement = statement?.DescendantNodesAndSelf().OfType<ReturnStatementSyntax>().FirstOrDefault();
-            if (returnStatement == null)
+            if (!Nodes.Contains(methodDeclaration.Body.Statements[0].Kind()))
             {
                 return null;
             }
 
-            return Diagnostic.Create(Rule, returnStatement.GetLocation(), "Method", methodDeclaration.Identifier.ValueText);
+            return Diagnostic.Create(Rule, methodDeclaration.Identifier.GetLocation(), "Method",
+                methodDeclaration.Identifier.ValueText);
         }
     }
 }

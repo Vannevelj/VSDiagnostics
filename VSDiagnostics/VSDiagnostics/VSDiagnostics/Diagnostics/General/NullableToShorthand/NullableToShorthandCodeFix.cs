@@ -11,10 +11,11 @@ using Microsoft.CodeAnalysis.Formatting;
 
 namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
 {
-    [ExportCodeFixProvider("NullableToShorthand", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(NullableToShorthandCodeFix), LanguageNames.CSharp), Shared]
     public class NullableToShorthandCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(NullableToShorthandAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds
+            => ImmutableArray.Create(NullableToShorthandAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -25,10 +26,14 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var declaration = root.FindToken(diagnosticSpan.Start);
-            context.RegisterCodeFix(CodeAction.Create("Use shorthand notation", x => UseShorthandNotationAsync(context.Document, root, declaration), nameof(NullableToShorthandAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.NullableToShorthandCodeFixTitle,
+                    x => UseShorthandNotationAsync(context.Document, root, declaration),
+                    NullableToShorthandAnalyzer.Rule.Id), diagnostic);
         }
 
-        private static async Task<Solution> UseShorthandNotationAsync(Document document, SyntaxNode root, SyntaxToken declaration)
+        private static async Task<Solution> UseShorthandNotationAsync(Document document, SyntaxNode root,
+            SyntaxToken declaration)
         {
             var node = root.FindNode(declaration.Span);
             var typeNode = (GenericNameSyntax) node;

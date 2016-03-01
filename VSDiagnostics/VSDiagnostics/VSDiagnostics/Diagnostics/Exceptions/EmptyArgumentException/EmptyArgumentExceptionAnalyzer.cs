@@ -12,13 +12,14 @@ namespace VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentException
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class EmptyArgumentExceptionAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "Exceptions";
-        private const string DiagnosticId = nameof(EmptyArgumentExceptionAnalyzer);
-        private const string Message = "ArgumentException is thrown without a message.";
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Verifies whether an ArgumentException is thrown with a message.";
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private static readonly string Category = VSDiagnosticsResources.ExceptionsCategory;
+        private static readonly string Message = VSDiagnosticsResources.EmptyArgumentExceptionAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.EmptyArgumentExceptionAnalyzerTitle;
+
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.EmptyArgumentException, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 

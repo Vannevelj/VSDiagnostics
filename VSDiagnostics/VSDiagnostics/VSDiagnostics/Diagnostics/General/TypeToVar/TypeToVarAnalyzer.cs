@@ -1,21 +1,24 @@
 ﻿using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.TypeToVar
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class TypeToVarAnalyzer : DiagnosticAnalyzer
     {
-        private const string Category = "General";
-        private const string DiagnosticId = nameof(TypeToVarAnalyzer);
-        private const string Message = "Actual type can be replaced with 'var'.";
-        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-        private const string Title = "Use var instead of type.";
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Hidden;
 
-        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId, Title, Message, Category, Severity, true);
+        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Message = VSDiagnosticsResources.TypeToVarAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.TypeToVarAnalyzerTitle;
+
+        internal static DiagnosticDescriptor Rule
+            => new DiagnosticDescriptor(DiagnosticId.TypeToVar, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -35,6 +38,11 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
 
             var declaredType = localDeclaration.Declaration.Type;
             if (declaredType.IsVar)
+            {
+                return;
+            }
+
+            if (localDeclaration.Modifiers.Any(m => m.IsKind(SyntaxKind.ConstKeyword)))
             {
                 return;
             }

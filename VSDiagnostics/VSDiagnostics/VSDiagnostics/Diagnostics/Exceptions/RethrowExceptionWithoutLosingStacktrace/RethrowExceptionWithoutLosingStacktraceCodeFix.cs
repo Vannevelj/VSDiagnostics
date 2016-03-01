@@ -10,10 +10,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStacktrace
 {
-    [ExportCodeFixProvider("RethrowExceptionWithoutLosingStacktrace", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(RethrowExceptionWithoutLosingStacktraceCodeFix), LanguageNames.CSharp), Shared]
     public class RethrowExceptionWithoutLosingStacktraceCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(RethrowExceptionWithoutLosingStacktraceAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds
+            => ImmutableArray.Create(RethrowExceptionWithoutLosingStacktraceAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -24,10 +25,14 @@ namespace VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStac
             var diagnosticSpan = diagnostic.Location.SourceSpan;
             var throwStatement = root.FindNode(diagnosticSpan).AncestorsAndSelf().OfType<ThrowStatementSyntax>().First();
 
-            context.RegisterCodeFix(CodeAction.Create("Remove rethrow", x => RemoveRethrowAsync(context.Document, root, throwStatement), nameof(RethrowExceptionWithoutLosingStacktraceAnalyzer)), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.RethrowExceptionWithoutLosingStacktraceCodeFixTitle,
+                    x => RemoveRethrowAsync(context.Document, root, throwStatement),
+                    RethrowExceptionWithoutLosingStacktraceAnalyzer.Rule.Id), diagnostic);
         }
 
-        private Task<Solution> RemoveRethrowAsync(Document document, SyntaxNode root, ThrowStatementSyntax throwStatement)
+        private Task<Solution> RemoveRethrowAsync(Document document, SyntaxNode root,
+            ThrowStatementSyntax throwStatement)
         {
             var newStatement = SyntaxFactory.ThrowStatement();
             var newRoot = root.ReplaceNode(throwStatement, newStatement);
