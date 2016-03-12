@@ -358,5 +358,168 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, ConditionIsAlwaysTrueAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void ConditionIsAlwaysTrue_ConstantBooleanComparedToBooleanLiteralTrue()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            const bool lit = true;
+            if (lit == true)
+            {
+                var dummyVal = 0;
+            }
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            const bool lit = true;
+            var dummyVal = 0;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, ConditionIsAlwaysTrueAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
+        }
+
+        [TestMethod]
+        public void ConditionIsAlwaysTrue_ConstantBooleanComparedToBooleanLiteralFalse()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            const bool lit = false;
+            if (lit == false)
+            {
+                var dummyVal = 0;
+            }
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            const bool lit = false;
+            var dummyVal = 0;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, ConditionIsAlwaysTrueAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
+        }
+
+        [TestMethod]
+        public void ConditionIsAlwaysTrue_ConstantBoolean()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            const bool lit = true;
+            if (lit)
+            {
+                var dummyVal = 0;
+            }
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            const bool lit = true;
+            var dummyVal = 0;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, ConditionIsAlwaysTrueAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
+        }
+
+        [TestMethod]
+        public void ConditionIsAlwaysTrue_ConstantInteger()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            const int lit = 5;
+            if (lit == 5)
+            {
+                var dummyVal = 0;
+            }
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            const int lit = 5;
+            var dummyVal = 0;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, ConditionIsAlwaysTrueAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
+        }
+
+        [TestMethod]
+        public void ConditionIsAlwaysTrue_ConstantInteger_DoesNotEvaluateToTrue()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            const int lit = 5;
+            if (lit == 6) {}
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }
