@@ -421,23 +421,14 @@
   <data name="EnumCanHaveFlagsAttributeCodeFixTitle" xml:space="preserve">
     <value>Add Flags attribute</value>
   </data>
-  <data name="ConditionIsAlwaysTrueAnalyzerMessage" xml:space="preserve">
-    <value>Condition is always true.</value>
+  <data name="ConditionIsConstantAnalyzerMessage" xml:space="preserve">
+    <value>Condition is constant.</value>
   </data>
-  <data name="ConditionIsAlwaysTrueAnalyzerTitle" xml:space="preserve">
-    <value>Condition is always true.</value>
+  <data name="ConditionIsConstantAnalyzerTitle" xml:space="preserve">
+    <value>Condition is constant.</value>
   </data>
-  <data name="ConditionIsAlwaysTrueCodeFixTitle" xml:space="preserve">
-    <value>Remove condition.</value>
-  </data>
-  <data name="ConditionIsAlwaysFalseAnalyzerMessage" xml:space="preserve">
-    <value>Condition is always false.</value>
-  </data>
-  <data name="ConditionIsAlwaysFalseAnalyzerTitle" xml:space="preserve">
-    <value>Condition is always false.</value>
-  </data>
-  <data name="ConditionIsAlwaysFalseCodeFixTitle" xml:space="preserve">
-    <value>Remove condition and body.</value>
+  <data name="ConditionIsConstantCodeFixTitle" xml:space="preserve">
+    <value>Remove condition and dead code.</value>
   </data>
   <data name="StringPlaceholdersInWrongOrderCodeFixTitle" xml:space="preserve">
     <value>Re-order placeholders</value>

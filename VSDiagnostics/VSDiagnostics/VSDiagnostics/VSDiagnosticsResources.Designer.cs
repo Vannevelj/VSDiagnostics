@@ -341,56 +341,29 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition is always false..
+        ///   Looks up a localized string similar to Condition is constant..
         /// </summary>
-        internal static string ConditionIsAlwaysFalseAnalyzerMessage {
+        internal static string ConditionIsConstantAnalyzerMessage {
             get {
-                return ResourceManager.GetString("ConditionIsAlwaysFalseAnalyzerMessage", resourceCulture);
+                return ResourceManager.GetString("ConditionIsConstantAnalyzerMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition is always false..
+        ///   Looks up a localized string similar to Condition is constant..
         /// </summary>
-        internal static string ConditionIsAlwaysFalseAnalyzerTitle {
+        internal static string ConditionIsConstantAnalyzerTitle {
             get {
-                return ResourceManager.GetString("ConditionIsAlwaysFalseAnalyzerTitle", resourceCulture);
+                return ResourceManager.GetString("ConditionIsConstantAnalyzerTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove condition and body..
+        ///   Looks up a localized string similar to Remove condition and dead code..
         /// </summary>
-        internal static string ConditionIsAlwaysFalseCodeFixTitle {
+        internal static string ConditionIsConstantCodeFixTitle {
             get {
-                return ResourceManager.GetString("ConditionIsAlwaysFalseCodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Condition is always true..
-        /// </summary>
-        internal static string ConditionIsAlwaysTrueAnalyzerMessage {
-            get {
-                return ResourceManager.GetString("ConditionIsAlwaysTrueAnalyzerMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Condition is always true..
-        /// </summary>
-        internal static string ConditionIsAlwaysTrueAnalyzerTitle {
-            get {
-                return ResourceManager.GetString("ConditionIsAlwaysTrueAnalyzerTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Remove condition..
-        /// </summary>
-        internal static string ConditionIsAlwaysTrueCodeFixTitle {
-            get {
-                return ResourceManager.GetString("ConditionIsAlwaysTrueCodeFixTitle", resourceCulture);
+                return ResourceManager.GetString("ConditionIsConstantCodeFixTitle", resourceCulture);
             }
         }
         

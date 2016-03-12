@@ -1,20 +1,21 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
 
-namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysTrue
+namespace VSDiagnostics.Diagnostics.General.ConditionIsConstant
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class ConditionIsAlwaysTrueAnalyzer : DiagnosticAnalyzer
+    internal class ConditionIsConstant : DiagnosticAnalyzer
     {
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
-        private static readonly string Message = VSDiagnosticsResources.ConditionIsAlwaysTrueAnalyzerMessage;
-        private static readonly string Title = VSDiagnosticsResources.ConditionIsAlwaysTrueAnalyzerTitle;
+        private static readonly string Message = VSDiagnosticsResources.ConditionIsConstantAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.ConditionIsConstantAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule
             => new DiagnosticDescriptor(DiagnosticId.ConditionIsAlwaysTrue, Title, Message, Category, Severity, true);
@@ -39,7 +40,16 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysTrue
 
             if ((bool) constantValue.Value)
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, ifStatement.Condition.GetLocation()));
+                context.ReportDiagnostic(Diagnostic.Create(Rule,
+                    ifStatement.Condition.GetLocation(),
+                    ImmutableDictionary.CreateRange(new[] { new KeyValuePair<string, string>("IsConditionTrue", "true") })));
+            }
+
+            if (!(bool)constantValue.Value)
+            {
+                context.ReportDiagnostic(Diagnostic.Create(Rule,
+                    ifStatement.Condition.GetLocation(),
+                    ImmutableDictionary.CreateRange(new[] { new KeyValuePair<string, string>("IsConditionTrue", "false") })));
             }
         }
     }
