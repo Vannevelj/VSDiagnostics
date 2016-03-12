@@ -30,12 +30,6 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysTrue
         {
             var ifStatement = (IfStatementSyntax) context.Node;
 
-            /*if (ifStatement.Condition.IsKind(SyntaxKind.TrueLiteralExpression))
-            {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, ifStatement.Condition.GetLocation()));
-                return;
-            }*/
-
             var constantValue = context.SemanticModel.GetConstantValue(ifStatement.Condition);
 
             if (!constantValue.HasValue)

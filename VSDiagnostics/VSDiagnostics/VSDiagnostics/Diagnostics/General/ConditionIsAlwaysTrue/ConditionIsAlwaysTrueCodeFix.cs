@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
 
@@ -37,9 +38,20 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysTrue
 
             var blockStatement = ifStatement.Statement as BlockSyntax;
 
-            var newRoot = blockStatement == null
-                ? root.ReplaceNode(ifStatement, ifStatement.Statement).WithAdditionalAnnotations(Formatter.Annotation)
-                : root.ReplaceNode(ifStatement, blockStatement.Statements).WithAdditionalAnnotations(Formatter.Annotation);
+            SyntaxNode newRoot;
+
+            if (ifStatement.Parent.IsKind(SyntaxKind.ElseClause))
+            {
+                newRoot = blockStatement == null
+                    ? root.ReplaceNode(ifStatement, ifStatement.Statement).WithAdditionalAnnotations(Formatter.Annotation)
+                    : root.ReplaceNode(ifStatement, blockStatement).WithAdditionalAnnotations(Formatter.Annotation);
+            }
+            else
+            {
+                newRoot = blockStatement == null
+                    ? root.ReplaceNode(ifStatement, ifStatement.Statement).WithAdditionalAnnotations(Formatter.Annotation)
+                    : root.ReplaceNode(ifStatement, blockStatement.Statements).WithAdditionalAnnotations(Formatter.Annotation);
+            }
 
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);

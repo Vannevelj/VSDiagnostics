@@ -230,6 +230,111 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void ConditionIsAlwaysTrue_WithElseIf_ChildIfIsAlwaysTrue_IfIsInBlockNode()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var potentiallyTrue = true;
+            if (potentiallyTrue)
+            {
+                var b = true;
+                b = false;
+            }
+            else
+            {
+                if (true)
+                {
+                    var b = true;
+                    b = false;
+                }
+            }
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var potentiallyTrue = true;
+            if (potentiallyTrue)
+            {
+                var b = true;
+                b = false;
+            }
+            else
+            {
+                var b = true;
+                b = false;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, ConditionIsAlwaysTrueAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ConditionIsAlwaysTrue_WithElseIf_ChildIfIsAlwaysTrue_IfIsInElseNode()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var potentiallyTrue = true;
+            if (potentiallyTrue)
+            {
+                var b = true;
+                b = false;
+            }
+            else if (true)
+            {
+                var b = true;
+                b = false;
+            }
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var potentiallyTrue = true;
+            if (potentiallyTrue)
+            {
+                var b = true;
+                b = false;
+            }
+            else
+            {
+                var b = true;
+                b = false;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, ConditionIsAlwaysTrueAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
         public void ConditionIsAlwaysTrue_WithElseIf_ConditionDoesNotHaveBraces()
         {
             var original = @"
