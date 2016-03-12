@@ -422,13 +422,13 @@
     <value>Add Flags attribute</value>
   </data>
   <data name="ConditionIsConstantAnalyzerMessage" xml:space="preserve">
-    <value>Condition is constant.</value>
+    <value>Condition is always {0}.</value>
   </data>
   <data name="ConditionIsConstantAnalyzerTitle" xml:space="preserve">
     <value>Condition is constant.</value>
   </data>
   <data name="ConditionIsConstantCodeFixTitle" xml:space="preserve">
-    <value>Remove condition and dead code.</value>
+    <value>Remove condition and unreachable code.</value>
   </data>
   <data name="StringPlaceholdersInWrongOrderCodeFixTitle" xml:space="preserve">
     <value>Re-order placeholders</value>

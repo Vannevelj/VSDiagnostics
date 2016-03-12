@@ -341,7 +341,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition is constant..
+        ///   Looks up a localized string similar to Condition is always {0}..
         /// </summary>
         internal static string ConditionIsConstantAnalyzerMessage {
             get {
@@ -359,7 +359,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove condition and dead code..
+        ///   Looks up a localized string similar to Remove condition and unreachable code..
         /// </summary>
         internal static string ConditionIsConstantCodeFixTitle {
             get {

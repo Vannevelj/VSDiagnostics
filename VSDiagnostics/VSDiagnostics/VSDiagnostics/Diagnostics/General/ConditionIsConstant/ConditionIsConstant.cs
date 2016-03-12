@@ -42,14 +42,16 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsConstant
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule,
                     ifStatement.Condition.GetLocation(),
-                    ImmutableDictionary.CreateRange(new[] { new KeyValuePair<string, string>("IsConditionTrue", "true") })));
+                    ImmutableDictionary.CreateRange(new[] { new KeyValuePair<string, string>("IsConditionTrue", "true") }),
+                    "true"));
             }
 
             if (!(bool)constantValue.Value)
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule,
                     ifStatement.Condition.GetLocation(),
-                    ImmutableDictionary.CreateRange(new[] { new KeyValuePair<string, string>("IsConditionTrue", "false") })));
+                    ImmutableDictionary.CreateRange(new[] { new KeyValuePair<string, string>("IsConditionTrue", "false") }),
+                    "false"));
             }
         }
     }
