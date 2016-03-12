@@ -46,8 +46,7 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysTrue
             */
             if (blockStatement == null)
             {
-                newRoot = root.ReplaceNode(ifStatement, ifStatement.Statement)
-                              .WithAdditionalAnnotations(Formatter.Annotation);
+                newRoot = root.ReplaceNode(ifStatement, ifStatement.Statement).WithAdditionalAnnotations(Formatter.Annotation);
             }
             else
             {
@@ -63,10 +62,8 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysTrue
                    if (condition) { statements; }
                 */
                 newRoot = ifStatement.Parent.IsKind(SyntaxKind.ElseClause)
-                    ? root.ReplaceNode(ifStatement, blockStatement)
-                          .WithAdditionalAnnotations(Formatter.Annotation)
-                    : root.ReplaceNode(ifStatement, blockStatement.Statements)
-                          .WithAdditionalAnnotations(Formatter.Annotation);
+                    ? root.ReplaceNode(ifStatement, blockStatement).WithAdditionalAnnotations(Formatter.Annotation)
+                    : root.ReplaceNode(ifStatement, blockStatement.Statements).WithAdditionalAnnotations(Formatter.Annotation);
             }
 
             var newDocument = document.WithSyntaxRoot(newRoot);
