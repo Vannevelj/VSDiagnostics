@@ -40,17 +40,33 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsAlwaysTrue
 
             SyntaxNode newRoot;
 
-            if (ifStatement.Parent.IsKind(SyntaxKind.ElseClause))
+            /* this condition will be true when the `if` does not have braces:
+
+               if (condition) statement;
+            */
+            if (blockStatement == null)
             {
-                newRoot = blockStatement == null
-                    ? root.ReplaceNode(ifStatement, ifStatement.Statement).WithAdditionalAnnotations(Formatter.Annotation)
-                    : root.ReplaceNode(ifStatement, blockStatement).WithAdditionalAnnotations(Formatter.Annotation);
+                newRoot = root.ReplaceNode(ifStatement, ifStatement.Statement)
+                              .WithAdditionalAnnotations(Formatter.Annotation);
             }
             else
             {
-                newRoot = blockStatement == null
-                    ? root.ReplaceNode(ifStatement, ifStatement.Statement).WithAdditionalAnnotations(Formatter.Annotation)
-                    : root.ReplaceNode(ifStatement, blockStatement.Statements).WithAdditionalAnnotations(Formatter.Annotation);
+                /* if the if statement's parent is `SyntaxKind.ElseClause`,
+                   the `else` does not have braces and needs the entire `if` block, braces and all:
+
+                   else if (condition) { statement; }
+
+                   otherwise, the block is already there and we need to replace `if` with just the block statements
+                   also covers the general `if`-with-braces condition
+
+                   else { if (condition) { statements; } }
+                   if (condition) { statements; }
+                */
+                newRoot = ifStatement.Parent.IsKind(SyntaxKind.ElseClause)
+                    ? root.ReplaceNode(ifStatement, blockStatement)
+                          .WithAdditionalAnnotations(Formatter.Annotation)
+                    : root.ReplaceNode(ifStatement, blockStatement.Statements)
+                          .WithAdditionalAnnotations(Formatter.Annotation);
             }
 
             var newDocument = document.WithSyntaxRoot(newRoot);
