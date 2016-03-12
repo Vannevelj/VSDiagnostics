@@ -609,6 +609,40 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void ConditionIsAlwaysTrue_CompareIdenticalLiterals()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            if (5 == 5)
+            {
+                var dummyVal = 0;
+            }
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var dummyVal = 0;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, ConditionIsAlwaysTrueAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
+        }
+
+        [TestMethod]
         public void ConditionIsAlwaysTrue_ConstantInteger_DoesNotEvaluateToTrue()
         {
             var original = @"
