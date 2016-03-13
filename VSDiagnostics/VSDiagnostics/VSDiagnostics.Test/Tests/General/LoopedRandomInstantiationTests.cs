@@ -30,7 +30,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(string.Format(LoopedRandomInstantiationAnalyzer.Rule.MessageFormat.ToString(), "rand"), "rand"));
+            VerifyDiagnostic(original, string.Format(LoopedRandomInstantiationAnalyzer.Rule.MessageFormat.ToString(), "rand"));
         }
 
         [TestMethod]
