@@ -494,4 +494,10 @@
   <data name="StringDotFormatWithDifferentAmountOfArgumentsTitle" xml:space="preserve">
     <value>Invalid arguments for the string.Format() call.</value>
   </data>
+  <data name="LoopedRandomInstantiationAnalyzerMessage" xml:space="preserve">
+    <value>Instantiate the random instance outside the loop.</value>
+  </data>
+  <data name="LoopedRandomInstantiationAnalyzerTitle" xml:space="preserve">
+    <value>Random instance created in loop.</value>
+  </data>
 </root>

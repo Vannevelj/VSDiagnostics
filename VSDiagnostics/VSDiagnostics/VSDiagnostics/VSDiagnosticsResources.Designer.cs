@@ -566,6 +566,24 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Instantiate the random instance outside the loop..
+        /// </summary>
+        internal static string LoopedRandomInstantiationAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("LoopedRandomInstantiationAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Random instance created in loop..
+        /// </summary>
+        internal static string LoopedRandomInstantiationAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("LoopedRandomInstantiationAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A loop-statement should be written using braces..
         /// </summary>
         internal static string LoopStatementWithoutBracesAnalyzerMessage {

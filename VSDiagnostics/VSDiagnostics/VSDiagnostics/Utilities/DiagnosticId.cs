@@ -20,8 +20,7 @@
         public const string CompareBooleanToTrueLiteral = "VSD0016";
         public const string ConditionalOperatorReturnsDefaultOptions = "VSD0017";
         public const string ConditionalOperatorReturnsInvertedDefaultOptions = "VSD0018";
-        public const string ConditionIsAlwaysFalse = "VSD0019";
-        public const string ConditionIsAlwaysTrue = "VSD0020";
+        public const string ConditionIsConstant = "VSD0020";
         public const string ExplicitAccessModifiers = "VSD0021";
         public const string GotoDetection = "VSD0022";
         public const string IfStatementWithoutBraces = "VSD0023";
@@ -44,5 +43,6 @@
         public const string NamingConventionsConflictingMember = "VSD0040";
         public const string SyncMethodWithAsyncSuffix = "VSD0041";
         public const string StringDotFormatWithDifferentAmountOfArguments = "VSD0042";
+        public const string LoopedRandomInstantiation = "VSD0043";
     }
 }
