@@ -18,7 +18,7 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsConstant
         private static readonly string Title = VSDiagnosticsResources.ConditionIsConstantAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule
-            => new DiagnosticDescriptor(DiagnosticId.ConditionIsAlwaysTrue, Title, Message, Category, Severity, true);
+            => new DiagnosticDescriptor(DiagnosticId.ConditionIsConstant, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 

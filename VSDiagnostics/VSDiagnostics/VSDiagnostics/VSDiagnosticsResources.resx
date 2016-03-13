@@ -449,10 +449,10 @@
     <value>Add attribute</value>
   </data>
   <data name="LoopStatementWithoutBracesAnalyzerMessage" xml:space="preserve">
-    <value>A loop-statement should be written using braces.</value>
+    <value>Variable {0} of type System.Random is instantiated in a loop.</value>
   </data>
   <data name="LoopStatementWithoutBracesAnalyzerTitle" xml:space="preserve">
-    <value>Loop blocks should use braces to denote start and end.</value>
+    <value>An instance of type System.Random is created in a loop.</value>
   </data>
   <data name="LoopStatementWithoutBracesCodeFixTitle" xml:space="preserve">
     <value>Use braces</value>
@@ -493,5 +493,11 @@
   </data>
   <data name="StringDotFormatWithDifferentAmountOfArgumentsTitle" xml:space="preserve">
     <value>Invalid arguments for the string.Format() call.</value>
+  </data>
+  <data name="LoopedRandomInstantiationAnalyzerMessage" xml:space="preserve">
+    <value>Instantiate the random instance outside the loop.</value>
+  </data>
+  <data name="LoopedRandomInstantiationAnalyzerTitle" xml:space="preserve">
+    <value>Random instance created in loop.</value>
   </data>
 </root>
