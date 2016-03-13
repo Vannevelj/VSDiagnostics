@@ -19,7 +19,7 @@ namespace VSDiagnostics.Diagnostics.General.LoopedRandomInstantiation
         internal static DiagnosticDescriptor Rule =>
                 new DiagnosticDescriptor(DiagnosticId.LoopedRandomInstantiation, Title, Message, Category, Severity, true);
 
-        private SyntaxKind[] _loopTypes = {SyntaxKind.ForEachStatement, SyntaxKind.ForStatement, SyntaxKind.WhileStatement};
+        private readonly SyntaxKind[] _loopTypes = {SyntaxKind.ForEachStatement, SyntaxKind.ForStatement, SyntaxKind.WhileStatement, SyntaxKind.DoStatement};
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 

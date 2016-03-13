@@ -34,6 +34,29 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void LoopedRandomInstantiation_DoWhileLoop()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            do
+            {
+                var rand = new Random();
+            } while (true);
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, LoopedRandomInstantiationAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
         public void LoopedRandomInstantiation_ForLoop()
         {
             var original = @"
