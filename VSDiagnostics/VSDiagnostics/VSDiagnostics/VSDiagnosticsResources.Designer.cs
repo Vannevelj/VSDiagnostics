@@ -584,7 +584,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A loop-statement should be written using braces..
+        ///   Looks up a localized string similar to Variable {0} of type System.Random is instantiated in a loop..
         /// </summary>
         internal static string LoopStatementWithoutBracesAnalyzerMessage {
             get {
@@ -593,7 +593,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loop blocks should use braces to denote start and end..
+        ///   Looks up a localized string similar to An instance of type System.Random is created in a loop..
         /// </summary>
         internal static string LoopStatementWithoutBracesAnalyzerTitle {
             get {

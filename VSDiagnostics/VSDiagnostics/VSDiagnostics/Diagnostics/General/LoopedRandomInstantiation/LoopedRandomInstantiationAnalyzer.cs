@@ -51,7 +51,7 @@ namespace VSDiagnostics.Diagnostics.General.LoopedRandomInstantiation
                 {
                     foreach (var declarator in variableDeclaration.Variables)
                     {
-                        context.ReportDiagnostic(Diagnostic.Create(Rule, declarator.GetLocation()));
+                        context.ReportDiagnostic(Diagnostic.Create(Rule, declarator.GetLocation(), declarator.Identifier.Text));
                     }
                     return;
                 }

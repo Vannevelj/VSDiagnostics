@@ -30,7 +30,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, LoopedRandomInstantiationAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, string.Format(string.Format(LoopedRandomInstantiationAnalyzer.Rule.MessageFormat.ToString(), "rand"), "rand"));
         }
 
         [TestMethod]
@@ -53,7 +53,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, LoopedRandomInstantiationAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, string.Format(LoopedRandomInstantiationAnalyzer.Rule.MessageFormat.ToString(), "rand"));
         }
 
         [TestMethod]
@@ -76,7 +76,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, LoopedRandomInstantiationAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, string.Format(LoopedRandomInstantiationAnalyzer.Rule.MessageFormat.ToString(), "rand"));
         }
 
         [TestMethod]
@@ -101,7 +101,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, LoopedRandomInstantiationAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, string.Format(LoopedRandomInstantiationAnalyzer.Rule.MessageFormat.ToString(), "rand"));
         }
 
         [TestMethod]
@@ -124,8 +124,34 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, LoopedRandomInstantiationAnalyzer.Rule.MessageFormat.ToString(),
-                                       LoopedRandomInstantiationAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, string.Format(LoopedRandomInstantiationAnalyzer.Rule.MessageFormat.ToString(), "rand"),
+                                       string.Format(LoopedRandomInstantiationAnalyzer.Rule.MessageFormat.ToString(), "rind"));
+        }
+
+        [TestMethod]
+        public void LoopedRandomInstantiation_MultipleLevelsOfNesting()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            while (true)
+            {
+                if (true)
+                {
+                    Random rand = new Random();
+                }
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(LoopedRandomInstantiationAnalyzer.Rule.MessageFormat.ToString(), "rand"));
         }
 
         [TestMethod]
