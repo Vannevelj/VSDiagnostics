@@ -105,6 +105,30 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void LoopedRandomInstantiation_MultipleDeclaratorsInDeclaration()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            while (true)
+            {
+                Random rand = new Random(), rind = new Random(2);
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, LoopedRandomInstantiationAnalyzer.Rule.MessageFormat.ToString(),
+                                       LoopedRandomInstantiationAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
         public void LoopedRandomInstantiation_RandomInstanceNotInLoop()
         {
             var original = @"

@@ -49,7 +49,10 @@ namespace VSDiagnostics.Diagnostics.General.LoopedRandomInstantiation
             {
                 if (_loopTypes.Contains(currentNode.Kind()))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, variableDeclaration.GetLocation()));
+                    foreach (var declarator in variableDeclaration.Variables)
+                    {
+                        context.ReportDiagnostic(Diagnostic.Create(Rule, declarator.GetLocation()));
+                    }
                     return;
                 }
 
