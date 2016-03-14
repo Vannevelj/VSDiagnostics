@@ -14,11 +14,11 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
-        private static readonly string Message = VSDiagnosticsResources.SingleEmptyConstructorAnalyzerMessage;
-        private static readonly string Title = VSDiagnosticsResources.SingleEmptyConstructorAnalyzerTitle;
+        private static readonly string Message = VSDiagnosticsResources.SwitchDoesNotHandleAllEnumOptionsAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.SwitchDoesNotHandleAllEnumOptionsAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule
-            => new DiagnosticDescriptor(DiagnosticId.SingleEmptyConstructor, Title, Message, Category, Severity, true);
+            => new DiagnosticDescriptor(DiagnosticId.SwitchDoesNotHandleAllEnumOptions, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 

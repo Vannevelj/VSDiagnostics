@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions;
@@ -6,9 +7,10 @@ using VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions;
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class SwitchDoesNotHandleAllEnumOptionsTests : CSharpDiagnosticVerifier
+    public class SwitchDoesNotHandleAllEnumOptionsTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new SwitchDoesNotHandleAllEnumOptionsAnalyzer();
+        protected override CodeFixProvider CodeFixProvider => new SwitchDoesNotHandleAllEnumOptionsCodeFix();
 
         [TestMethod]
         public void SwitchDoesNotHandleAllEnumOptions_MissingEnumStatement()

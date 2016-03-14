@@ -500,4 +500,13 @@
   <data name="LoopedRandomInstantiationAnalyzerTitle" xml:space="preserve">
     <value>Random instance created in loop.</value>
   </data>
+  <data name="SwitchDoesNotHandleAllEnumOptionsAnalyzerMessage" xml:space="preserve">
+    <value>Missing enum member in switched cases.</value>
+  </data>
+  <data name="SwitchDoesNotHandleAllEnumOptionsAnalyzerTitle" xml:space="preserve">
+    <value>Add case for missing enum member.</value>
+  </data>
+  <data name="SwitchDoesNotHandleAllEnumOptionsCodeFixTitle" xml:space="preserve">
+    <value>Add case.</value>
+  </data>
 </root>
