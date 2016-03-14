@@ -88,6 +88,7 @@
     <Compile Include="Diagnostics\General\SimplifyExpressionBodiedMember\SimplifyExpressionBodiedMemberCodeFix.cs" />
     <Compile Include="Diagnostics\General\SingleEmptyConstructor\SingleEmptyConstructorAnalyzer.cs" />
     <Compile Include="Diagnostics\General\SingleEmptyConstructor\SingleEmptyConstructorCodeFix.cs" />
+    <Compile Include="Diagnostics\General\SwitchDoesNotHandleAllEnumOptions\SwitchDoesNotHandleAllEnumOptionsAnalyzer.cs" />
     <Compile Include="Diagnostics\General\TryCastWithoutUsingAsNotNull\TryCastWithoutUsingAsNotNullAnalyzer.cs" />
     <Compile Include="Diagnostics\General\TryCastWithoutUsingAsNotNull\TryCastWithoutUsingAsNotNullCodeFix.cs" />
     <Compile Include="Diagnostics\General\TypeToVar\TypeToVarAnalyzer.cs" />
