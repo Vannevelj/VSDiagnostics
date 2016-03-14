@@ -54,7 +54,7 @@ namespace ConsoleApplication1
             switch (e)
             {
                 case MyEnum.FizzBuzz:
-                    throw new System.NotImplementedException();
+                    break;
                 case MyEnum.Fizz:
                 case MyEnum.Buzz:
                     break;
@@ -164,7 +164,7 @@ namespace ConsoleApplication1
             switch (e)
             {
                 case MyEnum.FizzBuzz:
-                    throw new System.NotImplementedException();
+                    break;
                 case MyEnum.Fizz:
                 case MyEnum.Buzz:
                 default:
@@ -221,7 +221,7 @@ namespace ConsoleApplication1
             switch (e)
             {
                 case MyEnum.FizzBuzz:
-                    throw new System.NotImplementedException();
+                    break;
                 case MyEnum.Fizz:
                     break;
                 case MyEnum.Buzz:
@@ -247,7 +247,7 @@ namespace ConsoleApplication1
     {
         void Method()
         {
-            var e = FileOptions.DeleteOnClose;
+            var e = DeleteOnClose;
             switch (e)
             {
                 case Asynchronous:
@@ -268,19 +268,19 @@ namespace ConsoleApplication1
     {
         void Method()
         {
-            var e = FileOptions.DeleteOnClose;
+            var e = DeleteOnClose;
             switch (e)
             {
-                case FileOptions.Encrypted:
-                    throw new System.NotImplementedException();
-                case FileOptions.SequentialScan:
-                    throw new System.NotImplementedException();
-                case FileOptions.RandomAccess:
-                    throw new System.NotImplementedException();
-                case FileOptions.WriteThrough:
-                    throw new System.NotImplementedException();
-                case FileOptions.None:
-                    throw new System.NotImplementedException();
+                case Encrypted:
+                    break;
+                case SequentialScan:
+                    break;
+                case RandomAccess:
+                    break;
+                case WriteThrough:
+                    break;
+                case None:
+                    break;
                 case Asynchronous:
                 case DeleteOnClose:
                     break;
@@ -336,12 +336,195 @@ namespace ConsoleApplication1
             switch (e)
             {
                 case MyEnum.FizzBuzz:
-                    throw new System.NotImplementedException();
+                    break;
                 case MyEnum.Fizz:
-                    throw new System.NotImplementedException();
+                    break;
                 case MyEnum.Buzz:
                     break;
                 default:
+                    break;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void SwitchDoesNotHandleAllEnumOptions_UsingStaticEnum_NoEnumStatements()
+        {
+            var original = @"
+using System.IO;
+using static System.IO.FileOptions;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var e = DeleteOnClose;
+            switch (e)
+            {
+            }
+        }
+    }
+}";
+
+            var result = @"
+using System.IO;
+using static System.IO.FileOptions;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var e = DeleteOnClose;
+            switch (e)
+            {
+                case Encrypted:
+                    break;
+                case SequentialScan:
+                    break;
+                case DeleteOnClose:
+                    break;
+                case RandomAccess:
+                    break;
+                case Asynchronous:
+                    break;
+                case WriteThrough:
+                    break;
+                case None:
+                    break;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void SwitchDoesNotHandleAllEnumOptions_UsingStaticEnum_MissingEnumStatement_MixedExpandedEnumStatements()
+        {
+            var original = @"
+using System.IO;
+using static System.IO.FileOptions;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var e = DeleteOnClose;
+            switch (e)
+            {
+                case FileOptions.Encrypted:
+                    break;
+                case SequentialScan:
+                    break;
+                case RandomAccess:
+                    break;
+            }
+        }
+    }
+}";
+
+            var result = @"
+using System.IO;
+using static System.IO.FileOptions;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var e = DeleteOnClose;
+            switch (e)
+            {
+                case DeleteOnClose:
+                    break;
+                case Asynchronous:
+                    break;
+                case WriteThrough:
+                    break;
+                case None:
+                    break;
+                case Encrypted:
+                    break;
+                case SequentialScan:
+                    break;
+                case RandomAccess:
+                    break;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS8019");     // unneeded using directive
+        }
+
+        [TestMethod]
+        public void SwitchDoesNotHandleAllEnumOptions_UsingStaticEnum_MissingEnumStatement_AllExpandedEnumStatements()
+        {
+            var original = @"
+using System.IO;
+using static System.IO.FileOptions;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var e = DeleteOnClose;
+            switch (e)
+            {
+                case FileOptions.Encrypted:
+                    break;
+                case FileOptions.SequentialScan:
+                    break;
+                case FileOptions.RandomAccess:
+                    break;
+            }
+        }
+    }
+}";
+
+            var result = @"
+using System.IO;
+using static System.IO.FileOptions;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var e = DeleteOnClose;
+            switch (e)
+            {
+                case FileOptions.DeleteOnClose:
+                    break;
+                case FileOptions.Asynchronous:
+                    break;
+                case FileOptions.WriteThrough:
+                    break;
+                case FileOptions.None:
+                    break;
+                case FileOptions.Encrypted:
+                    break;
+                case FileOptions.SequentialScan:
+                    break;
+                case FileOptions.RandomAccess:
                     break;
             }
         }

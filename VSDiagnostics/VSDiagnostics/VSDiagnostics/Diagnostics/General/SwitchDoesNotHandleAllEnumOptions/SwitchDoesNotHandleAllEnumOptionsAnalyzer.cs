@@ -33,16 +33,23 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
             if (switchBlock == null) { return; }
 
             var enumType = context.SemanticModel.GetTypeInfo(switchBlock.Expression).Type as INamedTypeSymbol;
-            if (enumType == null || enumType.BaseType.ContainingNamespace.Name != nameof(System) || enumType.BaseType.Name != nameof(System.Enum)) { return; }
+            if (enumType == null || enumType.BaseType.SpecialType != SpecialType.System_Enum) { return; }
 
-            var labelNames = switchBlock.Sections.SelectMany(l => l.Labels)
+            var caseLabels = switchBlock.Sections.SelectMany(l => l.Labels)
                     .OfType<CaseSwitchLabelSyntax>()
                     .Select(l => l.Value)
+                    .ToList();
+
+            // these are the labels like `MyEnum.EnumMember`
+            var labelNames = caseLabels
                     .OfType<MemberAccessExpressionSyntax>()
                     .Select(l => l.Name.Identifier.ValueText)
                     .ToList();
 
-            if (enumType.MemberNames.Any(member => !labelNames.Contains(member)))
+            // these are the labels like `EnumMember` (such as when using `using static Namespace.MyEnum;`)
+            labelNames.AddRange(caseLabels.OfType<IdentifierNameSyntax>().Select(l => l.Identifier.ValueText).ToList());
+
+            if (enumType.MemberNames.Where(m => !m.StartsWith(".")).Any(member => !labelNames.Contains(member)))
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule, switchBlock.GetLocation()));
             }

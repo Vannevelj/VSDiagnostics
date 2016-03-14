@@ -10,15 +10,15 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
-using VSDiagnostics.Diagnostics.General.SingleEmptyConstructor;
+using Microsoft.CodeAnalysis.Simplification;
 
 namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
 {
-    [ExportCodeFixProvider(nameof(SingleEmptyConstructorCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(nameof(SwitchDoesNotHandleAllEnumOptionsCodeFix), LanguageNames.CSharp), Shared]
     internal class SwitchDoesNotHandleAllEnumOptionsCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
-            => ImmutableArray.Create(SingleEmptyConstructorAnalyzer.Rule.Id);
+            => ImmutableArray.Create(SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -56,6 +56,10 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
             // these are the labels like `EnumMember` (such as when using `using static Namespace.MyEnum;`)
             labels.AddRange(caseLabels.OfType<IdentifierNameSyntax>().Select(l => l.Identifier.ValueText).ToList());
 
+            // use simplified form if there are any in simplified form or if there are not any labels at all
+            var useSimplifiedForm = caseLabels.OfType<IdentifierNameSyntax>().Any() ||
+                                    !caseLabels.OfType<MemberAccessExpressionSyntax>().Any();
+
             var missingLabels = enumType.MemberNames.Where(m => !labels.Contains(m) && !m.StartsWith(".")); // don't create members like ".ctor"
 
             var newSections = SyntaxFactory.List(switchBlock.Sections);
@@ -66,18 +70,22 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
                     SyntaxFactory.CaseSwitchLabel(
                         SyntaxFactory.ParseExpression(" " + enumType.Name + "." + label)
                             .WithTrailingTrivia(SyntaxFactory.ParseTrailingTrivia(Environment.NewLine)));
+                
+                var statements = SyntaxFactory.List(new List<StatementSyntax> {SyntaxFactory.BreakStatement()});
 
-                var notImplementedException =
-                    SyntaxFactory.ThrowStatement(SyntaxFactory.ParseExpression(" new System.NotImplementedException()" + Environment.NewLine));
-                var statements = SyntaxFactory.List(new List<StatementSyntax> {notImplementedException});
-
-                var section = SyntaxFactory.SwitchSection(SyntaxFactory.List(new List<SwitchLabelSyntax> {caseLabel}), statements);
+                var section =
+                    SyntaxFactory.SwitchSection(SyntaxFactory.List(new List<SwitchLabelSyntax> {caseLabel}), statements)
+                        .WithAdditionalAnnotations(Formatter.Annotation);
 
                 newSections = newSections.Insert(0, section);
             }
 
-            var newRoot = root.ReplaceNode(switchBlock, switchBlock.WithSections(newSections).WithAdditionalAnnotations(Formatter.Annotation));
-            var newDocument = document.WithSyntaxRoot(newRoot);
+            var newNode = useSimplifiedForm
+                ? switchBlock.WithSections(newSections).WithAdditionalAnnotations(Formatter.Annotation, Simplifier.Annotation)
+                : switchBlock.WithSections(newSections).WithAdditionalAnnotations(Formatter.Annotation);
+
+            var newRoot = root.ReplaceNode(switchBlock, newNode);
+            var newDocument = await Simplifier.ReduceAsync(document.WithSyntaxRoot(newRoot));
             return newDocument.Project.Solution;
         }
     }
