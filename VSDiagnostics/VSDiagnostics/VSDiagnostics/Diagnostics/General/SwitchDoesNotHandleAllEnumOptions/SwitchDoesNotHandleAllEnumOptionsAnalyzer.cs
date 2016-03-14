@@ -33,8 +33,6 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
             if (switchBlock == null) { return; }
 
             var enumType = context.SemanticModel.GetTypeInfo(switchBlock.Expression).Type as INamedTypeSymbol;
-            var v = nameof(System);
-            var t = nameof(System.Enum);
             if (enumType == null || enumType.BaseType.ContainingNamespace.Name != nameof(System) || enumType.BaseType.Name != nameof(System.Enum)) { return; }
 
             var labelNames = switchBlock.Sections.SelectMany(l => l.Labels)

@@ -152,5 +152,32 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
         }
+
+        [TestMethod]
+        public void SwitchDoesNotHandleAllEnumOptions_UsingStaticEnum_MissingEnumStatements()
+        {
+            var original = @"
+using System.IO;
+using static System.IO.FileOptions;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var e = FileOptions.DeleteOnClose;
+            switch (e)
+            {
+                case Asynchronous:
+                case DeleteOnClose:
+                    break;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
+        }
     }
 }
