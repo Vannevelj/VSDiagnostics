@@ -501,12 +501,12 @@
     <value>Random instance created in loop.</value>
   </data>
   <data name="SwitchDoesNotHandleAllEnumOptionsAnalyzerMessage" xml:space="preserve">
-    <value>Missing enum member in switched cases.</value>
+    <value>Missing enum member(s) in switched cases.</value>
   </data>
   <data name="SwitchDoesNotHandleAllEnumOptionsAnalyzerTitle" xml:space="preserve">
-    <value>Add case for missing enum member.</value>
+    <value>Add cases for missing enum member(s).</value>
   </data>
   <data name="SwitchDoesNotHandleAllEnumOptionsCodeFixTitle" xml:space="preserve">
-    <value>Add case.</value>
+    <value>Add case(s).</value>
   </data>
 </root>

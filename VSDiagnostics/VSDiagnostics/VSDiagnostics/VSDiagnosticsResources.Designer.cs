@@ -998,7 +998,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Missing enum member in switched cases..
+        ///   Looks up a localized string similar to Missing enum member(s) in switched cases..
         /// </summary>
         internal static string SwitchDoesNotHandleAllEnumOptionsAnalyzerMessage {
             get {
@@ -1007,7 +1007,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add case for missing enum member..
+        ///   Looks up a localized string similar to Add cases for missing enum member(s)..
         /// </summary>
         internal static string SwitchDoesNotHandleAllEnumOptionsAnalyzerTitle {
             get {
@@ -1016,7 +1016,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add case..
+        ///   Looks up a localized string similar to Add case(s)..
         /// </summary>
         internal static string SwitchDoesNotHandleAllEnumOptionsCodeFixTitle {
             get {

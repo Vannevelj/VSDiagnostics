@@ -38,7 +38,33 @@ namespace ConsoleApplication1
     }
 }";
 
+            var result = @"
+namespace ConsoleApplication1
+{
+    enum MyEnum
+    {
+        Fizz, Buzz, FizzBuzz
+    }
+
+    class MyClass
+    {
+        void Method()
+        {
+            var e = MyEnum.Fizz;
+            switch (e)
+            {
+                case MyEnum.FizzBuzz:
+                    throw new System.NotImplementedException();
+                case MyEnum.Fizz:
+                case MyEnum.Buzz:
+                    break;
+            }
+        }
+    }
+}";
+
             VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -122,7 +148,34 @@ namespace ConsoleApplication1
     }
 }";
 
+            var result = @"
+namespace ConsoleApplication1
+{
+    enum MyEnum
+    {
+        Fizz, Buzz, FizzBuzz
+    }
+
+    class MyClass
+    {
+        void Method()
+        {
+            var e = MyEnum.Fizz;
+            switch (e)
+            {
+                case MyEnum.FizzBuzz:
+                    throw new System.NotImplementedException();
+                case MyEnum.Fizz:
+                case MyEnum.Buzz:
+                default:
+                    break;
+            }
+        }
+    }
+}";
+
             VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -143,6 +196,32 @@ namespace ConsoleApplication1
             var e = MyEnum.Fizz;
             switch (e)
             {
+                case MyEnum.Fizz:
+                    break;
+                case MyEnum.Buzz:
+                    break;
+            }
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    enum MyEnum
+    {
+        Fizz, Buzz, FizzBuzz
+    }
+
+    class MyClass
+    {
+        void Method()
+        {
+            var e = MyEnum.Fizz;
+            switch (e)
+            {
+                case MyEnum.FizzBuzz:
+                    throw new System.NotImplementedException();
                 case MyEnum.Fizz:
                     break;
                 case MyEnum.Buzz:
@@ -179,7 +258,98 @@ namespace ConsoleApplication1
     }
 }";
 
+            var result = @"
+using System.IO;
+using static System.IO.FileOptions;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var e = FileOptions.DeleteOnClose;
+            switch (e)
+            {
+                case FileOptions.Encrypted:
+                    throw new System.NotImplementedException();
+                case FileOptions.SequentialScan:
+                    throw new System.NotImplementedException();
+                case FileOptions.RandomAccess:
+                    throw new System.NotImplementedException();
+                case FileOptions.WriteThrough:
+                    throw new System.NotImplementedException();
+                case FileOptions.None:
+                    throw new System.NotImplementedException();
+                case Asynchronous:
+                case DeleteOnClose:
+                    break;
+            }
+        }
+    }
+}";
+
             VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void SwitchDoesNotHandleAllEnumOptions_MissingEnumStatement_AddsAllMissingStatements()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    enum MyEnum
+    {
+        Fizz, Buzz, FizzBuzz
+    }
+
+    class MyClass
+    {
+        void Method()
+        {
+            var e = MyEnum.Fizz;
+            switch (e)
+            {
+                case MyEnum.Buzz:
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    enum MyEnum
+    {
+        Fizz, Buzz, FizzBuzz
+    }
+
+    class MyClass
+    {
+        void Method()
+        {
+            var e = MyEnum.Fizz;
+            switch (e)
+            {
+                case MyEnum.FizzBuzz:
+                    throw new System.NotImplementedException();
+                case MyEnum.Fizz:
+                    throw new System.NotImplementedException();
+                case MyEnum.Buzz:
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
     }
 }
