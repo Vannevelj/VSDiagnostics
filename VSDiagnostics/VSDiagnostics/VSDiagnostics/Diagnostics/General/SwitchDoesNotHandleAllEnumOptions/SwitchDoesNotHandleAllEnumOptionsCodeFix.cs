@@ -37,16 +37,6 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
 
         private async Task<Solution> AddMissingCaseAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
-            var qualifier = "System.";
-            var usingSystemDirective = ((CompilationUnitSyntax) root).Usings.Where(u => u.Name is IdentifierNameSyntax).FirstOrDefault(u => ((IdentifierNameSyntax) u.Name).Identifier.ValueText == "System");
-
-            if (usingSystemDirective != null)
-            {
-                qualifier = usingSystemDirective.Alias == null
-                    ? string.Empty
-                    : usingSystemDirective.Alias.Name.Identifier.ValueText + ".";
-            }
-
             var semanticModel = await document.GetSemanticModelAsync();
 
             var switchBlock = (SwitchStatementSyntax)statement;
@@ -57,36 +47,28 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
                     .Select(l => l.Value)
                     .ToList();
 
-            // these are the labels like `MyEnum.EnumMember`
-            var labels = caseLabels
-                    .OfType<MemberAccessExpressionSyntax>()
-                    .Select(l => l.Name.Identifier.ValueText)
-                    .ToList();
-
-            // these are the labels like `EnumMember` (such as when using `using static Namespace.MyEnum;`)
-            labels.AddRange(caseLabels.OfType<IdentifierNameSyntax>().Select(l => l.Identifier.ValueText));
+            var missingLabels = GetMissingLabels(caseLabels, enumType);
 
             // use simplified form if there are any in simplified form or if there are not any labels at all
             var useSimplifiedForm = caseLabels.OfType<IdentifierNameSyntax>().Any() ||
                                     !caseLabels.OfType<MemberAccessExpressionSyntax>().Any();
 
-            // don't create members like ".ctor"
-            var missingLabels = enumType.MemberNames.Except(labels).Where(m => !m.StartsWith("."));
-
-            var newSections = SyntaxFactory.List(switchBlock.Sections);
+            var qualifier = GetQualifierForException(root);
 
             var notImplementedException =
                 SyntaxFactory.ThrowStatement(SyntaxFactory.ParseExpression($" new {qualifier}NotImplementedException()"))
                     .WithAdditionalAnnotations(Simplifier.Annotation);
+            var statements = SyntaxFactory.List(new List<StatementSyntax> { notImplementedException });
+
+            var newSections = SyntaxFactory.List(switchBlock.Sections);
 
             foreach (var label in missingLabels)
             {
+                // ReSharper disable once PossibleNullReferenceException
                 var caseLabel =
                     SyntaxFactory.CaseSwitchLabel(
                         SyntaxFactory.ParseExpression(useSimplifiedForm ? $" {label}" : $" {enumType.Name}.{label}")
                             .WithTrailingTrivia(SyntaxFactory.ParseTrailingTrivia(Environment.NewLine)));
-                
-                var statements = SyntaxFactory.List(new List<StatementSyntax> {notImplementedException.WithAdditionalAnnotations(Simplifier.Annotation)});
 
                 var section =
                     SyntaxFactory.SwitchSection(SyntaxFactory.List(new List<SwitchLabelSyntax> {caseLabel}), statements)
@@ -102,6 +84,37 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
             var newRoot = root.ReplaceNode(switchBlock, newNode);
             var newDocument = await Simplifier.ReduceAsync(document.WithSyntaxRoot(newRoot));
             return newDocument.Project.Solution;
+        }
+
+        private IEnumerable<string> GetMissingLabels(List<ExpressionSyntax> caseLabels, INamedTypeSymbol enumType)
+        {
+            // these are the labels like `MyEnum.EnumMember`
+            var labels = caseLabels
+                .OfType<MemberAccessExpressionSyntax>()
+                .Select(l => l.Name.Identifier.ValueText)
+                .ToList();
+
+            // these are the labels like `EnumMember` (such as when using `using static Namespace.MyEnum;`)
+            labels.AddRange(caseLabels.OfType<IdentifierNameSyntax>().Select(l => l.Identifier.ValueText));
+
+            // don't create members like ".ctor"
+            return enumType.MemberNames.Except(labels).Where(m => !m.StartsWith("."));
+        }
+
+        private string GetQualifierForException(SyntaxNode root)
+        {
+            var qualifier = "System.";
+            var usingSystemDirective =
+                ((CompilationUnitSyntax) root).Usings.Where(u => u.Name is IdentifierNameSyntax)
+                    .FirstOrDefault(u => ((IdentifierNameSyntax) u.Name).Identifier.ValueText == "System");
+
+            if (usingSystemDirective != null)
+            {
+                qualifier = usingSystemDirective.Alias == null
+                    ? string.Empty
+                    : usingSystemDirective.Alias.Name.Identifier.ValueText + ".";
+            }
+            return qualifier;
         }
     }
 }
