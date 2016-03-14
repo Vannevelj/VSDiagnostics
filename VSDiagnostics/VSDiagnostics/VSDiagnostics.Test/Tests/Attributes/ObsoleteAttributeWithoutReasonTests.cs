@@ -6,7 +6,7 @@ using VSDiagnostics.Diagnostics.Attributes.ObsoleteAttributeWithoutReason;
 namespace VSDiagnostics.Test.Tests.Attributes
 {
     [TestClass]
-    public class ObsoleteAttributeWithoutReasonCSharpTests : CSharpDiagnosticVerifier
+    public class ObsoleteAttributeWithoutReasonTests : CSharpDiagnosticVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new ObsoleteAttributeWithoutReasonAnalyzer();
 

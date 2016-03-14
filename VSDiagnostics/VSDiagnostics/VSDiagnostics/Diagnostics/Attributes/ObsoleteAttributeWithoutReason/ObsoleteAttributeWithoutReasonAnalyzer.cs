@@ -3,14 +3,12 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
-using CSharpSyntaxKind = Microsoft.CodeAnalysis.CSharp.SyntaxKind;
-using VisualBasicSyntaxKind = Microsoft.CodeAnalysis.VisualBasic.SyntaxKind;
-using CSharpAttributeSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.AttributeSyntax;
-using VisualBasicAttributeSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax.AttributeSyntax;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace VSDiagnostics.Diagnostics.Attributes.ObsoleteAttributeWithoutReason
 {
-    [DiagnosticAnalyzer(LanguageNames.CSharp, LanguageNames.VisualBasic)]
+    [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ObsoleteAttributeWithoutReasonAnalyzer : DiagnosticAnalyzer
     {
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
@@ -26,39 +24,12 @@ namespace VSDiagnostics.Diagnostics.Attributes.ObsoleteAttributeWithoutReason
 
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeCSharpSymbol, CSharpSyntaxKind.Attribute);
-            context.RegisterSyntaxNodeAction(AnalyzeVisualBasicSymbol, VisualBasicSyntaxKind.Attribute);
+            context.RegisterSyntaxNodeAction(AnalyzeCSharpSymbol, SyntaxKind.Attribute);
         }
 
         private void AnalyzeCSharpSymbol(SyntaxNodeAnalysisContext context)
         {
-            var attributeExpression = context.Node as CSharpAttributeSyntax;
-            if (attributeExpression == null)
-            {
-                return;
-            }
-
-            // attribute type must be of type ObsoleteAttribute
-            var type = context.SemanticModel.GetSymbolInfo(attributeExpression).Symbol;
-            if (type == null || type.ContainingType.MetadataName != typeof (ObsoleteAttribute).Name)
-            {
-                return;
-            }
-
-            // attribute must have arguments
-            // if there are no parenthesis, the ArgumentList is null
-            // if there are empty parenthesis, the ArgumentList is empty
-            if (attributeExpression.ArgumentList != null && attributeExpression.ArgumentList.Arguments.Any())
-            {
-                return;
-            }
-
-            context.ReportDiagnostic(Diagnostic.Create(Rule, attributeExpression.GetLocation()));
-        }
-
-        private void AnalyzeVisualBasicSymbol(SyntaxNodeAnalysisContext context)
-        {
-            var attributeExpression = context.Node as VisualBasicAttributeSyntax;
+            var attributeExpression = context.Node as AttributeSyntax;
             if (attributeExpression == null)
             {
                 return;
