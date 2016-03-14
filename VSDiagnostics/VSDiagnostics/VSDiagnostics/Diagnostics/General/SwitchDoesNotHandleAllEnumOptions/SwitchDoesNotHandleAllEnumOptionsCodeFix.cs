@@ -31,11 +31,11 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
             var statement = root.FindNode(diagnosticSpan);
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.SwitchDoesNotHandleAllEnumOptionsCodeFixTitle,
-                    x => AddMissingCaseAsync(context.Document, root, statement),
+                    x => AddMissingCaseAsync(context.Document, (CompilationUnitSyntax)root, statement),
                     SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.Id), diagnostic);
         }
 
-        private async Task<Solution> AddMissingCaseAsync(Document document, SyntaxNode root, SyntaxNode statement)
+        private async Task<Solution> AddMissingCaseAsync(Document document, CompilationUnitSyntax root, SyntaxNode statement)
         {
             var semanticModel = await document.GetSemanticModelAsync();
 
@@ -50,8 +50,9 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
             var missingLabels = GetMissingLabels(caseLabels, enumType);
 
             // use simplified form if there are any in simplified form or if there are not any labels at all
-            var useSimplifiedForm = caseLabels.OfType<IdentifierNameSyntax>().Any() ||
-                                    !caseLabels.OfType<MemberAccessExpressionSyntax>().Any();
+            var useSimplifiedForm = (caseLabels.OfType<IdentifierNameSyntax>().Any() ||
+                                    !caseLabels.OfType<MemberAccessExpressionSyntax>().Any()) &&
+                                    EnumIsUsingStatic(root, enumType);
 
             var qualifier = GetQualifierForException(root);
 
@@ -74,6 +75,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
                     SyntaxFactory.SwitchSection(SyntaxFactory.List(new List<SwitchLabelSyntax> {caseLabel}), statements)
                         .WithAdditionalAnnotations(Formatter.Annotation);
 
+                // ensure that the new cases are above the default case
                 newSections = newSections.Insert(0, section);
             }
 
@@ -84,6 +86,28 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
             var newRoot = root.ReplaceNode(switchBlock, newNode);
             var newDocument = await Simplifier.ReduceAsync(document.WithSyntaxRoot(newRoot));
             return newDocument.Project.Solution;
+        }
+
+        private bool EnumIsUsingStatic(CompilationUnitSyntax root, INamedTypeSymbol enumType)
+        {
+            var fullyQualifiedName = enumType.Name;
+
+            var containingNamespace = enumType.ContainingNamespace;
+            while (!string.IsNullOrEmpty(containingNamespace.Name))
+            {
+                fullyQualifiedName = fullyQualifiedName.Insert(0, containingNamespace.Name + ".");
+                containingNamespace = containingNamespace.ContainingNamespace;
+            }
+
+            return root.Usings.Any(u =>
+                {
+                    if (!u.StaticKeyword.IsKind(SyntaxKind.StaticKeyword)) { return false; }
+
+                    var name = u.Name as QualifiedNameSyntax;
+                    if (name == null) { return false; }
+
+                    return new string(name.GetText().ToString().ToCharArray().Where(c => !char.IsWhiteSpace(c)).ToArray()) == fullyQualifiedName;
+                });
         }
 
         private IEnumerable<string> GetMissingLabels(List<ExpressionSyntax> caseLabels, INamedTypeSymbol enumType)
@@ -101,11 +125,11 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
             return enumType.MemberNames.Except(labels).Where(m => !m.StartsWith("."));
         }
 
-        private string GetQualifierForException(SyntaxNode root)
+        private string GetQualifierForException(CompilationUnitSyntax root)
         {
             var qualifier = "System.";
             var usingSystemDirective =
-                ((CompilationUnitSyntax) root).Usings.Where(u => u.Name is IdentifierNameSyntax)
+                root.Usings.Where(u => u.Name is IdentifierNameSyntax)
                     .FirstOrDefault(u => ((IdentifierNameSyntax) u.Name).Identifier.ValueText == "System");
 
             if (usingSystemDirective != null)

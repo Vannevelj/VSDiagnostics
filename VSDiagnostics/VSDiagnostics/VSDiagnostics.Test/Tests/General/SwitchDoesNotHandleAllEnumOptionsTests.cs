@@ -122,7 +122,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void SwitchDoesNotHandleAllEnumOptions_CaseHasDefaultStatement_MissingEnumStatement()
+        public void SwitchDoesNotHandleAllEnumOptions_CaseHasDefaultStatement_NewStatementsAreAddedAboveDefault()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -139,8 +139,6 @@ namespace ConsoleApplication1
             var e = MyEnum.Fizz;
             switch (e)
             {
-                case MyEnum.Fizz:
-                case MyEnum.Buzz:
                 default:
                     break;
             }
@@ -165,8 +163,10 @@ namespace ConsoleApplication1
             {
                 case MyEnum.FizzBuzz:
                     throw new System.NotImplementedException();
-                case MyEnum.Fizz:
                 case MyEnum.Buzz:
+                    throw new System.NotImplementedException();
+                case MyEnum.Fizz:
+                    throw new System.NotImplementedException();
                 default:
                     break;
             }
@@ -232,6 +232,7 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -677,6 +678,67 @@ namespace ConsoleApplication1
 
             var result = @"
 using static System.IO.FileOptions;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var e = DeleteOnClose;
+            switch (e)
+            {
+                case DeleteOnClose:
+                    throw new System.NotImplementedException();
+                case Asynchronous:
+                    throw new System.NotImplementedException();
+                case WriteThrough:
+                    throw new System.NotImplementedException();
+                case None:
+                    throw new System.NotImplementedException();
+                case Encrypted:
+                    break;
+                case SequentialScan:
+                    break;
+                case RandomAccess:
+                    break;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void SwitchDoesNotHandleAllEnumOptions_UsingStaticEnum_MissingEnumStatement_SimplifiesAllStatementsWhenUsingDirectiveIncludesWhitespace()
+        {
+            var original = @"
+using static System .       IO      . FileOptions;  // Happy maintaining
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var e = DeleteOnClose;
+            switch (e)
+            {
+                case Encrypted:
+                    break;
+                case SequentialScan:
+                    break;
+                case RandomAccess:
+                    break;
+            }
+        }
+    }
+}";
+
+            var result = @"
+using static System .       IO      . FileOptions;  // Happy maintaining
 
 namespace ConsoleApplication1
 {
