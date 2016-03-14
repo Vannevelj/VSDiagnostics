@@ -648,5 +648,66 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void SwitchDoesNotHandleAllEnumOptions_UsingStaticEnum_MissingEnumStatement_SimplifiesAllStatementsWhenParentDirectiveNotIncluded()
+        {
+            var original = @"
+using static System.IO.FileOptions;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var e = DeleteOnClose;
+            switch (e)
+            {
+                case Encrypted:
+                    break;
+                case SequentialScan:
+                    break;
+                case RandomAccess:
+                    break;
+            }
+        }
+    }
+}";
+
+            var result = @"
+using static System.IO.FileOptions;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var e = DeleteOnClose;
+            switch (e)
+            {
+                case DeleteOnClose:
+                    throw new System.NotImplementedException();
+                case Asynchronous:
+                    throw new System.NotImplementedException();
+                case WriteThrough:
+                    throw new System.NotImplementedException();
+                case None:
+                    throw new System.NotImplementedException();
+                case Encrypted:
+                    break;
+                case SequentialScan:
+                    break;
+                case RandomAccess:
+                    break;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
     }
 }

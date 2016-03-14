@@ -38,9 +38,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
         private async Task<Solution> AddMissingCaseAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var qualifier = "System.";
-            var usingSystemDirective =
-                ((CompilationUnitSyntax) root).Usings.Where(u => u.Name is IdentifierNameSyntax)
-                    .FirstOrDefault(u => ((IdentifierNameSyntax) u.Name).Identifier.ValueText == "System");
+            var usingSystemDirective = ((CompilationUnitSyntax) root).Usings.Where(u => u.Name is IdentifierNameSyntax).FirstOrDefault(u => ((IdentifierNameSyntax) u.Name).Identifier.ValueText == "System");
 
             if (usingSystemDirective != null)
             {
@@ -66,14 +64,14 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
                     .ToList();
 
             // these are the labels like `EnumMember` (such as when using `using static Namespace.MyEnum;`)
-            labels.AddRange(caseLabels.OfType<IdentifierNameSyntax>().Select(l => l.Identifier.ValueText).ToList());
+            labels.AddRange(caseLabels.OfType<IdentifierNameSyntax>().Select(l => l.Identifier.ValueText));
 
             // use simplified form if there are any in simplified form or if there are not any labels at all
             var useSimplifiedForm = caseLabels.OfType<IdentifierNameSyntax>().Any() ||
                                     !caseLabels.OfType<MemberAccessExpressionSyntax>().Any();
 
             // don't create members like ".ctor"
-            var missingLabels = enumType.MemberNames.Where(m => !labels.Contains(m) && !m.StartsWith("."));
+            var missingLabels = enumType.MemberNames.Except(labels).Where(m => !m.StartsWith("."));
 
             var newSections = SyntaxFactory.List(switchBlock.Sections);
 
@@ -85,7 +83,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
             {
                 var caseLabel =
                     SyntaxFactory.CaseSwitchLabel(
-                        SyntaxFactory.ParseExpression(" " + enumType.Name + "." + label)
+                        SyntaxFactory.ParseExpression(useSimplifiedForm ? $" {label}" : $" {enumType.Name}.{label}")
                             .WithTrailingTrivia(SyntaxFactory.ParseTrailingTrivia(Environment.NewLine)));
                 
                 var statements = SyntaxFactory.List(new List<StatementSyntax> {notImplementedException.WithAdditionalAnnotations(Simplifier.Annotation)});
