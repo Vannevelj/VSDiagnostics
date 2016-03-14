@@ -37,6 +37,18 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
 
         private async Task<Solution> AddMissingCaseAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
+            var qualifier = "System.";
+            var usingSystemDirective =
+                ((CompilationUnitSyntax) root).Usings.Where(u => u.Name is IdentifierNameSyntax)
+                    .FirstOrDefault(u => ((IdentifierNameSyntax) u.Name).Identifier.ValueText == "System");
+
+            if (usingSystemDirective != null)
+            {
+                qualifier = usingSystemDirective.Alias == null
+                    ? string.Empty
+                    : usingSystemDirective.Alias.Name.Identifier.ValueText + ".";
+            }
+
             var semanticModel = await document.GetSemanticModelAsync();
 
             var switchBlock = (SwitchStatementSyntax)statement;
@@ -60,9 +72,14 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
             var useSimplifiedForm = caseLabels.OfType<IdentifierNameSyntax>().Any() ||
                                     !caseLabels.OfType<MemberAccessExpressionSyntax>().Any();
 
-            var missingLabels = enumType.MemberNames.Where(m => !labels.Contains(m) && !m.StartsWith(".")); // don't create members like ".ctor"
+            // don't create members like ".ctor"
+            var missingLabels = enumType.MemberNames.Where(m => !labels.Contains(m) && !m.StartsWith("."));
 
             var newSections = SyntaxFactory.List(switchBlock.Sections);
+
+            var notImplementedException =
+                SyntaxFactory.ThrowStatement(SyntaxFactory.ParseExpression($" new {qualifier}NotImplementedException()"))
+                    .WithAdditionalAnnotations(Simplifier.Annotation);
 
             foreach (var label in missingLabels)
             {
@@ -71,7 +88,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
                         SyntaxFactory.ParseExpression(" " + enumType.Name + "." + label)
                             .WithTrailingTrivia(SyntaxFactory.ParseTrailingTrivia(Environment.NewLine)));
                 
-                var statements = SyntaxFactory.List(new List<StatementSyntax> {SyntaxFactory.BreakStatement()});
+                var statements = SyntaxFactory.List(new List<StatementSyntax> {notImplementedException.WithAdditionalAnnotations(Simplifier.Annotation)});
 
                 var section =
                     SyntaxFactory.SwitchSection(SyntaxFactory.List(new List<SwitchLabelSyntax> {caseLabel}), statements)

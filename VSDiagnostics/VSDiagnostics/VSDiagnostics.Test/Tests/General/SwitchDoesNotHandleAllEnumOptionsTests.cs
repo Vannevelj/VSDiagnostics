@@ -54,7 +54,7 @@ namespace ConsoleApplication1
             switch (e)
             {
                 case MyEnum.FizzBuzz:
-                    break;
+                    throw new System.NotImplementedException();
                 case MyEnum.Fizz:
                 case MyEnum.Buzz:
                     break;
@@ -164,7 +164,7 @@ namespace ConsoleApplication1
             switch (e)
             {
                 case MyEnum.FizzBuzz:
-                    break;
+                    throw new System.NotImplementedException();
                 case MyEnum.Fizz:
                 case MyEnum.Buzz:
                 default:
@@ -221,7 +221,7 @@ namespace ConsoleApplication1
             switch (e)
             {
                 case MyEnum.FizzBuzz:
-                    break;
+                    throw new System.NotImplementedException();
                 case MyEnum.Fizz:
                     break;
                 case MyEnum.Buzz:
@@ -272,15 +272,15 @@ namespace ConsoleApplication1
             switch (e)
             {
                 case Encrypted:
-                    break;
+                    throw new System.NotImplementedException();
                 case SequentialScan:
-                    break;
+                    throw new System.NotImplementedException();
                 case RandomAccess:
-                    break;
+                    throw new System.NotImplementedException();
                 case WriteThrough:
-                    break;
+                    throw new System.NotImplementedException();
                 case None:
-                    break;
+                    throw new System.NotImplementedException();
                 case Asynchronous:
                 case DeleteOnClose:
                     break;
@@ -336,9 +336,9 @@ namespace ConsoleApplication1
             switch (e)
             {
                 case MyEnum.FizzBuzz:
-                    break;
+                    throw new System.NotImplementedException();
                 case MyEnum.Fizz:
-                    break;
+                    throw new System.NotImplementedException();
                 case MyEnum.Buzz:
                     break;
                 default:
@@ -387,19 +387,19 @@ namespace ConsoleApplication1
             switch (e)
             {
                 case Encrypted:
-                    break;
+                    throw new System.NotImplementedException();
                 case SequentialScan:
-                    break;
+                    throw new System.NotImplementedException();
                 case DeleteOnClose:
-                    break;
+                    throw new System.NotImplementedException();
                 case RandomAccess:
-                    break;
+                    throw new System.NotImplementedException();
                 case Asynchronous:
-                    break;
+                    throw new System.NotImplementedException();
                 case WriteThrough:
-                    break;
+                    throw new System.NotImplementedException();
                 case None:
-                    break;
+                    throw new System.NotImplementedException();
             }
         }
     }
@@ -450,13 +450,13 @@ namespace ConsoleApplication1
             switch (e)
             {
                 case DeleteOnClose:
-                    break;
+                    throw new System.NotImplementedException();
                 case Asynchronous:
-                    break;
+                    throw new System.NotImplementedException();
                 case WriteThrough:
-                    break;
+                    throw new System.NotImplementedException();
                 case None:
-                    break;
+                    throw new System.NotImplementedException();
                 case Encrypted:
                     break;
                 case SequentialScan:
@@ -513,18 +513,132 @@ namespace ConsoleApplication1
             switch (e)
             {
                 case FileOptions.DeleteOnClose:
-                    break;
+                    throw new System.NotImplementedException();
                 case FileOptions.Asynchronous:
-                    break;
+                    throw new System.NotImplementedException();
                 case FileOptions.WriteThrough:
-                    break;
+                    throw new System.NotImplementedException();
                 case FileOptions.None:
-                    break;
+                    throw new System.NotImplementedException();
                 case FileOptions.Encrypted:
                     break;
                 case FileOptions.SequentialScan:
                     break;
                 case FileOptions.RandomAccess:
+                    break;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void SwitchDoesNotHandleAllEnumOptions_MissingEnumStatement_NoRedundantQualifierIfUsingSystemDirectiveExists()
+        {
+            var original = @"
+using System;
+namespace ConsoleApplication1
+{
+    enum MyEnum
+    {
+        Fizz, Buzz, FizzBuzz
+    }
+
+    class MyClass
+    {
+        void Method()
+        {
+            var e = MyEnum.Fizz;
+            switch (e)
+            {
+                case MyEnum.Fizz:
+                case MyEnum.Buzz:
+                    break;
+            }
+        }
+    }
+}";
+
+            var result = @"
+using System;
+namespace ConsoleApplication1
+{
+    enum MyEnum
+    {
+        Fizz, Buzz, FizzBuzz
+    }
+
+    class MyClass
+    {
+        void Method()
+        {
+            var e = MyEnum.Fizz;
+            switch (e)
+            {
+                case MyEnum.FizzBuzz:
+                    throw new NotImplementedException();
+                case MyEnum.Fizz:
+                case MyEnum.Buzz:
+                    break;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void SwitchDoesNotHandleAllEnumOptions_MissingEnumStatement_UsingAliasForSystem()
+        {
+            var original = @"
+using Fizz = System;    // seriously...
+namespace ConsoleApplication1
+{
+    enum MyEnum
+    {
+        Fizz, Buzz, FizzBuzz
+    }
+
+    class MyClass
+    {
+        void Method()
+        {
+            var e = MyEnum.Fizz;
+            switch (e)
+            {
+                case MyEnum.Fizz:
+                case MyEnum.Buzz:
+                    break;
+            }
+        }
+    }
+}";
+
+            var result = @"
+using Fizz = System;    // seriously...
+namespace ConsoleApplication1
+{
+    enum MyEnum
+    {
+        Fizz, Buzz, FizzBuzz
+    }
+
+    class MyClass
+    {
+        void Method()
+        {
+            var e = MyEnum.Fizz;
+            switch (e)
+            {
+                case MyEnum.FizzBuzz:
+                    throw new Fizz.NotImplementedException();
+                case MyEnum.Fizz:
+                case MyEnum.Buzz:
                     break;
             }
         }
