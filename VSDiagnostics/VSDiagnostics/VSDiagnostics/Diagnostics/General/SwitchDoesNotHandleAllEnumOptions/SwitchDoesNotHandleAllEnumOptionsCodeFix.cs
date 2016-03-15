@@ -41,7 +41,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
 
             var switchBlock = (SwitchStatementSyntax)statement;
 
-            var enumType = semanticModel.GetTypeInfo(switchBlock.Expression).Type as INamedTypeSymbol;
+            var enumType = (INamedTypeSymbol) semanticModel.GetTypeInfo(switchBlock.Expression).Type;
             var caseLabels = switchBlock.Sections.SelectMany(l => l.Labels)
                     .OfType<CaseSwitchLabelSyntax>()
                     .Select(l => l.Value)
@@ -50,9 +50,8 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
             var missingLabels = GetMissingLabels(caseLabels, enumType);
 
             // use simplified form if there are any in simplified form or if there are not any labels at all
-            var useSimplifiedForm = (caseLabels.OfType<IdentifierNameSyntax>().Any() ||
-                                    !caseLabels.OfType<MemberAccessExpressionSyntax>().Any()) &&
-                                    EnumIsUsingStatic(root, enumType);
+            var hasSimplifiedLabel = caseLabels.OfType<IdentifierNameSyntax>().Any();
+            var useSimplifiedForm = hasSimplifiedLabel || !caseLabels.OfType<MemberAccessExpressionSyntax>().Any();
 
             var qualifier = GetQualifierForException(root);
 
@@ -65,10 +64,10 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
 
             foreach (var label in missingLabels)
             {
-                // ReSharper disable once PossibleNullReferenceException
+                // If an existing simplified label exists, it means we can assume that works already and do it ourselves as well (ergo: there is a static using)
                 var caseLabel =
                     SyntaxFactory.CaseSwitchLabel(
-                        SyntaxFactory.ParseExpression(useSimplifiedForm ? $" {label}" : $" {enumType.Name}.{label}")
+                        SyntaxFactory.ParseExpression(hasSimplifiedLabel ? $"{label}" : $"{enumType.Name}.{label}")
                             .WithTrailingTrivia(SyntaxFactory.ParseTrailingTrivia(Environment.NewLine)));
 
                 var section =
@@ -86,28 +85,6 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
             var newRoot = root.ReplaceNode(switchBlock, newNode);
             var newDocument = await Simplifier.ReduceAsync(document.WithSyntaxRoot(newRoot));
             return newDocument.Project.Solution;
-        }
-
-        private bool EnumIsUsingStatic(CompilationUnitSyntax root, INamedTypeSymbol enumType)
-        {
-            var fullyQualifiedName = enumType.Name;
-
-            var containingNamespace = enumType.ContainingNamespace;
-            while (!string.IsNullOrEmpty(containingNamespace.Name))
-            {
-                fullyQualifiedName = fullyQualifiedName.Insert(0, containingNamespace.Name + ".");
-                containingNamespace = containingNamespace.ContainingNamespace;
-            }
-
-            return root.Usings.Any(u =>
-                {
-                    if (!u.StaticKeyword.IsKind(SyntaxKind.StaticKeyword)) { return false; }
-
-                    var name = u.Name as QualifiedNameSyntax;
-                    if (name == null) { return false; }
-
-                    return new string(name.GetText().ToString().ToCharArray().Where(c => !char.IsWhiteSpace(c)).ToArray()) == fullyQualifiedName;
-                });
         }
 
         private IEnumerable<string> GetMissingLabels(List<ExpressionSyntax> caseLabels, INamedTypeSymbol enumType)
@@ -130,7 +107,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
             var qualifier = "System.";
             var usingSystemDirective =
                 root.Usings.Where(u => u.Name is IdentifierNameSyntax)
-                    .FirstOrDefault(u => ((IdentifierNameSyntax) u.Name).Identifier.ValueText == "System");
+                    .FirstOrDefault(u => ((IdentifierNameSyntax) u.Name).Identifier.ValueText == nameof(System));
 
             if (usingSystemDirective != null)
             {
