@@ -24,10 +24,7 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.FieldDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.FieldDeclaration);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {

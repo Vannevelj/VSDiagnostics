@@ -22,10 +22,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.SingleGeneralException
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.TryStatement);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.TryStatement);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {

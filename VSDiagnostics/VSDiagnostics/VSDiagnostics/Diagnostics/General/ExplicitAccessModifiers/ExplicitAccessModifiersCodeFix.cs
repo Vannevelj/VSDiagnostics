@@ -31,11 +31,11 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
 
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.ExplicitAccessModifiersCodeFixTitle,
-                    x => AddModifier(context.Document, root, statement, accessibility),
+                    x => AddModifierAsync(context.Document, root, statement, accessibility),
                     ExplicitAccessModifiersAnalyzer.Rule.Id), diagnostic);
         }
 
-        private Task<Solution> AddModifier(Document document, SyntaxNode root, SyntaxNode statement,
+        private Task<Solution> AddModifierAsync(Document document, SyntaxNode root, SyntaxNode statement,
             Accessibility accessibility)
         {
             var generator = SyntaxGenerator.GetGenerator(document);

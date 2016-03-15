@@ -29,11 +29,11 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
             var statement = root.FindNode(diagnosticSpan);
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.OnPropertyChangedWithoutCallerMemberNameCodeFixTitle,
-                    x => AddCallerMemberNameAttribute(context.Document, statement),
+                    x => AddCallerMemberNameAttributeAsync(context.Document, statement),
                     OnPropertyChangedWithoutCallerMemberNameAnalyzer.Rule.Id), diagnostic);
         }
 
-        private async Task<Solution> AddCallerMemberNameAttribute(Document document, SyntaxNode statement)
+        private async Task<Solution> AddCallerMemberNameAttributeAsync(Document document, SyntaxNode statement)
         {
             var editor = await DocumentEditor.CreateAsync(document);
 

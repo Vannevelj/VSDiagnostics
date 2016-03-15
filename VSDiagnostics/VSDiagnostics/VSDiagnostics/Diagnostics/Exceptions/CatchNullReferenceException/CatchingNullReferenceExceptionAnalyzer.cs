@@ -22,10 +22,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.CatchNullReferenceException
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.CatchDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.CatchDeclaration);
 
         private void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {

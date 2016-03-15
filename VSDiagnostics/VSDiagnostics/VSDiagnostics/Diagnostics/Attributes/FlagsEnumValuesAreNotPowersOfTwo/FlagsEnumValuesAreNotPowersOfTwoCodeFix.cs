@@ -30,11 +30,11 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.FlagsEnumValuesAreNotPowersOfTwoCodeFixTitle,
-                    x => AdjustEnumValues(context.Document, root, statement),
+                    x => AdjustEnumValuesAsync(context.Document, root, statement),
                     FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.Id), diagnostic);
         }
 
-        private async Task<Solution> AdjustEnumValues(Document document, SyntaxNode root, SyntaxNode statement)
+        private async Task<Solution> AdjustEnumValuesAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var semanticModel = await document.GetSemanticModelAsync();
 
