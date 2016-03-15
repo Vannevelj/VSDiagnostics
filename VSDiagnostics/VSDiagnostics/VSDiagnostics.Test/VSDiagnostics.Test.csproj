@@ -105,12 +105,9 @@
   <ItemGroup>
     <Compile Include="Tests\Async\AsyncMethodWithoutAsyncSuffixTests.cs" />
     <Compile Include="Tests\Async\SyncMethodWithAsyncSuffixTests.cs" />
-    <Compile Include="Tests\Attributes\AttributeWithEmptyArgumentListVisualBasicTests.cs" />
-    <Compile Include="Tests\Attributes\AttributeWithEmptyArgumentListCSharpTests.cs" />
-    <Compile Include="Tests\Attributes\EnumCanHaveFlagsAttributeVisualBasicTests.cs" />
-    <Compile Include="Tests\Attributes\EnumCanHaveFlagsAttributeCSharpTests.cs" />
-    <Compile Include="Tests\Attributes\ObsoleteAttributeWithoutReasonVisualBasicTests.cs" />
-    <Compile Include="Tests\Attributes\ObsoleteAttributeWithoutReasonCSharpTests.cs" />
+    <Compile Include="Tests\Attributes\AttributeWithEmptyArgumentListTests.cs" />
+    <Compile Include="Tests\Attributes\EnumCanHaveFlagsAttributeTests.cs" />
+    <Compile Include="Tests\Attributes\ObsoleteAttributeWithoutReasonTests.cs" />
     <Compile Include="Tests\Attributes\OnPropertyChangedWithoutCallerMemberNameTests.cs" />
     <Compile Include="Tests\Exceptions\ArgumentExceptionWithoutNameofOperatorTests.cs" />
     <Compile Include="Tests\Exceptions\CatchNullReferenceExceptionTests.cs" />

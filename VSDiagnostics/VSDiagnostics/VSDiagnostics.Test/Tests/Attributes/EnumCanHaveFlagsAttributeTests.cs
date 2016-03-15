@@ -7,7 +7,7 @@ using VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute;
 namespace VSDiagnostics.Test.Tests.Attributes
 {
     [TestClass]
-    public class EnumCanHaveFlagsAttributeCSharpTests : CSharpCodeFixVerifier
+    public class EnumCanHaveFlagsAttributeTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new EnumCanHaveFlagsAttributeAnalyzer();
 
