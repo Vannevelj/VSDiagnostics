@@ -44,10 +44,6 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
 
             // If we're dealing with a self-defined type 'Char' then we ignore it
             var identifierSymbol = context.SemanticModel.GetSymbolInfo(identifier);
-            if (identifierSymbol.Symbol == null)
-            {
-                return;
-            }
 
             var typeSymbol = identifierSymbol.Symbol as INamedTypeSymbol;
             if (typeSymbol == null || typeSymbol.SpecialType == SpecialType.None)

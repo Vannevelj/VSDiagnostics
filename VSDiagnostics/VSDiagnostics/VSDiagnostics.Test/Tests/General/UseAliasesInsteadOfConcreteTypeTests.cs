@@ -940,7 +940,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        public static explicit operator int(MyClass c)
+        public static explicit operator int (MyClass c)
         {
             return 5;
         }
@@ -1596,13 +1596,13 @@ namespace ConsoleApplication1
     {
         static void Main()
         {
-            string bar = ""test"";
+            Single bar = ""test"";
         }
     }
 }";
 
             VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "string", "String"));
-            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
+            VerifyFix(original, result);
         }
     }
 }
