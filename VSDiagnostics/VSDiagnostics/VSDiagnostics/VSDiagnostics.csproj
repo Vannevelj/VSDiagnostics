@@ -88,6 +88,8 @@
     <Compile Include="Diagnostics\General\SimplifyExpressionBodiedMember\SimplifyExpressionBodiedMemberCodeFix.cs" />
     <Compile Include="Diagnostics\General\SingleEmptyConstructor\SingleEmptyConstructorAnalyzer.cs" />
     <Compile Include="Diagnostics\General\SingleEmptyConstructor\SingleEmptyConstructorCodeFix.cs" />
+    <Compile Include="Diagnostics\General\SwitchDoesNotHandleAllEnumOptions\SwitchDoesNotHandleAllEnumOptionsCodeFix.cs" />
+    <Compile Include="Diagnostics\General\SwitchDoesNotHandleAllEnumOptions\SwitchDoesNotHandleAllEnumOptionsAnalyzer.cs" />
     <Compile Include="Diagnostics\General\TryCastWithoutUsingAsNotNull\TryCastWithoutUsingAsNotNullAnalyzer.cs" />
     <Compile Include="Diagnostics\General\TryCastWithoutUsingAsNotNull\TryCastWithoutUsingAsNotNullCodeFix.cs" />
     <Compile Include="Diagnostics\General\TypeToVar\TypeToVarAnalyzer.cs" />
@@ -182,6 +184,7 @@
   <ItemGroup>
     <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\VSDiagnostics.1.9.3\tools\analyzers\VSDiagnostics.dll" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="VSDiagnosticsResources.resx">

@@ -21,11 +21,8 @@ namespace VSDiagnostics.Diagnostics.General.GotoDetection
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.GotoStatement, SyntaxKind.GotoCaseStatement,
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.GotoStatement, SyntaxKind.GotoCaseStatement,
                 SyntaxKind.GotoDefaultStatement);
-        }
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {

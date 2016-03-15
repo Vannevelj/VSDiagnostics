@@ -23,10 +23,7 @@ namespace VSDiagnostics.Diagnostics.General.LoopedRandomInstantiation
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.VariableDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.VariableDeclaration);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {

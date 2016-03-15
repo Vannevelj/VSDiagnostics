@@ -998,6 +998,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing enum member(s) in switched cases..
+        /// </summary>
+        internal static string SwitchDoesNotHandleAllEnumOptionsAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("SwitchDoesNotHandleAllEnumOptionsAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add cases for missing enum member(s)..
+        /// </summary>
+        internal static string SwitchDoesNotHandleAllEnumOptionsAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("SwitchDoesNotHandleAllEnumOptionsAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add case(s)..
+        /// </summary>
+        internal static string SwitchDoesNotHandleAllEnumOptionsCodeFixTitle {
+            get {
+                return ResourceManager.GetString("SwitchDoesNotHandleAllEnumOptionsCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove suffix.
         /// </summary>
         internal static string SyncMethodWithSyncSuffixAnalyzerCodeFixTitle {

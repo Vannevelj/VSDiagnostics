@@ -32,11 +32,11 @@ namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
 
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.RemoveTestSuffixCodeFixTitle,
-                    x => RemoveTestSuffix(context.Document, root, methodDeclaration, context.CancellationToken), RemoveTestSuffixAnalyzer.Rule.Id),
+                    x => RemoveTestSuffixAsync(context.Document, root, methodDeclaration, context.CancellationToken), RemoveTestSuffixAnalyzer.Rule.Id),
                 diagnostic);
         }
 
-        private async Task<Solution> RemoveTestSuffix(Document document, SyntaxNode root,
+        private async Task<Solution> RemoveTestSuffixAsync(Document document, SyntaxNode root,
             MethodDeclarationSyntax methodDeclaration, CancellationToken cancellationToken)
         {
             var newMethodName = methodDeclaration.Identifier.Text.Remove(methodDeclaration.Identifier.Text.Length - 4);
