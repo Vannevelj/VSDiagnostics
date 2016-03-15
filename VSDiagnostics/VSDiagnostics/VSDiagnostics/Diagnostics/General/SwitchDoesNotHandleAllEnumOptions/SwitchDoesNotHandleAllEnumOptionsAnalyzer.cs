@@ -30,7 +30,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
             if (switchBlock == null) { return; }
 
             var enumType = context.SemanticModel.GetTypeInfo(switchBlock.Expression).Type as INamedTypeSymbol;
-            if (enumType == null || enumType.BaseType.SpecialType != SpecialType.System_Enum) { return; }
+            if (enumType == null || enumType.TypeKind != TypeKind.Enum) { return; }
 
             var caseLabels = switchBlock.Sections.SelectMany(l => l.Labels)
                     .OfType<CaseSwitchLabelSyntax>()
