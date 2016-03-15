@@ -22,10 +22,7 @@ namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.MethodDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.MethodDeclaration);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {

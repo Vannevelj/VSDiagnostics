@@ -21,10 +21,7 @@ namespace VSDiagnostics.Diagnostics.General.CastToAs
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.CastExpression);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.CastExpression);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {

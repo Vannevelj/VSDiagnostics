@@ -49,15 +49,9 @@ namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
             return Task.FromResult(newDocument.Project.Solution);
         }
 
-        private SyntaxNode RemoveEmptyArgumentListCSharp(SyntaxNode root, CSharpAttributeSyntax attributeExpression)
-        {
-            return root.RemoveNode(attributeExpression.ArgumentList, SyntaxRemoveOptions.KeepNoTrivia);
-        }
+        private SyntaxNode RemoveEmptyArgumentListCSharp(SyntaxNode root, CSharpAttributeSyntax attributeExpression) => root.RemoveNode(attributeExpression.ArgumentList, SyntaxRemoveOptions.KeepNoTrivia);
 
         private SyntaxNode RemoveEmptyArgumentListVisualBasic(SyntaxNode root,
-            VisualBasicAttributeSyntax attributeExpression)
-        {
-            return root.RemoveNode(attributeExpression.ArgumentList, SyntaxRemoveOptions.KeepNoTrivia);
-        }
+            VisualBasicAttributeSyntax attributeExpression) => root.RemoveNode(attributeExpression.ArgumentList, SyntaxRemoveOptions.KeepNoTrivia);
     }
 }
