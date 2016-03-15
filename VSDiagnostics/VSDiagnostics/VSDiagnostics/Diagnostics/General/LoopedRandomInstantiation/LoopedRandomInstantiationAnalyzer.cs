@@ -36,9 +36,9 @@ namespace VSDiagnostics.Diagnostics.General.LoopedRandomInstantiation
             if (type == null) { return; }
 
             var typeInfo = context.SemanticModel.GetTypeInfo(type).Type;
-            if (typeInfo == null) { return; }
 
-            if (typeInfo.OriginalDefinition.ContainingNamespace.Name != nameof(System) ||
+            if (typeInfo?.OriginalDefinition.ContainingNamespace == null ||
+                typeInfo.OriginalDefinition.ContainingNamespace.Name != nameof(System) ||
                 typeInfo.Name != nameof(System.Random))
             {
                 return;
