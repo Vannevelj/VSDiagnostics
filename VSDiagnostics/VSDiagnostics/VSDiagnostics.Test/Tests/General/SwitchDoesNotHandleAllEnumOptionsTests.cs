@@ -771,5 +771,60 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void SwitchDoesNotHandleAllEnumOptions_MissingEnumStatement_NestedEnum()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        enum MyEnum
+        {
+            Fizz, Buzz, FizzBuzz
+        }
+
+        void Method()
+        {
+            var e = MyEnum.Fizz;
+            switch (e)
+            {
+                case MyEnum.Fizz:
+                case MyEnum.Buzz:
+                    break;
+            }
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        enum MyEnum
+        {
+            Fizz, Buzz, FizzBuzz
+        }
+
+        void Method()
+        {
+            var e = MyEnum.Fizz;
+            switch (e)
+            {
+                case MyEnum.FizzBuzz:
+                    throw new System.NotImplementedException();
+                case MyEnum.Fizz:
+                case MyEnum.Buzz:
+                    break;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
     }
 }
