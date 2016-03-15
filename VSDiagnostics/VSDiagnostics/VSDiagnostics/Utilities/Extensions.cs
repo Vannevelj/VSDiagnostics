@@ -135,16 +135,6 @@ namespace VSDiagnostics.Utilities
             return AliasMapping.TryGetValue(type, out alias);
         }
 
-        public static bool HasAlias(this string type)
-        {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
-
-            return AliasMapping.Keys.Contains(type);
-        }
-
         /// <summary>
         ///     Determines whether or not the specified <see cref="IMethodSymbol" /> is the symbol of an asynchronous method. This
         ///     can be a method declared as async (e.g. returning <see cref="Task" /> or <see cref="Task{TResult}" />), or a method

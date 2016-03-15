@@ -940,7 +940,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        public static explicit operator int(MyClass c)
+        public static explicit operator int (MyClass c)
         {
             return 5;
         }
@@ -1571,7 +1571,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void UseAliasesInsteadOfConcreteType_DisplaysCorrectWarning()
+        public void UseAliasesInsteadOfConcreteType_DoesNotDisplayWarningWithAlias()
         {
             var original = @"
 using Single = System.String;
@@ -1587,22 +1587,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            var result = @"
-using Single = System.String;
-
-namespace ConsoleApplication1
-{
-    class Foo
-    {
-        static void Main()
-        {
-            string bar = ""test"";
-        }
-    }
-}";
-
-            VerifyDiagnostic(original, string.Format(UseAliasesInsteadOfConcreteTypeAnalyzer.Rule.MessageFormat.ToString(), "string", "String"));
-            VerifyFix(original, result, allowNewCompilerDiagnostics: true);
+            VerifyDiagnostic(original);
         }
     }
 }
