@@ -44,10 +44,6 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
 
             // If we're dealing with a self-defined type 'Char' then we ignore it
             var identifierSymbol = context.SemanticModel.GetSymbolInfo(identifier);
-            if (identifierSymbol.Symbol == null)
-            {
-                return;
-            }
 
             var typeSymbol = identifierSymbol.Symbol as INamedTypeSymbol;
             if (typeSymbol == null || typeSymbol.SpecialType == SpecialType.None)
@@ -70,10 +66,11 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
                 location = qualifiedName.GetLocation();
             }
 
-            string alias;
-            if (identifier.Identifier.Text.HasAlias() && typeSymbol.MetadataName.HasAlias(out alias))
+            string identifierAlias;
+            string metadataAlias;
+            if (identifier.Identifier.Text.HasAlias(out identifierAlias) && typeSymbol.MetadataName.HasAlias(out metadataAlias) && identifierAlias == metadataAlias)
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, location, alias, typeSymbol.MetadataName));
+                context.ReportDiagnostic(Diagnostic.Create(Rule, location, metadataAlias, typeSymbol.MetadataName));
             }
         }
     }
