@@ -66,6 +66,9 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
                 location = qualifiedName.GetLocation();
             }
 
+            // This ensures that we are not using aliases.  Both the identifier and the actual type must have a registered alias.
+            // If the identifier alias and the alias for the actual type do not match (as when `using Single = System.String`),
+            // the aliases do not match, so we do not create a diagnostic because the Simplifier does not create an alias in this case.
             string identifierAlias;
             string metadataAlias;
             if (identifier.Identifier.Text.HasAlias(out identifierAlias) && typeSymbol.MetadataName.HasAlias(out metadataAlias) && identifierAlias == metadataAlias)
