@@ -7,7 +7,7 @@ using VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList;
 namespace VSDiagnostics.Test.Tests.Attributes
 {
     [TestClass]
-    public class AttributeWithEmptyArgumentListCSharpTests : CSharpCodeFixVerifier
+    public class AttributeWithEmptyArgumentListTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new AttributeWithEmptyArgumentListAnalyzer();
 

@@ -105,12 +105,9 @@
   <ItemGroup>
     <Compile Include="Tests\Async\AsyncMethodWithoutAsyncSuffixTests.cs" />
     <Compile Include="Tests\Async\SyncMethodWithAsyncSuffixTests.cs" />
-    <Compile Include="Tests\Attributes\AttributeWithEmptyArgumentListVisualBasicTests.cs" />
-    <Compile Include="Tests\Attributes\AttributeWithEmptyArgumentListCSharpTests.cs" />
-    <Compile Include="Tests\Attributes\EnumCanHaveFlagsAttributeVisualBasicTests.cs" />
-    <Compile Include="Tests\Attributes\EnumCanHaveFlagsAttributeCSharpTests.cs" />
-    <Compile Include="Tests\Attributes\ObsoleteAttributeWithoutReasonVisualBasicTests.cs" />
-    <Compile Include="Tests\Attributes\ObsoleteAttributeWithoutReasonCSharpTests.cs" />
+    <Compile Include="Tests\Attributes\AttributeWithEmptyArgumentListTests.cs" />
+    <Compile Include="Tests\Attributes\EnumCanHaveFlagsAttributeTests.cs" />
+    <Compile Include="Tests\Attributes\ObsoleteAttributeWithoutReasonTests.cs" />
     <Compile Include="Tests\Attributes\OnPropertyChangedWithoutCallerMemberNameTests.cs" />
     <Compile Include="Tests\Exceptions\ArgumentExceptionWithoutNameofOperatorTests.cs" />
     <Compile Include="Tests\Exceptions\CatchNullReferenceExceptionTests.cs" />
@@ -124,12 +121,12 @@
     <Compile Include="Tests\General\CompareBooleanToTrueLiteralTests.cs" />
     <Compile Include="Tests\General\ConditionalOperatorReturnsInvertedDefaultOptionsTests.cs" />
     <Compile Include="Tests\General\ConditionalOperatorReturnsDefaultOptionsTests.cs" />
-    <Compile Include="Tests\General\ConditionIsAlwaysFalseTests.cs" />
-    <Compile Include="Tests\General\ConditionIsAlwaysTrueTests.cs" />
+    <Compile Include="Tests\General\ConditionIsConstantTests.cs" />
     <Compile Include="Tests\General\ExplicitAccessModifiersTests.cs" />
     <Compile Include="Tests\Attributes\FlagsEnumValuesAreNotPowersOfTwoTests.cs" />
     <Compile Include="Tests\General\GotoDetectionTests.cs" />
     <Compile Include="Tests\General\IfStatementWithoutBracesTests.cs" />
+    <Compile Include="Tests\General\LoopedRandomInstantiationTests.cs" />
     <Compile Include="Tests\General\LoopStatementWithoutBracesTests.cs" />
     <Compile Include="Tests\General\NonEncapsulatedOrMutableFieldTests.cs" />
     <Compile Include="Tests\General\NamingConventionsTests.cs" />
@@ -137,6 +134,7 @@
     <Compile Include="Tests\General\OnPropertyChangedWithoutNameOfOperatorTests.cs" />
     <Compile Include="Tests\General\SimplifyExpressionBodiedMemberTests.cs" />
     <Compile Include="Tests\General\SingleEmptyConstructorTests.cs" />
+    <Compile Include="Tests\General\SwitchDoesNotHandleAllEnumOptionsTests.cs" />
     <Compile Include="Tests\General\TryCastUsingAsNotNullInsteadOfIsAsTests.cs" />
     <Compile Include="Tests\General\TypeToVarTests.cs" />
     <Compile Include="Tests\General\UseAliasesInsteadOfConcreteTypeTests.cs" />

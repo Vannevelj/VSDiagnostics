@@ -341,56 +341,29 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition is always false..
+        ///   Looks up a localized string similar to Condition is always {0}..
         /// </summary>
-        internal static string ConditionIsAlwaysFalseAnalyzerMessage {
+        internal static string ConditionIsConstantAnalyzerMessage {
             get {
-                return ResourceManager.GetString("ConditionIsAlwaysFalseAnalyzerMessage", resourceCulture);
+                return ResourceManager.GetString("ConditionIsConstantAnalyzerMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition is always false..
+        ///   Looks up a localized string similar to Condition is constant..
         /// </summary>
-        internal static string ConditionIsAlwaysFalseAnalyzerTitle {
+        internal static string ConditionIsConstantAnalyzerTitle {
             get {
-                return ResourceManager.GetString("ConditionIsAlwaysFalseAnalyzerTitle", resourceCulture);
+                return ResourceManager.GetString("ConditionIsConstantAnalyzerTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove condition and body..
+        ///   Looks up a localized string similar to Remove condition and unreachable code..
         /// </summary>
-        internal static string ConditionIsAlwaysFalseCodeFixTitle {
+        internal static string ConditionIsConstantCodeFixTitle {
             get {
-                return ResourceManager.GetString("ConditionIsAlwaysFalseCodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Condition is always true..
-        /// </summary>
-        internal static string ConditionIsAlwaysTrueAnalyzerMessage {
-            get {
-                return ResourceManager.GetString("ConditionIsAlwaysTrueAnalyzerMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Condition is always true..
-        /// </summary>
-        internal static string ConditionIsAlwaysTrueAnalyzerTitle {
-            get {
-                return ResourceManager.GetString("ConditionIsAlwaysTrueAnalyzerTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Remove condition..
-        /// </summary>
-        internal static string ConditionIsAlwaysTrueCodeFixTitle {
-            get {
-                return ResourceManager.GetString("ConditionIsAlwaysTrueCodeFixTitle", resourceCulture);
+                return ResourceManager.GetString("ConditionIsConstantCodeFixTitle", resourceCulture);
             }
         }
         
@@ -593,7 +566,25 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A loop-statement should be written using braces..
+        ///   Looks up a localized string similar to Instantiate the random instance outside the loop..
+        /// </summary>
+        internal static string LoopedRandomInstantiationAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("LoopedRandomInstantiationAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Random instance created in loop..
+        /// </summary>
+        internal static string LoopedRandomInstantiationAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("LoopedRandomInstantiationAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable {0} of type System.Random is instantiated in a loop..
         /// </summary>
         internal static string LoopStatementWithoutBracesAnalyzerMessage {
             get {
@@ -602,7 +593,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loop blocks should use braces to denote start and end..
+        ///   Looks up a localized string similar to An instance of type System.Random is created in a loop..
         /// </summary>
         internal static string LoopStatementWithoutBracesAnalyzerTitle {
             get {
@@ -1003,6 +994,33 @@ namespace VSDiagnostics {
         internal static string StructsShouldNotMutateSelfAnalyzerTitle {
             get {
                 return ResourceManager.GetString("StructsShouldNotMutateSelfAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing enum member(s) in switched cases..
+        /// </summary>
+        internal static string SwitchDoesNotHandleAllEnumOptionsAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("SwitchDoesNotHandleAllEnumOptionsAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add cases for missing enum member(s)..
+        /// </summary>
+        internal static string SwitchDoesNotHandleAllEnumOptionsAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("SwitchDoesNotHandleAllEnumOptionsAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add case(s)..
+        /// </summary>
+        internal static string SwitchDoesNotHandleAllEnumOptionsCodeFixTitle {
+            get {
+                return ResourceManager.GetString("SwitchDoesNotHandleAllEnumOptionsCodeFixTitle", resourceCulture);
             }
         }
         

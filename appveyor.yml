@@ -10,7 +10,6 @@ assembly_info:
   assembly_informational_version: '{version}'
 environment:
   PATH: C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
-cache: packages -> **\packages.config
 nuget:
   account_feed: true
   project_feed: true
