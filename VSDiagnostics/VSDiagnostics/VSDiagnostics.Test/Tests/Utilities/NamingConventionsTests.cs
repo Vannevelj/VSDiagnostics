@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VSDiagnostics.Diagnostics.General.NamingConventions;
 using VSDiagnostics.Utilities;
