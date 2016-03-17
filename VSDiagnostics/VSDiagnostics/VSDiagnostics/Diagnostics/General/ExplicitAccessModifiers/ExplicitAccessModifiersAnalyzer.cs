@@ -22,9 +22,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol,
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol,
                 SyntaxKind.ClassDeclaration,
                 SyntaxKind.ConstructorDeclaration,
                 SyntaxKind.DelegateDeclaration,
@@ -37,7 +35,6 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 SyntaxKind.MethodDeclaration,
                 SyntaxKind.PropertyDeclaration,
                 SyntaxKind.StructDeclaration);
-        }
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {

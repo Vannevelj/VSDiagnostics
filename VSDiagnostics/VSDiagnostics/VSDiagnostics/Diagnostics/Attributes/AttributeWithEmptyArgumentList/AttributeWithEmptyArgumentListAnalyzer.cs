@@ -23,10 +23,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeCSharpSymbol, SyntaxKind.Attribute);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeCSharpSymbol, SyntaxKind.Attribute);
 
         private void AnalyzeCSharpSymbol(SyntaxNodeAnalysisContext context)
         {

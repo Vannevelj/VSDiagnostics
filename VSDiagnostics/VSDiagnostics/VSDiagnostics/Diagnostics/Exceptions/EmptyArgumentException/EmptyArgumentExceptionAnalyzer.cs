@@ -23,10 +23,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentException
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.ThrowStatement);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.ThrowStatement);
 
         private static void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {

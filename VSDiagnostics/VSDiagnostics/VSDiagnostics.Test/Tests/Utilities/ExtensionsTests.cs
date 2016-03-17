@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -528,10 +528,7 @@ namespace VSDiagnostics.Test.Tests.Utilities
             Assert.IsTrue(methodSymbol.IsDefinedInAncestor());
         }
 
-        private static IEnumerable<MethodDeclarationSyntax> GetMethodNodes(SyntaxTree tree)
-        {
-            return tree.GetRoot().DescendantNodes().OfType<MethodDeclarationSyntax>();
-        }
+        private static IEnumerable<MethodDeclarationSyntax> GetMethodNodes(SyntaxTree tree) => tree.GetRoot().DescendantNodes().OfType<MethodDeclarationSyntax>();
 
         private static SemanticModel GetSemanticModel(SyntaxTree tree)
         {
