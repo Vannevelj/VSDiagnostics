@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using VSDiagnostics.Utilities;
 
-namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithSyncSuffix
+namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithAsyncSuffix
 {
 
     [ExportCodeFixProvider(nameof(SyncMethodWithAsyncSuffixCodeFix), LanguageNames.CSharp), Shared]

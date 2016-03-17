@@ -2,7 +2,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.Helpers.CSharp;
-using VSDiagnostics.Diagnostics.Async.SyncMethodWithSyncSuffix;
+using VSDiagnostics.Diagnostics.Async.SyncMethodWithAsyncSuffix;
 
 namespace VSDiagnostics.Test.Tests.Async
 {

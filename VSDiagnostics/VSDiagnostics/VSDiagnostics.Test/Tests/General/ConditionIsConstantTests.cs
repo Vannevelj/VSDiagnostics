@@ -9,7 +9,7 @@ namespace VSDiagnostics.Test.Tests.General
     [TestClass]
     public class ConditionIsConstantTests : CSharpCodeFixVerifier
     {
-        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new ConditionIsConstant();
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new ConditionIsConstantAnalyzer();
 
         protected override CodeFixProvider CodeFixProvider => new ConditionIsConstantCodeFix();
 
@@ -45,7 +45,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "true"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "true"));
             VerifyFix(original, result);
         }
 
@@ -80,7 +80,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "true"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "true"));
             VerifyFix(original, result);
         }
 
@@ -141,7 +141,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "true"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "true"));
             VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
         }
 
@@ -178,7 +178,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "true"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "true"));
             VerifyFix(original, result);
         }
 
@@ -221,7 +221,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "true"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "true"));
             VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
         }
 
@@ -275,7 +275,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "true"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "true"));
             VerifyFix(original, result);
         }
 
@@ -326,7 +326,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "true"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "true"));
             VerifyFix(original, result);
         }
 
@@ -363,7 +363,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "true"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "true"));
             VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
         }
 
@@ -411,7 +411,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "true"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "true"));
             VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
         }
 
@@ -454,7 +454,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "true"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "true"));
             VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
         }
 
@@ -490,7 +490,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "true"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "true"));
             VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
         }
 
@@ -526,7 +526,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "true"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "true"));
             VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
         }
 
@@ -562,7 +562,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "true"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "true"));
             VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
         }
 
@@ -598,7 +598,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "true"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "true"));
             VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
         }
 
@@ -632,7 +632,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "true"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "true"));
             VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
         }
 
@@ -666,7 +666,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "false"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "false"));
             VerifyFix(original, result);
         }
 
@@ -700,7 +700,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "false"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "false"));
             VerifyFix(original, result);
         }
 
@@ -760,7 +760,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "false"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "false"));
             VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
         }
 
@@ -797,7 +797,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "false"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "false"));
             VerifyFix(original, result);
         }
 
@@ -843,7 +843,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "false"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "false"));
             VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
         }
 
@@ -881,7 +881,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "false"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "false"));
             VerifyFix(original, result);
         }
 
@@ -937,7 +937,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "false"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "false"));
             VerifyFix(original, result);
         }
 
@@ -983,7 +983,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "false"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "false"));
             VerifyFix(original, result);
         }
 
@@ -1018,7 +1018,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "false"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "false"));
             VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
         }
 
@@ -1053,7 +1053,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "false"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "false"));
             VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
         }
 
@@ -1088,7 +1088,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "false"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "false"));
             VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
         }
 
@@ -1123,7 +1123,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "false"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "false"));
             VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
         }
 
@@ -1156,7 +1156,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "false"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "false"));
             VerifyFix(original, result, allowedNewCompilerDiagnosticsId: "CS0219");
         }
 
@@ -1208,7 +1208,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "false"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "false"));
             VerifyFix(original, result);
         }
 
@@ -1254,7 +1254,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ConditionIsConstant.Rule.MessageFormat.ToString(), "false"));
+            VerifyDiagnostic(original, string.Format(ConditionIsConstantAnalyzer.Rule.MessageFormat.ToString(), "false"));
             VerifyFix(original, result);
         }
     }
