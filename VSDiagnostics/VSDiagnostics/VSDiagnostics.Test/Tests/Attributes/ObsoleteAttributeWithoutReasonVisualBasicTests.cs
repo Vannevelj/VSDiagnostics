@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.Helpers.VisualBasic;
 using VSDiagnostics.Diagnostics.Attributes.ObsoleteAttributeWithoutReason;
