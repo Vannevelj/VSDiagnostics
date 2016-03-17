@@ -19,7 +19,7 @@ build:
   publish_nuget: true
   publish_nuget_symbols: true
   include_nuget_references: true
-  verbosity: minimal
+  verbosity: normal
 notifications:
 - provider: Webhook
   url: http://stats.zomis.net:8081/hooks/appveyor?roomId=14929
