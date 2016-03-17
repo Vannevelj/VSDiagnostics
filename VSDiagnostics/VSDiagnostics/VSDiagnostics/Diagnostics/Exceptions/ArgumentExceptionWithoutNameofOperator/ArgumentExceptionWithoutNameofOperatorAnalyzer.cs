@@ -27,10 +27,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOpe
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.ObjectCreationExpression);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.ObjectCreationExpression);
 
         private void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
@@ -42,16 +39,16 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOpe
 
             var exceptionType = objectCreationExpression.Type;
             var symbolInformation = context.SemanticModel.GetSymbolInfo(exceptionType);
-            if (symbolInformation.Symbol.InheritsFrom(typeof (ArgumentException)))
+            if (symbolInformation.Symbol.InheritsFrom(typeof(ArgumentException)))
             {
                 var arguments =
                     objectCreationExpression.ArgumentList.Arguments.Select(x => x.Expression)
-                        .OfType<LiteralExpressionSyntax>();
+                                            .OfType<LiteralExpressionSyntax>();
                 var methodParameters =
                     objectCreationExpression.Ancestors()
-                        .OfType<MethodDeclarationSyntax>()
-                        .FirstOrDefault()?
-                        .ParameterList.Parameters;
+                                            .OfType<MethodDeclarationSyntax>()
+                                            .FirstOrDefault()?
+                                            .ParameterList.Parameters;
 
                 // Exception is declared outside a method
                 if (methodParameters == null)
@@ -65,7 +62,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOpe
                     var correspondingParameter =
                         methodParameters.Value.FirstOrDefault(
                             x =>
-                                string.Equals((string) x.Identifier.Value, (string) argumentName,
+                                string.Equals((string) x.Identifier.Value, argumentName,
                                     StringComparison.OrdinalIgnoreCase));
                     if (correspondingParameter != null)
                     {

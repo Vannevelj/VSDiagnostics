@@ -22,10 +22,7 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.GenericName);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.GenericName);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
@@ -79,19 +76,19 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
                 if (parentNode.Kind() == SyntaxKind.LocalDeclarationStatement)
                 {
                     identifier = ((LocalDeclarationStatementSyntax) parentNode).Declaration?
-                        .Variables
-                        .FirstOrDefault()?
-                        .Identifier
-                        .Text;
+                                                                               .Variables
+                                                                               .FirstOrDefault()?
+                                                                               .Identifier
+                                                                               .Text;
                 }
                 else if (parentNode.Kind() == SyntaxKind.FieldDeclaration)
                 {
                     identifier =
                         ((FieldDeclarationSyntax) parentNode).Declaration?
-                            .Variables
-                            .FirstOrDefault()?
-                            .Identifier
-                            .Text;
+                                                             .Variables
+                                                             .FirstOrDefault()?
+                                                             .Identifier
+                                                             .Text;
                 }
                 else if (parentNode.Kind() == SyntaxKind.Parameter)
                 {

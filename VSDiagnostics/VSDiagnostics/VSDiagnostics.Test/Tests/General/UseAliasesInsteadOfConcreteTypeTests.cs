@@ -940,7 +940,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        public static explicit operator int (MyClass c)
+        public static explicit operator int(MyClass c)
         {
             return 5;
         }

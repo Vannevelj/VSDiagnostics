@@ -39,12 +39,12 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
             {
                 var firstStatement =
                     property.AccessorList.Accessors.FirstOrDefault(x => x.Keyword.IsKind(SyntaxKind.GetKeyword))
-                        .Body.Statements.First();
+                            .Body.Statements.First();
                 var arrowClause =
                     SyntaxFactory.ArrowExpressionClause(((ReturnStatementSyntax) firstStatement).Expression);
                 var newProperty = property.RemoveNode(property.AccessorList, SyntaxRemoveOptions.KeepNoTrivia)
-                    .WithExpressionBody(arrowClause)
-                    .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+                                          .WithExpressionBody(arrowClause)
+                                          .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
 
                 root = root.ReplaceNode(property, newProperty);
@@ -54,13 +54,13 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
             if (method != null)
             {
                 var firstStatement = method.Body.Statements.First();
-                var expression = firstStatement is ExpressionStatementSyntax
+                var expression = firstStatement.IsKind(SyntaxKind.ExpressionStatement)
                     ? ((ExpressionStatementSyntax) firstStatement).Expression
                     : ((ReturnStatementSyntax) firstStatement).Expression;
                 var arrowClause = SyntaxFactory.ArrowExpressionClause(expression);
                 root = root.ReplaceNode(method, method.RemoveNode(method.Body, SyntaxRemoveOptions.KeepNoTrivia)
-                    .WithExpressionBody(arrowClause)
-                    .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
+                                                      .WithExpressionBody(arrowClause)
+                                                      .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
             }
 
             return Task.FromResult(document.WithSyntaxRoot(root).Project.Solution);

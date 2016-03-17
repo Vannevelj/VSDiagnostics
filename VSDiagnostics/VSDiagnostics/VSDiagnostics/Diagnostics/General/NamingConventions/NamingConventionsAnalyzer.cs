@@ -23,20 +23,17 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
             => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol,
-                SyntaxKind.FieldDeclaration,
-                SyntaxKind.PropertyDeclaration,
-                SyntaxKind.MethodDeclaration,
-                SyntaxKind.ClassDeclaration,
-                SyntaxKind.InterfaceDeclaration,
-                SyntaxKind.LocalDeclarationStatement,
-                SyntaxKind.Parameter,
-                SyntaxKind.StructDeclaration,
-                SyntaxKind.EnumDeclaration,
-                SyntaxKind.EnumMemberDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol,
+            SyntaxKind.FieldDeclaration,
+            SyntaxKind.PropertyDeclaration,
+            SyntaxKind.MethodDeclaration,
+            SyntaxKind.ClassDeclaration,
+            SyntaxKind.InterfaceDeclaration,
+            SyntaxKind.LocalDeclarationStatement,
+            SyntaxKind.Parameter,
+            SyntaxKind.StructDeclaration,
+            SyntaxKind.EnumDeclaration,
+            SyntaxKind.EnumMemberDeclaration);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
@@ -149,20 +146,19 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             if (nodeAsEnumMember != null)
             {
                 CheckNaming(nodeAsEnumMember.Identifier, "enum member", NamingConvention.UpperCamelCase, context);
-                return;
             }
         }
 
         private static void CheckNaming(SyntaxToken currentIdentifier, string memberType, NamingConvention convention,
-            SyntaxNodeAnalysisContext context)
+                                        SyntaxNodeAnalysisContext context)
         {
             var conventionedIdentifier = currentIdentifier.WithConvention(convention);
             if (conventionedIdentifier.Text != currentIdentifier.Text)
             {
                 context.ReportDiagnostic(
-                    Diagnostic.Create(Rule, currentIdentifier.GetLocation(), 
-                    ImmutableDictionary.CreateRange( new[] { new KeyValuePair<string, string>("convention", convention.ToString()) }), 
-                    memberType, currentIdentifier.Text, conventionedIdentifier.Text));
+                    Diagnostic.Create(Rule, currentIdentifier.GetLocation(),
+                        ImmutableDictionary.CreateRange(new[] { new KeyValuePair<string, string>("convention", convention.ToString()) }),
+                        memberType, currentIdentifier.Text, conventionedIdentifier.Text));
             }
         }
     }

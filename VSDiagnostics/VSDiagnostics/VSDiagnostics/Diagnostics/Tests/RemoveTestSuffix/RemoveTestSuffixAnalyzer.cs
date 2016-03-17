@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -22,10 +23,7 @@ namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.MethodDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.MethodDeclaration);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
@@ -35,7 +33,7 @@ namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
                 return;
             }
 
-            if (!method.Identifier.Text.EndsWith("Test", System.StringComparison.CurrentCultureIgnoreCase))
+            if (!method.Identifier.Text.EndsWith("Test", StringComparison.CurrentCultureIgnoreCase))
             {
                 return;
             }
@@ -50,7 +48,7 @@ namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
 
         private static bool IsTestMethod(MethodDeclarationSyntax method)
         {
-            var methodAttributes = new[] {"Test", "TestMethod", "Fact"};
+            var methodAttributes = new[] { "Test", "TestMethod", "Fact" };
             var attributes = method.AttributeLists.FirstOrDefault()?.Attributes;
 
             if (attributes == null)

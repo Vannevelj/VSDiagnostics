@@ -28,10 +28,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.MethodDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.MethodDeclaration);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
@@ -40,7 +37,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
 
 
             // class must implement INotifyPropertyChanged
-            if (!parentClass.ImplementsInterface(context.SemanticModel, typeof (INotifyPropertyChanged)))
+            if (!parentClass.ImplementsInterface(context.SemanticModel, typeof(INotifyPropertyChanged)))
             {
                 return;
             }
@@ -71,7 +68,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
             if (param.AttributeLists.Any(a => a.Attributes.Any() && a.Attributes.Any(t =>
             {
                 var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
-                return symbol != null && symbol.ContainingSymbol.MetadataName == typeof (CallerMemberNameAttribute).Name;
+                return symbol != null && symbol.ContainingSymbol.MetadataName == typeof(CallerMemberNameAttribute).Name;
             })))
             {
                 return;

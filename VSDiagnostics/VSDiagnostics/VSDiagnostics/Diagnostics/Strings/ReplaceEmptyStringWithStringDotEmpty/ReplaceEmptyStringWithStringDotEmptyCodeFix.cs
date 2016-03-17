@@ -35,7 +35,7 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
         }
 
         private static Task<Solution> UseStringDotEmptyAsync(Document document, SyntaxNode root,
-            LiteralExpressionSyntax literalDeclaration)
+                                                             LiteralExpressionSyntax literalDeclaration)
         {
             var stringDotEmptyInvocation = SyntaxFactory.ParseExpression("string.Empty").WithTriviaFrom(literalDeclaration);
             var newRoot =

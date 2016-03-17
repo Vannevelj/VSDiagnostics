@@ -8,7 +8,7 @@ using VSDiagnostics.Utilities;
 namespace VSDiagnostics.Diagnostics.General.GotoDetection
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class GotoDetectionAnalyzer : DiagnosticAnalyzer
+    public class GotoDetectionAnalyzer : DiagnosticAnalyzer
     {
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
@@ -21,11 +21,8 @@ namespace VSDiagnostics.Diagnostics.General.GotoDetection
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.GotoStatement, SyntaxKind.GotoCaseStatement,
-                SyntaxKind.GotoDefaultStatement);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.GotoStatement, SyntaxKind.GotoCaseStatement,
+            SyntaxKind.GotoDefaultStatement);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {

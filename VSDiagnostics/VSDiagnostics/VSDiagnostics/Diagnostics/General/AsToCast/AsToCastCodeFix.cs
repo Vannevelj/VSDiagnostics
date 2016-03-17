@@ -36,7 +36,7 @@ namespace VSDiagnostics.Diagnostics.General.AsToCast
             var typeSyntax = SyntaxFactory.ParseTypeName(binaryExpression.Right.GetText().ToString());
             var newExpression =
                 SyntaxFactory.CastExpression(typeSyntax, binaryExpression.Left)
-                    .WithAdditionalAnnotations(Formatter.Annotation);
+                             .WithAdditionalAnnotations(Formatter.Annotation);
 
             var newRoot = root.ReplaceNode(binaryExpression, newExpression);
 

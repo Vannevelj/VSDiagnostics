@@ -17,27 +17,32 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
         private static readonly string Message = VSDiagnosticsResources.ExplicitAccessModifiersAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.ExplicitAccessModifiersAnalyzerTitle;
 
+        private readonly SyntaxKind[] _accessModifierKinds =
+        {
+            SyntaxKind.PublicKeyword,
+            SyntaxKind.ProtectedKeyword,
+            SyntaxKind.InternalKeyword,
+            SyntaxKind.PrivateKeyword
+        };
+
         internal static DiagnosticDescriptor Rule
             => new DiagnosticDescriptor(DiagnosticId.ExplicitAccessModifiers, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol,
-                SyntaxKind.ClassDeclaration,
-                SyntaxKind.ConstructorDeclaration,
-                SyntaxKind.DelegateDeclaration,
-                SyntaxKind.EnumDeclaration,
-                SyntaxKind.EventDeclaration,
-                SyntaxKind.EventFieldDeclaration,
-                SyntaxKind.FieldDeclaration,
-                SyntaxKind.IndexerDeclaration,
-                SyntaxKind.InterfaceDeclaration,
-                SyntaxKind.MethodDeclaration,
-                SyntaxKind.PropertyDeclaration,
-                SyntaxKind.StructDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol,
+            SyntaxKind.ClassDeclaration,
+            SyntaxKind.ConstructorDeclaration,
+            SyntaxKind.DelegateDeclaration,
+            SyntaxKind.EnumDeclaration,
+            SyntaxKind.EventDeclaration,
+            SyntaxKind.EventFieldDeclaration,
+            SyntaxKind.FieldDeclaration,
+            SyntaxKind.IndexerDeclaration,
+            SyntaxKind.InterfaceDeclaration,
+            SyntaxKind.MethodDeclaration,
+            SyntaxKind.PropertyDeclaration,
+            SyntaxKind.StructDeclaration);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
@@ -192,7 +197,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             {
                 var declarationExpression = (IndexerDeclarationSyntax) context.Node;
                 if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())) &&
-                     declarationExpression.ExplicitInterfaceSpecifier == null)
+                    declarationExpression.ExplicitInterfaceSpecifier == null)
                 {
                     var accessibility =
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
@@ -202,13 +207,5 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 }
             }
         }
-
-        private readonly SyntaxKind[] _accessModifierKinds =
-        {
-            SyntaxKind.PublicKeyword,
-            SyntaxKind.ProtectedKeyword,
-            SyntaxKind.InternalKeyword,
-            SyntaxKind.PrivateKeyword
-        };
     }
 }

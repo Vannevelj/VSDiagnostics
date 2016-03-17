@@ -15,6 +15,17 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToFalseLiteral
     [ExportCodeFixProvider(nameof(CompareBooleanToFalseLiteralCodeFix), LanguageNames.CSharp), Shared]
     public class CompareBooleanToFalseLiteralCodeFix : CodeFixProvider
     {
+        private static readonly Dictionary<SyntaxKind, SyntaxKind> MapOperatorToReverseOperator =
+            new Dictionary<SyntaxKind, SyntaxKind>
+            {
+                { SyntaxKind.EqualsEqualsToken, SyntaxKind.ExclamationEqualsToken },
+                { SyntaxKind.ExclamationEqualsToken, SyntaxKind.EqualsEqualsToken },
+                { SyntaxKind.GreaterThanEqualsToken, SyntaxKind.LessThanToken },
+                { SyntaxKind.LessThanToken, SyntaxKind.GreaterThanEqualsToken },
+                { SyntaxKind.LessThanEqualsToken, SyntaxKind.GreaterThanToken },
+                { SyntaxKind.GreaterThanToken, SyntaxKind.LessThanEqualsToken }
+            };
+
         public override ImmutableArray<string> FixableDiagnosticIds
             => ImmutableArray.Create(CompareBooleanToFalseLiteralAnalyzer.Rule.Id);
 
@@ -54,7 +65,7 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToFalseLiteral
 
                 var newOperator = binaryExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken)
                     ? MapOperatorToReverseOperator.First(kvp => kvp.Key == internalBinaryExpression.OperatorToken.Kind())
-                        .Value
+                                                  .Value
                     : internalBinaryExpression.OperatorToken.Kind();
 
                 newExpression = internalBinaryExpression.WithOperatorToken(SyntaxFactory.Token(newOperator));
@@ -78,16 +89,5 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToFalseLiteral
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);
         }
-
-        private static readonly Dictionary<SyntaxKind, SyntaxKind> MapOperatorToReverseOperator =
-            new Dictionary<SyntaxKind, SyntaxKind>
-            {
-                {SyntaxKind.EqualsEqualsToken, SyntaxKind.ExclamationEqualsToken},
-                {SyntaxKind.ExclamationEqualsToken, SyntaxKind.EqualsEqualsToken},
-                {SyntaxKind.GreaterThanEqualsToken, SyntaxKind.LessThanToken},
-                {SyntaxKind.LessThanToken, SyntaxKind.GreaterThanEqualsToken},
-                {SyntaxKind.LessThanEqualsToken, SyntaxKind.GreaterThanToken},
-                {SyntaxKind.GreaterThanToken, SyntaxKind.LessThanEqualsToken},
-            };
     }
 }

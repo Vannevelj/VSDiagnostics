@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 {
@@ -42,7 +42,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 
             var newRoot = root.ReplaceNode(statement, newStatement);
 
-            var compilationUnit = (CompilationUnitSyntax)newRoot;
+            var compilationUnit = (CompilationUnitSyntax) newRoot;
 
             var usingSystemDirective = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System"));
             var usingDirectives = compilationUnit.Usings.Select(u => u.Name.GetText().ToString());

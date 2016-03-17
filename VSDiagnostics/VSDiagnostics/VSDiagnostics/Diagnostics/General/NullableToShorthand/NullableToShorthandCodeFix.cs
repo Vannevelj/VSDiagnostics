@@ -33,7 +33,7 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
         }
 
         private static async Task<Solution> UseShorthandNotationAsync(Document document, SyntaxNode root,
-            SyntaxToken declaration)
+                                                                      SyntaxToken declaration)
         {
             var node = root.FindNode(declaration.Span);
             var typeNode = (GenericNameSyntax) node;
