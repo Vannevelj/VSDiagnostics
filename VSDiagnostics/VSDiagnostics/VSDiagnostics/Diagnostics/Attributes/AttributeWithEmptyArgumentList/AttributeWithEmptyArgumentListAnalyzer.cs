@@ -30,7 +30,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
 
         private void AnalyzeCSharpSymbol(SyntaxNodeAnalysisContext context)
         {
-            var attributeExpression = context.Node as AttributeSyntax;
+            var attributeExpression = (AttributeSyntax) context.Node;
 
             // attribute must have arguments
             // if there are no parenthesis, the ArgumentList is null

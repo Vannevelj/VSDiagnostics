@@ -30,9 +30,9 @@ namespace VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentException
 
         private static void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
-            var throwStatement = context.Node as ThrowStatementSyntax;
+            var throwStatement = (ThrowStatementSyntax) context.Node;
 
-            var expression = throwStatement?.Expression as ObjectCreationExpressionSyntax;
+            var expression = throwStatement.Expression as ObjectCreationExpressionSyntax;
             if (expression == null)
             {
                 return;

@@ -29,30 +29,30 @@ namespace VSDiagnostics.Diagnostics.General.LoopStatementWithoutBraces
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var forLoop = context.Node as ForStatementSyntax;
-            if (forLoop != null)
+            if (context.Node.IsKind(SyntaxKind.ForStatement))
             {
+                var forLoop = (ForStatementSyntax) context.Node;
                 HandleFor(context, forLoop);
                 return;
             }
 
-            var whileLoop = context.Node as WhileStatementSyntax;
-            if (whileLoop != null)
+            if (context.Node.IsKind(SyntaxKind.WhileStatement))
             {
+                var whileLoop = (WhileStatementSyntax) context.Node;
                 HandleWhile(context, whileLoop);
                 return;
             }
 
-            var foreachLoop = context.Node as ForEachStatementSyntax;
-            if (foreachLoop != null)
+            if (context.Node.IsKind(SyntaxKind.ForEachStatement))
             {
+                var foreachLoop = (ForEachStatementSyntax) context.Node;
                 HandleForeach(context, foreachLoop);
                 return;
             }
 
-            var doLoop = context.Node as DoStatementSyntax;
-            if (doLoop != null)
+            if (context.Node.IsKind(SyntaxKind.DoStatement))
             {
+                var doLoop = (DoStatementSyntax) context.Node;
                 HandleDo(context, doLoop);
             }
         }

@@ -41,17 +41,15 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             Diagnostic diagnostic = null;
-
-            var asProperty = context.Node as PropertyDeclarationSyntax;
-            if (asProperty != null)
+            
+            if (context.Node.IsKind(SyntaxKind.PropertyDeclaration))
             {
-                diagnostic = HandleProperty(asProperty);
+                diagnostic = HandleProperty((PropertyDeclarationSyntax)context.Node);
             }
-
-            var asMethod = context.Node as MethodDeclarationSyntax;
-            if (asMethod != null)
+            
+            if (context.Node.IsKind(SyntaxKind.MethodDeclaration))
             {
-                diagnostic = HandleMethod(asMethod);
+                diagnostic = HandleMethod((MethodDeclarationSyntax)context.Node);
             }
 
             if (diagnostic != null)

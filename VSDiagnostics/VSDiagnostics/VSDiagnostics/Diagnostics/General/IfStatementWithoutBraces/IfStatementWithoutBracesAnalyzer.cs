@@ -28,15 +28,15 @@ namespace VSDiagnostics.Diagnostics.General.IfStatementWithoutBraces
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var ifStatement = context.Node as IfStatementSyntax;
-            if (ifStatement != null)
+            if (context.Node.IsKind(SyntaxKind.IfStatement))
             {
+                var ifStatement = (IfStatementSyntax) context.Node;
                 HandleIf(context, ifStatement);
             }
 
-            var elseClause = context.Node as ElseClauseSyntax;
-            if (elseClause != null)
+            if (context.Node.IsKind(SyntaxKind.ElseClause))
             {
+                var elseClause = (ElseClauseSyntax) context.Node;
                 HandleElse(context, elseClause);
             }
         }

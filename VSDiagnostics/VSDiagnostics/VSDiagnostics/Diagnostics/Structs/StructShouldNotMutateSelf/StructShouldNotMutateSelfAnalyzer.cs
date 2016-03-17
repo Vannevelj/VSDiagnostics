@@ -30,11 +30,7 @@ namespace VSDiagnostics.Diagnostics.Structs.StructShouldNotMutateSelf
         {
             // Looking for
             // this = someValueType;
-            var assignmentExpression = context.Node as AssignmentExpressionSyntax;
-            if (assignmentExpression == null)
-            {
-                return;
-            }
+            var assignmentExpression = (AssignmentExpressionSyntax) context.Node;
             
             if (!(assignmentExpression.Left is ThisExpressionSyntax))
             {

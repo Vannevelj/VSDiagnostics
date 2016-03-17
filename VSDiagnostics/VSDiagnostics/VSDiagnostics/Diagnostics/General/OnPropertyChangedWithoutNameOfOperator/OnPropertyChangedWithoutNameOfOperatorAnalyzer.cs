@@ -38,9 +38,9 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var invocation = context.Node as InvocationExpressionSyntax;
+            var invocation = (InvocationExpressionSyntax) context.Node;
 
-            var identifierExpression = invocation?.Expression as IdentifierNameSyntax;
+            var identifierExpression = invocation.Expression as IdentifierNameSyntax;
             if (identifierExpression == null)
             {
                 return;
