@@ -29,11 +29,7 @@ namespace VSDiagnostics.Diagnostics.General.GotoDetection
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var literalExpression = context.Node as GotoStatementSyntax;
-            if (literalExpression == null)
-            {
-                return;
-            }
+            var literalExpression = (GotoStatementSyntax) context.Node;
 
             context.ReportDiagnostic(Diagnostic.Create(Rule, literalExpression.GetLocation()));
         }

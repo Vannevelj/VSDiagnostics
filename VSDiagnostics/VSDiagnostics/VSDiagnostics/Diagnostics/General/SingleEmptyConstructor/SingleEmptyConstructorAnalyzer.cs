@@ -29,11 +29,7 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var constructorDeclaration = context.Node as ConstructorDeclarationSyntax;
-            if (constructorDeclaration == null)
-            {
-                return;
-            }
+            var constructorDeclaration = (ConstructorDeclarationSyntax) context.Node;
 
             // ctor must be public
             if (!constructorDeclaration.Modifiers.Any(SyntaxKind.PublicKeyword))

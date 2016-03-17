@@ -28,11 +28,7 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var literalExpression = context.Node as LiteralExpressionSyntax;
-            if (literalExpression == null)
-            {
-                return;
-            }
+            var literalExpression = (LiteralExpressionSyntax) context.Node;
 
             if (!(literalExpression.Token.IsKind(SyntaxKind.TrueKeyword) && literalExpression.Token.Value is bool))
             {

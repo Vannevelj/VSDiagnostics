@@ -29,9 +29,9 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var localDeclaration = context.Node as LocalDeclarationStatementSyntax;
+            var localDeclaration = (LocalDeclarationStatementSyntax) context.Node;
 
-            if (localDeclaration?.Declaration == null)
+            if (localDeclaration.Declaration == null)
             {
                 return;
             }
