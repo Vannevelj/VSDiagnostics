@@ -37,13 +37,13 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOpe
         }
 
         private Task<Solution> UseNameofAsync(Document document, SyntaxNode root,
-            ObjectCreationExpressionSyntax objectCreationExpression)
+                                              ObjectCreationExpressionSyntax objectCreationExpression)
         {
             var method = objectCreationExpression.Ancestors().OfType<MethodDeclarationSyntax>().First();
             var methodParameters = method.ParameterList.Parameters;
             var expressionArguments =
                 objectCreationExpression.ArgumentList.Arguments.Select(x => x.Expression)
-                    .OfType<LiteralExpressionSyntax>();
+                                        .OfType<LiteralExpressionSyntax>();
 
             foreach (var expressionArgument in expressionArguments)
             {

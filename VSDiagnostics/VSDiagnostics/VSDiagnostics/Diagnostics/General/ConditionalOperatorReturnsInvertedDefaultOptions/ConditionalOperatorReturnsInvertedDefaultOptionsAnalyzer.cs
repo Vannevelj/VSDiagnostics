@@ -25,10 +25,7 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsInvertedDe
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.ConditionalExpression);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.ConditionalExpression);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {

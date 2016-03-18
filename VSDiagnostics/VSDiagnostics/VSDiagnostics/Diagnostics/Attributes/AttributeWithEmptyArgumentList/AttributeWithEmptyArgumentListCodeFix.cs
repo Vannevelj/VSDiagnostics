@@ -32,7 +32,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
 
         private Task<Solution> RemoveEmptyArgumentListAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
-            var newRoot = root.RemoveNode(((AttributeSyntax)statement).ArgumentList, SyntaxRemoveOptions.KeepNoTrivia);
+            var newRoot = root.RemoveNode(((AttributeSyntax) statement).ArgumentList, SyntaxRemoveOptions.KeepNoTrivia);
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);
         }

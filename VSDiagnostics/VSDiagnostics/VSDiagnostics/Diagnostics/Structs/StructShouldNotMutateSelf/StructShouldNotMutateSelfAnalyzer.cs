@@ -21,10 +21,7 @@ namespace VSDiagnostics.Diagnostics.Structs.StructShouldNotMutateSelf
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.SimpleAssignmentExpression);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.SimpleAssignmentExpression);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
@@ -35,7 +32,7 @@ namespace VSDiagnostics.Diagnostics.Structs.StructShouldNotMutateSelf
             {
                 return;
             }
-            
+
             if (!(assignmentExpression.Left is ThisExpressionSyntax))
             {
                 return;

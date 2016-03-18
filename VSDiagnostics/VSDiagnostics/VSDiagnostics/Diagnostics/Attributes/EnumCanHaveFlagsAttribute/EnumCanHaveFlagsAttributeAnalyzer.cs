@@ -2,10 +2,10 @@
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using VSDiagnostics.Utilities;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 {
@@ -23,10 +23,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeCSharpSymbol, SyntaxKind.EnumDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeCSharpSymbol, SyntaxKind.EnumDeclaration);
 
         private void AnalyzeCSharpSymbol(SyntaxNodeAnalysisContext context)
         {
@@ -39,7 +36,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
                     {
                         var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
 
-                        return symbol == null || symbol.ContainingType.MetadataName == typeof (FlagsAttribute).Name;
+                        return symbol == null || symbol.ContainingType.MetadataName == typeof(FlagsAttribute).Name;
                     })))
             {
                 return;

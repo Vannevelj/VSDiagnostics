@@ -31,8 +31,8 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
         private Task<Solution> UseVarAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var varIdentifier = SyntaxFactory.IdentifierName("var")
-                .WithLeadingTrivia(statement.GetLeadingTrivia())
-                .WithTrailingTrivia(statement.GetTrailingTrivia());
+                                             .WithLeadingTrivia(statement.GetLeadingTrivia())
+                                             .WithTrailingTrivia(statement.GetTrailingTrivia());
 
             var newRoot = root.ReplaceNode(statement, varIdentifier);
 

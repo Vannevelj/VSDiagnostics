@@ -35,9 +35,7 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
         }
 
         private async Task<Solution> AddSuffixAsync(Document document, MethodDeclarationSyntax methodDeclaration, SyntaxNode root,
-            CancellationToken cancellationToken)
-        {
-            return await RenameHelper.RenameSymbolAsync(document, root, methodDeclaration.Identifier, methodDeclaration.Identifier.Text + "Async", cancellationToken);
-        }
+                                                    CancellationToken cancellationToken)
+            => await RenameHelper.RenameSymbolAsync(document, root, methodDeclaration.Identifier, methodDeclaration.Identifier.Text + "Async", cancellationToken);
     }
 }

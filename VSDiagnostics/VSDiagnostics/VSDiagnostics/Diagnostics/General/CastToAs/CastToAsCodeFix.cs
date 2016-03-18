@@ -35,7 +35,7 @@ namespace VSDiagnostics.Diagnostics.General.CastToAs
             var castExpression = (CastExpressionSyntax) statement;
             var newExpression =
                 SyntaxFactory.BinaryExpression(SyntaxKind.AsExpression, castExpression.Expression, castExpression.Type)
-                    .WithAdditionalAnnotations(Formatter.Annotation);
+                             .WithAdditionalAnnotations(Formatter.Annotation);
 
             var newRoot = root.ReplaceNode(castExpression, newExpression);
 

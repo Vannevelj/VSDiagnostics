@@ -15,7 +15,7 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsConstant
     public class ConditionIsConstantCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
-            => ImmutableArray.Create(General.ConditionIsConstant.ConditionIsConstant.Rule.Id);
+            => ImmutableArray.Create(ConditionIsConstantAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -32,7 +32,7 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsConstant
                 context.RegisterCodeFix(
                     CodeAction.Create(VSDiagnosticsResources.ConditionIsConstantCodeFixTitle,
                         x => RemoveConstantTrueConditionAsync(context.Document, root, statement),
-                        ConditionIsConstant.Rule.Id),
+                        ConditionIsConstantAnalyzer.Rule.Id),
                     diagnostic);
             }
             else
@@ -40,7 +40,7 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsConstant
                 context.RegisterCodeFix(
                     CodeAction.Create(VSDiagnosticsResources.ConditionIsConstantCodeFixTitle,
                         x => RemoveConstantFalseConditionAsync(context.Document, root, statement),
-                        ConditionIsConstant.Rule.Id),
+                        ConditionIsConstantAnalyzer.Rule.Id),
                     diagnostic);
             }
         }

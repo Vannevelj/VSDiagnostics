@@ -32,7 +32,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStac
         }
 
         private Task<Solution> RemoveRethrowAsync(Document document, SyntaxNode root,
-            ThrowStatementSyntax throwStatement)
+                                                  ThrowStatementSyntax throwStatement)
         {
             var newStatement = SyntaxFactory.ThrowStatement();
             var newRoot = root.ReplaceNode(throwStatement, newStatement);

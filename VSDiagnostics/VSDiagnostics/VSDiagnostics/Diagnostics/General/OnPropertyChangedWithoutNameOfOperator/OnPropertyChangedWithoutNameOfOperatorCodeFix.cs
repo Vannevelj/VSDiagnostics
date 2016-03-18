@@ -23,7 +23,7 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
             var diagnostic = context.Diagnostics.First();
 
             context.RegisterCodeFix(
-                    CodeAction.Create(VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorCodeFixTitle,
+                CodeAction.Create(VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorCodeFixTitle,
                     x => UseNameOfAsync(context.Document, root, diagnostic),
                     OnPropertyChangedWithoutNameOfOperatorAnalyzer.Rule.Id), diagnostic);
         }

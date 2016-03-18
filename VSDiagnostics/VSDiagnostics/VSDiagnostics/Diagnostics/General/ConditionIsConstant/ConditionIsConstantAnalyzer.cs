@@ -9,7 +9,7 @@ using VSDiagnostics.Utilities;
 namespace VSDiagnostics.Diagnostics.General.ConditionIsConstant
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class ConditionIsConstant : DiagnosticAnalyzer
+    public class ConditionIsConstantAnalyzer : DiagnosticAnalyzer
     {
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
@@ -22,10 +22,7 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsConstant
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.IfStatement);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.IfStatement);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
@@ -46,7 +43,7 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsConstant
                     "true"));
             }
 
-            if (!(bool)constantValue.Value)
+            if (!(bool) constantValue.Value)
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule,
                     ifStatement.Condition.GetLocation(),
