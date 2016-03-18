@@ -7,10 +7,11 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
 {
-    [ExportCodeFixProvider(nameof(SimplifyExpressionBodiedMemberCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.SimplifyExpressionBodiedMember + "CF", LanguageNames.CSharp), Shared]
     public class SimplifyExpressionBodiedMemberCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds

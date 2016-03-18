@@ -6,10 +6,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Simplification;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
 {
-    [ExportCodeFixProvider(nameof(UseAliasesInsteadOfConcreteTypeCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.UseAliasesInsteadOfConcreteType + "CF", LanguageNames.CSharp), Shared]
     public class UseAliasesInsteadOfConcreteTypeCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds

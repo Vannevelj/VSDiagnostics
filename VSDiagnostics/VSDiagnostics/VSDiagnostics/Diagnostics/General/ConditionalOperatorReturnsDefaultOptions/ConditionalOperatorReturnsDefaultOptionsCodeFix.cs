@@ -7,10 +7,11 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsDefaultOptions
 {
-    [ExportCodeFixProvider(nameof(ConditionalOperatorReturnsDefaultOptionsCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.ConditionalOperatorReturnsDefaultOptions + "CF", LanguageNames.CSharp), Shared]
     public class ConditionalOperatorReturnsDefaultOptionsCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds

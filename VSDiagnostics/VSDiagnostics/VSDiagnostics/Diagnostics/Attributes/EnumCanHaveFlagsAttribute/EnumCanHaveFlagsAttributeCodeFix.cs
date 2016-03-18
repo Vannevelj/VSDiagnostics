@@ -8,10 +8,11 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 {
-    [ExportCodeFixProvider(nameof(EnumCanHaveFlagsAttributeCodeFix), LanguageNames.CSharp),
+    [ExportCodeFixProvider(DiagnosticId.EnumCanHaveFlagsAttribute, LanguageNames.CSharp),
      Shared]
     public class EnumCanHaveFlagsAttributeCodeFix : CodeFixProvider
     {

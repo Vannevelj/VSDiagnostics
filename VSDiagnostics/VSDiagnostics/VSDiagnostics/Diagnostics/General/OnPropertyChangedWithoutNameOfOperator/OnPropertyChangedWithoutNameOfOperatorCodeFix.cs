@@ -6,10 +6,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperator
 {
-    [ExportCodeFixProvider(nameof(OnPropertyChangedWithoutNameOfOperatorCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.OnPropertyChangedWithoutNameofOperator + "CF", LanguageNames.CSharp), Shared]
     public class OnPropertyChangedWithoutNameOfOperatorCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds

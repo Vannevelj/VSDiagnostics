@@ -7,10 +7,11 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStacktrace
 {
-    [ExportCodeFixProvider(nameof(RethrowExceptionWithoutLosingStacktraceCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.RethrowExceptionWithoutLosingStacktrace + "CF", LanguageNames.CSharp), Shared]
     public class RethrowExceptionWithoutLosingStacktraceCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds

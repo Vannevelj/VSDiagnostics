@@ -11,10 +11,11 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Simplification;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
 {
-    [ExportCodeFixProvider(nameof(SwitchDoesNotHandleAllEnumOptionsCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.SwitchDoesNotHandleAllEnumOptions + "CF", LanguageNames.CSharp), Shared]
     internal class SwitchDoesNotHandleAllEnumOptionsCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds

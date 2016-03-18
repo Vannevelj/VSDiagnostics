@@ -10,10 +10,11 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
 {
-    [ExportCodeFixProvider(nameof(StringPlaceHoldersInWrongOrderCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.StringPlaceholdersInWrongOrder + "CF", LanguageNames.CSharp), Shared]
     public class StringPlaceHoldersInWrongOrderCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds

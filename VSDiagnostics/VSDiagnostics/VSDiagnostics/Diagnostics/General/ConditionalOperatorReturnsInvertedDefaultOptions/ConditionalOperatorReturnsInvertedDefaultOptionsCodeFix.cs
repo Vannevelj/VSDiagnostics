@@ -8,10 +8,11 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsInvertedDefaultOptions
 {
-    [ExportCodeFixProvider(nameof(ConditionalOperatorReturnsInvertedDefaultOptionsCodeFix), LanguageNames.CSharp),
+    [ExportCodeFixProvider(DiagnosticId.ConditionalOperatorReturnsInvertedDefaultOptions, LanguageNames.CSharp),
      Shared]
     public class ConditionalOperatorReturnsInvertedDefaultOptionsCodeFix : CodeFixProvider
     {
