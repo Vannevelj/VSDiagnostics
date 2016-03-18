@@ -7,10 +7,11 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.LoopStatementWithoutBraces
 {
-    [ExportCodeFixProvider("LoopWithoutBraces", LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.LoopStatementWithoutBraces + "CF", LanguageNames.CSharp), Shared]
     public class LoopStatementWithoutBracesCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds

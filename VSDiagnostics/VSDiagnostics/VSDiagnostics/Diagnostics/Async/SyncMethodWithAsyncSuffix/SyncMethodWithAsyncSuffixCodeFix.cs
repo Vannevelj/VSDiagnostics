@@ -11,7 +11,7 @@ using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithSyncSuffix
 {
-    [ExportCodeFixProvider(nameof(SyncMethodWithAsyncSuffixCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.SyncMethodWithAsyncSuffix + "CF", LanguageNames.CSharp), Shared]
     public class SyncMethodWithAsyncSuffixCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds

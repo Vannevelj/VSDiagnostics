@@ -6,10 +6,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Editing;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
 {
-    [ExportCodeFixProvider(nameof(ExplicitAccessModifiersCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.ExplicitAccessModifiers + "CF", LanguageNames.CSharp), Shared]
     public class ExplicitAccessModifiersCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds

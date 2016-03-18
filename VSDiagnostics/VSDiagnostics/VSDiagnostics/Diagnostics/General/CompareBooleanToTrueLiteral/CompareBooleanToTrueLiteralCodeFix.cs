@@ -9,10 +9,11 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
 {
-    [ExportCodeFixProvider(nameof(CompareBooleanToTrueLiteralCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.CompareBooleanToTrueLiteral + "CF", LanguageNames.CSharp), Shared]
     public class CompareBooleanToTrueLiteralCodeFix : CodeFixProvider
     {
         private static readonly Dictionary<SyntaxKind, SyntaxKind> MapOperatorToReverseOperator =

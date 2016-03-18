@@ -9,10 +9,11 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
 {
-    [ExportCodeFixProvider(nameof(NonEncapsulatedOrMutableFieldCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.NonEncapsulatedOrMutableField + "CF", LanguageNames.CSharp), Shared]
     public class NonEncapsulatedOrMutableFieldCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds

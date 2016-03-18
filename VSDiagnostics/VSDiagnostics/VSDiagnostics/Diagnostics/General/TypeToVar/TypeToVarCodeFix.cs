@@ -6,10 +6,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.TypeToVar
 {
-    [ExportCodeFixProvider(nameof(TypeToVarCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.TypeToVar + "CF", LanguageNames.CSharp), Shared]
     public class TypeToVarCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(TypeToVarAnalyzer.Rule.Id);

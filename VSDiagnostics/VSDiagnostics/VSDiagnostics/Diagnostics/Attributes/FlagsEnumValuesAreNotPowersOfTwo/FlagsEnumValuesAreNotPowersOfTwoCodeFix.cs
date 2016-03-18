@@ -9,10 +9,11 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 {
-    [ExportCodeFixProvider(nameof(FlagsEnumValuesAreNotPowersOfTwoCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.FlagsEnumValuesAreNotPowersOfTwo + "CF", LanguageNames.CSharp), Shared]
     public class FlagsEnumValuesAreNotPowersOfTwoCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds

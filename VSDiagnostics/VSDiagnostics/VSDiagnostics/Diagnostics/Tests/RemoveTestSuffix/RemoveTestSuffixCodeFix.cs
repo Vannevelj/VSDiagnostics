@@ -11,7 +11,7 @@ using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
 {
-    [ExportCodeFixProvider(nameof(RemoveTestSuffixCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.RemoveTestSuffix + "CF", LanguageNames.CSharp), Shared]
     public class RemoveTestSuffixCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds

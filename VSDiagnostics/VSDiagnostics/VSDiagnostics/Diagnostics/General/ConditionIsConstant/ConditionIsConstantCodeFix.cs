@@ -8,10 +8,11 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.ConditionIsConstant
 {
-    [ExportCodeFixProvider(nameof(ConditionIsConstantCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.ConditionIsConstant, LanguageNames.CSharp), Shared]
     public class ConditionIsConstantCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds

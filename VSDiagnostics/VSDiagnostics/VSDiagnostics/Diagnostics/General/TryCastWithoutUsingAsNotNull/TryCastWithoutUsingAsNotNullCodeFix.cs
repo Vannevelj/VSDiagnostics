@@ -16,7 +16,7 @@ using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 {
-    [ExportCodeFixProvider(nameof(TryCastWithoutUsingAsNotNullCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.TryCastWithoutUsingAsNotNull + "CF", LanguageNames.CSharp), Shared]
     public class TryCastWithoutUsingAsNotNullCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
