@@ -34,9 +34,9 @@ namespace VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStac
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var throwStatement = context.Node as ThrowStatementSyntax;
+            var throwStatement = (ThrowStatementSyntax) context.Node;
 
-            var throwIdentifierSyntax = throwStatement?.Expression as IdentifierNameSyntax;
+            var throwIdentifierSyntax = throwStatement.Expression as IdentifierNameSyntax;
             if (throwIdentifierSyntax == null)
             {
                 return;

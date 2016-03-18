@@ -28,11 +28,7 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var identifier = context.Node as IdentifierNameSyntax;
-            if (identifier == null)
-            {
-                return;
-            }
+            var identifier = (IdentifierNameSyntax) context.Node;
 
             // A nameof() expression cannot contain aliases
             // There is no way to distinguish between a self-defined method 'nameof' and the nameof operator so we have to ignore all invocations that call into 'nameof'

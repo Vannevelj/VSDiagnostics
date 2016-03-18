@@ -29,11 +29,7 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var fieldDeclaration = context.Node as FieldDeclarationSyntax;
-            if (fieldDeclaration == null)
-            {
-                return;
-            }
+            var fieldDeclaration = (FieldDeclarationSyntax) context.Node;
 
             // Don't handle (semi-)immutable fields
             if (fieldDeclaration.Modifiers.Any(

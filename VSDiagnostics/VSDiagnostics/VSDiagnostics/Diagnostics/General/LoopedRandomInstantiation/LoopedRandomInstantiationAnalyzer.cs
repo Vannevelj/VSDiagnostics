@@ -30,9 +30,9 @@ namespace VSDiagnostics.Diagnostics.General.LoopedRandomInstantiation
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var variableDeclaration = context.Node as VariableDeclarationSyntax;
+            var variableDeclaration = (VariableDeclarationSyntax) context.Node;
 
-            var type = variableDeclaration?.Type;
+            var type = variableDeclaration.Type;
             if (type == null) { return; }
 
             var typeInfo = context.SemanticModel.GetTypeInfo(type).Type;

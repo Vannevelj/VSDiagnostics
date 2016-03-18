@@ -32,9 +32,9 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsInvertedDe
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var conditionalExpression = context.Node as ConditionalExpressionSyntax;
+            var conditionalExpression = (ConditionalExpressionSyntax) context.Node;
 
-            var trueExpression = conditionalExpression?.WhenTrue as LiteralExpressionSyntax;
+            var trueExpression = conditionalExpression.WhenTrue as LiteralExpressionSyntax;
             if (trueExpression == null)
             {
                 return;

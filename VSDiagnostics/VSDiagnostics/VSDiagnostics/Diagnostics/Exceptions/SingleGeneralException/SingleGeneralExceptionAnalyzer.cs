@@ -29,8 +29,8 @@ namespace VSDiagnostics.Diagnostics.Exceptions.SingleGeneralException
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var tryStatement = context.Node as TryStatementSyntax;
-            if (tryStatement?.Catches.Count != 1)
+            var tryStatement = (TryStatementSyntax) context.Node;
+            if (tryStatement.Catches.Count != 1)
             {
                 return;
             }
