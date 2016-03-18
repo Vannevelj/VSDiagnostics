@@ -26,9 +26,9 @@ namespace VSDiagnostics.Diagnostics.Exceptions.CatchNullReferenceException
 
         private void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
-            var catchDeclaration = context.Node as CatchDeclarationSyntax;
+            var catchDeclaration = (CatchDeclarationSyntax) context.Node;
 
-            var catchType = catchDeclaration?.Type;
+            var catchType = catchDeclaration.Type;
             if (catchType == null)
             {
                 return;

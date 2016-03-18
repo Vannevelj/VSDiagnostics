@@ -27,11 +27,7 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
 
         private static void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
-            var method = context.Node as MethodDeclarationSyntax;
-            if (method == null)
-            {
-                return;
-            }
+            var method = (MethodDeclarationSyntax) context.Node;
 
             if (method.Modifiers.Any(SyntaxKind.OverrideKeyword))
             {

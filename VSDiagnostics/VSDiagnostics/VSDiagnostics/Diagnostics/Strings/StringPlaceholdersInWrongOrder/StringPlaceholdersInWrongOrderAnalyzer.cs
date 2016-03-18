@@ -27,11 +27,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var invocation = context.Node as InvocationExpressionSyntax;
-            if (invocation == null)
-            {
-                return;
-            }
+            var invocation = (InvocationExpressionSyntax) context.Node;
 
             // Verify we're dealing with a string.Format() call
             if (!invocation.IsAnInvocationOf(typeof(string), nameof(string.Format), context.SemanticModel))

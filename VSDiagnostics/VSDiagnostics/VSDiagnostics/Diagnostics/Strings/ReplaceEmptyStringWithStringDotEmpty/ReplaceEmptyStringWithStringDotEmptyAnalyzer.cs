@@ -34,11 +34,7 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
                 return;
             }
 
-            var stringLiteral = context.Node as LiteralExpressionSyntax;
-            if (stringLiteral == null)
-            {
-                return;
-            }
+            var stringLiteral = (LiteralExpressionSyntax) context.Node;
 
             if (stringLiteral.Token.Text != "\"\"")
             {

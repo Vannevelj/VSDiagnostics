@@ -27,11 +27,7 @@ namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var method = context.Node as MethodDeclarationSyntax;
-            if (method == null)
-            {
-                return;
-            }
+            var method = (MethodDeclarationSyntax) context.Node;
 
             if (!method.Identifier.Text.EndsWith("Test", StringComparison.CurrentCultureIgnoreCase))
             {

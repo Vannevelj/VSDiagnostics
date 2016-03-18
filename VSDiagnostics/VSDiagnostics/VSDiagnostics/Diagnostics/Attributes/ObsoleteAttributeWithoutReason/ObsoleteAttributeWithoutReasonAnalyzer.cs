@@ -26,11 +26,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.ObsoleteAttributeWithoutReason
 
         private void AnalyzeCSharpSymbol(SyntaxNodeAnalysisContext context)
         {
-            var attributeExpression = context.Node as AttributeSyntax;
-            if (attributeExpression == null)
-            {
-                return;
-            }
+            var attributeExpression = (AttributeSyntax) context.Node;
 
             // attribute type must be of type ObsoleteAttribute
             var type = context.SemanticModel.GetSymbolInfo(attributeExpression).Symbol;

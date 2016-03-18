@@ -46,12 +46,12 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node.Parent is InterfaceDeclarationSyntax)
+            if (context.Node.Parent.IsKind(SyntaxKind.InterfaceDeclaration))
             {
                 return;
             }
 
-            if (context.Node is ClassDeclarationSyntax)
+            if (context.Node.IsKind(SyntaxKind.ClassDeclaration))
             {
                 var declarationExpression = (ClassDeclarationSyntax) context.Node;
                 if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
@@ -64,7 +64,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 }
             }
 
-            if (context.Node is StructDeclarationSyntax)
+            if (context.Node.IsKind(SyntaxKind.StructDeclaration))
             {
                 var declarationExpression = (StructDeclarationSyntax) context.Node;
                 if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
@@ -77,7 +77,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 }
             }
 
-            if (context.Node is EnumDeclarationSyntax)
+            if (context.Node.IsKind(SyntaxKind.EnumDeclaration))
             {
                 var declarationExpression = (EnumDeclarationSyntax) context.Node;
                 if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
@@ -90,7 +90,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 }
             }
 
-            if (context.Node is DelegateDeclarationSyntax)
+            if (context.Node.IsKind(SyntaxKind.DelegateDeclaration))
             {
                 var declarationExpression = (DelegateDeclarationSyntax) context.Node;
                 if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
@@ -103,7 +103,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 }
             }
 
-            if (context.Node is InterfaceDeclarationSyntax)
+            if (context.Node.IsKind(SyntaxKind.InterfaceDeclaration))
             {
                 var declarationExpression = (InterfaceDeclarationSyntax) context.Node;
                 if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
@@ -116,7 +116,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 }
             }
 
-            if (context.Node is FieldDeclarationSyntax)
+            if (context.Node.IsKind(SyntaxKind.FieldDeclaration))
             {
                 var declarationExpression = (FieldDeclarationSyntax) context.Node;
                 if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
@@ -126,7 +126,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 }
             }
 
-            if (context.Node is PropertyDeclarationSyntax)
+            if (context.Node.IsKind(SyntaxKind.PropertyDeclaration))
             {
                 var declarationExpression = (PropertyDeclarationSyntax) context.Node;
                 if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())) &&
@@ -140,7 +140,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 }
             }
 
-            if (context.Node is MethodDeclarationSyntax)
+            if (context.Node.IsKind(SyntaxKind.MethodDeclaration))
             {
                 var declarationExpression = (MethodDeclarationSyntax) context.Node;
                 if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())) &&
@@ -155,7 +155,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 }
             }
 
-            if (context.Node is ConstructorDeclarationSyntax)
+            if (context.Node.IsKind(SyntaxKind.ConstructorDeclaration))
             {
                 var declarationExpression = (ConstructorDeclarationSyntax) context.Node;
                 if (
@@ -170,7 +170,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 }
             }
 
-            if (context.Node is EventFieldDeclarationSyntax)
+            if (context.Node.IsKind(SyntaxKind.EventFieldDeclaration))
             {
                 var declarationExpression = (EventFieldDeclarationSyntax) context.Node;
                 if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
@@ -180,7 +180,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 }
             }
 
-            if (context.Node is EventDeclarationSyntax)
+            if (context.Node.IsKind(SyntaxKind.EventDeclaration))
             {
                 var declarationExpression = (EventDeclarationSyntax) context.Node;
                 if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
@@ -193,7 +193,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
                 }
             }
 
-            if (context.Node is IndexerDeclarationSyntax)
+            if (context.Node.IsKind(SyntaxKind.IndexerDeclaration))
             {
                 var declarationExpression = (IndexerDeclarationSyntax) context.Node;
                 if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())) &&

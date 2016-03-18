@@ -25,11 +25,7 @@ namespace VSDiagnostics.Diagnostics.General.CastToAs
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var castExpression = context.Node as CastExpressionSyntax;
-            if (castExpression == null)
-            {
-                return;
-            }
+            var castExpression = (CastExpressionSyntax) context.Node;
 
             var castedTypeInfo = context.SemanticModel.GetTypeInfo(castExpression.Expression);
             if (castedTypeInfo.ConvertedType != null && castedTypeInfo.ConvertedType.IsValueType)

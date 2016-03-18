@@ -31,8 +31,8 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOpe
 
         private void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
-            var objectCreationExpression = context.Node as ObjectCreationExpressionSyntax;
-            if (objectCreationExpression?.ArgumentList == null || !objectCreationExpression.ArgumentList.Arguments.Any())
+            var objectCreationExpression = (ObjectCreationExpressionSyntax) context.Node;
+            if (objectCreationExpression.ArgumentList == null || !objectCreationExpression.ArgumentList.Arguments.Any())
             {
                 return;
             }

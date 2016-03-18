@@ -20,7 +20,7 @@ namespace VSDiagnostics.Diagnostics.General.LoopedRandomInstantiation
         private readonly SyntaxKind[] _loopTypes = { SyntaxKind.ForEachStatement, SyntaxKind.ForStatement, SyntaxKind.WhileStatement, SyntaxKind.DoStatement };
 
         internal static DiagnosticDescriptor Rule =>
-            new DiagnosticDescriptor(DiagnosticId.LoopedRandomInstantiation, Title, Message, Category, Severity, true);
+                new DiagnosticDescriptor(DiagnosticId.LoopedRandomInstantiation, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -28,13 +28,10 @@ namespace VSDiagnostics.Diagnostics.General.LoopedRandomInstantiation
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var variableDeclaration = context.Node as VariableDeclarationSyntax;
+            var variableDeclaration = (VariableDeclarationSyntax) context.Node;
 
-            var type = variableDeclaration?.Type;
-            if (type == null)
-            {
-                return;
-            }
+            var type = variableDeclaration.Type;
+            if (type == null) { return; }
 
             var typeInfo = context.SemanticModel.GetTypeInfo(type).Type;
 

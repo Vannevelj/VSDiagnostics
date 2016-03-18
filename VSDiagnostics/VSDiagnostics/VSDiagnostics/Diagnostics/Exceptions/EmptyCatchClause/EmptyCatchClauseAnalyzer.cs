@@ -26,8 +26,8 @@ namespace VSDiagnostics.Diagnostics.Exceptions.EmptyCatchClause
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var catchClause = context.Node as CatchClauseSyntax;
-            if (catchClause?.Block == null)
+            var catchClause = (CatchClauseSyntax) context.Node;
+            if (catchClause.Block == null)
             {
                 return;
             }

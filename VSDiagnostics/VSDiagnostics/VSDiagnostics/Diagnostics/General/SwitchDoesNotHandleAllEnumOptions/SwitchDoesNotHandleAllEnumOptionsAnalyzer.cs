@@ -26,11 +26,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var switchBlock = context.Node as SwitchStatementSyntax;
-            if (switchBlock == null)
-            {
-                return;
-            }
+            var switchBlock = (SwitchStatementSyntax) context.Node;
 
             var enumType = context.SemanticModel.GetTypeInfo(switchBlock.Expression).Type as INamedTypeSymbol;
             if (enumType == null || enumType.TypeKind != TypeKind.Enum)
@@ -39,15 +35,15 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
             }
 
             var caseLabels = switchBlock.Sections.SelectMany(l => l.Labels)
-                                        .OfType<CaseSwitchLabelSyntax>()
-                                        .Select(l => l.Value)
-                                        .ToList();
+                    .OfType<CaseSwitchLabelSyntax>()
+                    .Select(l => l.Value)
+                    .ToList();
 
             // these are the labels like `MyEnum.EnumMember`
             var labelNames = caseLabels
-                .OfType<MemberAccessExpressionSyntax>()
-                .Select(l => l.Name.Identifier.ValueText)
-                .ToList();
+                    .OfType<MemberAccessExpressionSyntax>()
+                    .Select(l => l.Name.Identifier.ValueText)
+                    .ToList();
 
             // these are the labels like `EnumMember` (such as when using `using static Namespace.MyEnum;`)
             labelNames.AddRange(caseLabels.OfType<IdentifierNameSyntax>().Select(l => l.Identifier.ValueText).ToList());

@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
 
-namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithSyncSuffix
+namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithAsyncSuffix
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class SyncMethodWithAsyncSuffixAnalyzer : DiagnosticAnalyzer
@@ -27,11 +27,7 @@ namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithSyncSuffix
 
         private static void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
-            var method = context.Node as MethodDeclarationSyntax;
-            if (method == null)
-            {
-                return;
-            }
+            var method = (MethodDeclarationSyntax) context.Node;
 
             if (method.Modifiers.Any(SyntaxKind.OverrideKeyword))
             {

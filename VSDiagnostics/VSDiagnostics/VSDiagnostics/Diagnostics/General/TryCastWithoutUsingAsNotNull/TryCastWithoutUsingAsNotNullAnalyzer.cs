@@ -27,9 +27,9 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var isExpression = context.Node as BinaryExpressionSyntax;
+            var isExpression = (BinaryExpressionSyntax) context.Node;
 
-            var isIdentifierExpression = isExpression?.Left as IdentifierNameSyntax;
+            var isIdentifierExpression = isExpression.Left as IdentifierNameSyntax;
             if (isIdentifierExpression == null)
             {
                 return;

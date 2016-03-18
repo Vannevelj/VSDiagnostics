@@ -26,8 +26,8 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var invocation = context.Node as InvocationExpressionSyntax;
-            if (invocation?.ArgumentList == null)
+            var invocation = (InvocationExpressionSyntax) context.Node;
+            if (invocation.ArgumentList == null)
             {
                 return;
             }
