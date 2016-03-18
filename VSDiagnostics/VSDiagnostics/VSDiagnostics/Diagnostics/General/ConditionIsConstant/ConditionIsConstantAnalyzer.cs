@@ -9,7 +9,7 @@ using VSDiagnostics.Utilities;
 namespace VSDiagnostics.Diagnostics.General.ConditionIsConstant
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class ConditionIsConstantAnalyzer : DiagnosticAnalyzer
+    public class ConditionIsConstantAnalyzer : DiagnosticAnalyzer
     {
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
