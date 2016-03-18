@@ -23,10 +23,7 @@ namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithAsyncSuffix
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.MethodDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.MethodDeclaration);
 
         private static void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
@@ -57,7 +54,7 @@ namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithAsyncSuffix
             if (!declaredSymbol.IsAsync() && method.Identifier.Text.EndsWith("Async"))
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule, method.Identifier.GetLocation(),
-                      method.Identifier.Text));
+                    method.Identifier.Text));
             }
         }
     }

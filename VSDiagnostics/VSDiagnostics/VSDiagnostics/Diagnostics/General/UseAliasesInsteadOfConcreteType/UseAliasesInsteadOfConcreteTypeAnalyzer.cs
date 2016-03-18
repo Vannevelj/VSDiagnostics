@@ -21,10 +21,7 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.IdentifierName);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.IdentifierName);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {

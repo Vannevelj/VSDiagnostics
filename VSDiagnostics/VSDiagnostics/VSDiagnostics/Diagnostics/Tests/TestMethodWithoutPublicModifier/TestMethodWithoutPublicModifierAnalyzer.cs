@@ -22,10 +22,7 @@ namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.MethodDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.MethodDeclaration);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
@@ -40,7 +37,7 @@ namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
 
         private static bool IsTestMethod(MethodDeclarationSyntax method)
         {
-            var methodAttributes = new[] {"Test", "TestMethod", "Fact"};
+            var methodAttributes = new[] { "Test", "TestMethod", "Fact" };
             var attributes = method.AttributeLists.FirstOrDefault()?.Attributes;
 
             if (attributes == null)

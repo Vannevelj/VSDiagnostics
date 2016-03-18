@@ -21,11 +21,8 @@ namespace VSDiagnostics.Diagnostics.General.LoopStatementWithoutBraces
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.ForStatement, SyntaxKind.ForEachStatement,
-                SyntaxKind.WhileStatement, SyntaxKind.DoStatement);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.ForStatement, SyntaxKind.ForEachStatement,
+            SyntaxKind.WhileStatement, SyntaxKind.DoStatement);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {

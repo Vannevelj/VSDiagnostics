@@ -33,10 +33,7 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.PropertyDeclaration, SyntaxKind.MethodDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.PropertyDeclaration, SyntaxKind.MethodDeclaration);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
@@ -67,7 +64,7 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
 
             if (
                 propertyDeclaration.DescendantNodesAndTokensAndSelf()
-                    .Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
+                                   .Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
             {
                 return null;
             }
@@ -112,7 +109,7 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
 
             if (
                 methodDeclaration.DescendantNodesAndTokensAndSelf()
-                    .Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
+                                 .Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
             {
                 return null;
             }

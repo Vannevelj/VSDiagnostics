@@ -22,10 +22,7 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.ConstructorDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.ConstructorDeclaration);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
@@ -76,9 +73,10 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
 
             if (childNodes.Any() && childNodes.Any(node =>
             {
-                if (node is ConstructorInitializerSyntax)
+                var nodeAsConstructorInitializerSyntax = node as ConstructorInitializerSyntax;
+                if (nodeAsConstructorInitializerSyntax != null)
                 {
-                    var constructorInitializer = (ConstructorInitializerSyntax) node;
+                    var constructorInitializer = nodeAsConstructorInitializerSyntax;
 
                     // we must return false (to avoid the parent if) only if it is the base keyword
                     // and there are no arguments.

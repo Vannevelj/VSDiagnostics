@@ -29,11 +29,11 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
             var statement = root.FindNode(diagnosticSpan);
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.OnPropertyChangedWithoutCallerMemberNameCodeFixTitle,
-                    x => AddCallerMemberNameAttribute(context.Document, statement),
+                    x => AddCallerMemberNameAttributeAsync(context.Document, statement),
                     OnPropertyChangedWithoutCallerMemberNameAnalyzer.Rule.Id), diagnostic);
         }
 
-        private async Task<Solution> AddCallerMemberNameAttribute(Document document, SyntaxNode statement)
+        private async Task<Solution> AddCallerMemberNameAttributeAsync(Document document, SyntaxNode statement)
         {
             var editor = await DocumentEditor.CreateAsync(document);
 
@@ -45,7 +45,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
 
             var newParam = param.Default == null
                 ? param.WithAttributeLists(param.AttributeLists.Add(attributeList))
-                    .WithDefault(SyntaxFactory.EqualsValueClause(SyntaxFactory.ParseExpression("\"\"")))
+                       .WithDefault(SyntaxFactory.EqualsValueClause(SyntaxFactory.ParseExpression("\"\"")))
                 : param.WithAttributeLists(param.AttributeLists.Add(attributeList));
 
             editor.ReplaceNode(param, newParam);
@@ -53,12 +53,12 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
             var parentClass = methodDeclaration.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault();
             var methodInvocations =
                 parentClass.DescendantNodes()
-                    .OfType<InvocationExpressionSyntax>().Where(i =>
-                    {
-                        var identifierExpression = i.Expression as IdentifierNameSyntax;
-                        return identifierExpression != null &&
-                               identifierExpression.Identifier.ValueText == "OnPropertyChanged";
-                    });
+                           .OfType<InvocationExpressionSyntax>().Where(i =>
+                           {
+                               var identifierExpression = i.Expression as IdentifierNameSyntax;
+                               return identifierExpression != null &&
+                                      identifierExpression.Identifier.ValueText == "OnPropertyChanged";
+                           });
 
             foreach (var methodInvocation in methodInvocations)
             {
@@ -78,10 +78,10 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
             {
                 var usings =
                     compilationUnit.Usings.Add(usingSystemRuntimeCompilerServicesDirective)
-                        .OrderBy(u => u.Name.GetText().ToString());
+                                   .OrderBy(u => u.Name.GetText().ToString());
 
                 newRoot = newRoot.ReplaceNode(compilationUnit, compilationUnit.WithUsings(SyntaxFactory.List(usings))
-                    .WithAdditionalAnnotations(Formatter.Annotation));
+                                                                              .WithAdditionalAnnotations(Formatter.Annotation));
             }
 
             var newDocument = document.WithSyntaxRoot(newRoot);

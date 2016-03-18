@@ -22,10 +22,7 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.FieldDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.FieldDeclaration);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
@@ -33,14 +30,14 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
 
             // Don't handle (semi-)immutable fields
             if (fieldDeclaration.Modifiers.Any(
-                    x => x.IsKind(SyntaxKind.ConstKeyword) || x.IsKind(SyntaxKind.ReadOnlyKeyword)))
+                x => x.IsKind(SyntaxKind.ConstKeyword) || x.IsKind(SyntaxKind.ReadOnlyKeyword)))
             {
                 return;
             }
 
             // Only handle public, internal and protected internal fields
             if (!fieldDeclaration.Modifiers.Any(
-                    x => x.IsKind(SyntaxKind.PublicKeyword) || x.IsKind(SyntaxKind.InternalKeyword)))
+                x => x.IsKind(SyntaxKind.PublicKeyword) || x.IsKind(SyntaxKind.InternalKeyword)))
             {
                 return;
             }

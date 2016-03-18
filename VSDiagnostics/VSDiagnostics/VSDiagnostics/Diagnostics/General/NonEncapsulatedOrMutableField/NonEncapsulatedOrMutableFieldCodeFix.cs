@@ -45,24 +45,24 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
             var variableDeclaration = variableDeclarator.AncestorsAndSelf().OfType<VariableDeclarationSyntax>().First();
 
             var newProperty = SyntaxFactory.PropertyDeclaration(variableDeclaration.Type, variableDeclarator.Identifier)
-                .WithAttributeLists(fieldStatement.AttributeLists)
-                .WithModifiers(fieldStatement.Modifiers)
-                .WithAdditionalAnnotations(Formatter.Annotation)
-                .WithAccessorList(
-                    SyntaxFactory.AccessorList(
-                        SyntaxFactory.List(new[]
-                        {
-                            SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
-                                .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
-                            SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration)
-                                .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
-                        })));
+                                           .WithAttributeLists(fieldStatement.AttributeLists)
+                                           .WithModifiers(fieldStatement.Modifiers)
+                                           .WithAdditionalAnnotations(Formatter.Annotation)
+                                           .WithAccessorList(
+                                               SyntaxFactory.AccessorList(
+                                                   SyntaxFactory.List(new[]
+                                                   {
+                                                       SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
+                                                                    .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
+                                                       SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration)
+                                                                    .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
+                                                   })));
 
             if (variableDeclarator.Initializer != null)
             {
                 newProperty =
                     newProperty.WithInitializer(variableDeclarator.Initializer)
-                        .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+                               .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
             }
 
             var editor = await DocumentEditor.CreateAsync(document);

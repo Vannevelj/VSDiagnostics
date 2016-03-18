@@ -11,7 +11,6 @@ using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithAsyncSuffix
 {
-
     [ExportCodeFixProvider(nameof(SyncMethodWithAsyncSuffixCodeFix), LanguageNames.CSharp), Shared]
     public class SyncMethodWithAsyncSuffixCodeFix : CodeFixProvider
     {
@@ -34,7 +33,7 @@ namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithAsyncSuffix
         }
 
         private async Task<Solution> RemoveSuffixAsync(Document document, MethodDeclarationSyntax methodDeclaration, SyntaxNode root,
-            CancellationToken cancellationToken)
+                                                       CancellationToken cancellationToken)
         {
             var origMethodName = methodDeclaration.Identifier.Text;
             var newMethodName = origMethodName.Substring(0, origMethodName.Length - "Async".Length);

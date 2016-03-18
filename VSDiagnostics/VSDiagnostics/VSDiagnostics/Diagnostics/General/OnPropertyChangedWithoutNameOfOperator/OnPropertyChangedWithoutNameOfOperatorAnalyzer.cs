@@ -31,10 +31,7 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.InvocationExpression);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.InvocationExpression);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
@@ -97,7 +94,7 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
                     var data = ImmutableDictionary.CreateRange(new[]
                     {
                         new KeyValuePair<string, string>("parameterName", property.Name),
-                        new KeyValuePair<string, string>("startLocation", location.SourceSpan.Start.ToString(CultureInfo.InvariantCulture)),
+                        new KeyValuePair<string, string>("startLocation", location.SourceSpan.Start.ToString(CultureInfo.InvariantCulture))
                     });
                     context.ReportDiagnostic(Diagnostic.Create(Rule, location, data, property.Name));
                 }

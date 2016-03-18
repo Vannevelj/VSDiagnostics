@@ -15,7 +15,7 @@ namespace VSDiagnostics.Diagnostics.General.ConditionIsConstant
     public class ConditionIsConstantCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
-            => ImmutableArray.Create(General.ConditionIsConstant.ConditionIsConstantAnalyzer.Rule.Id);
+            => ImmutableArray.Create(ConditionIsConstantAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
