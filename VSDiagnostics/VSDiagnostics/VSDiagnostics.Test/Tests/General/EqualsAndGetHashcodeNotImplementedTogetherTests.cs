@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.Helpers.CSharp;
-using VSDiagnostics.Diagnostics.General.AsToCast;
 using VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTogether;
 
 namespace VSDiagnostics.Test.Tests.General
@@ -81,7 +80,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, EqualsAndGetHashcodeNotImplemented.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
@@ -117,7 +116,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, EqualsAndGetHashcodeNotImplemented.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original);
         }
     }
 }

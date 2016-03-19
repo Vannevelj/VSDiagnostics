@@ -21,10 +21,7 @@ namespace VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTo
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ClassDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ClassDeclaration);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
@@ -47,7 +44,15 @@ namespace VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTo
                     continue;
                 }
 
-                var typeInfo = context.SemanticModel.GetTypeInfo(methodDeclaration).Type;   // why isn't this working?
+                if (methodDeclaration.Identifier.ValueText == nameof(Equals) && methodDeclaration.ParameterList.Parameters.Count == 1)
+                {
+                    equalsImplemented = true;
+                }
+
+                if (methodDeclaration.Identifier.ValueText == nameof(GetHashCode) && methodDeclaration.ParameterList.Parameters.Count == 0)
+                {
+                    getHashcodeImplemented = true;
+                }
             }
 
             if (equalsImplemented ^ getHashcodeImplemented)
