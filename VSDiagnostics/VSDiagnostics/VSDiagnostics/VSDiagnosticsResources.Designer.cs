@@ -431,6 +431,24 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Both Equals() and GetHashcode() must be implemented..
+        /// </summary>
+        internal static string EqualsAndGetHashcodeNotImplementedTogetherAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("EqualsAndGetHashcodeNotImplementedTogetherAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implement Equals() and GetHashcode()..
+        /// </summary>
+        internal static string EqualsAndGetHashcodeNotImplementedTogetherAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("EqualsAndGetHashcodeNotImplementedTogetherAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exceptions.
         /// </summary>
         internal static string ExceptionsCategory {
