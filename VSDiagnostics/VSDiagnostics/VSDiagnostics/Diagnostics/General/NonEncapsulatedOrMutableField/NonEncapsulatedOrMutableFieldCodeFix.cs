@@ -9,12 +9,11 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
-using VSDiagnostics.Diagnostics.General.NamingConventions;
 using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
 {
-    [ExportCodeFixProvider(nameof(NonEncapsulatedOrMutableFieldCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.NonEncapsulatedOrMutableField + "CF", LanguageNames.CSharp), Shared]
     public class NonEncapsulatedOrMutableFieldCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
@@ -47,24 +46,24 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
             var variableDeclaration = variableDeclarator.AncestorsAndSelf().OfType<VariableDeclarationSyntax>().First();
 
             var newProperty = SyntaxFactory.PropertyDeclaration(variableDeclaration.Type, variableDeclarator.Identifier)
-                .WithAttributeLists(fieldStatement.AttributeLists)
-                .WithModifiers(fieldStatement.Modifiers)
-                .WithAdditionalAnnotations(Formatter.Annotation)
-                .WithAccessorList(
-                    SyntaxFactory.AccessorList(
-                        SyntaxFactory.List(new[]
-                        {
-                            SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
-                                .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
-                            SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration)
-                                .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
-                        })));
+                                           .WithAttributeLists(fieldStatement.AttributeLists)
+                                           .WithModifiers(fieldStatement.Modifiers)
+                                           .WithAdditionalAnnotations(Formatter.Annotation)
+                                           .WithAccessorList(
+                                               SyntaxFactory.AccessorList(
+                                                   SyntaxFactory.List(new[]
+                                                   {
+                                                       SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
+                                                                    .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
+                                                       SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration)
+                                                                    .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
+                                                   })));
 
             if (variableDeclarator.Initializer != null)
             {
                 newProperty =
                     newProperty.WithInitializer(variableDeclarator.Initializer)
-                        .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+                               .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
             }
 
             var editor = await DocumentEditor.CreateAsync(document);

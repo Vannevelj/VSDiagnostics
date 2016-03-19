@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Diagnostics;
-using VSDiagnostics.Utilities;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Attributes.ObsoleteAttributeWithoutReason
 {
@@ -22,22 +22,15 @@ namespace VSDiagnostics.Diagnostics.Attributes.ObsoleteAttributeWithoutReason
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeCSharpSymbol, SyntaxKind.Attribute);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeCSharpSymbol, SyntaxKind.Attribute);
 
         private void AnalyzeCSharpSymbol(SyntaxNodeAnalysisContext context)
         {
-            var attributeExpression = context.Node as AttributeSyntax;
-            if (attributeExpression == null)
-            {
-                return;
-            }
+            var attributeExpression = (AttributeSyntax) context.Node;
 
             // attribute type must be of type ObsoleteAttribute
             var type = context.SemanticModel.GetSymbolInfo(attributeExpression).Symbol;
-            if (type == null || type.ContainingType.MetadataName != typeof (ObsoleteAttribute).Name)
+            if (type == null || type.ContainingType.MetadataName != typeof(ObsoleteAttribute).Name)
             {
                 return;
             }

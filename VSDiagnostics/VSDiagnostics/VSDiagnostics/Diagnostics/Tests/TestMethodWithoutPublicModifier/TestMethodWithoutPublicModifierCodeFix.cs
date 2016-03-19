@@ -7,10 +7,11 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
 {
-    [ExportCodeFixProvider(nameof(TestMethodWithoutPublicModifierCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.TestMethodWithoutPublicModifier + "CF", LanguageNames.CSharp), Shared]
     public class TestMethodWithoutPublicModifierCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds

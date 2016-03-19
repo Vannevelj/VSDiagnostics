@@ -25,10 +25,7 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.StringLiteralExpression);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.StringLiteralExpression);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
@@ -37,11 +34,7 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
                 return;
             }
 
-            var stringLiteral = context.Node as LiteralExpressionSyntax;
-            if (stringLiteral == null)
-            {
-                return;
-            }
+            var stringLiteral = (LiteralExpressionSyntax) context.Node;
 
             if (stringLiteral.Token.Text != "\"\"")
             {

@@ -9,10 +9,11 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 {
-    [ExportCodeFixProvider(nameof(FlagsEnumValuesAreNotPowersOfTwoCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.FlagsEnumValuesAreNotPowersOfTwo + "CF", LanguageNames.CSharp), Shared]
     public class FlagsEnumValuesAreNotPowersOfTwoCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
@@ -30,11 +31,11 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.FlagsEnumValuesAreNotPowersOfTwoCodeFixTitle,
-                    x => AdjustEnumValues(context.Document, root, statement),
+                    x => AdjustEnumValuesAsync(context.Document, root, statement),
                     FlagsEnumValuesAreNotPowersOfTwoAnalyzer.DefaultRule.Id), diagnostic);
         }
 
-        private async Task<Solution> AdjustEnumValues(Document document, SyntaxNode root, SyntaxNode statement)
+        private async Task<Solution> AdjustEnumValuesAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var semanticModel = await document.GetSemanticModelAsync();
 
@@ -112,7 +113,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 
             var newStatement =
                 declarationExpression.WithMembers(SyntaxFactory.SeparatedList(enumMemberDeclarations))
-                    .WithAdditionalAnnotations(Formatter.Annotation);
+                                     .WithAdditionalAnnotations(Formatter.Annotation);
 
             var newRoot = root.ReplaceNode(statement, newStatement);
             return document.WithSyntaxRoot(newRoot).Project.Solution;

@@ -21,18 +21,11 @@ namespace VSDiagnostics.Diagnostics.General.CastToAs
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.CastExpression);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.CastExpression);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var castExpression = context.Node as CastExpressionSyntax;
-            if (castExpression == null)
-            {
-                return;
-            }
+            var castExpression = (CastExpressionSyntax) context.Node;
 
             var castedTypeInfo = context.SemanticModel.GetTypeInfo(castExpression.Expression);
             if (castedTypeInfo.ConvertedType != null && castedTypeInfo.ConvertedType.IsValueType)

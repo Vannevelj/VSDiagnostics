@@ -16,7 +16,7 @@ using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 {
-    [ExportCodeFixProvider(nameof(TryCastWithoutUsingAsNotNullCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.TryCastWithoutUsingAsNotNull + "CF", LanguageNames.CSharp), Shared]
     public class TryCastWithoutUsingAsNotNullCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
@@ -224,30 +224,21 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             return editor.GetChangedDocument();
         }
 
-        private bool IsSurroundedByInvocation(ExpressionSyntax expression)
-        {
-            return expression.Ancestors().OfType<InvocationExpressionSyntax>().Any();
-        }
+        private bool IsSurroundedByInvocation(ExpressionSyntax expression) => expression.Ancestors().OfType<InvocationExpressionSyntax>().Any();
 
-        private IEnumerable<CastExpressionSyntax> GetDescendantCasts(IfStatementSyntax ifStatement)
-        {
-            return ifStatement.Statement.DescendantNodes()
-                              .Concat(ifStatement.Condition.DescendantNodesAndSelf())
-                              .Where(x => !(x is IfStatementSyntax))
-                              .OfType<CastExpressionSyntax>()
-                              .ToArray();
-        }
+        private IEnumerable<CastExpressionSyntax> GetDescendantCasts(IfStatementSyntax ifStatement) => ifStatement.Statement.DescendantNodes()
+                                                                                                                  .Concat(ifStatement.Condition.DescendantNodesAndSelf())
+                                                                                                                  .Where(x => !(x is IfStatementSyntax))
+                                                                                                                  .OfType<CastExpressionSyntax>()
+                                                                                                                  .ToArray();
 
-        private IEnumerable<BinaryExpressionSyntax> GetDescendantBinaryAs(IfStatementSyntax ifStatement)
-        {
-            return ifStatement.Statement
-                              .DescendantNodes()
-                              .Concat(ifStatement.Condition.DescendantNodesAndSelf())
-                              .Where(x => !(x is IfStatementSyntax))
-                              .OfType<BinaryExpressionSyntax>()
-                              .Where(x => x.OperatorToken.IsKind(SyntaxKind.AsKeyword))
-                              .ToArray();
-        }
+        private IEnumerable<BinaryExpressionSyntax> GetDescendantBinaryAs(IfStatementSyntax ifStatement) => ifStatement.Statement
+                                                                                                                       .DescendantNodes()
+                                                                                                                       .Concat(ifStatement.Condition.DescendantNodesAndSelf())
+                                                                                                                       .Where(x => !(x is IfStatementSyntax))
+                                                                                                                       .OfType<BinaryExpressionSyntax>()
+                                                                                                                       .Where(x => x.OperatorToken.IsKind(SyntaxKind.AsKeyword))
+                                                                                                                       .ToArray();
 
         private void ReplaceCondition(string newIdentifier, SyntaxNode isExpression, DocumentEditor editor, ref bool conditionAlreadyReplaced)
         {

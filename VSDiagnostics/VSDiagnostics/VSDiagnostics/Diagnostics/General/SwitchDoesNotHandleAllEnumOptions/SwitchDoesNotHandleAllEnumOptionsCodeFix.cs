@@ -11,10 +11,11 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Simplification;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
 {
-    [ExportCodeFixProvider(nameof(SwitchDoesNotHandleAllEnumOptionsCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.SwitchDoesNotHandleAllEnumOptions + "CF", LanguageNames.CSharp), Shared]
     internal class SwitchDoesNotHandleAllEnumOptionsCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
@@ -31,7 +32,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
             var statement = root.FindNode(diagnosticSpan);
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.SwitchDoesNotHandleAllEnumOptionsCodeFixTitle,
-                    x => AddMissingCaseAsync(context.Document, (CompilationUnitSyntax)root, statement),
+                    x => AddMissingCaseAsync(context.Document, (CompilationUnitSyntax) root, statement),
                     SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.Id), diagnostic);
         }
 
@@ -39,13 +40,13 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
         {
             var semanticModel = await document.GetSemanticModelAsync();
 
-            var switchBlock = (SwitchStatementSyntax)statement;
+            var switchBlock = (SwitchStatementSyntax) statement;
 
             var enumType = (INamedTypeSymbol) semanticModel.GetTypeInfo(switchBlock.Expression).Type;
             var caseLabels = switchBlock.Sections.SelectMany(l => l.Labels)
-                    .OfType<CaseSwitchLabelSyntax>()
-                    .Select(l => l.Value)
-                    .ToList();
+                                        .OfType<CaseSwitchLabelSyntax>()
+                                        .Select(l => l.Value)
+                                        .ToList();
 
             var missingLabels = GetMissingLabels(caseLabels, enumType);
 
@@ -57,7 +58,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
 
             var notImplementedException =
                 SyntaxFactory.ThrowStatement(SyntaxFactory.ParseExpression($" new {qualifier}NotImplementedException()"))
-                    .WithAdditionalAnnotations(Simplifier.Annotation);
+                             .WithAdditionalAnnotations(Simplifier.Annotation);
             var statements = SyntaxFactory.List(new List<StatementSyntax> { notImplementedException });
 
             var newSections = SyntaxFactory.List(switchBlock.Sections);
@@ -68,11 +69,11 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
                 var caseLabel =
                     SyntaxFactory.CaseSwitchLabel(
                         SyntaxFactory.ParseExpression(hasSimplifiedLabel ? $"{label}" : $"{enumType.Name}.{label}")
-                            .WithTrailingTrivia(SyntaxFactory.ParseTrailingTrivia(Environment.NewLine)));
+                                     .WithTrailingTrivia(SyntaxFactory.ParseTrailingTrivia(Environment.NewLine)));
 
                 var section =
-                    SyntaxFactory.SwitchSection(SyntaxFactory.List(new List<SwitchLabelSyntax> {caseLabel}), statements)
-                        .WithAdditionalAnnotations(Formatter.Annotation);
+                    SyntaxFactory.SwitchSection(SyntaxFactory.List(new List<SwitchLabelSyntax> { caseLabel }), statements)
+                                 .WithAdditionalAnnotations(Formatter.Annotation);
 
                 // ensure that the new cases are above the default case
                 newSections = newSections.Insert(0, section);

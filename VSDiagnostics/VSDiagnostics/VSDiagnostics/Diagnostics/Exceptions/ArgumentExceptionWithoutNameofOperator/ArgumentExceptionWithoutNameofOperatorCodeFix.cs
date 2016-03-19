@@ -8,10 +8,11 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOperator
 {
-    [ExportCodeFixProvider(nameof(ArgumentExceptionWithoutNameofOperatorCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.ArgumentExceptionWithoutNameofOperator + "CF", LanguageNames.CSharp), Shared]
     public class ArgumentExceptionWithoutNameofOperatorCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
@@ -37,13 +38,13 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOpe
         }
 
         private Task<Solution> UseNameofAsync(Document document, SyntaxNode root,
-            ObjectCreationExpressionSyntax objectCreationExpression)
+                                              ObjectCreationExpressionSyntax objectCreationExpression)
         {
             var method = objectCreationExpression.Ancestors().OfType<MethodDeclarationSyntax>().First();
             var methodParameters = method.ParameterList.Parameters;
             var expressionArguments =
                 objectCreationExpression.ArgumentList.Arguments.Select(x => x.Expression)
-                    .OfType<LiteralExpressionSyntax>();
+                                        .OfType<LiteralExpressionSyntax>();
 
             foreach (var expressionArgument in expressionArguments)
             {

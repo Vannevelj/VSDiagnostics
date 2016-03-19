@@ -22,18 +22,17 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.SwitchStatement);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.SwitchStatement);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var switchBlock = context.Node as SwitchStatementSyntax;
-            if (switchBlock == null) { return; }
+            var switchBlock = (SwitchStatementSyntax) context.Node;
 
             var enumType = context.SemanticModel.GetTypeInfo(switchBlock.Expression).Type as INamedTypeSymbol;
-            if (enumType == null || enumType.TypeKind != TypeKind.Enum) { return; }
+            if (enumType == null || enumType.TypeKind != TypeKind.Enum)
+            {
+                return;
+            }
 
             var caseLabels = switchBlock.Sections.SelectMany(l => l.Labels)
                     .OfType<CaseSwitchLabelSyntax>()

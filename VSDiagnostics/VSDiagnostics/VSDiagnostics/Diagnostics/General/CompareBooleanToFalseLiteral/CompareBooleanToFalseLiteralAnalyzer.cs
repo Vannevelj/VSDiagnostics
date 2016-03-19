@@ -21,18 +21,11 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToFalseLiteral
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.FalseLiteralExpression);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.FalseLiteralExpression);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var literalExpression = context.Node as LiteralExpressionSyntax;
-            if (literalExpression == null)
-            {
-                return;
-            }
+            var literalExpression = (LiteralExpressionSyntax) context.Node;
 
             if (!(literalExpression.Token.IsKind(SyntaxKind.FalseKeyword) && literalExpression.Token.Value is bool))
             {

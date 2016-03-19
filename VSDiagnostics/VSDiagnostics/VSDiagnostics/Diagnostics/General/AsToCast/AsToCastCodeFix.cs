@@ -8,10 +8,11 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.AsToCast
 {
-    [ExportCodeFixProvider(nameof(AsToCastCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.AsToCast + "CF", LanguageNames.CSharp), Shared]
     public class AsToCastCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(AsToCastAnalyzer.Rule.Id);
@@ -36,7 +37,7 @@ namespace VSDiagnostics.Diagnostics.General.AsToCast
             var typeSyntax = SyntaxFactory.ParseTypeName(binaryExpression.Right.GetText().ToString());
             var newExpression =
                 SyntaxFactory.CastExpression(typeSyntax, binaryExpression.Left)
-                    .WithAdditionalAnnotations(Formatter.Annotation);
+                             .WithAdditionalAnnotations(Formatter.Annotation);
 
             var newRoot = root.ReplaceNode(binaryExpression, newExpression);
 

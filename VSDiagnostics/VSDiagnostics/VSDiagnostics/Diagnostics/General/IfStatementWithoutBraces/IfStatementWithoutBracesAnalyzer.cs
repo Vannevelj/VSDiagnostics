@@ -21,23 +21,18 @@ namespace VSDiagnostics.Diagnostics.General.IfStatementWithoutBraces
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.IfStatement, SyntaxKind.ElseClause);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.IfStatement, SyntaxKind.ElseClause);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var ifStatement = context.Node as IfStatementSyntax;
-            if (ifStatement != null)
+            if (context.Node.IsKind(SyntaxKind.IfStatement))
             {
-                HandleIf(context, ifStatement);
+                HandleIf(context, (IfStatementSyntax)context.Node);
             }
-
-            var elseClause = context.Node as ElseClauseSyntax;
-            if (elseClause != null)
+            
+            if (context.Node.IsKind(SyntaxKind.ElseClause))
             {
-                HandleElse(context, elseClause);
+                HandleElse(context, (ElseClauseSyntax)context.Node);
             }
         }
 

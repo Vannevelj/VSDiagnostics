@@ -34,5 +34,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.9.3")]
 [assembly: AssemblyFileVersion("1.9.3.0")]
 [assembly: AssemblyInformationalVersion("1.9.3")]
-
 [assembly: InternalsVisibleTo("VSDiagnostics.Test")]

@@ -25,16 +25,13 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsInvertedDe
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.ConditionalExpression);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.ConditionalExpression);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var conditionalExpression = context.Node as ConditionalExpressionSyntax;
+            var conditionalExpression = (ConditionalExpressionSyntax) context.Node;
 
-            var trueExpression = conditionalExpression?.WhenTrue as LiteralExpressionSyntax;
+            var trueExpression = conditionalExpression.WhenTrue as LiteralExpressionSyntax;
             if (trueExpression == null)
             {
                 return;

@@ -22,15 +22,12 @@ namespace VSDiagnostics.Diagnostics.Exceptions.SingleGeneralException
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.TryStatement);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.TryStatement);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var tryStatement = context.Node as TryStatementSyntax;
-            if (tryStatement?.Catches.Count != 1)
+            var tryStatement = (TryStatementSyntax) context.Node;
+            if (tryStatement.Catches.Count != 1)
             {
                 return;
             }
@@ -45,7 +42,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.SingleGeneralException
             var symbol = context.SemanticModel.GetSymbolInfo(declaredException).Symbol;
             if (symbol != null)
             {
-                if (symbol.MetadataName == typeof (Exception).Name)
+                if (symbol.MetadataName == typeof(Exception).Name)
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declaredException.GetLocation()));
                 }

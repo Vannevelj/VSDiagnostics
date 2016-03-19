@@ -21,18 +21,11 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.IdentifierName);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.IdentifierName);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var identifier = context.Node as IdentifierNameSyntax;
-            if (identifier == null)
-            {
-                return;
-            }
+            var identifier = (IdentifierNameSyntax) context.Node;
 
             // A nameof() expression cannot contain aliases
             // There is no way to distinguish between a self-defined method 'nameof' and the nameof operator so we have to ignore all invocations that call into 'nameof'

@@ -22,16 +22,13 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.LocalDeclarationStatement);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.LocalDeclarationStatement);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var localDeclaration = context.Node as LocalDeclarationStatementSyntax;
+            var localDeclaration = (LocalDeclarationStatementSyntax) context.Node;
 
-            if (localDeclaration?.Declaration == null)
+            if (localDeclaration.Declaration == null)
             {
                 return;
             }

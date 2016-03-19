@@ -23,23 +23,20 @@ namespace VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentException
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.ThrowStatement);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.ThrowStatement);
 
         private static void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
-            var throwStatement = context.Node as ThrowStatementSyntax;
+            var throwStatement = (ThrowStatementSyntax) context.Node;
 
-            var expression = throwStatement?.Expression as ObjectCreationExpressionSyntax;
+            var expression = throwStatement.Expression as ObjectCreationExpressionSyntax;
             if (expression == null)
             {
                 return;
             }
 
             var symbolInformation = context.SemanticModel.GetSymbolInfo(expression.Type);
-            if (!symbolInformation.Symbol.InheritsFrom(typeof (ArgumentException)))
+            if (!symbolInformation.Symbol.InheritsFrom(typeof(ArgumentException)))
             {
                 return;
             }

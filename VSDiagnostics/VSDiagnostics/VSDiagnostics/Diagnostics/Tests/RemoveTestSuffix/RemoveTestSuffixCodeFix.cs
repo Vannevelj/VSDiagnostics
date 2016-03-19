@@ -7,12 +7,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Rename;
 using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
 {
-    [ExportCodeFixProvider(nameof(RemoveTestSuffixCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.RemoveTestSuffix + "CF", LanguageNames.CSharp), Shared]
     public class RemoveTestSuffixCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
@@ -32,12 +31,12 @@ namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
 
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.RemoveTestSuffixCodeFixTitle,
-                    x => RemoveTestSuffix(context.Document, root, methodDeclaration, context.CancellationToken), RemoveTestSuffixAnalyzer.Rule.Id),
+                    x => RemoveTestSuffixAsync(context.Document, root, methodDeclaration, context.CancellationToken), RemoveTestSuffixAnalyzer.Rule.Id),
                 diagnostic);
         }
 
-        private async Task<Solution> RemoveTestSuffix(Document document, SyntaxNode root,
-            MethodDeclarationSyntax methodDeclaration, CancellationToken cancellationToken)
+        private async Task<Solution> RemoveTestSuffixAsync(Document document, SyntaxNode root,
+                                                           MethodDeclarationSyntax methodDeclaration, CancellationToken cancellationToken)
         {
             var newMethodName = methodDeclaration.Identifier.Text.Remove(methodDeclaration.Identifier.Text.Length - 4);
             return await RenameHelper.RenameSymbolAsync(document, root, methodDeclaration.Identifier, newMethodName, cancellationToken);

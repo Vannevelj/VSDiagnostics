@@ -27,16 +27,13 @@ namespace VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStac
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ThrowStatement);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ThrowStatement);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var throwStatement = context.Node as ThrowStatementSyntax;
+            var throwStatement = (ThrowStatementSyntax) context.Node;
 
-            var throwIdentifierSyntax = throwStatement?.Expression as IdentifierNameSyntax;
+            var throwIdentifierSyntax = throwStatement.Expression as IdentifierNameSyntax;
             if (throwIdentifierSyntax == null)
             {
                 return;

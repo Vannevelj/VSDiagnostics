@@ -7,10 +7,11 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.IfStatementWithoutBraces
 {
-    [ExportCodeFixProvider(nameof(IfStatementWithoutBracesCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.IfStatementWithoutBraces + "CF", LanguageNames.CSharp), Shared]
     public class IfStatementWithoutBracesCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds

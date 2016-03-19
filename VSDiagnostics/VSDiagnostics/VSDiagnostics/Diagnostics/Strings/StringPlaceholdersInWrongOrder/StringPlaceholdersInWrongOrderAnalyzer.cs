@@ -23,21 +23,14 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.InvocationExpression);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.InvocationExpression);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var invocation = context.Node as InvocationExpressionSyntax;
-            if (invocation == null)
-            {
-                return;
-            }
+            var invocation = (InvocationExpressionSyntax) context.Node;
 
             // Verify we're dealing with a string.Format() call
-            if (!invocation.IsAnInvocationOf(typeof (string), nameof(string.Format), context.SemanticModel))
+            if (!invocation.IsAnInvocationOf(typeof(string), nameof(string.Format), context.SemanticModel))
             {
                 return;
             }
@@ -54,7 +47,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
 
             var firstArgumentSymbol = context.SemanticModel.GetSymbolInfo(firstArgument.Expression);
             if (!(firstArgument.Expression is LiteralExpressionSyntax) &&
-                (firstArgumentSymbol.Symbol?.MetadataName == typeof (CultureInfo).Name &&
+                (firstArgumentSymbol.Symbol?.MetadataName == typeof(CultureInfo).Name &&
                  !(secondArgument?.Expression is LiteralExpressionSyntax)))
             {
                 return;

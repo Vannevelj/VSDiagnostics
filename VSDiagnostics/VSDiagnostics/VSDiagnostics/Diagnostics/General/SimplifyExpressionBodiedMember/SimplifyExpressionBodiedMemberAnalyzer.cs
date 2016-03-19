@@ -33,25 +33,20 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.PropertyDeclaration, SyntaxKind.MethodDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.PropertyDeclaration, SyntaxKind.MethodDeclaration);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             Diagnostic diagnostic = null;
-
-            var asProperty = context.Node as PropertyDeclarationSyntax;
-            if (asProperty != null)
+            
+            if (context.Node.IsKind(SyntaxKind.PropertyDeclaration))
             {
-                diagnostic = HandleProperty(asProperty);
+                diagnostic = HandleProperty((PropertyDeclarationSyntax)context.Node);
             }
-
-            var asMethod = context.Node as MethodDeclarationSyntax;
-            if (asMethod != null)
+            
+            if (context.Node.IsKind(SyntaxKind.MethodDeclaration))
             {
-                diagnostic = HandleMethod(asMethod);
+                diagnostic = HandleMethod((MethodDeclarationSyntax)context.Node);
             }
 
             if (diagnostic != null)
@@ -69,7 +64,7 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
 
             if (
                 propertyDeclaration.DescendantNodesAndTokensAndSelf()
-                    .Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
+                                   .Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
             {
                 return null;
             }
@@ -114,7 +109,7 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
 
             if (
                 methodDeclaration.DescendantNodesAndTokensAndSelf()
-                    .Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
+                                 .Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
             {
                 return null;
             }
