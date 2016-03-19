@@ -449,6 +449,15 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Implement {0}..
+        /// </summary>
+        internal static string EqualsAndGetHashcodeNotImplementedTogetherCodeFixTitle {
+            get {
+                return ResourceManager.GetString("EqualsAndGetHashcodeNotImplementedTogetherCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exceptions.
         /// </summary>
         internal static string ExceptionsCategory {

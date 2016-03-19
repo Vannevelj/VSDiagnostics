@@ -515,4 +515,7 @@
   <data name="EqualsAndGetHashcodeNotImplementedTogetherAnalyzerTitle" xml:space="preserve">
     <value>Implement Equals() and GetHashcode().</value>
   </data>
+  <data name="EqualsAndGetHashcodeNotImplementedTogetherCodeFixTitle" xml:space="preserve">
+    <value>Implement {0}.</value>
+  </data>
 </root>

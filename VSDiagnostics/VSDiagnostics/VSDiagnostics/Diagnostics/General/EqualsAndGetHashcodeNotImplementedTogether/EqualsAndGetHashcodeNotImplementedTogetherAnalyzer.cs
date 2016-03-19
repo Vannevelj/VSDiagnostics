@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -8,7 +9,7 @@ using VSDiagnostics.Utilities;
 namespace VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTogether
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class EqualsAndGetHashcodeNotImplemented : DiagnosticAnalyzer
+    public class EqualsAndGetHashcodeNotImplementedTogetherAnalyzer : DiagnosticAnalyzer
     {
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
@@ -57,7 +58,8 @@ namespace VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTo
 
             if (equalsImplemented ^ getHashcodeImplemented)
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, classDeclaration.GetLocation()));
+                context.ReportDiagnostic(Diagnostic.Create(Rule, classDeclaration.GetLocation(),
+                    ImmutableDictionary.CreateRange(new[] { new KeyValuePair<string, string>("IsEqualsImplemented", equalsImplemented.ToString()) })));
             }
         }
 

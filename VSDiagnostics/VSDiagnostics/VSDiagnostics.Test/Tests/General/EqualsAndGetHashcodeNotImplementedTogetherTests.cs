@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTogether;
@@ -6,9 +7,10 @@ using VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTogeth
 namespace VSDiagnostics.Test.Tests.General
 {
     [TestClass]
-    public class EqualsAndGetHashcodeNotImplementedTogetherTests : CSharpDiagnosticVerifier
+    public class EqualsAndGetHashcodeNotImplementedTogetherTests : CSharpCodeFixVerifier
     {
-        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new EqualsAndGetHashcodeNotImplemented();
+        protected override DiagnosticAnalyzer DiagnosticAnalyzer => new EqualsAndGetHashcodeNotImplementedTogetherAnalyzer();
+        protected override CodeFixProvider CodeFixProvider => new EqualsAndGetHashcodeNotImplementedTogetherCodeFix();
 
         [TestMethod]
         public void EqualsAndGetHashcodeNotImplemented_BothImplemented_NoWarning()
@@ -48,7 +50,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, EqualsAndGetHashcodeNotImplemented.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, EqualsAndGetHashcodeNotImplementedTogetherAnalyzer.Rule.MessageFormat.ToString());
         }
 
         [TestMethod]
@@ -66,7 +68,25 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, EqualsAndGetHashcodeNotImplemented.Rule.MessageFormat.ToString());
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public override int GetHashCode()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override bool Equals(object obj)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, EqualsAndGetHashcodeNotImplementedTogetherAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
 
         [TestMethod]
