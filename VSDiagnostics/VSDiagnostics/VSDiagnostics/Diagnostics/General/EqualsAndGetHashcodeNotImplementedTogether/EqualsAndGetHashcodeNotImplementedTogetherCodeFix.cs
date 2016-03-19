@@ -47,13 +47,13 @@ namespace VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTo
             }
         }
 
-        private Task<Solution> ImplementEqualsAsync(Document document, SyntaxNode root, SyntaxNode statement)
+        private async Task<Solution> ImplementEqualsAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var classDeclaration = (ClassDeclarationSyntax) statement;
 
             var newRoot = root.ReplaceNode(classDeclaration, classDeclaration.AddMembers(GetEqualsMethod()));
-            var newDocument = document.WithSyntaxRoot(newRoot); //await Simplifier.ReduceAsync(document.WithSyntaxRoot(newRoot));
-            return Task.FromResult(newDocument.Project.Solution);
+            var newDocument = await Simplifier.ReduceAsync(document.WithSyntaxRoot(newRoot));
+            return newDocument.Project.Solution;
         }
 
         private async Task<Solution> ImplementGetHashCodeAsync(Document document, SyntaxNode root, SyntaxNode statement)

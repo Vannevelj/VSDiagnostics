@@ -50,7 +50,25 @@ namespace ConsoleApplication1
     }
 }";
 
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public override bool Equals(object obj)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override int GetHashCode()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+}";
+
             VerifyDiagnostic(original, EqualsAndGetHashcodeNotImplementedTogetherAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -137,6 +155,82 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void EqualsAndGetHashcodeNotImplemented_EqualsImplemented_SimplifiesNameWhenUsingSystem()
+        {
+            var original = @"
+using System;
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public override bool Equals(object obj)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}";
+
+            var result = @"
+using System;
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public override bool Equals(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, EqualsAndGetHashcodeNotImplementedTogetherAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void EqualsAndGetHashcodeNotImplemented_GetHashcodeImplemented_SimplifiesNameWhenUsingSystem()
+        {
+            var original = @"
+using System;
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}";
+
+            var result = @"
+using System;
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(object obj)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, EqualsAndGetHashcodeNotImplementedTogetherAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
     }
 }
