@@ -49,7 +49,7 @@ namespace ConsoleApplication1
     interface MyCollectionItem {}
 }";
 
-            VerifyDiagnostic(original, ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]

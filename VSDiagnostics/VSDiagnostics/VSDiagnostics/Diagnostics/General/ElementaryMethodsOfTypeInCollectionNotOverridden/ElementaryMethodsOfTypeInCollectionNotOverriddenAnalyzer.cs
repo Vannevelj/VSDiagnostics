@@ -52,8 +52,7 @@ namespace VSDiagnostics.Diagnostics.General.ElementaryMethodsOfTypeInCollectionN
             }
 
             var genericTypeInfo = context.SemanticModel.GetTypeInfo(genericType).Type;
-
-            if (genericTypeInfo == null)
+            if (genericTypeInfo == null || genericTypeInfo.TypeKind == TypeKind.Interface)
             {
                 return;
             }
