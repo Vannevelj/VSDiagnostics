@@ -246,7 +246,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer_Dictionary()
+        public void ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer_Dictionary_BothDoNotImplementMethods()
         {
             var original = @"
 using System.Collections.Generic;
@@ -265,6 +265,28 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original,
                 ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer.Rule.MessageFormat.ToString(),
+                ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
+        public void ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer_Dictionary_OneDoesNotImplementMethods()
+        {
+            var original = @"
+using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var list = new Dictionary<int, MyCollectionItem>();
+        }
+    }
+
+    class MyCollectionItem {}
+}";
+
+            VerifyDiagnostic(original,
                 ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer.Rule.MessageFormat.ToString());
         }
 
