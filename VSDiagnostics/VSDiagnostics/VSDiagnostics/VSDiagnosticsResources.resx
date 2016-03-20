@@ -509,4 +509,10 @@
   <data name="SwitchDoesNotHandleAllEnumOptionsCodeFixTitle" xml:space="preserve">
     <value>Add case(s).</value>
   </data>
+  <data name="ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerMessage" xml:space="preserve">
+    <value>Implement elementary methods of type used in collection.</value>
+  </data>
+  <data name="ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerTitle" xml:space="preserve">
+    <value>Implement elementary methods.</value>
+  </data>
 </root>
