@@ -39,16 +39,9 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
                     .Select(l => l.Value)
                     .ToList();
 
-            // these are the labels like `MyEnum.EnumMember`
-            var labelNames = caseLabels
-                    .OfType<MemberAccessExpressionSyntax>()
-                    .Select(l => l.Name.Identifier.ValueText)
-                    .ToList();
+            var labelSymbols = caseLabels.Select(l => context.SemanticModel.GetSymbolInfo(l).Symbol);
 
-            // these are the labels like `EnumMember` (such as when using `using static Namespace.MyEnum;`)
-            labelNames.AddRange(caseLabels.OfType<IdentifierNameSyntax>().Select(l => l.Identifier.ValueText).ToList());
-
-            if (enumType.MemberNames.Where(m => !m.StartsWith(".")).Any(member => !labelNames.Contains(member)))
+            if (!enumType.GetMembers().Where(m => !m.Name.StartsWith(".")).SequenceEqual(labelSymbols))
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule, switchBlock.GetLocation()));
             }
