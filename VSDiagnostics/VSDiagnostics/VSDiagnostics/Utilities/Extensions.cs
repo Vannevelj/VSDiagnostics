@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace VSDiagnostics.Utilities
 {
@@ -217,5 +218,32 @@ namespace VSDiagnostics.Utilities
 
             return identifier != null && identifier.Identifier.ValueText == "nameof";
         }
+
+        public static List<T> OfType<T>(this IEnumerable<SyntaxNode> enumerable, SyntaxKind kind) where T : SyntaxNode
+        {
+            var list = new List<T>();
+
+            foreach (var node in enumerable)
+            {
+                if (node.IsKind(kind))
+                {
+                    list.Add((T)node);
+                }
+            }
+
+            return list;
+        }
+
+        public static bool Any(this IEnumerable<SyntaxNode> enumerable)
+        {
+            foreach (var node in enumerable)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool Any(this List<SyntaxNode> list) => list.Count != 0;
     }
 }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
+// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 {
@@ -51,14 +51,26 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var declarationExpression = (EnumDeclarationSyntax) context.Node;
-            var flagsAttribute = declarationExpression.AttributeLists.FirstOrDefault(
-                a => a.Attributes.FirstOrDefault(
-                    t =>
-                    {
-                        var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
-                        return symbol == null || symbol.ContainingType.MetadataName == typeof(FlagsAttribute).Name;
-                    }) != null);
 
+            AttributeListSyntax flagsAttribute = null;
+
+            foreach (var list in declarationExpression.AttributeLists)
+            {
+                foreach (var attribute in list.Attributes)
+                {
+                    var symbol = context.SemanticModel.GetSymbolInfo(attribute).Symbol;
+                    if (symbol == null || symbol.ContainingType.MetadataName == typeof (FlagsAttribute).Name)
+                    {
+                        flagsAttribute = list;
+                        break;
+                    }
+                }
+
+                if (flagsAttribute != null)
+                {
+                    break; 
+                }
+            }
 
             if (flagsAttribute == null)
             {
@@ -67,7 +79,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 
             var enumName = context.SemanticModel.GetDeclaredSymbol(declarationExpression).Name;
             var enumMemberDeclarations =
-                declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>().ToList();
+                declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>(SyntaxKind.EnumMemberDeclaration);
 
             foreach (var member in enumMemberDeclarations)
             {
@@ -76,11 +88,26 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
                     continue;
                 }
 
-                var descendantNodes = member.EqualsValue.Value.DescendantNodesAndSelf().ToList();
-                if (descendantNodes.OfType<LiteralExpressionSyntax>().Any() &&
-                    descendantNodes.OfType<IdentifierNameSyntax>().Any())
+                var descendantNodes = member.EqualsValue.Value.DescendantNodesAndSelf();
+
+                var containsLiteralExpression = false;
+                var containsIdentifierName = false;
+                foreach (var node in descendantNodes)
                 {
-                    return;
+                    if (node is LiteralExpressionSyntax)
+                    {
+                        containsLiteralExpression = true;
+                    }
+
+                    if (node.IsKind(SyntaxKind.IdentifierName))
+                    {
+                        containsIdentifierName = true;
+                    }
+
+                    if (containsIdentifierName && containsLiteralExpression)
+                    {
+                        return;
+                    }
                 }
             }
 
@@ -126,9 +153,19 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 
                 if (member.EqualsValue.Value is BinaryExpressionSyntax)
                 {
-                    var descendantNodes = member.EqualsValue.Value.DescendantNodesAndSelf().ToList();
-                    if (descendantNodes.Any() &&
-                        descendantNodes.All(n => n is IdentifierNameSyntax || n is BinaryExpressionSyntax))
+                    var descendantNodes = new List<SyntaxNode>(member.EqualsValue.Value.DescendantNodesAndSelf());
+
+                    var all = true;
+                    foreach (var node in descendantNodes)
+                    {
+                        if (!node.IsKind(SyntaxKind.IdentifierName) && !(node is BinaryExpressionSyntax))
+                        {
+                            all = false;
+                            break;
+                        }
+                    }
+
+                    if (descendantNodes.Any() && all)
                     {
                         continue;
                     }
