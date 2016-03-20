@@ -246,6 +246,29 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer_Dictionary()
+        {
+            var original = @"
+using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var list = new Dictionary<MyCollectionItem, MyCollectionItem>();
+        }
+    }
+
+    class MyCollectionItem {}
+}";
+
+            VerifyDiagnostic(original,
+                ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer.Rule.MessageFormat.ToString(),
+                ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer.Rule.MessageFormat.ToString());
+        }
+
+        [TestMethod]
         public void ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer_IEnumerable()
         {
             var original = @"

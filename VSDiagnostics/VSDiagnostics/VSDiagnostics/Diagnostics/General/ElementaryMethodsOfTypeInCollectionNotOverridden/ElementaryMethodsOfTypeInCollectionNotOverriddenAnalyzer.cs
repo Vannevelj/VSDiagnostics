@@ -44,37 +44,43 @@ namespace VSDiagnostics.Diagnostics.General.ElementaryMethodsOfTypeInCollectionN
             }
 
             var objectType = ((ObjectCreationExpressionSyntax) context.Node).Type as GenericNameSyntax;
-            var genericType = objectType?.TypeArgumentList.Arguments.FirstOrDefault();
-
-            if (genericType == null)
+            if (objectType == null)
             {
                 return;
             }
 
-            var genericTypeInfo = context.SemanticModel.GetTypeInfo(genericType).Type;
-            if (genericTypeInfo == null || genericTypeInfo.TypeKind == TypeKind.Interface)
+            foreach (var genericType in objectType.TypeArgumentList.Arguments)
             {
-                return;
-            }
-
-            var implementsEquals = false;
-            var implementsGetHashCode = false;
-            foreach (var member in genericTypeInfo.GetMembers())
-            {
-                if (member.Name == nameof(Equals))
+                if (genericType == null)
                 {
-                    implementsEquals = true;
+                    return;
                 }
 
-                if (member.Name == nameof(GetHashCode))
+                var genericTypeInfo = context.SemanticModel.GetTypeInfo(genericType).Type;
+                if (genericTypeInfo == null || genericTypeInfo.TypeKind == TypeKind.Interface)
                 {
-                    implementsGetHashCode = true;
+                    return;
                 }
-            }
 
-            if (!implementsEquals || !implementsGetHashCode)
-            {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, genericType.GetLocation()));
+                var implementsEquals = false;
+                var implementsGetHashCode = false;
+                foreach (var member in genericTypeInfo.GetMembers())
+                {
+                    if (member.Name == nameof(Equals))
+                    {
+                        implementsEquals = true;
+                    }
+
+                    if (member.Name == nameof(GetHashCode))
+                    {
+                        implementsGetHashCode = true;
+                    }
+                }
+
+                if (!implementsEquals || !implementsGetHashCode)
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, genericType.GetLocation()));
+                }
             }
         }
     }
