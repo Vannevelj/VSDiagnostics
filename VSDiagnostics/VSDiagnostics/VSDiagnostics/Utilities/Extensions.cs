@@ -244,7 +244,7 @@ namespace VSDiagnostics.Utilities
             return false;
         }
 
-        public static bool NonLinqAny(this List<SyntaxNode> list) => list.Count != 0;
+        public static bool NonLinqAny<T>(this List<T> list) where T : SyntaxNode => list.Count != 0;
 
         public static T NonLinqFirstOrDefault<T>(this IEnumerable<T> enumerable) where T : SyntaxNode
         {
@@ -253,9 +253,9 @@ namespace VSDiagnostics.Utilities
                 return node;
             }
 
-            throw new InvalidOperationException($"No elements exist in {nameof(enumerable)}");
+            return null;
         }
 
-        public static T NonLinqFirstOrDefault<T>(this List<T> list) where T : SyntaxNode => list[0];
+        public static T NonLinqFirstOrDefault<T>(this List<T> list) where T : SyntaxNode => list.NonLinqAny() ? list[0] : null;
     }
 }
