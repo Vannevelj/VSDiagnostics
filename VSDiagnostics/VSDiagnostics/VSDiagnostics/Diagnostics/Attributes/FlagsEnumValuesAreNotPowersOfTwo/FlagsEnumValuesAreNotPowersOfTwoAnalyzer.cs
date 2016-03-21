@@ -79,7 +79,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 
             var enumName = context.SemanticModel.GetDeclaredSymbol(declarationExpression).Name;
             var enumMemberDeclarations =
-                declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>(SyntaxKind.EnumMemberDeclaration);
+                declarationExpression.ChildNodes().NonLinqOfType<EnumMemberDeclarationSyntax>(SyntaxKind.EnumMemberDeclaration);
 
             foreach (var member in enumMemberDeclarations)
             {
@@ -165,7 +165,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
                         }
                     }
 
-                    if (descendantNodes.Any() && all)
+                    if (descendantNodes.NonLinqAny() && all)
                     {
                         continue;
                     }

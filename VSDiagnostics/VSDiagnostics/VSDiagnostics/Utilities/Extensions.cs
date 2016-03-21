@@ -219,7 +219,7 @@ namespace VSDiagnostics.Utilities
             return identifier != null && identifier.Identifier.ValueText == "nameof";
         }
 
-        public static List<T> OfType<T>(this IEnumerable<SyntaxNode> enumerable, SyntaxKind kind) where T : SyntaxNode
+        public static List<T> NonLinqOfType<T>(this IEnumerable<SyntaxNode> enumerable, SyntaxKind kind) where T : SyntaxNode
         {
             var list = new List<T>();
 
@@ -234,7 +234,7 @@ namespace VSDiagnostics.Utilities
             return list;
         }
 
-        public static bool Any(this IEnumerable<SyntaxNode> enumerable)
+        public static bool NonLinqAny(this IEnumerable<SyntaxNode> enumerable)
         {
             foreach (var node in enumerable)
             {
@@ -244,6 +244,18 @@ namespace VSDiagnostics.Utilities
             return false;
         }
 
-        public static bool Any(this List<SyntaxNode> list) => list.Count != 0;
+        public static bool NonLinqAny(this List<SyntaxNode> list) => list.Count != 0;
+
+        public static T NonLinqFirstOrDefault<T>(this IEnumerable<T> enumerable) where T : SyntaxNode
+        {
+            foreach (var node in enumerable)
+            {
+                return node;
+            }
+
+            throw new InvalidOperationException($"No elements exist in {nameof(enumerable)}");
+        }
+
+        public static T NonLinqFirstOrDefault<T>(this List<T> list) where T : SyntaxNode => list[0];
     }
 }

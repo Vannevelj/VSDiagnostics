@@ -1,12 +1,12 @@
 ﻿using System.Collections.Immutable;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
+// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMemberName
 {
@@ -33,7 +33,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var methodDeclaration = (MethodDeclarationSyntax) context.Node;
-            var parentClass = methodDeclaration.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+            var parentClass = methodDeclaration.Ancestors().NonLinqOfType<ClassDeclarationSyntax>(SyntaxKind.ClassDeclaration).NonLinqFirstOrDefault();
 
 
             // class must implement INotifyPropertyChanged
@@ -65,13 +65,17 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
             }
 
             // parameter must not have CallerMemberNameAttribute
-            if (param.AttributeLists.Any(a => a.Attributes.Any() && a.Attributes.Any(t =>
+            foreach (var list in param.AttributeLists)
             {
-                var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
-                return symbol != null && symbol.ContainingSymbol.MetadataName == typeof(CallerMemberNameAttribute).Name;
-            })))
-            {
-                return;
+                foreach (var attribute in list.Attributes)
+                {
+                    var symbol = context.SemanticModel.GetSymbolInfo(attribute).Symbol;
+                    if (symbol != null &&
+                        symbol.ContainingSymbol.MetadataName == typeof (CallerMemberNameAttribute).Name)
+                    {
+                        return;
+                    }
+                }
             }
 
             context.ReportDiagnostic(Diagnostic.Create(Rule, methodDeclaration.GetLocation()));
