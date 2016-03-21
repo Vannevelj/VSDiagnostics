@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -41,7 +40,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.EmptyArgumentException
                 return;
             }
 
-            if (!expression.ArgumentList.ChildNodes().Any())
+            if (!expression.ArgumentList.ChildNodes().NonLinqAny())
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule, expression.GetLocation()));
             }
