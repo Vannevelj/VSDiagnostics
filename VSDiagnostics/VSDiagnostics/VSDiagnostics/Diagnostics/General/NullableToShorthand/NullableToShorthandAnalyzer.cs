@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -27,7 +26,7 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var argumentList = (GenericNameSyntax) context.Node;
-            if (argumentList.TypeArgumentList.Arguments.OfType<OmittedTypeArgumentSyntax>().Any())
+            if (argumentList.TypeArgumentList.Arguments.NonLinqOfType<OmittedTypeArgumentSyntax>(SyntaxKind.OmittedTypeArgument).NonLinqAny())
             {
                 return;
             }
@@ -64,17 +63,28 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
 
                 // First we look through the different nodes that can't be nested
                 // If nothing is found, we check if it's perhaps a standalone expression (such as an object creation without assigning it to an identifier)
-                var parentNode =
-                    context.Node.AncestorsAndSelf().FirstOrDefault(x => variableAncestorNodes.Contains(x.Kind())) ??
-                    context.Node.AncestorsAndSelf().OfType<ExpressionStatementSyntax>().FirstOrDefault();
+                SyntaxNode parentNode = null;
+                foreach (var node in context.Node.AncestorsAndSelf())
+                {
+                    if (variableAncestorNodes.NonLinqContains(node.Kind()))
+                    {
+                        parentNode = node;
+                    }
+                }
 
                 if (parentNode == null)
                 {
-                    return;
+                    parentNode = context.Node.AncestorsAndSelf().NonLinqOfType<ExpressionStatementSyntax>(SyntaxKind.ExpressionStatement).NonLinqFirstOrDefault();
+
+                    if (parentNode == null)
+                    {
+                        return;
+                    }
                 }
 
                 if (parentNode.Kind() == SyntaxKind.LocalDeclarationStatement)
                 {
+                    // ReSharper disable once PossibleInvalidCastException
                     identifier = ((LocalDeclarationStatementSyntax) parentNode).Declaration?
                                                                                .Variables
                                                                                .FirstOrDefault()?
@@ -83,23 +93,26 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
                 }
                 else if (parentNode.Kind() == SyntaxKind.FieldDeclaration)
                 {
-                    identifier =
-                        ((FieldDeclarationSyntax) parentNode).Declaration?
-                                                             .Variables
-                                                             .FirstOrDefault()?
-                                                             .Identifier
-                                                             .Text;
+                    // ReSharper disable once PossibleInvalidCastException
+                    identifier = ((FieldDeclarationSyntax) parentNode).Declaration?
+                                                                      .Variables
+                                                                      .FirstOrDefault()?
+                                                                      .Identifier
+                                                                      .Text;
                 }
                 else if (parentNode.Kind() == SyntaxKind.Parameter)
                 {
+                    // ReSharper disable once PossibleInvalidCastException
                     identifier = ((ParameterSyntax) parentNode).Identifier.Text;
                 }
                 else if (parentNode.Kind() == SyntaxKind.TypeParameter)
                 {
+                    // ReSharper disable once PossibleInvalidCastException
                     identifier = ((TypeParameterSyntax) parentNode).Identifier.Text;
                 }
                 else if (parentNode.Kind() == SyntaxKind.PropertyDeclaration)
                 {
+                    // ReSharper disable once PossibleInvalidCastException
                     identifier = ((PropertyDeclarationSyntax) parentNode).Identifier.Text;
                 }
                 else
