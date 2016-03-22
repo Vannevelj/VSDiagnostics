@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Globalization;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
+// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperator
 {
@@ -61,9 +61,12 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
             }
 
             // We use the descendent nodes in case it's wrapped in another level. For example: OnPropertyChanged(((nameof(MyProperty))))
-            if (invokedProperty.DescendantNodesAndSelf().OfType<InvocationExpressionSyntax>().Any(x => x.IsNameofInvocation()))
+            foreach (var expression in invokedProperty.DescendantNodesAndSelf().NonLinqOfType<InvocationExpressionSyntax>(SyntaxKind.InvocationExpression))
             {
-                return;
+                if (expression.IsNameofInvocation())
+                {
+                    return;
+                }
             }
 
             var invocationArgument = context.SemanticModel.GetConstantValue(invokedProperty.Expression);
@@ -74,7 +77,7 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
 
             // Get all the properties defined in this type
             // We can't just get all the descendents of the classdeclaration because that would pass by some of a partial class' properties
-            var classDeclaration = invocation.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+            var classDeclaration = invocation.Ancestors().NonLinqOfType<ClassDeclarationSyntax>(SyntaxKind.ClassDeclaration).NonLinqFirstOrDefault();
             if (classDeclaration == null)
             {
                 return;
@@ -90,7 +93,9 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
             {
                 if (string.Equals(property.Name, (string) invocationArgument.Value, StringComparison.OrdinalIgnoreCase))
                 {
-                    var location = invokedProperty.Expression.DescendantNodesAndSelf().Last().GetLocation();
+                    // The original Linq was `Last()`.  I used `LastOrDefault()` just because I didn't feel the need to implement a
+                    // version to throw an `InvalidOperationException()` rather than a `NullReferenceException()` in this case.
+                    var location = invokedProperty.Expression.DescendantNodesAndSelf().NonLinqLastOrDefault().GetLocation();
                     var data = ImmutableDictionary.CreateRange(new[]
                     {
                         new KeyValuePair<string, string>("parameterName", property.Name),
