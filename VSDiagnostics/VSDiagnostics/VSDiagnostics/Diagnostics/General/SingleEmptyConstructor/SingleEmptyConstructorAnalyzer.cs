@@ -1,10 +1,10 @@
 ﻿using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
+// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
 {
@@ -47,31 +47,35 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
             }
 
             // ctor must not contain comments
-            if (constructorDeclaration.Body.CloseBraceToken.LeadingTrivia.Any(t => t.IsCommentTrivia()))
+            foreach (var trivia in constructorDeclaration.Body.CloseBraceToken.LeadingTrivia)
             {
-                return;
+                if (trivia.IsCommentTrivia())
+                {
+                    return;
+                }
             }
 
             // ctor must not have attributes
-            if (constructorDeclaration.AttributeLists.Any())
+            if (constructorDeclaration.AttributeLists.NonLinqAny())
             {
                 return;
             }
 
             var classSymbol = context.SemanticModel.GetDeclaredSymbol(constructorDeclaration.Parent) as INamedTypeSymbol;
-            if (classSymbol != null && classSymbol.Constructors.Count() != 1)
+            if (classSymbol != null && classSymbol.Constructors.Length != 1)
             {
                 return;
             }
 
-            if (constructorDeclaration.GetLeadingTrivia().Any(t => t.IsCommentTrivia()))
+            foreach (var trivia in constructorDeclaration.GetLeadingTrivia())
             {
-                return;
+                if (trivia.IsCommentTrivia())
+                {
+                    return;
+                }
             }
-
-            var childNodes = constructorDeclaration.ChildNodes().ToList();
-
-            if (childNodes.Any() && childNodes.Any(node =>
+            
+            foreach (var node in constructorDeclaration.ChildNodes())
             {
                 var nodeAsConstructorInitializerSyntax = node as ConstructorInitializerSyntax;
                 if (nodeAsConstructorInitializerSyntax != null)
@@ -80,14 +84,12 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
 
                     // we must return false (to avoid the parent if) only if it is the base keyword
                     // and there are no arguments.
-                    return !constructorInitializer.ThisOrBaseKeyword.IsKind(SyntaxKind.BaseKeyword) ||
-                           constructorInitializer.ArgumentList.Arguments.Any();
+                    if (!constructorInitializer.ThisOrBaseKeyword.IsKind(SyntaxKind.BaseKeyword) ||
+                        constructorInitializer.ArgumentList.Arguments.NonLinqAny())
+                    {
+                        return;
+                    }
                 }
-
-                return false;
-            }))
-            {
-                return;
             }
 
             context.ReportDiagnostic(Diagnostic.Create(Rule, constructorDeclaration.GetLocation(),
