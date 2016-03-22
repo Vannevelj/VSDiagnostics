@@ -1,10 +1,10 @@
 ﻿using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
+// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
 {
@@ -54,7 +54,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node.IsKind(SyntaxKind.ClassDeclaration))
             {
                 var declarationExpression = (ClassDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.NonLinqContainsAny(_accessModifierKinds))
                 {
                     var accessibility =
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
@@ -67,7 +67,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node.IsKind(SyntaxKind.StructDeclaration))
             {
                 var declarationExpression = (StructDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.NonLinqContainsAny(_accessModifierKinds))
                 {
                     var accessibility =
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
@@ -80,7 +80,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node.IsKind(SyntaxKind.EnumDeclaration))
             {
                 var declarationExpression = (EnumDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.NonLinqContainsAny(_accessModifierKinds))
                 {
                     var accessibility =
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
@@ -93,7 +93,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node.IsKind(SyntaxKind.DelegateDeclaration))
             {
                 var declarationExpression = (DelegateDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.NonLinqContainsAny(_accessModifierKinds))
                 {
                     var accessibility =
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
@@ -106,7 +106,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node.IsKind(SyntaxKind.InterfaceDeclaration))
             {
                 var declarationExpression = (InterfaceDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.NonLinqContainsAny(_accessModifierKinds))
                 {
                     var accessibility =
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
@@ -119,7 +119,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node.IsKind(SyntaxKind.FieldDeclaration))
             {
                 var declarationExpression = (FieldDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.NonLinqContainsAny(_accessModifierKinds))
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
                         "private"));
@@ -129,7 +129,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node.IsKind(SyntaxKind.PropertyDeclaration))
             {
                 var declarationExpression = (PropertyDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())) &&
+                if (!declarationExpression.Modifiers.NonLinqContainsAny(_accessModifierKinds) &&
                     declarationExpression.ExplicitInterfaceSpecifier == null)
                 {
                     var accessibility =
@@ -143,8 +143,8 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node.IsKind(SyntaxKind.MethodDeclaration))
             {
                 var declarationExpression = (MethodDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())) &&
-                    declarationExpression.Modifiers.All(m => m.Kind() != SyntaxKind.PartialKeyword) &&
+                if (!declarationExpression.Modifiers.NonLinqContainsAny(_accessModifierKinds) &&
+                    !declarationExpression.Modifiers.NonLinqContains(SyntaxKind.PartialKeyword) &&
                     declarationExpression.ExplicitInterfaceSpecifier == null)
                 {
                     var accessibility =
@@ -158,9 +158,8 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node.IsKind(SyntaxKind.ConstructorDeclaration))
             {
                 var declarationExpression = (ConstructorDeclarationSyntax) context.Node;
-                if (
-                    !declarationExpression.Modifiers.Any(
-                        m => _accessModifierKinds.Contains(m.Kind()) || m.Kind() == SyntaxKind.StaticKeyword))
+                if (!declarationExpression.Modifiers.NonLinqContainsAny(_accessModifierKinds) &&
+                    !declarationExpression.Modifiers.NonLinqContains(SyntaxKind.StaticKeyword))
                 {
                     var accessibility =
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
@@ -173,7 +172,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node.IsKind(SyntaxKind.EventFieldDeclaration))
             {
                 var declarationExpression = (EventFieldDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.NonLinqContainsAny(_accessModifierKinds))
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
                         "private"));
@@ -183,7 +182,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node.IsKind(SyntaxKind.EventDeclaration))
             {
                 var declarationExpression = (EventDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())))
+                if (!declarationExpression.Modifiers.NonLinqContainsAny(_accessModifierKinds))
                 {
                     var accessibility =
                         context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
@@ -196,7 +195,7 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             if (context.Node.IsKind(SyntaxKind.IndexerDeclaration))
             {
                 var declarationExpression = (IndexerDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.Any(m => _accessModifierKinds.Contains(m.Kind())) &&
+                if (!declarationExpression.Modifiers.NonLinqContainsAny(_accessModifierKinds) &&
                     declarationExpression.ExplicitInterfaceSpecifier == null)
                 {
                     var accessibility =

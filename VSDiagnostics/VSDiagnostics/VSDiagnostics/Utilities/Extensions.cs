@@ -257,5 +257,34 @@ namespace VSDiagnostics.Utilities
         }
 
         public static T NonLinqFirstOrDefault<T>(this List<T> list) => list.NonLinqAny() ? list[0] : default(T);
+
+        public static bool NonLinqContainsAny(this SyntaxTokenList list, SyntaxKind[] kinds)
+        {
+            foreach (var item in list)
+            {
+                foreach (var kind in kinds)
+                {
+                    if (item.Kind() == kind)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public static bool NonLinqContains(this SyntaxTokenList list, SyntaxKind kind)
+        {
+            foreach (var item in list)
+            {
+                if (item.Kind() == kind)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
