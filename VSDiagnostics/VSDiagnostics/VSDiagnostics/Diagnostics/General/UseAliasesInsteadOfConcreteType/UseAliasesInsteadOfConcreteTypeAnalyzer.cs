@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -29,7 +28,7 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
 
             // A nameof() expression cannot contain aliases
             // There is no way to distinguish between a self-defined method 'nameof' and the nameof operator so we have to ignore all invocations that call into 'nameof'
-            var surroundingInvocation = identifier.Ancestors().OfType<InvocationExpressionSyntax>().FirstOrDefault();
+            var surroundingInvocation = identifier.Ancestors().NonLinqOfType<InvocationExpressionSyntax>(SyntaxKind.InvocationExpression).NonLinqFirstOrDefault();
             if (surroundingInvocation != null && surroundingInvocation.IsNameofInvocation())
             {
                 return;
@@ -48,7 +47,7 @@ namespace VSDiagnostics.Diagnostics.General.UseAliasesInsteadOfConcreteType
             // We don't need it in this step but we have to point the analyzer to the right location
             // This will make sure that we accept the entire qualified name in the code fix
             var location = identifier.GetLocation();
-            var qualifiedName = identifier.AncestorsAndSelf().OfType<QualifiedNameSyntax>().FirstOrDefault();
+            var qualifiedName = identifier.AncestorsAndSelf().NonLinqOfType<QualifiedNameSyntax>(SyntaxKind.QualifiedName).NonLinqFirstOrDefault();
             if (qualifiedName?.Parent is UsingDirectiveSyntax)
             {
                 return;
