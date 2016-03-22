@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
+// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 {
@@ -41,22 +42,35 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 return;
             }
 
-            var ifStatement = isExpression.AncestorsAndSelf().OfType<IfStatementSyntax>().FirstOrDefault();
+            var ifStatement = isExpression.AncestorsAndSelf().NonLinqOfType<IfStatementSyntax>(SyntaxKind.IfStatement).NonLinqFirstOrDefault();
             if (ifStatement == null)
             {
                 return;
             }
 
-            var asExpressions = ifStatement.Statement
-                                           .DescendantNodes()
-                                           .Concat(ifStatement.Condition.DescendantNodesAndSelf())
-                                           .OfType<BinaryExpressionSyntax>()
-                                           .Where(x => x.OperatorToken.IsKind(SyntaxKind.AsKeyword));
+            var asExpressions = new List<BinaryExpressionSyntax>();
 
-            var castExpressions = ifStatement.Statement
-                                             .DescendantNodes()
-                                             .Concat(ifStatement.Condition.DescendantNodesAndSelf())
-                                             .OfType<CastExpressionSyntax>();
+            foreach (var node in ifStatement.Statement.DescendantNodes())
+            {
+                var expression = node as BinaryExpressionSyntax;
+                if (expression != null && expression.OperatorToken.IsKind(SyntaxKind.AsKeyword))
+                {
+                    asExpressions.Add(expression);
+                }
+            }
+
+            foreach (var node in ifStatement.Condition.DescendantNodesAndSelf())
+            {
+                var expression = node as BinaryExpressionSyntax;
+                if (expression != null && expression.OperatorToken.IsKind(SyntaxKind.AsKeyword))
+                {
+                    asExpressions.Add(expression);
+                }
+            }
+
+            var castExpressions = new List<CastExpressionSyntax>();
+            castExpressions.AddRange(ifStatement.Statement.DescendantNodes().NonLinqOfType<CastExpressionSyntax>(SyntaxKind.CastExpression));
+            castExpressions.AddRange(ifStatement.Condition.DescendantNodesAndSelf().NonLinqOfType<CastExpressionSyntax>(SyntaxKind.CastExpression));
 
             Action reportDiagnostic = () => context.ReportDiagnostic(Diagnostic.Create(Rule, isExpression.GetLocation(), isIdentifier));
 
@@ -74,7 +88,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                     if (castedType.Type.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T)
                     {
                         var nullableType = castedType.Type as INamedTypeSymbol;
-                        var argument = nullableType?.TypeArguments.FirstOrDefault();
+                        var argument = nullableType?.TypeArguments.NonLinqFirstOrDefault();
                         if (argument == null)
                         {
                             return;
@@ -92,7 +106,10 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 }
             };
 
-            foreach (var expression in asExpressions.Concat<ExpressionSyntax>(castExpressions))
+            var expressions = new List<ExpressionSyntax>(asExpressions);
+            expressions.AddRange(castExpressions);
+
+            foreach (var expression in expressions)
             {
                 var binaryExpression = expression as BinaryExpressionSyntax;
                 var binaryIdentifier = binaryExpression?.Left as IdentifierNameSyntax;
