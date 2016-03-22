@@ -1,10 +1,10 @@
 ﻿using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
+// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
 {
@@ -29,7 +29,7 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node.AncestorsAndSelf().OfType<AttributeArgumentSyntax>().Any())
+            if (context.Node.AncestorsAndSelf().NonLinqOfType<AttributeArgumentSyntax>(SyntaxKind.AttributeArgument).NonLinqAny())
             {
                 return;
             }
@@ -41,17 +41,23 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
                 return;
             }
 
-            if (stringLiteral.Ancestors().Any(x => x.IsKind(SyntaxKind.Parameter)))
+            foreach (var node in stringLiteral.Ancestors())
             {
-                return;
-            }
-
-            var variableDeclaration = stringLiteral.Ancestors().OfType<FieldDeclarationSyntax>().FirstOrDefault();
-            if (variableDeclaration != null)
-            {
-                if (variableDeclaration.Modifiers.Any(x => x.IsKind(SyntaxKind.ConstKeyword)))
+                if (node.IsKind(SyntaxKind.Parameter))
                 {
                     return;
+                }
+            }
+
+            var variableDeclaration = stringLiteral.Ancestors().NonLinqOfType<FieldDeclarationSyntax>(SyntaxKind.FieldDeclaration).NonLinqFirstOrDefault();
+            if (variableDeclaration != null)
+            {
+                foreach (var modifier in variableDeclaration.Modifiers)
+                {
+                    if (modifier.IsKind(SyntaxKind.ConstKeyword))
+                    {
+                        return;
+                    }
                 }
             }
 
@@ -61,10 +67,16 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
             //     case "": break;
             // }
             // Cannot be changed since it has to be a constant
-            if (stringLiteral.AncestorsAndSelf().OfType<SwitchLabelSyntax>().Any())
+            foreach (var label in stringLiteral.AncestorsAndSelf())
             {
-                return;
+                if (label is SwitchLabelSyntax)
+                {
+                    return;
+                }
             }
+            /*{
+                return;
+            }*/
 
             context.ReportDiagnostic(Diagnostic.Create(Rule, stringLiteral.GetLocation()));
         }
