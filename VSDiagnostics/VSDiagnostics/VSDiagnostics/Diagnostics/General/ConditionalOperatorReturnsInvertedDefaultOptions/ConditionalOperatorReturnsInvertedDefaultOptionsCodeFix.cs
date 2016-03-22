@@ -12,7 +12,7 @@ using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsInvertedDefaultOptions
 {
-    [ExportCodeFixProvider(DiagnosticId.ConditionalOperatorReturnsInvertedDefaultOptions, LanguageNames.CSharp),
+    [ExportCodeFixProvider(DiagnosticId.ConditionalOperatorReturnsInvertedDefaultOptions + "CF", LanguageNames.CSharp),
      Shared]
     public class ConditionalOperatorReturnsInvertedDefaultOptionsCodeFix : CodeFixProvider
     {

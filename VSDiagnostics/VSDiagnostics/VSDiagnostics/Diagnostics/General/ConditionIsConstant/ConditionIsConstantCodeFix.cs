@@ -12,7 +12,7 @@ using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.ConditionIsConstant
 {
-    [ExportCodeFixProvider(DiagnosticId.ConditionIsConstant, LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.ConditionIsConstant + "CF", LanguageNames.CSharp), Shared]
     public class ConditionIsConstantCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
