@@ -286,5 +286,18 @@ namespace VSDiagnostics.Utilities
 
             return false;
         }
+
+        public static bool NonLinqContains(this IEnumerable<SyntaxKind> list, SyntaxKind kind)
+        {
+            foreach (var syntaxKind in list)
+            {
+                if (syntaxKind == kind)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

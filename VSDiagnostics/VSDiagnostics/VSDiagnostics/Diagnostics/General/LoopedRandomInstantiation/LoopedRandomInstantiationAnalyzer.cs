@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -45,7 +44,7 @@ namespace VSDiagnostics.Diagnostics.General.LoopedRandomInstantiation
             SyntaxNode currentNode = variableDeclaration;
             while (!currentNode.IsKind(SyntaxKind.ClassDeclaration))
             {
-                if (_loopTypes.Contains(currentNode.Kind()))
+                if (_loopTypes.NonLinqContains(currentNode.Kind()))
                 {
                     foreach (var declarator in variableDeclaration.Variables)
                     {
