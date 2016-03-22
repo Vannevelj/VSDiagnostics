@@ -299,5 +299,8 @@ namespace VSDiagnostics.Utilities
 
             return false;
         }
+
+        public static T NonLinqLastOrDefault<T>(this IEnumerable<T> enumerable) => new List<T>(enumerable).NonLinqLastOrDefault();
+        public static T NonLinqLastOrDefault<T>(this List<T> list) => list.NonLinqAny() ? list[list.Count - 1] : default(T);
     }
 }
