@@ -244,18 +244,18 @@ namespace VSDiagnostics.Utilities
             return false;
         }
 
-        public static bool NonLinqAny<T>(this List<T> list) where T : SyntaxNode => list.Count != 0;
+        public static bool NonLinqAny<T>(this List<T> list) => list.Count != 0;
 
-        public static T NonLinqFirstOrDefault<T>(this IEnumerable<T> enumerable) where T : SyntaxNode
+        public static T NonLinqFirstOrDefault<T>(this IEnumerable<T> enumerable)
         {
             foreach (var node in enumerable)
             {
                 return node;
             }
 
-            return null;
+            return default(T);
         }
 
-        public static T NonLinqFirstOrDefault<T>(this List<T> list) where T : SyntaxNode => list.NonLinqAny() ? list[0] : null;
+        public static T NonLinqFirstOrDefault<T>(this List<T> list) => list.NonLinqAny() ? list[0] : default(T);
     }
 }

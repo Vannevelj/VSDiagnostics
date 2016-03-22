@@ -1,11 +1,13 @@
-﻿using System.Collections.Immutable;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
+// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOfArguments
 {
@@ -37,28 +39,62 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
             var invokedMethod = context.SemanticModel.GetSymbolInfo(invocation);
             var methodSymbol = invokedMethod.Symbol as IMethodSymbol;
 
+            if (methodSymbol == null)
+            {
+                return;
+            }
+
             // Verify we're dealing with a call to a method that accepts a variable named 'format' and a object, params object[] or a plain object[]
             // params object[] and object[] can both be verified by looking for the latter
             // This allows us to support similar calls like Console.WriteLine("{0}", "test") as well which carry an implicit string.Format
-            var formatParam = methodSymbol?.Parameters.FirstOrDefault(x => x.Name == "format");
+            IParameterSymbol formatParam = null;
+            foreach (var parameter in methodSymbol.Parameters)
+            {
+                if (parameter.Name == "format")
+                {
+                    formatParam = parameter;
+                    break;
+                }
+            }
+
             if (formatParam == null)
             {
                 return;
             }
 
             var formatIndex = formatParam.Ordinal;
-            var formatParameters = methodSymbol.Parameters.Skip(formatIndex + 1).ToArray();
+            var formatParameters = new List<IParameterSymbol>();// methodSymbol.Parameters.Skip(formatIndex + 1).ToArray();
+            for (var i = formatIndex + 1; i < methodSymbol.Parameters.Length; i++)
+            {
+                formatParameters.Add(methodSymbol.Parameters[i]);
+            }
 
             // If the method definition doesn't contain any parameter to pass format arguments, we ignore it
-            if (!formatParameters.Any())
+            if (!formatParameters.NonLinqAny())
             {
                 return;
             }
 
-            var hasObjectArray = formatParameters.Length == 1 &&
-                                 formatParameters.All(x => x.Type.Kind == SymbolKind.ArrayType &&
-                                                           ((IArrayTypeSymbol) x.Type).ElementType.SpecialType == SpecialType.System_Object);
-            var hasObject = formatParameters.All(x => x.Type.SpecialType == SpecialType.System_Object);
+            var symbolsAreNotArraysOrObjects = true;
+            foreach (var symbol in formatParameters)
+            {
+                if (symbol.Type.Kind != SymbolKind.ArrayType || ((IArrayTypeSymbol) symbol.Type).ElementType.SpecialType != SpecialType.System_Object)
+                {
+                    symbolsAreNotArraysOrObjects = false;
+                    break;
+                }
+            }
+            var hasObjectArray = formatParameters.Count == 1 && symbolsAreNotArraysOrObjects;
+
+            var hasObject = true;
+            foreach (var symbol in formatParameters)
+            {
+                if (symbol.Type.SpecialType != SpecialType.System_Object)
+                {
+                    hasObject = false;
+                    break;
+                }
+            }
 
             if (!(hasObject || hasObjectArray))
             {
@@ -86,8 +122,13 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
             // If the first one is the literal (aka: the format specified) then every other argument is an argument to the format
             // If not, it means the first one is the CultureInfo, the second is the format and all others are format arguments
             // We also have to check whether or not the arguments are passed in through an explicit array or whether they use the params syntax
-            var formatArguments = invocation.ArgumentList.Arguments.Skip(formatIndex + 1).ToArray();
-            var amountOfFormatArguments = formatArguments.Length;
+            var formatArguments = new List<ArgumentSyntax>();
+            for (var i = formatIndex + 1; i < invocation.ArgumentList.Arguments.Count; i++)
+            {
+                formatArguments.Add(invocation.ArgumentList.Arguments[i]);
+            }
+
+            var amountOfFormatArguments = formatArguments.Count;
 
             if (amountOfFormatArguments == 1)
             {
@@ -102,14 +143,23 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
                 {
                     // We check for an invocation first to account for the scenario where you have both an invocation and an array initializer
                     // Think about something like this: string.Format(""{0}{1}{2}"", new[] { 1 }.Concat(new[] {2}).ToArray());
-                    var methodInvocation = formatArguments[0].DescendantNodes().OfType<InvocationExpressionSyntax>().FirstOrDefault();
+                    var methodInvocation = formatArguments[0].DescendantNodes().NonLinqOfType<InvocationExpressionSyntax>(SyntaxKind.InvocationExpression).NonLinqFirstOrDefault();
                     if (methodInvocation != null)
                     {
                         // We don't handle method calls that return an array in the case of a single argument
                         return;
                     }
 
-                    var inlineArrayCreation = formatArguments[0].DescendantNodes().OfType<InitializerExpressionSyntax>().FirstOrDefault();
+                    InitializerExpressionSyntax inlineArrayCreation = null;
+                    foreach (var argument in formatArguments[0].DescendantNodes())
+                    {
+                        var argumentAsInitializerExpressionSyntax = argument as InitializerExpressionSyntax;
+                        if (argumentAsInitializerExpressionSyntax != null)
+                        {
+                            inlineArrayCreation = argumentAsInitializerExpressionSyntax;
+                        }
+                    }
+
                     if (inlineArrayCreation != null)
                     {
                         amountOfFormatArguments = inlineArrayCreation.Expressions.Count;
@@ -131,19 +181,24 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
             placeholderVerification:
             // Get the placeholders we use stripped off their format specifier, get the highest value 
             // and verify that this value + 1 (to account for 0-based indexing) is not greater than the amount of placeholder arguments
-            var placeholders = PlaceholderHelpers.GetPlaceholders((string) formatString.Value)
-                                                 .Cast<Match>()
-                                                 .Select(x => x.Value)
-                                                 .Select(PlaceholderHelpers.GetPlaceholderIndex)
-                                                 .Select(int.Parse)
-                                                 .ToList();
+            var placeholders = new List<int>();
 
-            if (!placeholders.Any())
+            foreach (Match placeholder in PlaceholderHelpers.GetPlaceholders((string) formatString.Value))
+            {
+                placeholders.Add(int.Parse(PlaceholderHelpers.GetPlaceholderIndex(placeholder.Value)));
+            }
+
+            if (!placeholders.NonLinqAny())
             {
                 return;
             }
 
-            var highestPlaceholder = placeholders.Max();
+            var highestPlaceholder = int.MinValue;
+            foreach (var placeholder in placeholders)
+            {
+                highestPlaceholder = Math.Max(highestPlaceholder, placeholder);
+            }
+
             if (highestPlaceholder + 1 > amountOfFormatArguments)
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule, formatExpression.GetLocation()));
