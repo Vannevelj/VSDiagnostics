@@ -570,7 +570,8 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"),
+            VerifyDiagnostic(original, 
+                string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"),
                 string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
             VerifyFix(original, expected);
         }
@@ -1743,6 +1744,489 @@ namespace ConsoleApplication1
             {
                 Console.Write(oAsInt32_11.Value);
                 Console.Write(oAsInt32_10);
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_TernaryOperator()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            var x = o is int ? 5 : 6;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_TernaryOperator_WithCasts()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            var x = o is int ? ((int) o) : ((double) o);
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_Return()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        object Method(object o)
+        {
+            return o is int ? 5 : 6;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_Return_WithCasts()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        object Method(object o)
+        {
+            return o is int ? ((int) o) : ((double) o);
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_Return_IsStatement()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        bool Method(object o)
+        {
+            return o is int;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_Local()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            var isInt = o is int;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_IrrelevantIfParent()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            if (true)
+            {
+                var res = o is int ? ((int)o) : ((double)o);
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_IrrelevantIfParent_2()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            if (true)
+            {
+                if (true)
+                {
+                    var res = o is int ? ((int)o) : ((double)o);
+                }
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_IrrelevantIfAncestor()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = ""sample"";
+            if (true)
+            {
+                if (o is string)
+                {
+                    string oAsString = o as string;
+                }
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = ""sample"";
+            if (true)
+            {
+                var oAsString = o as string;
+                if (oAsString != null)
+                {
+                }
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_Trivia()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = ""sample"";
+            if (o is string)
+            {
+                // Test
+                string oAsString = o as string; // Test
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = ""sample"";
+            // Test
+            var oAsString = o as string; // Test
+            if (oAsString != null)
+            {
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_TernaryWithAppropriateIfCondition()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int x, y;
+
+        void Method(object o)
+        {
+            if (o is int)
+            {
+                var res = x > y ? (int) o : (double) o;
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        int x, y;
+
+        void Method(object o)
+        {
+            var oAsInt32 = o as int?;
+            if (oAsInt32 != null)
+            {
+                var res = x > y ? oAsInt32.Value : (double) o;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_TernaryWithAppropriateIfCondition_RepeatedCheck()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            if (o is int)
+            {
+                var res = o is int ? (int) o : (double) o;
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            var oAsInt32 = o as int?;
+            if (oAsInt32 != null)
+            {
+                var res = o is int ? oAsInt32.Value : (double) o;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_RedundantCheck()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            if (o is int)
+            {
+                var x = (int) o;
+                var y = o is int;
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            var oAsInt32 = o as int?;
+            if (oAsInt32 != null)
+            {
+                var y = o is int;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_While()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            if (true)
+            {
+                while(o is int)
+                {
+                    var x = o as int?;
+                    o = ""test"";
+                }
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_NegativeCondition()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            if (!(o is int))
+            {
+                var x = o as int?;
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            var oAsInt32 = o as int?;
+            if (!(oAsInt32 != null))
+            {
             }
         }
     }

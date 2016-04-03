@@ -34,6 +34,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             {
                 return;
             }
+
             var isIdentifier = isIdentifierExpression.Identifier.ValueText;
             var isType = context.SemanticModel.GetTypeInfo(isExpression.Right).Type;
             if (isType == null)
@@ -43,6 +44,12 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 
             var ifStatement = isExpression.AncestorsAndSelf().OfType<IfStatementSyntax>().FirstOrDefault();
             if (ifStatement == null)
+            {
+                return;
+            }
+
+            var isExpressionBelongsToIfCondition = ifStatement.Condition.DescendantNodesAndSelf().Contains(isExpression);
+            if (!isExpressionBelongsToIfCondition)
             {
                 return;
             }

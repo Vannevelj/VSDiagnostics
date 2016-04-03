@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
@@ -37,7 +38,8 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 diagnostic);
         }
 
-        private async Task<Document> UseAsAsync(Document document, SyntaxNode statement, CancellationToken cancellationToken)
+        private async Task<Document> UseAsAsync(Document document, SyntaxNode statement,
+            CancellationToken cancellationToken)
         {
             var documentId = document.Id;
             var projectId = document.Project.Id;
@@ -64,7 +66,12 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             var isExpression = (BinaryExpressionSyntax) root.GetAnnotatedNodes("MyIsStatement").Single();
             var isIdentifier = ((IdentifierNameSyntax) isExpression.Left).Identifier.ValueText;
             var ifStatement = isExpression.Ancestors().OfType<IfStatementSyntax>().First();
-            var newIdentifier = SyntaxFactory.Identifier(GetNewIdentifier(isIdentifier, (TypeSyntax) isExpression.Right, semanticModel, GetOuterIfStatement(ifStatement).Parent));
+            var nullableType = isExpression.Right as NullableTypeSyntax;
+            var type = nullableType != null
+                ? semanticModel.GetTypeInfo(nullableType.ElementType).Type
+                : semanticModel.GetTypeInfo(isExpression.Right).Type;
+            var newIdentifier =
+                SyntaxFactory.Identifier(GetNewIdentifier(isIdentifier, type, GetOuterIfStatement(ifStatement).Parent));
 
 
             // We filter out the descendent if statements to avoid executing the code fix on all nested ifs
@@ -97,7 +104,8 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                     // See https://github.com/dotnet/roslyn/issues/8154 for more info
                     if (identifier.Ancestors().OfType<VariableDeclaratorSyntax>().Any())
                     {
-                        editor.ReplaceNode(identifier, identifier.WithAdditionalAnnotations(new SyntaxAnnotation("QueueRename")));
+                        editor.ReplaceNode(identifier,
+                            identifier.WithAdditionalAnnotations(new SyntaxAnnotation("QueueRename")));
                     }
                 }
             }
@@ -116,7 +124,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                     {
                         // We only rename the VariableDeclarators that are directly assigned the casted variable in question
                         // If the variable is used in a separate expression, we don't have to rename our declarator
-                        if (!IsSurroundedByInvocation(node))
+                        if (!IsSurroundedByInvocation(node) && !IsInConditionalExpression(node))
                         {
                             nodeToRename = declarator;
                             break;
@@ -135,7 +143,10 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                     break;
                 }
 
-                var renamedSolution = await Renamer.RenameSymbolAsync(document.Project.Solution, nodeToRenameSymbol, newIdentifier.ValueText, null, cancellationToken);
+                var renamedSolution =
+                    await
+                        Renamer.RenameSymbolAsync(document.Project.Solution, nodeToRenameSymbol, newIdentifier.ValueText,
+                            null, cancellationToken);
                 document = renamedSolution.Projects.Single(x => x.Id == projectId).GetDocument(documentId);
             }
 
@@ -150,11 +161,18 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 
             var conditionAlreadyReplaced = false;
             var variableAlreadyExtracted = false;
+            
 
             foreach (var asExpression in asExpressions)
             {
                 var identifier = asExpression.Left as IdentifierNameSyntax;
                 if (identifier == null || identifier.Identifier.ValueText != isIdentifier)
+                {
+                    continue;
+                }
+
+                var castedType = semanticModel.GetTypeInfo(asExpression.Right);
+                if (castedType.Type != type)
                 {
                     continue;
                 }
@@ -170,13 +188,12 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                     editor: editor,
                     variableAlreadyExtracted: ref variableAlreadyExtracted);
 
-                // If the expression does not have a variable declarator as parent, we just swap the entire expression for the newly generated identifier
                 ReplaceIdentifier(asExpression, newIdentifier, editor);
 
                 // Remove the local variable
                 // If the expression is surrounded by an invocation we just swap the expression for the identifier
                 // e.g.: bool contains = new[] { ""test"", ""test"", ""test"" }.Contains(o as string);
-                if (!IsSurroundedByInvocation(asExpression))
+                if (!IsSurroundedByInvocation(asExpression) && !IsInConditionalExpression(asExpression))
                 {
                     RemoveLocal(asExpression, editor);
                 }
@@ -191,13 +208,20 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 }
 
                 var castedType = semanticModel.GetTypeInfo(castExpression.Type);
+                if (castedType.Type != type)
+                {
+                    continue;
+                }
 
                 // Replace condition if it hasn't happened yet
                 ReplaceCondition(newIdentifier.ValueText, isExpression, editor, ref conditionAlreadyReplaced);
 
                 // Create as statement before if block
-                var typeToCast = castedType.Type.IsNullable() || castedType.Type.IsReferenceType ? castExpression.Type : SyntaxFactory.NullableType(castExpression.Type);
-                var newAsClause = SyntaxFactory.BinaryExpression(SyntaxKind.AsExpression, castExpression.Expression, typeToCast);
+                var typeToCast = castedType.Type.IsNullable() || castedType.Type.IsReferenceType
+                    ? castExpression.Type
+                    : SyntaxFactory.NullableType(castExpression.Type);
+                var newAsClause = SyntaxFactory.BinaryExpression(SyntaxKind.AsExpression, castExpression.Expression,
+                    typeToCast);
                 InsertNewVariableDeclaration(
                     asExpression: newAsClause,
                     newIdentifier: newIdentifier,
@@ -205,17 +229,17 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                     editor: editor,
                     variableAlreadyExtracted: ref variableAlreadyExtracted);
 
-                // If the expression does not have a variable declarator as parent, we just swap the entire expression for the newly generated identifier
                 // If we have a direct cast (yes) and the existing type was a non-nullable value type, we have to add the `.Value` property accessor ourselves
                 // While it is not necessary to add the property access in the case of a nullable collection, we do it anyway because that's a very difficult thing to calculate otherwise
                 // e.g. new double?[] { 5.0, 6.0, 7.0 }.Contains(oAsDouble.Value)
                 // The above can be written with or without `.Value` when the collection is double?[] but requires `.Value` in the case of double[]
-                ReplaceIdentifier(castExpression, newIdentifier, editor, requiresNullableValueAccess: castedType.Type.IsValueType && !castedType.Type.IsNullable());
+                ReplaceIdentifier(castExpression, newIdentifier, editor,
+                    requiresNullableValueAccess: castedType.Type.IsValueType && !castedType.Type.IsNullable());
 
                 // Remove the local variable
                 // If the expression is surrounded by an invocation we just swap the expression for the identifier
                 // e.g.: bool contains = new[] { ""test"", ""test"", ""test"" }.Contains(o as string);
-                if (!IsSurroundedByInvocation(castExpression))
+                if (!IsSurroundedByInvocation(castExpression) && !IsInConditionalExpression(castExpression))
                 {
                     RemoveLocal(castExpression, editor);
                 }
@@ -252,14 +276,9 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             conditionAlreadyReplaced = true;
         }
 
-        private string GetNewIdentifier(string currentIdentifier, TypeSyntax type, SemanticModel semanticModel, SyntaxNode context)
+        private string GetNewIdentifier(string currentIdentifier, ITypeSymbol type, SyntaxNode context)
         {
-            var nullableType = type as NullableTypeSyntax;
-            var typeName = nullableType != null
-                ? semanticModel.GetTypeInfo(nullableType.ElementType).Type.Name
-                : semanticModel.GetTypeInfo(type).Type.Name;
-
-            var newName = $"{currentIdentifier}As{typeName}";
+            var newName = $"{currentIdentifier}As{type.Name}";
 
             // We add a suffix counter in case there are naming collisions. 
             var collidingIdentifier = context.DescendantNodesAndSelf()
@@ -320,26 +339,11 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
         /// </param>
         private void ReplaceIdentifier(ExpressionSyntax expression, SyntaxToken newIdentifier, DocumentEditor editor, bool requiresNullableValueAccess = false)
         {
-            var newIdentifierName = SyntaxFactory.IdentifierName(newIdentifier);
+            var newIdentifierName = requiresNullableValueAccess ?
+                SyntaxFactory.ParseExpression($"{newIdentifier.ValueText}.Value") :
+                SyntaxFactory.IdentifierName(newIdentifier);
 
-            if (expression.Ancestors().OfType<InvocationExpressionSyntax>().Any())
-            {
-                if (requiresNullableValueAccess)
-                {
-                    var newAccess = SyntaxFactory.ParseExpression($"{newIdentifier.ValueText}.Value");
-                    editor.ReplaceNode(expression, newAccess);
-                }
-                else
-                {
-                    editor.ReplaceNode(expression, newIdentifierName);
-                }
-                return;
-            }
-
-            if (!expression.Ancestors().OfType<VariableDeclaratorSyntax>().Any())
-            {
-                editor.ReplaceNode(expression, newIdentifierName);
-            }
+            editor.ReplaceNode(expression, newIdentifierName.WithAdditionalAnnotations(Formatter.Annotation));
         }
 
         private void InsertNewVariableDeclaration(
@@ -394,5 +398,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 }
             }
         }
+
+        private bool IsInConditionalExpression(SyntaxNode expression) => expression.AncestorsAndSelf().Any(x => x.IsKind(SyntaxKind.ConditionalExpression));
     }
 }
