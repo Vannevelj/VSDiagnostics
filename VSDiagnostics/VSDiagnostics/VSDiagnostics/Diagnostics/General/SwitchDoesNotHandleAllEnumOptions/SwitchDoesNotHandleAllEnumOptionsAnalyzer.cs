@@ -1,10 +1,12 @@
-﻿using System.Collections.Immutable;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
+// ReSharper disable LoopCanBeConvertedToQuery
+// ReSharper disable LoopCanBePartlyConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
 {
@@ -26,7 +28,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var switchBlock = (SwitchStatementSyntax) context.Node;
+            var switchBlock = (SwitchStatementSyntax)context.Node;
 
             var enumType = context.SemanticModel.GetTypeInfo(switchBlock.Expression).Type as INamedTypeSymbol;
             if (enumType == null || enumType.TypeKind != TypeKind.Enum)
@@ -34,16 +36,55 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
                 return;
             }
 
-            var caseLabels = switchBlock.Sections.SelectMany(l => l.Labels)
-                    .OfType<CaseSwitchLabelSyntax>()
-                    .Select(l => l.Value)
-                    .ToList();
+            var caseLabels = new List<ExpressionSyntax>();
 
-            var labelSymbols = caseLabels.Select(l => context.SemanticModel.GetSymbolInfo(l).Symbol);
-
-            if (!enumType.GetMembers().Where(m => !m.Name.StartsWith(".")).SequenceEqual(labelSymbols))
+            foreach (var section in switchBlock.Sections)
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, switchBlock.GetLocation()));
+                foreach (var label in section.Labels)
+                {
+                    if (label.IsKind(SyntaxKind.CaseSwitchLabel))
+                    {
+                        caseLabels.Add(((CaseSwitchLabelSyntax)label).Value);
+                    }
+                }
+            }
+
+            var labelSymbols = new List<ISymbol>();
+            foreach (var label in caseLabels)
+            {
+                var symbol = context.SemanticModel.GetSymbolInfo(label).Symbol;
+                if (symbol == null)
+                {
+                    // potentially malformed case statement
+                    // or an integer being cast to an enum type
+                    return;
+                }
+
+                labelSymbols.Add(symbol);
+            }
+
+            foreach (var member in enumType.GetMembers())
+            {
+                // skip `.ctor`
+                if (member.IsImplicitlyDeclared)
+                {
+                    continue;
+                }
+
+                var switchHasSymbol = false;
+                foreach (var symbol in labelSymbols)
+                {
+                    if (symbol == member)
+                    {
+                        switchHasSymbol = true;
+                    }
+                }
+
+                if (!switchHasSymbol)
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, switchBlock.GetLocation()));
+                    return;
+                }
             }
         }
     }
