@@ -184,12 +184,6 @@ namespace VSDiagnostics.Utilities
         }
 
         // TODO: tests
-        public static T ElementAtOrDefault<T>(this IEnumerable<T> list, int index, T @default)
-        {
-            return index >= 0 && index < list.Count() ? list.ElementAt(index) : @default;
-        }
-
-        // TODO: tests
         public static bool IsNameofInvocation(this InvocationExpressionSyntax invocation)
         {
             if (invocation == null)
