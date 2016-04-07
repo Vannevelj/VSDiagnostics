@@ -26,17 +26,9 @@ namespace VSDiagnostics.Diagnostics.General.ElementaryMethodsOfTypeInCollectionN
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var objectTypeInfo = context.SemanticModel.GetTypeInfo(context.Node).Type;
-
-            var ienumerableIsImplemented = false;
-            foreach (var @interface in objectTypeInfo.AllInterfaces)
-            {
-                if (@interface.ToDisplayString() == typeof (IEnumerable).FullName)
-                {
-                    ienumerableIsImplemented = true;
-                    break;
-                }
-            }
+            var objectTypeInfo = context.SemanticModel.GetTypeInfo(context.Node).Type as INamedTypeSymbol;
+            
+            var ienumerableIsImplemented = objectTypeInfo.ImplementsInterface(typeof(IEnumerable));
 
             if (!ienumerableIsImplemented)
             {

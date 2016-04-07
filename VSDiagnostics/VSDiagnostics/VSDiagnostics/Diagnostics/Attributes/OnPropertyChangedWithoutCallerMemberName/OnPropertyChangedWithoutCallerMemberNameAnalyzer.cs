@@ -34,10 +34,10 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
         {
             var methodDeclaration = (MethodDeclarationSyntax) context.Node;
             var parentClass = methodDeclaration.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault();
-
+            var typeSymbol = context.SemanticModel.GetTypeInfo(parentClass).Type as INamedTypeSymbol;
 
             // class must implement INotifyPropertyChanged
-            if (!parentClass.ImplementsInterface(context.SemanticModel, typeof(INotifyPropertyChanged)))
+            if (!typeSymbol.ImplementsInterfaceOrBaseClass(typeof(INotifyPropertyChanged)))
             {
                 return;
             }

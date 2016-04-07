@@ -11,7 +11,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer();
 
         [TestMethod]
-        public void ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer_WithReferenceType()
+        public void ElementaryMethodsOfTypeInCollectionNotOverridden_WithReferenceType()
         {
             var original = @"
 using System.Collections.Generic;
@@ -32,7 +32,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer_WithInterfaceType()
+        public void ElementaryMethodsOfTypeInCollectionNotOverridden_WithInterfaceType()
         {
             var original = @"
 using System.Collections.Generic;
@@ -53,7 +53,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer_WithValueType()
+        public void ElementaryMethodsOfTypeInCollectionNotOverridden_WithValueType()
         {
             var original = @"
 using System.Collections.Generic;
@@ -74,7 +74,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer_WithReferenceType_ImplementsEquals()
+        public void ElementaryMethodsOfTypeInCollectionNotOverridden_WithReferenceType_ImplementsEquals()
         {
             var original = @"
 using System.Collections.Generic;
@@ -101,7 +101,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer_WithValueType_ImplementsEquals()
+        public void ElementaryMethodsOfTypeInCollectionNotOverridden_WithValueType_ImplementsEquals()
         {
             var original = @"
 using System.Collections.Generic;
@@ -128,7 +128,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer_WithReferenceType_ImplementsGetHashCode()
+        public void ElementaryMethodsOfTypeInCollectionNotOverridden_WithReferenceType_ImplementsGetHashCode()
         {
             var original = @"
 using System.Collections.Generic;
@@ -155,7 +155,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer_WithValueType_ImplementsGetHashCode()
+        public void ElementaryMethodsOfTypeInCollectionNotOverridden_WithValueType_ImplementsGetHashCode()
         {
             var original = @"
 using System.Collections.Generic;
@@ -182,7 +182,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer_WithReferenceType_ImplementsMethods()
+        public void ElementaryMethodsOfTypeInCollectionNotOverridden_WithReferenceType_ImplementsMethods()
         {
             var original = @"
 using System.Collections.Generic;
@@ -214,7 +214,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer_WithValueType_ImplementsMethods()
+        public void ElementaryMethodsOfTypeInCollectionNotOverridden_WithValueType_ImplementsMethods()
         {
             var original = @"
 using System.Collections.Generic;
@@ -246,7 +246,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer_Dictionary_BothDoNotImplementMethods()
+        public void ElementaryMethodsOfTypeInCollectionNotOverridden_Dictionary_BothDoNotImplementMethods()
         {
             var original = @"
 using System.Collections.Generic;
@@ -269,7 +269,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer_Dictionary_OneDoesNotImplementMethods()
+        public void ElementaryMethodsOfTypeInCollectionNotOverridden_Dictionary_OneDoesNotImplementMethods()
         {
             var original = @"
 using System.Collections.Generic;
@@ -291,7 +291,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer_IEnumerable()
+        public void ElementaryMethodsOfTypeInCollectionNotOverridden_TypeParameterWithoutObjectCreation()
         {
             var original = @"
 using System.Linq;
