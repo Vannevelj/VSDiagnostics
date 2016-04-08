@@ -826,5 +826,33 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void SwitchDoesNotHandleAllEnumOptions_MissingEnumStatements_CaseValueIsCastToEnumType()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        enum MyEnum
+        {
+            Fizz, Buzz, FizzBuzz
+        }
+
+        void Method()
+        {
+            var e = MyEnum.Fizz;
+            switch (e)
+            {
+                case (MyEnum) 0:
+                    break;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }
