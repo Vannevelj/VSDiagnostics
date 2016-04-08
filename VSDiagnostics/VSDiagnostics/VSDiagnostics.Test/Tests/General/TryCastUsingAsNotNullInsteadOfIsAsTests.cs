@@ -457,52 +457,6 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void TryCastWithoutUsingAsNotNull_ChainedVariableDeclaration()
-        {
-            var original = @"
-using System;
-using System.Text;
-
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        void Method()
-        {
-            object o = 5;
-            if (o is int)
-            {
-                int? oAsInt = o as int?, x = 10;
-            }
-        }
-    }
-}";
-
-            var expected = @"
-using System;
-using System.Text;
-
-namespace ConsoleApplication1
-{
-    class MyClass
-    {
-        void Method()
-        {
-            object o = 5;
-            var oAsInt32 = o as int?;
-            if (oAsInt32 != null)
-            {
-                int? x = 10;
-            }
-        }
-    }
-}";
-
-            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
-            VerifyFix(original, expected);
-        }
-
-        [TestMethod]
         public void TryCastWithoutUsingAsNotNull_TryCastNullCheck()
         {
             var original = @"
@@ -2015,10 +1969,55 @@ namespace ConsoleApplication1
         void Method()
         {
             object o = ""sample"";
-            // Test
-            var oAsString = o as string; // Test
+            var oAsString = o as string;
             if (oAsString != null)
             {
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_MultipleDeclarators()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = ""sample"";
+            if (o is string)
+            {
+                string oAsString = o as string, s = ""test"";
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            object o = ""sample"";
+            var oAsString = o as string;
+            if (oAsString != null)
+            {
+                string s = ""test"";
             }
         }
     }
