@@ -12,7 +12,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class TryCastWithoutUsingAsNotNullAnalyzer : DiagnosticAnalyzer
     {
-        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Hidden;
 
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.TryCastWithoutUsingAsNotNullAnalyzerMessage;

@@ -2120,6 +2120,50 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void TryCastWithoutUsingAsNotNull_DirectCastAndTryCast()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            if (o is int)
+            {
+                var res = o is int ? (int) o : o as double?;
+            }
+        }
+    }
+}";
+
+            var expected = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method(object o)
+        {
+            var oAsInt32 = o as int?;
+            if (oAsInt32 != null)
+            {
+                var res = o is int ? oAsInt32.Value : o as double?;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(TryCastWithoutUsingAsNotNullAnalyzer.Rule.MessageFormat.ToString(), "o"));
+            VerifyFix(original, expected);
+        }
+
+        [TestMethod]
         public void TryCastWithoutUsingAsNotNull_RedundantCheck()
         {
             var original = @"

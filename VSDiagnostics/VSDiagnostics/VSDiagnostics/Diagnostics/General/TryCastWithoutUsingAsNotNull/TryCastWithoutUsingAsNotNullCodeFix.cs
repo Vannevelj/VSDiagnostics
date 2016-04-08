@@ -189,7 +189,11 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 }
 
                 // Replace condition if it hasn't happened yet
-                ReplaceCondition(newIdentifier.ValueText, isExpression, editor, ref conditionAlreadyReplaced);
+                if (!conditionAlreadyReplaced)
+                {
+                    ReplaceCondition(newIdentifier.ValueText, isExpression, editor);
+                    conditionAlreadyReplaced = true;
+                }
 
                 // Create as statement before if block
                 if (!variableAlreadyExtracted)
@@ -202,7 +206,6 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 
                     variableAlreadyExtracted = true;
                 }
-                
 
                 ReplaceIdentifier(asExpression, newIdentifier, editor);
 
@@ -242,7 +245,11 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 }
 
                 // Replace condition if it hasn't happened yet
-                ReplaceCondition(newIdentifier.ValueText, isExpression, editor, ref conditionAlreadyReplaced);
+                if (!conditionAlreadyReplaced)
+                {
+                    ReplaceCondition(newIdentifier.ValueText, isExpression, editor);
+                    conditionAlreadyReplaced = true;
+                }
 
                 // Create as statement before if block
                 if (!variableAlreadyExtracted)
@@ -260,7 +267,6 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 
                     variableAlreadyExtracted = true;
                 }
-
 
                 // If we have a direct cast (yes) and the existing type was a non-nullable value type, we have to add the `.Value` property accessor ourselves
                 // While it is not necessary to add the property access in the case of a nullable collection, we do it anyway because that's a very difficult thing to calculate otherwise
@@ -293,20 +299,13 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                                                                                                                               .Concat(ifStatement.Condition.DescendantNodesAndSelf())
                                                                                                                               .Where(x => !(x is IfStatementSyntax))
                                                                                                                               .OfType<BinaryExpressionSyntax>()
-                                                                                                                              .Where(
-                                                                                                                                  x => x.OperatorToken.IsKind(SyntaxKind.AsKeyword))
+                                                                                                                              .Where(x => x.OperatorToken.IsKind(SyntaxKind.AsKeyword))
                                                                                                                               .ToArray();
 
-        private static void ReplaceCondition(string newIdentifier, SyntaxNode isExpression, DocumentEditor editor, ref bool conditionAlreadyReplaced)
+        private static void ReplaceCondition(string newIdentifier, SyntaxNode isExpression, DocumentEditor editor)
         {
-            if (conditionAlreadyReplaced)
-            {
-                return;
-            }
-
             var newCondition = SyntaxFactory.ParseExpression($"{newIdentifier} != null").WithAdditionalAnnotations(Formatter.Annotation);
             editor.ReplaceNode(isExpression, newCondition);
-            conditionAlreadyReplaced = true;
         }
 
         private static string GetNewIdentifier(string currentIdentifier, ITypeSymbol type, SyntaxNode context)
@@ -321,18 +320,18 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                                              .OrderByDescending(x => x)
                                              .FirstOrDefault();
 
-            if (collidingIdentifier != null)
+            if (collidingIdentifier == null)
             {
-                var indexOfUnderscore = collidingIdentifier.LastIndexOf('_');
-                int index;
-                if (indexOfUnderscore > 0 && int.TryParse(collidingIdentifier.Substring(indexOfUnderscore + 1), out index))
-                {
-                    return $"{newName}_{++index}";
-                }
-                return $"{newName}_1";
+                return newName;
             }
 
-            return newName;
+            var indexOfUnderscore = collidingIdentifier.LastIndexOf('_');
+            int index;
+            if (indexOfUnderscore > 0 && int.TryParse(collidingIdentifier.Substring(indexOfUnderscore + 1), out index))
+            {
+                return $"{newName}_{++index}";
+            }
+            return $"{newName}_1";
         }
 
         private static void RemoveLocal(ExpressionSyntax expression, DocumentEditor editor)
@@ -379,7 +378,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             editor.ReplaceNode(expression, newIdentifierName.WithAdditionalAnnotations(Formatter.Annotation));
         }
 
-        private void InsertNewVariableDeclaration(
+        private static void InsertNewVariableDeclaration(
             BinaryExpressionSyntax asExpression,
             SyntaxToken newIdentifier,
             SyntaxNode nodeLocation,
