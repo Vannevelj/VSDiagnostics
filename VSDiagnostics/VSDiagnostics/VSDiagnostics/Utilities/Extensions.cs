@@ -103,12 +103,6 @@ namespace VSDiagnostics.Utilities
             return whitespaceTrivia.Any(x => trivia.IsKind(x));
         }
 
-        public static bool IsNullable(this ITypeSymbol typeSymbol)
-        {
-            //TODO: this is really ugly.
-            return typeSymbol.IsValueType && typeSymbol.MetadataName.StartsWith(typeof(Nullable).Name);
-        }
-
         public static string ToAlias(this string type)
         {
             if (type == null)
@@ -195,12 +189,6 @@ namespace VSDiagnostics.Utilities
 
             return invokedType.MetadataName == type.Name &&
                    invokedMethod.Symbol.MetadataName == method;
-        }
-
-        // TODO: tests
-        public static T ElementAtOrDefault<T>(this IEnumerable<T> list, int index, T @default)
-        {
-            return index >= 0 && index < list.Count() ? list.ElementAt(index) : @default;
         }
 
         // TODO: tests

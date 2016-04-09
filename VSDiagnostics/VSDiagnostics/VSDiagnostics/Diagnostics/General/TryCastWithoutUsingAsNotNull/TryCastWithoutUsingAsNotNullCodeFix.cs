@@ -254,7 +254,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 // Create as statement before if block
                 if (!variableAlreadyExtracted)
                 {
-                    var typeToCast = castedType.IsNullable() || castedType.IsReferenceType
+                    var typeToCast = castedType.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T || castedType.IsReferenceType
                         ? castExpression.Type
                         : SyntaxFactory.NullableType(castExpression.Type);
                     var newAsClause = SyntaxFactory.BinaryExpression(SyntaxKind.AsExpression, castExpression.Expression,
@@ -272,7 +272,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 // While it is not necessary to add the property access in the case of a nullable collection, we do it anyway because that's a very difficult thing to calculate otherwise
                 // e.g. new double?[] { 5.0, 6.0, 7.0 }.Contains(oAsDouble.Value)
                 // The above can be written with or without `.Value` when the collection is double?[] but requires `.Value` in the case of double[]
-                ReplaceIdentifier(castExpression, newIdentifier, editor, requiresNullableValueAccess: castedType.IsValueType && !castedType.IsNullable());
+                ReplaceIdentifier(castExpression, newIdentifier, editor, requiresNullableValueAccess: castedType.IsValueType && castedType.OriginalDefinition.SpecialType != SpecialType.System_Nullable_T);
 
                 // Remove the local variable
                 // If the expression is surrounded by an invocation we just swap the expression for the identifier
