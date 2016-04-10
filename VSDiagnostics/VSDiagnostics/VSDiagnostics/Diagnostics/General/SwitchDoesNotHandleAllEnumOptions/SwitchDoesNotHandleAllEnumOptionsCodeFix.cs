@@ -40,7 +40,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
         {
             var semanticModel = await document.GetSemanticModelAsync();
 
-            var switchBlock = (SwitchStatementSyntax) statement;
+            var switchBlock = (SwitchStatementSyntax) statement.Parent;
 
             var enumType = (INamedTypeSymbol) semanticModel.GetTypeInfo(switchBlock.Expression).Type;
             var caseLabels = switchBlock.Sections.SelectMany(l => l.Labels)
