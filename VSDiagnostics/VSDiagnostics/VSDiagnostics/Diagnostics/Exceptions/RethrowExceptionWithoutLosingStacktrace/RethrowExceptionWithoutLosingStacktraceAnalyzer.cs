@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -38,7 +39,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStac
                 return;
             }
 
-            var catchClause = throwStatement.Ancestors().SyntaxNodeOfType<CatchClauseSyntax>(SyntaxKind.CatchClause).NonLinqFirstOrDefault();
+            var catchClause = throwStatement.Ancestors().SyntaxNodeOfType<CatchClauseSyntax>(SyntaxKind.CatchClause).FirstOrDefault();
 
             // Code is in an incomplete state (user is typing the catch clause but hasn't typed the identifier yet)
             var exceptionIdentifier = catchClause?.Declaration?.Identifier;

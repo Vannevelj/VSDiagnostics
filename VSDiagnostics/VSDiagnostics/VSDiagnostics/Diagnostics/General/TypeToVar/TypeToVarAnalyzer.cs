@@ -38,7 +38,7 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
                 return;
             }
 
-            if (localDeclaration.Modifiers.NonLinqContains(SyntaxKind.ConstKeyword))
+            if (localDeclaration.Modifiers.Contains(SyntaxKind.ConstKeyword))
             {
                 return;
             }

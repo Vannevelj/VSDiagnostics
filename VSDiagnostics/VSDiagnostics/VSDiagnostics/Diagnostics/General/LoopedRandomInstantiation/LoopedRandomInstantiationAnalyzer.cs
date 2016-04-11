@@ -44,7 +44,7 @@ namespace VSDiagnostics.Diagnostics.General.LoopedRandomInstantiation
             SyntaxNode currentNode = variableDeclaration;
             while (!currentNode.IsKind(SyntaxKind.ClassDeclaration))
             {
-                if (_loopTypes.NonLinqContains(currentNode.Kind()))
+                if (_loopTypes.Contains(currentNode.Kind()))
                 {
                     foreach (var declarator in variableDeclaration.Variables)
                     {

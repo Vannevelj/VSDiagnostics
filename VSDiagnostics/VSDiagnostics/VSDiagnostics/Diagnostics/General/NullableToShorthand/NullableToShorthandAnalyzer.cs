@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -26,7 +27,7 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var argumentList = (GenericNameSyntax) context.Node;
-            if (argumentList.TypeArgumentList.Arguments.SyntaxNodeOfType<OmittedTypeArgumentSyntax>(SyntaxKind.OmittedTypeArgument).NonLinqAny())
+            if (argumentList.TypeArgumentList.Arguments.SyntaxNodeOfType<OmittedTypeArgumentSyntax>(SyntaxKind.OmittedTypeArgument).Any())
             {
                 return;
             }
@@ -66,7 +67,7 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
                 SyntaxNode parentNode = null;
                 foreach (var node in context.Node.AncestorsAndSelf())
                 {
-                    if (variableAncestorNodes.NonLinqContains(node.Kind()))
+                    if (variableAncestorNodes.Contains(node.Kind()))
                     {
                         parentNode = node;
                     }
@@ -74,7 +75,7 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
 
                 if (parentNode == null)
                 {
-                    parentNode = context.Node.AncestorsAndSelf().SyntaxNodeOfType<ExpressionStatementSyntax>(SyntaxKind.ExpressionStatement).NonLinqFirstOrDefault();
+                    parentNode = context.Node.AncestorsAndSelf().SyntaxNodeOfType<ExpressionStatementSyntax>(SyntaxKind.ExpressionStatement).FirstOrDefault();
 
                     if (parentNode == null)
                     {

@@ -5,6 +5,8 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
+// ReSharper disable LoopCanBeConvertedToQuery
+// ReSharper disable LoopCanBePartlyConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
 {
@@ -26,7 +28,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var switchBlock = (SwitchStatementSyntax) context.Node;
+            var switchBlock = (SwitchStatementSyntax)context.Node;
 
             var enumType = context.SemanticModel.GetTypeInfo(switchBlock.Expression).Type as INamedTypeSymbol;
             if (enumType == null || enumType.TypeKind != TypeKind.Enum)
@@ -42,7 +44,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
                 {
                     if (label.IsKind(SyntaxKind.CaseSwitchLabel))
                     {
-                        caseLabels.Add(((CaseSwitchLabelSyntax) label).Value);
+                        caseLabels.Add(((CaseSwitchLabelSyntax)label).Value);
                     }
                 }
             }
@@ -50,13 +52,21 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
             var labelSymbols = new List<ISymbol>();
             foreach (var label in caseLabels)
             {
-                labelSymbols.Add(context.SemanticModel.GetSymbolInfo(label).Symbol);
+                var symbol = context.SemanticModel.GetSymbolInfo(label).Symbol;
+                if (symbol == null)
+                {
+                    // potentially malformed case statement
+                    // or an integer being cast to an enum type
+                    return;
+                }
+
+                labelSymbols.Add(symbol);
             }
-            
+
             foreach (var member in enumType.GetMembers())
             {
                 // skip `.ctor`
-                if (member.Name.StartsWith("."))
+                if (member.IsImplicitlyDeclared)
                 {
                     continue;
                 }
@@ -71,8 +81,8 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
                 }
 
                 if (!switchHasSymbol)
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, switchBlock.GetLocation()));
+            {
+                context.ReportDiagnostic(Diagnostic.Create(Rule, switchBlock.GetLocation()));
                     return;
                 }
             }
