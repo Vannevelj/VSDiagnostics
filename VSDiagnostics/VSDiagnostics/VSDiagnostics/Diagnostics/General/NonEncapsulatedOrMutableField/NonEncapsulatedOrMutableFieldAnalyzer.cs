@@ -1,10 +1,10 @@
 ﻿using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
-// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
 {
@@ -29,13 +29,13 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
             var fieldDeclaration = (FieldDeclarationSyntax) context.Node;
 
             // Don't handle (semi-)immutable fields
-            if (fieldDeclaration.Modifiers.NonLinqContainsAny(new [] {SyntaxKind.ConstKeyword, SyntaxKind.ReadOnlyKeyword}))
+            if (fieldDeclaration.Modifiers.ContainsAny(new [] {SyntaxKind.ConstKeyword, SyntaxKind.ReadOnlyKeyword}))
             {
                 return;
             }
 
             // Only handle public, internal and protected internal fields
-            if (!fieldDeclaration.Modifiers.NonLinqContainsAny(new[] {SyntaxKind.PublicKeyword, SyntaxKind.InternalKeyword}))
+            if (!fieldDeclaration.Modifiers.ContainsAny(new[] {SyntaxKind.PublicKeyword, SyntaxKind.InternalKeyword}))
             {
                 return;
             }
@@ -69,7 +69,7 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
             // In this scenario our analyzer is triggered on the field in class X and won't find any references inside that syntax tree (assuming separate files)
             // However it won't find any ref/out usages there so it will create the diagnostic -- which obviously isn't supposed to happen because the other syntax tree DOES contain that
             // However until this ability is added, we'll just have to live with it
-            var outerClass = context.Node.Ancestors().NonLinqOfType<ClassDeclarationSyntax>(SyntaxKind.ClassDeclaration).NonLinqLastOrDefault();
+            var outerClass = context.Node.Ancestors().SyntaxNodeOfType<ClassDeclarationSyntax>(SyntaxKind.ClassDeclaration).LastOrDefault();
             if (outerClass != null)
             {
                 var semanticModel = context.SemanticModel;
@@ -78,14 +78,14 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
                 {
                     var fieldSymbol = semanticModel.GetDeclaredSymbol(variable);
 
-                    foreach (var descendant in outerClass.DescendantNodes().NonLinqOfType<IdentifierNameSyntax>(SyntaxKind.IdentifierName))
+                    foreach (var descendant in outerClass.DescendantNodes().SyntaxNodeOfType<IdentifierNameSyntax>(SyntaxKind.IdentifierName))
                     {
                         var descendentSymbol = semanticModel.GetSymbolInfo(descendant).Symbol;
                         if (descendentSymbol != null && descendentSymbol.Equals(fieldSymbol))
                         {
                             // The field is being referenced
                             // Next we check whether it is referenced as an argument and passed by ref/out
-                            var argument = descendant.AncestorsAndSelf().NonLinqOfType<ArgumentSyntax>(SyntaxKind.Argument).NonLinqFirstOrDefault();
+                            var argument = descendant.AncestorsAndSelf().SyntaxNodeOfType<ArgumentSyntax>(SyntaxKind.Argument).FirstOrDefault();
                             if (argument != null && !argument.RefOrOutKeyword.IsMissing)
                             {
                                 return;

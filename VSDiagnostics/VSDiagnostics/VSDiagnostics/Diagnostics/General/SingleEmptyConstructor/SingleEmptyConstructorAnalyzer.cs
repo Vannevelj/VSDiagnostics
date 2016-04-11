@@ -4,7 +4,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
-// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
 {
@@ -56,7 +55,7 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
             }
 
             // ctor must not have attributes
-            if (constructorDeclaration.AttributeLists.NonLinqAny())
+            if (constructorDeclaration.AttributeLists.Any())
             {
                 return;
             }
@@ -85,7 +84,7 @@ namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
                     // we must return false (to avoid the parent if) only if it is the base keyword
                     // and there are no arguments.
                     if (!constructorInitializer.ThisOrBaseKeyword.IsKind(SyntaxKind.BaseKeyword) ||
-                        constructorInitializer.ArgumentList.Arguments.NonLinqAny())
+                        constructorInitializer.ArgumentList.Arguments.Any())
                     {
                         return;
                     }

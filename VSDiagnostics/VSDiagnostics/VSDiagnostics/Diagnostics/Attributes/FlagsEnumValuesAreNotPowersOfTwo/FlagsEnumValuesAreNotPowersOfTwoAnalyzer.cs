@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
-// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 {
@@ -79,7 +79,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 
             var enumName = context.SemanticModel.GetDeclaredSymbol(declarationExpression).Name;
             var enumMemberDeclarations =
-                declarationExpression.ChildNodes().NonLinqOfType<EnumMemberDeclarationSyntax>(SyntaxKind.EnumMemberDeclaration);
+                declarationExpression.ChildNodes().SyntaxNodeOfType<EnumMemberDeclarationSyntax>(SyntaxKind.EnumMemberDeclaration);
 
             foreach (var member in enumMemberDeclarations)
             {
@@ -165,7 +165,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
                         }
                     }
 
-                    if (descendantNodes.NonLinqAny() && all)
+                    if (descendantNodes.Any() && all)
                     {
                         continue;
                     }

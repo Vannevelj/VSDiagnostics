@@ -38,7 +38,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStac
                 return;
             }
 
-            var catchClause = throwStatement.Ancestors().NonLinqOfType<CatchClauseSyntax>(SyntaxKind.CatchClause).NonLinqFirstOrDefault();
+            var catchClause = throwStatement.Ancestors().SyntaxNodeOfType<CatchClauseSyntax>(SyntaxKind.CatchClause).NonLinqFirstOrDefault();
 
             // Code is in an incomplete state (user is typing the catch clause but hasn't typed the identifier yet)
             var exceptionIdentifier = catchClause?.Declaration?.Identifier;

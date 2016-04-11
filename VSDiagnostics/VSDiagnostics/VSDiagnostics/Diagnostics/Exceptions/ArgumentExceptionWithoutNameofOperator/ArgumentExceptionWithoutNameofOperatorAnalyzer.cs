@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
-// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOperator
 {
@@ -55,8 +55,8 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOpe
 
                 var methodParameters =
                     objectCreationExpression.Ancestors()
-                                            .NonLinqOfType<MethodDeclarationSyntax>(SyntaxKind.MethodDeclaration)
-                                            .NonLinqFirstOrDefault()?
+                                            .SyntaxNodeOfType<MethodDeclarationSyntax>(SyntaxKind.MethodDeclaration)
+                                            .FirstOrDefault()?
                                             .ParameterList.Parameters;
 
                 // Exception is declared outside a method

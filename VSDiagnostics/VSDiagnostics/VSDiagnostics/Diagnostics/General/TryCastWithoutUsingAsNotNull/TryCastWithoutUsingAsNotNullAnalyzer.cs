@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
-// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
 {
@@ -42,7 +42,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 return;
             }
 
-            var ifStatement = isExpression.AncestorsAndSelf().NonLinqOfType<IfStatementSyntax>(SyntaxKind.IfStatement).NonLinqFirstOrDefault();
+            var ifStatement = isExpression.AncestorsAndSelf().SyntaxNodeOfType<IfStatementSyntax>(SyntaxKind.IfStatement).FirstOrDefault();
             if (ifStatement == null)
             {
                 return;
@@ -69,8 +69,8 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             }
 
             var castExpressions = new List<CastExpressionSyntax>();
-            castExpressions.AddRange(ifStatement.Statement.DescendantNodes().NonLinqOfType<CastExpressionSyntax>(SyntaxKind.CastExpression));
-            castExpressions.AddRange(ifStatement.Condition.DescendantNodesAndSelf().NonLinqOfType<CastExpressionSyntax>(SyntaxKind.CastExpression));
+            castExpressions.AddRange(ifStatement.Statement.DescendantNodes().SyntaxNodeOfType<CastExpressionSyntax>(SyntaxKind.CastExpression));
+            castExpressions.AddRange(ifStatement.Condition.DescendantNodesAndSelf().SyntaxNodeOfType<CastExpressionSyntax>(SyntaxKind.CastExpression));
 
             Action reportDiagnostic = () => context.ReportDiagnostic(Diagnostic.Create(Rule, isExpression.GetLocation(), isIdentifier));
 
@@ -88,7 +88,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                     if (castedType.Type.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T)
                     {
                         var nullableType = castedType.Type as INamedTypeSymbol;
-                        var argument = nullableType?.TypeArguments.NonLinqFirstOrDefault();
+                        var argument = nullableType?.TypeArguments.FirstOrDefault();
                         if (argument == null)
                         {
                             return;

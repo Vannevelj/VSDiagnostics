@@ -1,10 +1,10 @@
 ﻿using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
-// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
 {
@@ -29,7 +29,7 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node.AncestorsAndSelf().NonLinqOfType<AttributeArgumentSyntax>(SyntaxKind.AttributeArgument).NonLinqAny())
+            if (context.Node.AncestorsAndSelf().SyntaxNodeOfType<AttributeArgumentSyntax>(SyntaxKind.AttributeArgument).Any())
             {
                 return;
             }
@@ -49,7 +49,7 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
                 }
             }
 
-            var variableDeclaration = stringLiteral.Ancestors().NonLinqOfType<FieldDeclarationSyntax>(SyntaxKind.FieldDeclaration).NonLinqFirstOrDefault();
+            var variableDeclaration = stringLiteral.Ancestors().SyntaxNodeOfType<FieldDeclarationSyntax>(SyntaxKind.FieldDeclaration).FirstOrDefault();
             if (variableDeclaration != null)
             {
                 foreach (var modifier in variableDeclaration.Modifiers)
@@ -67,16 +67,10 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
             //     case "": break;
             // }
             // Cannot be changed since it has to be a constant
-            foreach (var label in stringLiteral.AncestorsAndSelf())
+            if (stringLiteral.AncestorsAndSelf().OfType<SwitchLabelSyntax>().Any())
             {
-                if (label is SwitchLabelSyntax)
-                {
-                    return;
-                }
-            }
-            /*{
                 return;
-            }*/
+            }
 
             context.ReportDiagnostic(Diagnostic.Create(Rule, stringLiteral.GetLocation()));
         }

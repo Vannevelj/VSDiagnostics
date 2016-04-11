@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
-// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
 {
@@ -55,12 +55,9 @@ namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
             foreach (var attribute in attributes.Value)
             {
                 var attributeName = attribute.Name.ToString();
-                foreach (var methodAttribute in methodAttributes)
+                if (methodAttributes.Contains(attributeName))
                 {
-                    if (Equals(methodAttribute, attributeName))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-// ReSharper disable LoopCanBeConvertedToQuery
+
 
 namespace VSDiagnostics.Utilities
 {
@@ -219,7 +219,7 @@ namespace VSDiagnostics.Utilities
             return identifier != null && identifier.Identifier.ValueText == "nameof";
         }
 
-        public static List<T> NonLinqOfType<T>(this IEnumerable<SyntaxNode> enumerable, SyntaxKind kind) where T : SyntaxNode
+        public static List<T> SyntaxNodeOfType<T>(this IEnumerable<SyntaxNode> enumerable, SyntaxKind kind) where T : SyntaxNode
         {
             var list = new List<T>();
 
@@ -234,31 +234,7 @@ namespace VSDiagnostics.Utilities
             return list;
         }
 
-        public static bool NonLinqAny(this IEnumerable<SyntaxNode> enumerable)
-        {
-            foreach (var node in enumerable)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool NonLinqAny<T>(this List<T> list) => list.Count != 0;
-
-        public static T NonLinqFirstOrDefault<T>(this IEnumerable<T> enumerable)
-        {
-            foreach (var node in enumerable)
-            {
-                return node;
-            }
-
-            return default(T);
-        }
-
-        public static T NonLinqFirstOrDefault<T>(this List<T> list) => list.NonLinqAny() ? list[0] : default(T);
-
-        public static bool NonLinqContainsAny(this SyntaxTokenList list, SyntaxKind[] kinds)
+        public static bool ContainsAny(this SyntaxTokenList list, SyntaxKind[] kinds)
         {
             foreach (var item in list)
             {
@@ -274,7 +250,7 @@ namespace VSDiagnostics.Utilities
             return false;
         }
 
-        public static bool NonLinqContains(this SyntaxTokenList list, SyntaxKind kind)
+        public static bool Contains(this SyntaxTokenList list, SyntaxKind kind)
         {
             foreach (var item in list)
             {
@@ -287,7 +263,7 @@ namespace VSDiagnostics.Utilities
             return false;
         }
 
-        public static bool NonLinqContains(this IEnumerable<SyntaxKind> list, SyntaxKind kind)
+        public static bool Contains(this IEnumerable<SyntaxKind> list, SyntaxKind kind)
         {
             foreach (var syntaxKind in list)
             {
@@ -299,8 +275,5 @@ namespace VSDiagnostics.Utilities
 
             return false;
         }
-
-        public static T NonLinqLastOrDefault<T>(this IEnumerable<T> enumerable) => new List<T>(enumerable).NonLinqLastOrDefault();
-        public static T NonLinqLastOrDefault<T>(this List<T> list) => list.NonLinqAny() ? list[list.Count - 1] : default(T);
     }
 }

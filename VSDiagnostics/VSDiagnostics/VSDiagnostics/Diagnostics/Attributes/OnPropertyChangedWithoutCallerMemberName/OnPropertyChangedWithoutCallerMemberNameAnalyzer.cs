@@ -1,12 +1,12 @@
 ﻿using System.Collections.Immutable;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
-// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMemberName
 {
@@ -33,8 +33,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var methodDeclaration = (MethodDeclarationSyntax) context.Node;
-            var parentClass = methodDeclaration.Ancestors().NonLinqOfType<ClassDeclarationSyntax>(SyntaxKind.ClassDeclaration).NonLinqFirstOrDefault();
-
+            var parentClass = methodDeclaration.Ancestors().SyntaxNodeOfType<ClassDeclarationSyntax>(SyntaxKind.ClassDeclaration).FirstOrDefault();
 
             // class must implement INotifyPropertyChanged
             if (!parentClass.ImplementsInterface(context.SemanticModel, typeof(INotifyPropertyChanged)))

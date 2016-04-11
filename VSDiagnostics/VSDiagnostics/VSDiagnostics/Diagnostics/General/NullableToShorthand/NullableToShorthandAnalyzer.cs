@@ -26,7 +26,7 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var argumentList = (GenericNameSyntax) context.Node;
-            if (argumentList.TypeArgumentList.Arguments.NonLinqOfType<OmittedTypeArgumentSyntax>(SyntaxKind.OmittedTypeArgument).NonLinqAny())
+            if (argumentList.TypeArgumentList.Arguments.SyntaxNodeOfType<OmittedTypeArgumentSyntax>(SyntaxKind.OmittedTypeArgument).NonLinqAny())
             {
                 return;
             }
@@ -74,7 +74,7 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
 
                 if (parentNode == null)
                 {
-                    parentNode = context.Node.AncestorsAndSelf().NonLinqOfType<ExpressionStatementSyntax>(SyntaxKind.ExpressionStatement).NonLinqFirstOrDefault();
+                    parentNode = context.Node.AncestorsAndSelf().SyntaxNodeOfType<ExpressionStatementSyntax>(SyntaxKind.ExpressionStatement).NonLinqFirstOrDefault();
 
                     if (parentNode == null)
                     {

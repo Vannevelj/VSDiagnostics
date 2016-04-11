@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
-// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOfArguments
 {
@@ -63,14 +63,14 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
             }
 
             var formatIndex = formatParam.Ordinal;
-            var formatParameters = new List<IParameterSymbol>();// methodSymbol.Parameters.Skip(formatIndex + 1).ToArray();
+            var formatParameters = new List<IParameterSymbol>();
             for (var i = formatIndex + 1; i < methodSymbol.Parameters.Length; i++)
             {
                 formatParameters.Add(methodSymbol.Parameters[i]);
             }
 
             // If the method definition doesn't contain any parameter to pass format arguments, we ignore it
-            if (!formatParameters.NonLinqAny())
+            if (!formatParameters.Any())
             {
                 return;
             }
@@ -143,7 +143,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
                 {
                     // We check for an invocation first to account for the scenario where you have both an invocation and an array initializer
                     // Think about something like this: string.Format(""{0}{1}{2}"", new[] { 1 }.Concat(new[] {2}).ToArray());
-                    var methodInvocation = formatArguments[0].DescendantNodes().NonLinqOfType<InvocationExpressionSyntax>(SyntaxKind.InvocationExpression).NonLinqFirstOrDefault();
+                    var methodInvocation = formatArguments[0].DescendantNodes().SyntaxNodeOfType<InvocationExpressionSyntax>(SyntaxKind.InvocationExpression).FirstOrDefault();
                     if (methodInvocation != null)
                     {
                         // We don't handle method calls that return an array in the case of a single argument
@@ -188,16 +188,12 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
                 placeholders.Add(int.Parse(PlaceholderHelpers.GetPlaceholderIndex(placeholder.Value)));
             }
 
-            if (!placeholders.NonLinqAny())
+            if (!placeholders.Any())
             {
                 return;
             }
 
-            var highestPlaceholder = int.MinValue;
-            foreach (var placeholder in placeholders)
-            {
-                highestPlaceholder = Math.Max(highestPlaceholder, placeholder);
-            }
+            var highestPlaceholder = placeholders.Concat(new[] {int.MinValue}).Max();
 
             if (highestPlaceholder + 1 > amountOfFormatArguments)
             {
