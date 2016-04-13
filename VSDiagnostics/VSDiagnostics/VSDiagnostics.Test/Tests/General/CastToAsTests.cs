@@ -29,7 +29,21 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original);
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var ch = 'r';
+            var i = ch as int?;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, CastToAsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -191,6 +205,96 @@ namespace ConsoleApplication1
         {
             return true;
         }
+    }
+}";
+
+            VerifyDiagnostic(original, CastToAsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void CastToAs_Generics()
+        {
+            var original = @"
+using System.Collections.Generic;
+
+namespace ConsoleApplication1
+{
+    static class Extensions
+    {
+	    public static void Method<T>(this IEnumerable<T> input) where T : class
+	    {
+		    var list = new List<T>();
+		
+		    foreach (var node in input)
+		    {
+			    list.Add((T)node);
+		    }
+	    }
+    }
+}";
+
+            var result = @"
+using System.Collections.Generic;
+
+namespace ConsoleApplication1
+{
+    static class Extensions
+    {
+	    public static void Method<T>(this IEnumerable<T> input) where T : class
+	    {
+		    var list = new List<T>();
+		
+		    foreach (var node in input)
+		    {
+			    list.Add(node as T);
+		    }
+	    }
+    }
+}";
+
+            VerifyDiagnostic(original, CastToAsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void CastToAs_Generics_ValueType()
+        {
+            var original = @"
+using System.Collections.Generic;
+
+namespace ConsoleApplication1
+{
+    static class Extensions
+    {
+	    public static void Method<T>(this IEnumerable<T> input) where T : struct
+	    {
+		    var list = new List<T>();
+		
+		    foreach (var node in input)
+		    {
+			    list.Add((T)node);
+		    }
+	    }
+    }
+}";
+
+            var result = @"
+using System.Collections.Generic;
+
+namespace ConsoleApplication1
+{
+    static class Extensions
+    {
+	    public static void Method<T>(this IEnumerable<T> input) where T : struct
+	    {
+		    var list = new List<T>();
+		
+		    foreach (var node in input)
+		    {
+			    list.Add(node as T?);
+		    }
+	    }
     }
 }";
 

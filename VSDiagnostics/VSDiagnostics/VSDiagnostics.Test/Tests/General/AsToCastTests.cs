@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new AsToCastCodeFix();
 
         [TestMethod]
-        public void AsToCast_PredefinedType()
+        public void AsToCast_ValueType()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -39,7 +39,7 @@ namespace ConsoleApplication1
         {
             var ch = 'r';
             object o = ch;
-            var i = (int?)o;
+            var i = (int)o;
         }
     }
 }";
@@ -184,6 +184,51 @@ namespace ConsoleApplication1
 
             var j = (Program) variable;    // make sure this isn't formatted to '(Program)variable'
         }
+    }
+}";
+
+            VerifyDiagnostic(original, AsToCastAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void AsToCast_Generics()
+        {
+            var original = @"
+using System.Collections.Generic;
+
+namespace ConsoleApplication1
+{
+    static class Extensions
+    {
+	    public static void Method<T>(this IEnumerable<T> input) where T : class
+	    {
+		    var list = new List<T>();
+		
+		    foreach (var node in input)
+		    {
+			    list.Add(node as T);
+		    }
+	    }
+    }
+}";
+
+            var result = @"
+using System.Collections.Generic;
+
+namespace ConsoleApplication1
+{
+    static class Extensions
+    {
+	    public static void Method<T>(this IEnumerable<T> input) where T : class
+	    {
+		    var list = new List<T>();
+		
+		    foreach (var node in input)
+		    {
+			    list.Add((T)node);
+		    }
+	    }
     }
 }";
 
