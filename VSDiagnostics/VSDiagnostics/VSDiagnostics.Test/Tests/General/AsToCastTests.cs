@@ -14,7 +14,7 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new AsToCastCodeFix();
 
         [TestMethod]
-        public void AsToCast_ValueType()
+        public void AsToCast_NullableValueType()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -39,7 +39,7 @@ namespace ConsoleApplication1
         {
             var ch = 'r';
             object o = ch;
-            var i = (int)o;
+            var i = (int?)o;
         }
     }
 }";
