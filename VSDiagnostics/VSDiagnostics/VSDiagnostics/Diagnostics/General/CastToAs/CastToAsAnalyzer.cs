@@ -23,17 +23,22 @@ namespace VSDiagnostics.Diagnostics.General.CastToAs
 
         public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.CastExpression);
 
-        private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
+        /// <summary>
+        ///     We don't handle situations like
+        ///     int x = (int) o;
+        ///     Turning this into a soft cast (o as int?) would cause issues when trying to apply this to a generic definition
+        ///     This is only needed for non-nullable valuetypes because they need to become nullable for this kind of cast
+        /// </summary>
+        private static void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var castExpression = (CastExpressionSyntax) context.Node;
-
-            var castedTypeInfo = context.SemanticModel.GetTypeInfo(castExpression.Expression);
-            if (castedTypeInfo.ConvertedType != null && castedTypeInfo.ConvertedType.IsValueType)
+            var type = context.SemanticModel.GetTypeInfo(castExpression.Type).Type;
+            if (type.IsValueType && type.OriginalDefinition.SpecialType != SpecialType.System_Nullable_T)
             {
                 return;
             }
 
-            context.ReportDiagnostic(Diagnostic.Create(Rule, castExpression.GetLocation()));
+            context.ReportDiagnostic(Diagnostic.Create(Rule, context.Node.GetLocation()));
         }
     }
 }
