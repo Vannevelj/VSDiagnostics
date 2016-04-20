@@ -24,6 +24,7 @@ Currently these diagnostics are implemented:
 
 | Category | Name | Description
 |:-:|:-:|:-:
+| Arithmetic | VSD0045 | The operands of a divisive expression are both integers and result in an implicit rounding.
 | Async | VSD0001 | Asynchronous methods should end with -Async.
 | Async | VSD0041 | A non-async, non-Task method should not end with -Async.
 | Attributes | VSD0002 | Attributes with empty argument lists can have the argument list removed.
