@@ -45,5 +45,6 @@
         public const string StringDotFormatWithDifferentAmountOfArguments = "VSD0042";
         public const string LoopedRandomInstantiation = "VSD0043";
         public const string SwitchDoesNotHandleAllEnumOptions = "VSD0044";
+        public const string DivideIntegerByInteger = "VSD0045";
     }
 }
