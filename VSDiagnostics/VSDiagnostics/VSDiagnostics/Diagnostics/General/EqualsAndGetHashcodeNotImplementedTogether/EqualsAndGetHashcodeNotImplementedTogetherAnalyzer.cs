@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -22,10 +23,15 @@ namespace VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTo
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ClassDeclaration);
+        public override void Initialize(AnalysisContext context)
+            => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ClassDeclaration);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
+            var objectSymbol = context.SemanticModel.Compilation.GetSpecialType(SpecialType.System_Object);
+            var objectEquals = objectSymbol.GetMembers().OfType<IMethodSymbol>().First(x => x.MetadataName == "Equals" && x.Parameters.Count() == 1);
+            var objectGetHashCode = objectSymbol.GetMembers().OfType<IMethodSymbol>().First(x => x.MetadataName == "GetHashCode" && !x.Parameters.Any());
+            
             var classDeclaration = (ClassDeclarationSyntax)context.Node;
 
             var equalsImplemented = false;
@@ -39,18 +45,17 @@ namespace VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTo
                 }
 
                 var methodDeclaration = (MethodDeclarationSyntax)node;
-
                 if (!IsOverride(methodDeclaration))
                 {
                     continue;
                 }
 
-                if (methodDeclaration.Identifier.ValueText == nameof(Equals) && methodDeclaration.ParameterList.Parameters.Count == 1)
+                if (context.SemanticModel.GetDeclaredSymbol(methodDeclaration).OverriddenMethod == objectEquals)
                 {
                     equalsImplemented = true;
                 }
 
-                if (methodDeclaration.Identifier.ValueText == nameof(GetHashCode) && methodDeclaration.ParameterList.Parameters.Count == 0)
+                if (context.SemanticModel.GetDeclaredSymbol(methodDeclaration).OverriddenMethod == objectGetHashCode)
                 {
                     getHashcodeImplemented = true;
                 }

@@ -431,7 +431,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Both Equals() and GetHashcode() must be implemented..
+        ///   Looks up a localized string similar to Equals() and GetHashcode() must be implemented together..
         /// </summary>
         internal static string EqualsAndGetHashcodeNotImplementedTogetherAnalyzerMessage {
             get {
@@ -440,7 +440,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Implement Equals() and GetHashcode()..
+        ///   Looks up a localized string similar to Implement Equals() and GetHashcode() together..
         /// </summary>
         internal static string EqualsAndGetHashcodeNotImplementedTogetherAnalyzerTitle {
             get {
