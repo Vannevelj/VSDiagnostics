@@ -51,6 +51,13 @@ namespace VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTo
                 }
 
                 var methodSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclaration).OverriddenMethod;
+
+                // this will happen if the base class is deleted and there are still references to it in the derived class
+                if (methodSymbol == null)
+                {
+                    return;
+                }
+
                 while (methodSymbol.IsOverride)
                 {
                     methodSymbol = methodSymbol.OverriddenMethod;
