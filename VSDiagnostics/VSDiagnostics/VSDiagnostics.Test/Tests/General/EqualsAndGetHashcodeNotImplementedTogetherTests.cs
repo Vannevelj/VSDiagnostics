@@ -232,5 +232,69 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, EqualsAndGetHashcodeNotImplementedTogetherAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void EqualsAndGetHashcodeNotImplemented_GetHashcodeImplemented_BaseClassImplementsBoth()
+        {
+            var original = @"
+using System;
+namespace ConsoleApplication1
+{
+    class MyBaseClass
+    {
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(object obj)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    class MyClass : MyBaseClass
+    {
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}";
+
+            var result = @"
+using System;
+namespace ConsoleApplication1
+{
+    class MyBaseClass
+    {
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(object obj)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    class MyClass : MyBaseClass
+    {
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(object obj)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, EqualsAndGetHashcodeNotImplementedTogetherAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
     }
 }

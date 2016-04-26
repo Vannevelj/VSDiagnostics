@@ -50,12 +50,18 @@ namespace VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTo
                     continue;
                 }
 
-                if (context.SemanticModel.GetDeclaredSymbol(methodDeclaration).OverriddenMethod == objectEquals)
+                var methodSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclaration).OverriddenMethod;
+                while (methodSymbol.IsOverride)
+                {
+                    methodSymbol = methodSymbol.OverriddenMethod;
+                }
+
+                if (methodSymbol == objectEquals)
                 {
                     equalsImplemented = true;
                 }
 
-                if (context.SemanticModel.GetDeclaredSymbol(methodDeclaration).OverriddenMethod == objectGetHashCode)
+                if (methodSymbol == objectGetHashCode)
                 {
                     getHashcodeImplemented = true;
                 }
