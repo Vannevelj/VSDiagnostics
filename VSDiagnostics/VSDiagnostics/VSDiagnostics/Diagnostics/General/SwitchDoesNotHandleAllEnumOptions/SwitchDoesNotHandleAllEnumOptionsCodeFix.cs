@@ -40,7 +40,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
         {
             var semanticModel = await document.GetSemanticModelAsync();
 
-            var switchBlock = (SwitchStatementSyntax) statement;
+            var switchBlock = (SwitchStatementSyntax) statement.Parent;
 
             var enumType = (INamedTypeSymbol) semanticModel.GetTypeInfo(switchBlock.Expression).Type;
             var caseLabels = switchBlock.Sections.SelectMany(l => l.Labels)
@@ -52,7 +52,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
 
             // use simplified form if there are any in simplified form or if there are not any labels at all
             var hasSimplifiedLabel = caseLabels.OfType<IdentifierNameSyntax>().Any();
-            var useSimplifiedForm = hasSimplifiedLabel || !caseLabels.OfType<MemberAccessExpressionSyntax>().Any();
+            var useSimplifiedForm = (hasSimplifiedLabel || !caseLabels.OfType<MemberAccessExpressionSyntax>().Any()) && caseLabels.Any();
 
             var qualifier = GetQualifierForException(root);
 
@@ -66,10 +66,11 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
             foreach (var label in missingLabels)
             {
                 // If an existing simplified label exists, it means we can assume that works already and do it ourselves as well (ergo: there is a static using)
-                var caseLabel =
-                    SyntaxFactory.CaseSwitchLabel(
-                        SyntaxFactory.ParseExpression(hasSimplifiedLabel ? $"{label}" : $"{enumType.Name}.{label}")
-                                     .WithTrailingTrivia(SyntaxFactory.ParseTrailingTrivia(Environment.NewLine)));
+                var expression = caseLabels.Any()
+                    ? SyntaxFactory.ParseExpression(hasSimplifiedLabel ? $"{label}" : $"{enumType.Name}.{label}")
+                    : SyntaxFactory.ParseExpression($"{enumType.ToDisplayString()}.{label}").WithAdditionalAnnotations(Simplifier.Annotation);
+
+                var caseLabel = SyntaxFactory.CaseSwitchLabel(expression);
 
                 var section =
                     SyntaxFactory.SwitchSection(SyntaxFactory.List(new List<SwitchLabelSyntax> { caseLabel }), statements)

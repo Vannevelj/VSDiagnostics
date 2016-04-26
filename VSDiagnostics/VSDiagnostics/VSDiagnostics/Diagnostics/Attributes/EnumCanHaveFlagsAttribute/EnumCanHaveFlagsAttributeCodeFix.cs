@@ -12,7 +12,7 @@ using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 {
-    [ExportCodeFixProvider(DiagnosticId.EnumCanHaveFlagsAttribute, LanguageNames.CSharp),
+    [ExportCodeFixProvider(DiagnosticId.EnumCanHaveFlagsAttribute + "CF", LanguageNames.CSharp),
      Shared]
     public class EnumCanHaveFlagsAttributeCodeFix : CodeFixProvider
     {

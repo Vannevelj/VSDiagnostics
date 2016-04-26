@@ -47,7 +47,7 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToFalseLiteral
                     return;
                 }
 
-                if (rightSymbol.Type.IsNullable())
+                if (rightSymbol.Type.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T)
                 {
                     return;
                 }
@@ -61,7 +61,7 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToFalseLiteral
                     return;
                 }
 
-                if (leftSymbol.Type.IsNullable())
+                if (leftSymbol.Type.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T)
                 {
                     return;
                 }

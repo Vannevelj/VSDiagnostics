@@ -103,6 +103,7 @@
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Tests\Arithmetic\DivideIntegerByIntegerTests.cs" />
     <Compile Include="Tests\Async\AsyncMethodWithoutAsyncSuffixTests.cs" />
     <Compile Include="Tests\Async\SyncMethodWithAsyncSuffixTests.cs" />
     <Compile Include="Tests\Attributes\AttributeWithEmptyArgumentListTests.cs" />
