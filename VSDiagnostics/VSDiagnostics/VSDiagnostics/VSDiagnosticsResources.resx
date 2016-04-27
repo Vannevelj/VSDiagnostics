@@ -528,4 +528,14 @@
   <data name="EqualsAndGetHashcodeNotImplementedTogetherCodeFixTitle" xml:space="preserve">
     <value>Implement {0}.</value>
   </data>
+  <data name="RedundantPrivateSetterAnalyzerMessage" xml:space="preserve">
+    <value>Property {0} its private setter can be omitted.</value>
+    <comment>{0} - Property name</comment>
+  </data>
+  <data name="RedundantPrivateSetterAnalyzerTitle" xml:space="preserve">
+    <value>A property with a private setter can become a read-only property instead.</value>
+  </data>
+  <data name="RedundantPrivateSetterCodeFixTitle" xml:space="preserve">
+    <value>Turn into a read-only property</value>
+  </data>
 </root>

@@ -818,6 +818,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Property {0} its private setter can be omitted..
+        /// </summary>
+        internal static string RedundantPrivateSetterAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("RedundantPrivateSetterAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A property with a private setter can become a read-only property instead..
+        /// </summary>
+        internal static string RedundantPrivateSetterAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("RedundantPrivateSetterAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Turn into a read-only property.
+        /// </summary>
+        internal static string RedundantPrivateSetterCodeFixTitle {
+            get {
+                return ResourceManager.GetString("RedundantPrivateSetterCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Test method &quot;{0}&quot; should not end with &quot;Test&quot;..
         /// </summary>
         internal static string RemoveTestSuffixAnalyzerMessage {
