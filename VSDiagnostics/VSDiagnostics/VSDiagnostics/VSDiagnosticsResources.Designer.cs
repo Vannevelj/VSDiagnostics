@@ -89,6 +89,15 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Arithmetic.
+        /// </summary>
+        internal static string ArithmeticCategory {
+            get {
+                return ResourceManager.GetString("ArithmeticCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use cast instead of as..
         /// </summary>
         internal static string AsToCastAnalyzerMessage {
@@ -386,6 +395,24 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The operands in the divisive expression {0} are both integers and result in an implicit rounding..
+        /// </summary>
+        internal static string DivideIntegerByIntegerAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("DivideIntegerByIntegerAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The operands of a divisive expression are both integers and result in an implicit rounding..
+        /// </summary>
+        internal static string DivideIntegerByIntegerAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("DivideIntegerByIntegerAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ArgumentException is thrown without a message..
         /// </summary>
         internal static string EmptyArgumentExceptionAnalyzerMessage {
@@ -445,6 +472,33 @@ namespace VSDiagnostics {
         internal static string EnumCanHaveFlagsAttributeCodeFixTitle {
             get {
                 return ResourceManager.GetString("EnumCanHaveFlagsAttributeCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Equals() and GetHashcode() must be implemented together..
+        /// </summary>
+        internal static string EqualsAndGetHashcodeNotImplementedTogetherAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("EqualsAndGetHashcodeNotImplementedTogetherAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implement Equals() and GetHashcode() together..
+        /// </summary>
+        internal static string EqualsAndGetHashcodeNotImplementedTogetherAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("EqualsAndGetHashcodeNotImplementedTogetherAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implement {0}..
+        /// </summary>
+        internal static string EqualsAndGetHashcodeNotImplementedTogetherCodeFixTitle {
+            get {
+                return ResourceManager.GetString("EqualsAndGetHashcodeNotImplementedTogetherCodeFixTitle", resourceCulture);
             }
         }
         

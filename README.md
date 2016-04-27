@@ -24,6 +24,7 @@ Currently these diagnostics are implemented:
 
 | Category | Name | Description
 |:-:|:-:|:-:
+| Arithmetic | VSD0045 | The operands of a divisive expression are both integers and result in an implicit rounding.
 | Async | VSD0001 | Asynchronous methods should end with -Async.
 | Async | VSD0041 | A non-async, non-Task method should not end with -Async.
 | Attributes | VSD0002 | Attributes with empty argument lists can have the argument list removed.
@@ -59,6 +60,8 @@ Currently these diagnostics are implemented:
 | General | VSD0031 | A conversion can be done using `as` + a `null` comparison.
 | General | VSD0032 | Use `var` instead of an explicit type.
 | General | VSD0033 | Use the built-in type aliases instead of the concrete type.
+| General | VSD0044 | Missing enum member(s) in switched cases.
+| General | VSD0046 | Equals() and GetHashcode() must be implemented together.
 | Strings | VSD0034 | Use `string.Empty` instead of `""`.
 | Strings | VSD0035 | Adjusts the placeholders in `string.Format()` calls to be in numerical order.
 | Strings | VSD0042 | A `string.Format()` call lacks arguments and will cause a runtime exception

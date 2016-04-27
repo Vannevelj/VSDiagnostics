@@ -826,5 +826,194 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void SwitchDoesNotHandleAllEnumOptions_MissingEnumStatements_CaseValueIsCastToEnumType()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        enum MyEnum
+        {
+            Fizz, Buzz, FizzBuzz
+        }
+
+        void Method()
+        {
+            var e = MyEnum.Fizz;
+            switch (e)
+            {
+                case (MyEnum) 0:
+                    break;
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void SwitchDoesNotHandleAllEnumOptions_NoCaseStatements_NoUsings()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var e = System.IO.FileOptions.DeleteOnClose;
+            switch (e)
+            {
+            }
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var e = System.IO.FileOptions.DeleteOnClose;
+            switch (e)
+            {
+                case System.IO.FileOptions.Encrypted:
+                    throw new System.NotImplementedException();
+                case System.IO.FileOptions.SequentialScan:
+                    throw new System.NotImplementedException();
+                case System.IO.FileOptions.DeleteOnClose:
+                    throw new System.NotImplementedException();
+                case System.IO.FileOptions.RandomAccess:
+                    throw new System.NotImplementedException();
+                case System.IO.FileOptions.Asynchronous:
+                    throw new System.NotImplementedException();
+                case System.IO.FileOptions.WriteThrough:
+                    throw new System.NotImplementedException();
+                case System.IO.FileOptions.None:
+                    throw new System.NotImplementedException();
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void SwitchDoesNotHandleAllEnumOptions_NoCaseStatements_NormalUsing()
+        {
+            var original = @"
+using System.IO;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var e = FileOptions.DeleteOnClose;
+            switch (e)
+            {
+            }
+        }
+    }
+}";
+
+            var result = @"
+using System.IO;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var e = FileOptions.DeleteOnClose;
+            switch (e)
+            {
+                case FileOptions.Encrypted:
+                    throw new System.NotImplementedException();
+                case FileOptions.SequentialScan:
+                    throw new System.NotImplementedException();
+                case FileOptions.DeleteOnClose:
+                    throw new System.NotImplementedException();
+                case FileOptions.RandomAccess:
+                    throw new System.NotImplementedException();
+                case FileOptions.Asynchronous:
+                    throw new System.NotImplementedException();
+                case FileOptions.WriteThrough:
+                    throw new System.NotImplementedException();
+                case FileOptions.None:
+                    throw new System.NotImplementedException();
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void SwitchDoesNotHandleAllEnumOptions_NoCaseStatements_UsingStatic()
+        {
+            var original = @"
+using static System.IO.FileOptions;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var e = DeleteOnClose;
+            switch (e)
+            {
+            }
+        }
+    }
+}";
+
+            var result = @"
+using static System.IO.FileOptions;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var e = DeleteOnClose;
+            switch (e)
+            {
+                case Encrypted:
+                    throw new System.NotImplementedException();
+                case SequentialScan:
+                    throw new System.NotImplementedException();
+                case DeleteOnClose:
+                    throw new System.NotImplementedException();
+                case RandomAccess:
+                    throw new System.NotImplementedException();
+                case Asynchronous:
+                    throw new System.NotImplementedException();
+                case WriteThrough:
+                    throw new System.NotImplementedException();
+                case None:
+                    throw new System.NotImplementedException();
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, SwitchDoesNotHandleAllEnumOptionsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
     }
 }

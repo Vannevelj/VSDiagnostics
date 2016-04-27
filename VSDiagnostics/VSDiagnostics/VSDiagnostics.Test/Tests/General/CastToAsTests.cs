@@ -23,12 +23,11 @@ namespace ConsoleApplication1
     {
         void Method()
         {
-            var ch = 'r';
-            var i = (int) ch;
+            char ch = 'r';
+            int i = (int) ch;
         }
     }
 }";
-
             VerifyDiagnostic(original);
         }
 
@@ -196,6 +195,75 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original, CastToAsAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void CastToAs_Generics()
+        {
+            var original = @"
+using System.Collections.Generic;
+
+namespace ConsoleApplication1
+{
+    static class Extensions
+    {
+	    public static void Method<T>(this IEnumerable<T> input) where T : class
+	    {
+		    var list = new List<T>();
+		
+		    foreach (var node in input)
+		    {
+			    list.Add((T)node);
+		    }
+	    }
+    }
+}";
+
+            var result = @"
+using System.Collections.Generic;
+
+namespace ConsoleApplication1
+{
+    static class Extensions
+    {
+	    public static void Method<T>(this IEnumerable<T> input) where T : class
+	    {
+		    var list = new List<T>();
+		
+		    foreach (var node in input)
+		    {
+			    list.Add(node as T);
+		    }
+	    }
+    }
+}";
+
+            VerifyDiagnostic(original, CastToAsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void CastToAs_Generics_ValueType()
+        {
+            var original = @"
+using System.Collections.Generic;
+
+namespace ConsoleApplication1
+{
+    static class Extensions
+    {
+	    public static void Method<T>(this IEnumerable<T> input) where T : struct
+	    {
+		    var list = new List<T>();
+		
+		    foreach (var node in input)
+		    {
+			    list.Add((T)node);
+		    }
+	    }
+    }
+}";
+            VerifyDiagnostic(original);
         }
     }
 }
