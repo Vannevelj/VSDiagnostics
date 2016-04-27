@@ -61,7 +61,7 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
             }
 
             // We use the descendent nodes in case it's wrapped in another level. For example: OnPropertyChanged(((nameof(MyProperty))))
-            foreach (var expression in invokedProperty.DescendantNodesAndSelf().SyntaxNodeOfType<InvocationExpressionSyntax>(SyntaxKind.InvocationExpression))
+            foreach (var expression in invokedProperty.DescendantNodesAndSelf().OfType<InvocationExpressionSyntax>(SyntaxKind.InvocationExpression))
             {
                 if (expression.IsNameofInvocation())
                 {
@@ -77,7 +77,7 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
 
             // Get all the properties defined in this type
             // We can't just get all the descendents of the classdeclaration because that would pass by some of a partial class' properties
-            var classDeclaration = invocation.Ancestors().SyntaxNodeOfType<ClassDeclarationSyntax>(SyntaxKind.ClassDeclaration).FirstOrDefault();
+            var classDeclaration = invocation.Ancestors().OfType<ClassDeclarationSyntax>(SyntaxKind.ClassDeclaration).FirstOrDefault();
             if (classDeclaration == null)
             {
                 return;

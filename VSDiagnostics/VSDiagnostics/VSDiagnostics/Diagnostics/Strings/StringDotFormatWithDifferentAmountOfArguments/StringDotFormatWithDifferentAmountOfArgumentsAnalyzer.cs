@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -36,9 +35,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
 
             // Get the format string
             // This corresponds to the argument passed to the parameter with name 'format'
-            var invokedMethod = context.SemanticModel.GetSymbolInfo(invocation);
-            var methodSymbol = invokedMethod.Symbol as IMethodSymbol;
-
+            var methodSymbol = context.SemanticModel.GetSymbolInfo(invocation).Symbol as IMethodSymbol;
             if (methodSymbol == null)
             {
                 return;
@@ -143,7 +140,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
                 {
                     // We check for an invocation first to account for the scenario where you have both an invocation and an array initializer
                     // Think about something like this: string.Format(""{0}{1}{2}"", new[] { 1 }.Concat(new[] {2}).ToArray());
-                    var methodInvocation = formatArguments[0].DescendantNodes().SyntaxNodeOfType<InvocationExpressionSyntax>(SyntaxKind.InvocationExpression).FirstOrDefault();
+                    var methodInvocation = formatArguments[0].DescendantNodes().OfType<InvocationExpressionSyntax>(SyntaxKind.InvocationExpression).FirstOrDefault();
                     if (methodInvocation != null)
                     {
                         // We don't handle method calls that return an array in the case of a single argument
@@ -153,10 +150,9 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
                     InitializerExpressionSyntax inlineArrayCreation = null;
                     foreach (var argument in formatArguments[0].DescendantNodes())
                     {
-                        var argumentAsInitializerExpressionSyntax = argument as InitializerExpressionSyntax;
-                        if (argumentAsInitializerExpressionSyntax != null)
+                        if (argument is InitializerExpressionSyntax)
                         {
-                            inlineArrayCreation = argumentAsInitializerExpressionSyntax;
+                            inlineArrayCreation = (InitializerExpressionSyntax)argument;
                         }
                     }
 
@@ -193,8 +189,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringDotFormatWithDifferentAmountOf
                 return;
             }
 
-            var highestPlaceholder = placeholders.Concat(new[] {int.MinValue}).Max();
-
+            var highestPlaceholder = placeholders.Max();
             if (highestPlaceholder + 1 > amountOfFormatArguments)
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule, formatExpression.GetLocation()));

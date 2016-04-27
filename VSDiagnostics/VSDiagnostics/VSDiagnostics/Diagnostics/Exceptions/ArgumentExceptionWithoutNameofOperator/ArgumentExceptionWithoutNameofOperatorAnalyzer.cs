@@ -46,16 +46,15 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOpe
 
                 foreach (var argument in objectCreationExpression.ArgumentList.Arguments)
                 {
-                    var expression = argument.Expression as LiteralExpressionSyntax;
-                    if (expression != null)
+                    if (argument.Expression is LiteralExpressionSyntax)
                     {
-                        arguments.Add(expression);
+                        arguments.Add((LiteralExpressionSyntax)argument.Expression);
                     }
                 }
 
                 var methodParameters =
                     objectCreationExpression.Ancestors()
-                                            .SyntaxNodeOfType<MethodDeclarationSyntax>(SyntaxKind.MethodDeclaration)
+                                            .OfType<MethodDeclarationSyntax>(SyntaxKind.MethodDeclaration)
                                             .FirstOrDefault()?
                                             .ParameterList.Parameters;
 

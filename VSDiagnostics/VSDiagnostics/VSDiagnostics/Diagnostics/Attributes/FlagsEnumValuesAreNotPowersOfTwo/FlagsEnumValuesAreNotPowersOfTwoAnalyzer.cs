@@ -79,7 +79,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 
             var enumName = context.SemanticModel.GetDeclaredSymbol(declarationExpression).Name;
             var enumMemberDeclarations =
-                declarationExpression.ChildNodes().SyntaxNodeOfType<EnumMemberDeclarationSyntax>(SyntaxKind.EnumMemberDeclaration);
+                declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>(SyntaxKind.EnumMemberDeclaration);
 
             foreach (var member in enumMemberDeclarations)
             {

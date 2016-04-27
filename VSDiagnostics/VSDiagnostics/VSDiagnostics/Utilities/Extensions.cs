@@ -207,7 +207,7 @@ namespace VSDiagnostics.Utilities
             return identifier != null && identifier.Identifier.ValueText == "nameof";
         }
 
-        public static List<T> SyntaxNodeOfType<T>(this IEnumerable<SyntaxNode> enumerable, SyntaxKind kind) where T : SyntaxNode
+        public static List<T> OfType<T>(this IEnumerable<SyntaxNode> enumerable, SyntaxKind kind) where T : SyntaxNode
         {
             var list = new List<T>();
 
@@ -222,7 +222,7 @@ namespace VSDiagnostics.Utilities
             return list;
         }
 
-        public static bool ContainsAny(this SyntaxTokenList list, SyntaxKind[] kinds)
+        public static bool ContainsAny(this SyntaxTokenList list, params SyntaxKind[] kinds)
         {
             foreach (var item in list)
             {

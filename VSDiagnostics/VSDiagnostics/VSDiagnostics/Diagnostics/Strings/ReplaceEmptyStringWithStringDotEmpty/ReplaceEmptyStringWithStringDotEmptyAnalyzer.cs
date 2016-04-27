@@ -29,7 +29,7 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node.AncestorsAndSelf().SyntaxNodeOfType<AttributeArgumentSyntax>(SyntaxKind.AttributeArgument).Any())
+            if (context.Node.AncestorsAndSelf().OfType<AttributeArgumentSyntax>(SyntaxKind.AttributeArgument).Any())
             {
                 return;
             }
@@ -49,7 +49,7 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
                 }
             }
 
-            var variableDeclaration = stringLiteral.Ancestors().SyntaxNodeOfType<FieldDeclarationSyntax>(SyntaxKind.FieldDeclaration).FirstOrDefault();
+            var variableDeclaration = stringLiteral.Ancestors().OfType<FieldDeclarationSyntax>(SyntaxKind.FieldDeclaration).FirstOrDefault();
             if (variableDeclaration != null)
             {
                 foreach (var modifier in variableDeclaration.Modifiers)

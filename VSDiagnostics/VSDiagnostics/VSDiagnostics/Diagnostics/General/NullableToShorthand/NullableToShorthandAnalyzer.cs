@@ -27,7 +27,7 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var argumentList = (GenericNameSyntax) context.Node;
-            if (argumentList.TypeArgumentList.Arguments.SyntaxNodeOfType<OmittedTypeArgumentSyntax>(SyntaxKind.OmittedTypeArgument).Any())
+            if (argumentList.TypeArgumentList.Arguments.OfType<OmittedTypeArgumentSyntax>(SyntaxKind.OmittedTypeArgument).Any())
             {
                 return;
             }
@@ -75,7 +75,7 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
 
                 if (parentNode == null)
                 {
-                    parentNode = context.Node.AncestorsAndSelf().SyntaxNodeOfType<ExpressionStatementSyntax>(SyntaxKind.ExpressionStatement).FirstOrDefault();
+                    parentNode = context.Node.AncestorsAndSelf().OfType<ExpressionStatementSyntax>(SyntaxKind.ExpressionStatement).FirstOrDefault();
 
                     if (parentNode == null)
                     {
@@ -85,7 +85,6 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
 
                 if (parentNode.Kind() == SyntaxKind.LocalDeclarationStatement)
                 {
-                    // ReSharper disable once PossibleInvalidCastException
                     identifier = ((LocalDeclarationStatementSyntax) parentNode).Declaration?
                                                                                .Variables
                                                                                .FirstOrDefault()?
@@ -94,7 +93,6 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
                 }
                 else if (parentNode.Kind() == SyntaxKind.FieldDeclaration)
                 {
-                    // ReSharper disable once PossibleInvalidCastException
                     identifier = ((FieldDeclarationSyntax) parentNode).Declaration?
                                                                       .Variables
                                                                       .FirstOrDefault()?
@@ -103,17 +101,14 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
                 }
                 else if (parentNode.Kind() == SyntaxKind.Parameter)
                 {
-                    // ReSharper disable once PossibleInvalidCastException
                     identifier = ((ParameterSyntax) parentNode).Identifier.Text;
                 }
                 else if (parentNode.Kind() == SyntaxKind.TypeParameter)
                 {
-                    // ReSharper disable once PossibleInvalidCastException
                     identifier = ((TypeParameterSyntax) parentNode).Identifier.Text;
                 }
                 else if (parentNode.Kind() == SyntaxKind.PropertyDeclaration)
                 {
-                    // ReSharper disable once PossibleInvalidCastException
                     identifier = ((PropertyDeclarationSyntax) parentNode).Identifier.Text;
                 }
                 else
