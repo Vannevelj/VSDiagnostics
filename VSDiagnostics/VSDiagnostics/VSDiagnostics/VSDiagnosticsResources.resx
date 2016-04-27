@@ -528,4 +528,10 @@
   <data name="EqualsAndGetHashcodeNotImplementedTogetherCodeFixTitle" xml:space="preserve">
     <value>Implement {0}.</value>
   </data>
+  <data name="ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerMessage" xml:space="preserve">
+    <value>Implement elementary methods of type used in collection.</value>
+  </data>
+  <data name="ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerTitle" xml:space="preserve">
+    <value>Implement elementary methods.</value>
+  </data>
 </root>

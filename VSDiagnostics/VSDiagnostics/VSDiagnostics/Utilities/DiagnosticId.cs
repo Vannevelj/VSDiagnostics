@@ -47,5 +47,6 @@
         public const string SwitchDoesNotHandleAllEnumOptions = "VSD0044";
         public const string DivideIntegerByInteger = "VSD0045";
         public const string EqualsAndGetHashcodeNotImplementedTogether = "VSD0046";
+        public const string ElementaryMethodsOfTypeInCollectionNotOverridden = "VSD0047";
     }
 }

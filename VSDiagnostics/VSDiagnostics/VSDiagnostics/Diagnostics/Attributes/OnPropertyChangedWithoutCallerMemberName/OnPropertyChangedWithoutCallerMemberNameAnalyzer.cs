@@ -36,7 +36,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
             var parentClass = methodDeclaration.Ancestors().OfType<ClassDeclarationSyntax>(SyntaxKind.ClassDeclaration).FirstOrDefault();
 
             // class must implement INotifyPropertyChanged
-            if (!parentClass.ImplementsInterface(context.SemanticModel, typeof(INotifyPropertyChanged)))
+            if (!typeSymbol.ImplementsInterfaceOrBaseClass(typeof(INotifyPropertyChanged)))
             {
                 return;
             }
