@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
@@ -31,27 +30,14 @@ namespace VSDiagnostics.Utilities
             { nameof(String), "string" }
         };
 
+        public static bool ImplementsInterfaceOrBaseClass(this INamedTypeSymbol typeSymbol, Type interfaceType)
+            => typeSymbol != null &&
+               (typeSymbol.AllInterfaces.Any(i => i.MetadataName == interfaceType.Name) ||
+                typeSymbol.BaseType.MetadataName == interfaceType.Name);
 
-        public static bool ImplementsInterface(this ClassDeclarationSyntax classDeclaration, SemanticModel semanticModel,
-                                               Type interfaceType)
-        {
-            if (classDeclaration == null)
-            {
-                return false;
-            }
-
-            var declaredSymbol = semanticModel.GetDeclaredSymbol(classDeclaration);
-
-            return declaredSymbol != null &&
-                   (declaredSymbol.Interfaces.Any(i => i.MetadataName == interfaceType.Name) ||
-                    declaredSymbol.BaseType.MetadataName == typeof(INotifyPropertyChanged).Name);
-
-            // For some peculiar reason, "class Foo : INotifyPropertyChanged" doesn't have any interfaces,
-            // But "class Foo : IFoo, INotifyPropertyChanged" has two.  "IFoo" is an interface defined by me.
-            // However, the BaseType for the first is the "INotifyPropertyChanged" symbol.
-            // Also, "class Foo : INotifyPropertyChanged, IFoo" has just one - "IFoo",
-            // But the BaseType again is "INotifyPropertyChanged".
-        }
+        public static bool ImplementsInterface(this INamedTypeSymbol typeSymbol, Type interfaceType)
+            => typeSymbol != null &&
+               typeSymbol.AllInterfaces.Any(i => i.MetadataName == interfaceType.Name);
 
         public static bool InheritsFrom(this ISymbol typeSymbol, Type type)
         {

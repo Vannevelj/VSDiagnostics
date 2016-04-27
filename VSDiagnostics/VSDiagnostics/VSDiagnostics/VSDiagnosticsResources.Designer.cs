@@ -377,6 +377,24 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Implement elementary methods of type used in collection..
+        /// </summary>
+        internal static string ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implement elementary methods..
+        /// </summary>
+        internal static string ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The operands in the divisive expression {0} are both integers and result in an implicit rounding..
         /// </summary>
         internal static string DivideIntegerByIntegerAnalyzerMessage {
