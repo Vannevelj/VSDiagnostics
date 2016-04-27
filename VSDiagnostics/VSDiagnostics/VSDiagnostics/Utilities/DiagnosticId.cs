@@ -46,5 +46,6 @@
         public const string LoopedRandomInstantiation = "VSD0043";
         public const string SwitchDoesNotHandleAllEnumOptions = "VSD0044";
         public const string DivideIntegerByInteger = "VSD0045";
+        public const string EqualsAndGetHashcodeNotImplementedTogether = "VSD0046";
     }
 }

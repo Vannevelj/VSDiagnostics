@@ -116,6 +116,7 @@
     <Compile Include="Tests\Exceptions\EmptyCatchClauseTests.cs" />
     <Compile Include="Tests\Exceptions\RethrowExceptionWithoutLosingStracktraceTests.cs" />
     <Compile Include="Tests\Exceptions\SingleGeneralExceptionTests.cs" />
+    <Compile Include="Tests\General\EqualsAndGetHashcodeNotImplementedTogetherTests.cs" />
     <Compile Include="Tests\General\AsToCastTests.cs" />
     <Compile Include="Tests\General\CastToAsTests.cs" />
     <Compile Include="Tests\General\CompareBooleanToFalseLiteralTests.cs" />
