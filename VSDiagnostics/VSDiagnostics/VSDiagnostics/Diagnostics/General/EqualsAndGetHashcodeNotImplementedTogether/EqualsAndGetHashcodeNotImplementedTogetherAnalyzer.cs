@@ -52,7 +52,7 @@ namespace VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTo
 
                 var methodSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclaration).OverriddenMethod;
 
-                // this will happen if the base class is deleted and there are still references to it in the derived class
+                // this will happen if the base class is deleted and there is still a derived class
                 if (methodSymbol == null)
                 {
                     return;
@@ -76,7 +76,7 @@ namespace VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTo
 
             if (equalsImplemented ^ getHashcodeImplemented)
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, classDeclaration.GetLocation(),
+                context.ReportDiagnostic(Diagnostic.Create(Rule, classDeclaration.Identifier.GetLocation(),
                     ImmutableDictionary.CreateRange(new[] { new KeyValuePair<string, string>("IsEqualsImplemented", equalsImplemented.ToString()) })));
             }
         }
