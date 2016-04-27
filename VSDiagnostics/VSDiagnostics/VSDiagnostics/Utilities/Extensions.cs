@@ -31,13 +31,45 @@ namespace VSDiagnostics.Utilities
         };
 
         public static bool ImplementsInterfaceOrBaseClass(this INamedTypeSymbol typeSymbol, Type interfaceType)
-            => typeSymbol != null &&
-               (typeSymbol.AllInterfaces.Any(i => i.MetadataName == interfaceType.Name) ||
-                typeSymbol.BaseType.MetadataName == interfaceType.Name);
+        {
+            if (typeSymbol == null)
+            {
+                return false;
+            }
+
+            if (typeSymbol.BaseType.MetadataName == interfaceType.Name)
+            {
+                return true;
+            }
+
+            foreach (var @interface in typeSymbol.AllInterfaces)
+            {
+                if (@interface.MetadataName == interfaceType.Name)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         public static bool ImplementsInterface(this INamedTypeSymbol typeSymbol, Type interfaceType)
-            => typeSymbol != null &&
-               typeSymbol.AllInterfaces.Any(i => i.MetadataName == interfaceType.Name);
+        {
+            if (typeSymbol == null)
+            {
+                return false;
+            }
+
+            foreach (var @interface in typeSymbol.AllInterfaces)
+            {
+                if (@interface.MetadataName == interfaceType.Name)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         public static bool InheritsFrom(this ISymbol typeSymbol, Type type)
         {
@@ -54,7 +86,7 @@ namespace VSDiagnostics.Utilities
                 {
                     return true;
                 }
-                baseType = ((ITypeSymbol) baseType).BaseType;
+                baseType = ((ITypeSymbol)baseType).BaseType;
             }
 
             return false;
@@ -75,18 +107,34 @@ namespace VSDiagnostics.Utilities
                 SyntaxKind.XmlCommentStartToken
             };
 
-            return commentTrivias.Any(x => trivia.IsKind(x));
+            foreach (var commentTrivia in commentTrivias)
+            {
+                if (trivia.IsKind(commentTrivia))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static bool IsWhitespaceTrivia(this SyntaxTrivia trivia)
         {
-            var whitespaceTrivia = new[]
+            var whitespaceTrivias = new[]
             {
                 SyntaxKind.WhitespaceTrivia,
                 SyntaxKind.EndOfLineTrivia
             };
 
-            return whitespaceTrivia.Any(x => trivia.IsKind(x));
+            foreach (var whitespaceTrivia in whitespaceTrivias)
+            {
+                if (trivia.IsKind(whitespaceTrivia))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static string ToAlias(this string type)
@@ -138,12 +186,14 @@ namespace VSDiagnostics.Utilities
             var interfaces = containingType.AllInterfaces;
             foreach (var @interface in interfaces)
             {
-                var interfaceMethods =
-                    @interface.GetMembers().Select(containingType.FindImplementationForInterfaceMember).Where(x => x != null);
+                var interfaceMethods = @interface.GetMembers().Select(containingType.FindImplementationForInterfaceMember);
 
-                if (interfaceMethods.Any(method => method.Equals(methodSymbol)))
+                foreach (var method in interfaceMethods)
                 {
-                    return true;
+                    if (method != null && method.Equals(methodSymbol))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -151,10 +201,15 @@ namespace VSDiagnostics.Utilities
             while (baseType != null)
             {
                 var baseMethods = baseType.GetMembers().OfType<IMethodSymbol>();
-                if (baseMethods.Any(method => method.Equals(methodSymbol.OverriddenMethod)))
+
+                foreach (var method in baseMethods)
                 {
-                    return true;
+                    if (method.Equals(methodSymbol.OverriddenMethod))
+                    {
+                        return true;
+                    }
                 }
+
                 baseType = baseType.BaseType;
             }
 
@@ -190,6 +245,63 @@ namespace VSDiagnostics.Utilities
                                        .FirstOrDefault();
 
             return identifier != null && identifier.Identifier.ValueText == "nameof";
+        }
+
+        public static List<T> OfType<T>(this IEnumerable<SyntaxNode> enumerable, SyntaxKind kind) where T : SyntaxNode
+        {
+            var list = new List<T>();
+
+            foreach (var node in enumerable)
+            {
+                if (node.IsKind(kind))
+                {
+                    list.Add((T)node);
+                }
+            }
+
+            return list;
+        }
+
+        public static bool ContainsAny(this SyntaxTokenList list, params SyntaxKind[] kinds)
+        {
+            foreach (var item in list)
+            {
+                foreach (var kind in kinds)
+                {
+                    if (item.Kind() == kind)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public static bool Contains(this SyntaxTokenList list, SyntaxKind kind)
+        {
+            foreach (var item in list)
+            {
+                if (item.Kind() == kind)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool Contains(this IEnumerable<SyntaxKind> list, SyntaxKind kind)
+        {
+            foreach (var syntaxKind in list)
+            {
+                if (syntaxKind == kind)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

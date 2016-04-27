@@ -32,8 +32,8 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var methodDeclaration = (MethodDeclarationSyntax) context.Node;
-            var parentClass = methodDeclaration.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+            var methodDeclaration = (MethodDeclarationSyntax)context.Node;
+            var parentClass = methodDeclaration.Ancestors().OfType<ClassDeclarationSyntax>(SyntaxKind.ClassDeclaration).FirstOrDefault();
             var typeSymbol = context.SemanticModel.GetDeclaredSymbol(parentClass);
 
             // class must implement INotifyPropertyChanged
@@ -65,13 +65,17 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
             }
 
             // parameter must not have CallerMemberNameAttribute
-            if (param.AttributeLists.Any(a => a.Attributes.Any() && a.Attributes.Any(t =>
+            foreach (var list in param.AttributeLists)
             {
-                var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
-                return symbol != null && symbol.ContainingSymbol.MetadataName == typeof(CallerMemberNameAttribute).Name;
-            })))
-            {
-                return;
+                foreach (var attribute in list.Attributes)
+                {
+                    var symbol = context.SemanticModel.GetSymbolInfo(attribute).Symbol;
+                    if (symbol != null &&
+                        symbol.ContainingSymbol.MetadataName == typeof (CallerMemberNameAttribute).Name)
+                    {
+                        return;
+                    }
+                }
             }
 
             context.ReportDiagnostic(Diagnostic.Create(Rule, methodDeclaration.GetLocation()));

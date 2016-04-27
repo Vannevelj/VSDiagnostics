@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -42,7 +43,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 return;
             }
 
-            var ifStatement = isExpression.AncestorsAndSelf().OfType<IfStatementSyntax>().FirstOrDefault();
+            var ifStatement = isExpression.AncestorsAndSelf().OfType<IfStatementSyntax>(SyntaxKind.IfStatement).FirstOrDefault();
             if (ifStatement == null)
             {
                 return;
@@ -54,16 +55,21 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 return;
             }
 
-            var asExpressions = ifStatement.Statement
-                                           .DescendantNodes()
-                                           .Concat(ifStatement.Condition.DescendantNodesAndSelf())
-                                           .OfType<BinaryExpressionSyntax>()
-                                           .Where(x => x.OperatorToken.IsKind(SyntaxKind.AsKeyword));
+            var asExpressions = new List<BinaryExpressionSyntax>();
+            foreach (var statement in ifStatement.Statement
+                .DescendantNodes()
+                .Concat(ifStatement.Condition.DescendantNodesAndSelf())
+                .OfType<BinaryExpressionSyntax>())
+            {
+                if (statement.OperatorToken.IsKind(SyntaxKind.AsKeyword))
+                {
+                    asExpressions.Add(statement);
+                }
+            }
 
-            var castExpressions = ifStatement.Statement
-                                             .DescendantNodes()
-                                             .Concat(ifStatement.Condition.DescendantNodesAndSelf())
-                                             .OfType<CastExpressionSyntax>();
+            var castExpressions = new List<CastExpressionSyntax>();
+            castExpressions.AddRange(ifStatement.Statement.DescendantNodes().OfType<CastExpressionSyntax>(SyntaxKind.CastExpression));
+            castExpressions.AddRange(ifStatement.Condition.DescendantNodesAndSelf().OfType<CastExpressionSyntax>(SyntaxKind.CastExpression));
 
             Action reportDiagnostic = () => context.ReportDiagnostic(Diagnostic.Create(Rule, isExpression.GetLocation(), isIdentifier));
 
@@ -99,7 +105,11 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
                 }
             };
 
-            foreach (var expression in asExpressions.Concat<ExpressionSyntax>(castExpressions))
+            var expressions = new List<ExpressionSyntax>(asExpressions.Count + castExpressions.Count);
+            expressions.AddRange(asExpressions);
+            expressions.AddRange(castExpressions);
+
+            foreach (var expression in expressions)
             {
                 var binaryExpression = expression as BinaryExpressionSyntax;
                 var binaryIdentifier = binaryExpression?.Left as IdentifierNameSyntax;

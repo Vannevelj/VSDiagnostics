@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -41,12 +42,19 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOpe
             var symbolInformation = context.SemanticModel.GetSymbolInfo(exceptionType);
             if (symbolInformation.Symbol.InheritsFrom(typeof(ArgumentException)))
             {
-                var arguments =
-                    objectCreationExpression.ArgumentList.Arguments.Select(x => x.Expression)
-                                            .OfType<LiteralExpressionSyntax>();
+                var arguments = new List<LiteralExpressionSyntax>();
+
+                foreach (var argument in objectCreationExpression.ArgumentList.Arguments)
+                {
+                    if (argument.Expression is LiteralExpressionSyntax)
+                    {
+                        arguments.Add((LiteralExpressionSyntax)argument.Expression);
+                    }
+                }
+
                 var methodParameters =
                     objectCreationExpression.Ancestors()
-                                            .OfType<MethodDeclarationSyntax>()
+                                            .OfType<MethodDeclarationSyntax>(SyntaxKind.MethodDeclaration)
                                             .FirstOrDefault()?
                                             .ParameterList.Parameters;
 
@@ -59,11 +67,19 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOpe
                 foreach (var argument in arguments)
                 {
                     var argumentName = argument.Token.ValueText;
-                    var correspondingParameter =
-                        methodParameters.Value.FirstOrDefault(
-                            x =>
-                                string.Equals((string) x.Identifier.Value, argumentName,
-                                    StringComparison.OrdinalIgnoreCase));
+                    ParameterSyntax correspondingParameter = null;
+
+                    foreach (var parameter in methodParameters.Value)
+                    {
+                        if (string.Equals((string) parameter.Identifier.Value, argumentName,
+                            StringComparison.OrdinalIgnoreCase))
+                        {
+                            correspondingParameter = parameter;
+                            break;
+                        }
+                    }
+
+
                     if (correspondingParameter != null)
                     {
                         context.ReportDiagnostic(Diagnostic.Create(Rule, argument.GetLocation(),

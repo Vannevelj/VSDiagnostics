@@ -62,28 +62,53 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
-            if (
-                propertyDeclaration.DescendantNodesAndTokensAndSelf()
-                                   .Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
+            foreach (var declaration in propertyDeclaration.DescendantNodesAndTokensAndSelf())
             {
-                return null;
+                foreach (var trivia in declaration.GetLeadingTrivia())
+                {
+                    if (!trivia.IsWhitespaceTrivia())
+                    {
+                        return null;
+                    }
+                }
+
+                foreach (var trivia in declaration.GetTrailingTrivia())
+                {
+                    if (!trivia.IsWhitespaceTrivia())
+                    {
+                        return null;
+                    }
+                }
             }
 
-            if (propertyDeclaration.AccessorList.Accessors.Any(x => x.Keyword.IsKind(SyntaxKind.SetKeyword)))
+            foreach (var accessor in propertyDeclaration.AccessorList.Accessors)
             {
-                return null;
+                if (accessor.Keyword.IsKind(SyntaxKind.SetKeyword))
+                {
+                    return null;
+                }
             }
 
-            var getter =
-                propertyDeclaration.AccessorList.Accessors.FirstOrDefault(x => x.Keyword.IsKind(SyntaxKind.GetKeyword));
+            AccessorDeclarationSyntax getter = null;
+            foreach (var accessor in propertyDeclaration.AccessorList.Accessors)
+            {
+                if (accessor.Keyword.IsKind(SyntaxKind.GetKeyword))
+                {
+                    getter = accessor;
+                    break;
+                }
+            }
             if (getter == null)
             {
                 return null;
             }
 
-            if (getter.AttributeLists.Any(x => x.Attributes.Any()))
+            foreach (var list in getter.AttributeLists)
             {
-                return null;
+                if (list.Attributes.Any())
+                {
+                    return null;
+                }
             }
 
             if (getter.Body?.Statements.Count != 1)
@@ -107,11 +132,12 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
-            if (
-                methodDeclaration.DescendantNodesAndTokensAndSelf()
-                                 .Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
+            foreach (var nodeOrToken in methodDeclaration.DescendantNodesAndTokensAndSelf())
             {
-                return null;
+                if (nodeOrToken.GetLeadingTrivia().Concat(nodeOrToken.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia()))
+                {
+                    return null;
+                }
             }
 
             if (methodDeclaration.Body?.Statements.Count != 1)

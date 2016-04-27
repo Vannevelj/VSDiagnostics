@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -23,23 +22,22 @@ namespace VSDiagnostics.Diagnostics.Attributes.EnumCanHaveFlagsAttribute
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeCSharpSymbol, SyntaxKind.EnumDeclaration);
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.EnumDeclaration);
 
-        private void AnalyzeCSharpSymbol(SyntaxNodeAnalysisContext context)
+        private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var enumDeclaration = (EnumDeclarationSyntax) context.Node;
 
-            // enum must not already have flags attribute
-            if (enumDeclaration.AttributeLists.Any(
-                a => a.Attributes.Any(
-                    t =>
-                    {
-                        var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
-
-                        return symbol == null || symbol.ContainingType.MetadataName == typeof(FlagsAttribute).Name;
-                    })))
+            foreach (var list in enumDeclaration.AttributeLists)
             {
-                return;
+                foreach (var attribute in list.Attributes)
+                {
+                    var symbol = context.SemanticModel.GetSymbolInfo(attribute).Symbol;
+                    if (symbol == null || symbol.ContainingType.MetadataName == typeof (FlagsAttribute).Name)
+                    {
+                        return;
+                    }
+                }
             }
 
             context.ReportDiagnostic(Diagnostic.Create(Rule, enumDeclaration.GetLocation()));
