@@ -509,4 +509,23 @@
   <data name="SwitchDoesNotHandleAllEnumOptionsCodeFixTitle" xml:space="preserve">
     <value>Add case(s).</value>
   </data>
+  <data name="ArithmeticCategory" xml:space="preserve">
+    <value>Arithmetic</value>
+  </data>
+  <data name="DivideIntegerByIntegerAnalyzerMessage" xml:space="preserve">
+    <value>The operands in the divisive expression {0} are both integers and result in an implicit rounding.</value>
+    <comment>{0} - The expression</comment>
+  </data>
+  <data name="DivideIntegerByIntegerAnalyzerTitle" xml:space="preserve">
+    <value>The operands of a divisive expression are both integers and result in an implicit rounding.</value>
+  </data>
+  <data name="EqualsAndGetHashcodeNotImplementedTogetherAnalyzerMessage" xml:space="preserve">
+    <value>Equals() and GetHashcode() must be implemented together.</value>
+  </data>
+  <data name="EqualsAndGetHashcodeNotImplementedTogetherAnalyzerTitle" xml:space="preserve">
+    <value>Implement Equals() and GetHashcode() together.</value>
+  </data>
+  <data name="EqualsAndGetHashcodeNotImplementedTogetherCodeFixTitle" xml:space="preserve">
+    <value>Implement {0}.</value>
+  </data>
 </root>

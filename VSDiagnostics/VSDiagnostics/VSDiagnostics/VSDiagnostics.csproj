@@ -32,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Diagnostics\Arithmetic\DivideIntegerByInteger\DivideIntegerByIntegerAnalyzer.cs" />
     <Compile Include="Diagnostics\Async\AsyncMethodWithoutAsyncSuffix\AsyncMethodWithoutAsyncSuffixAnalyzer.cs" />
     <Compile Include="Diagnostics\Async\AsyncMethodWithoutAsyncSuffix\AsyncMethodWithoutAsyncSuffixCodeFix.cs" />
     <Compile Include="Diagnostics\Async\SyncMethodWithAsyncSuffix\SyncMethodWithAsyncSuffixAnalyzer.cs" />
@@ -65,6 +66,8 @@
     <Compile Include="Diagnostics\General\ConditionalOperatorReturnsDefaultOptions\ConditionalOperatorReturnsDefaultOptionsCodeFix.cs" />
     <Compile Include="Diagnostics\General\ConditionIsConstant\ConditionIsConstantAnalyzer.cs" />
     <Compile Include="Diagnostics\General\ConditionIsConstant\ConditionIsConstantCodeFix.cs" />
+    <Compile Include="Diagnostics\General\EqualsAndGetHashcodeNotImplementedTogether\EqualsAndGetHashcodeNotImplementedTogetherCodeFix.cs" />
+    <Compile Include="Diagnostics\General\EqualsAndGetHashcodeNotImplementedTogether\EqualsAndGetHashcodeNotImplementedTogetherAnalyzer.cs" />
     <Compile Include="Diagnostics\General\ExplicitAccessModifiers\ExplicitAccessModifiersAnalyzer.cs" />
     <Compile Include="Diagnostics\General\ExplicitAccessModifiers\ExplicitAccessModifiersCodeFix.cs" />
     <Compile Include="Diagnostics\Attributes\FlagsEnumValuesAreNotPowersOfTwo\FlagsEnumValuesAreNotPowersOfTwoAnalyzer.cs" />

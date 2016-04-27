@@ -80,7 +80,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
 
                 if (!switchHasSymbol)
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, switchBlock.GetLocation()));
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, switchBlock.Expression.GetLocation()));
                     return;
                 }
             }
