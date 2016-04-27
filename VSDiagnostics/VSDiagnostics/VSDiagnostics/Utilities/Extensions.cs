@@ -34,7 +34,7 @@ namespace VSDiagnostics.Utilities
 
 
         public static bool ImplementsInterface(this ClassDeclarationSyntax classDeclaration, SemanticModel semanticModel,
-                                               Type interfaceType)
+            Type interfaceType)
         {
             if (classDeclaration == null)
             {
@@ -43,9 +43,25 @@ namespace VSDiagnostics.Utilities
 
             var declaredSymbol = semanticModel.GetDeclaredSymbol(classDeclaration);
 
-            return declaredSymbol != null &&
-                   (declaredSymbol.Interfaces.Any(i => i.MetadataName == interfaceType.Name) ||
-                    declaredSymbol.BaseType.MetadataName == typeof(INotifyPropertyChanged).Name);
+            if (declaredSymbol == null)
+            {
+                return false;
+            }
+
+            if (declaredSymbol.BaseType.MetadataName == typeof (INotifyPropertyChanged).Name)
+            {
+                return true;
+            }
+
+            foreach (var @interface in declaredSymbol.Interfaces)
+            {
+                if (@interface.MetadataName == interfaceType.Name)
+                {
+                    return true;
+                }
+            }
+
+            return false;
 
             // For some peculiar reason, "class Foo : INotifyPropertyChanged" doesn't have any interfaces,
             // But "class Foo : IFoo, INotifyPropertyChanged" has two.  "IFoo" is an interface defined by me.
@@ -90,18 +106,34 @@ namespace VSDiagnostics.Utilities
                 SyntaxKind.XmlCommentStartToken
             };
 
-            return commentTrivias.Any(x => trivia.IsKind(x));
+            foreach (var commentTrivia in commentTrivias)
+            {
+                if (trivia.IsKind(commentTrivia))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static bool IsWhitespaceTrivia(this SyntaxTrivia trivia)
         {
-            var whitespaceTrivia = new[]
+            var whitespaceTrivias = new[]
             {
                 SyntaxKind.WhitespaceTrivia,
                 SyntaxKind.EndOfLineTrivia
             };
 
-            return whitespaceTrivia.Any(x => trivia.IsKind(x));
+            foreach (var whitespaceTrivia in whitespaceTrivias)
+            {
+                if (trivia.IsKind(whitespaceTrivia))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static string ToAlias(this string type)
@@ -154,21 +186,26 @@ namespace VSDiagnostics.Utilities
             foreach (var @interface in interfaces)
             {
                 var interfaceMethods =
-                    @interface.GetMembers().Select(containingType.FindImplementationForInterfaceMember).Where(x => x != null);
+                    @interface.GetMembers().Select(containingType.FindImplementationForInterfaceMember).ToList();
 
-                if (interfaceMethods.Any(method => method.Equals(methodSymbol)))
+                foreach (var interfaceMethod in interfaceMethods)
                 {
-                    return true;
+                    if (interfaceMethod != null && interfaceMethod.Equals(methodSymbol))
+                    {
+                        return true;
+                    }
                 }
             }
 
             var baseType = containingType.BaseType;
             while (baseType != null)
             {
-                var baseMethods = baseType.GetMembers().OfType<IMethodSymbol>();
-                if (baseMethods.Any(method => method.Equals(methodSymbol.OverriddenMethod)))
+                foreach (var baseMethod in baseType.GetMembers().OfType<IMethodSymbol>())
                 {
-                    return true;
+                    if (baseMethod.Equals(methodSymbol.OverriddenMethod))
+                    {
+                        return true;
+                    }
                 }
                 baseType = baseType.BaseType;
             }
