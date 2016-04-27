@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -27,8 +28,14 @@ namespace VSDiagnostics.Diagnostics.General.ElementaryMethodsOfTypeInCollectionN
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var objectTypeInfo = context.SemanticModel.GetTypeInfo(context.Node).Type as INamedTypeSymbol;
+
+            if (objectTypeInfo == null)
+            {
+                return;
+            }
             
-            var ienumerableIsImplemented = objectTypeInfo.ImplementsInterface(typeof(IEnumerable));
+            var ienumerableIsImplemented = objectTypeInfo.ImplementsInterface(typeof(IEnumerable)) ||
+                                           objectTypeInfo.ImplementsInterface(typeof(IEnumerable<>));
 
             if (!ienumerableIsImplemented)
             {
