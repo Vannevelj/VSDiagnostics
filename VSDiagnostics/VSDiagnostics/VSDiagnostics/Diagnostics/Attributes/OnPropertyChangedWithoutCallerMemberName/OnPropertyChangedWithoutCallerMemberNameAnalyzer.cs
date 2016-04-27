@@ -32,8 +32,9 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var methodDeclaration = (MethodDeclarationSyntax) context.Node;
-            var parentClass = methodDeclaration.Ancestors().OfType<ClassDeclarationSyntax>(SyntaxKind.ClassDeclaration).FirstOrDefault();
+            var methodDeclaration = (MethodDeclarationSyntax)context.Node;
+            var parentClass = methodDeclaration.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+            var typeSymbol = context.SemanticModel.GetDeclaredSymbol(parentClass);
 
             // class must implement INotifyPropertyChanged
             if (!typeSymbol.ImplementsInterfaceOrBaseClass(typeof(INotifyPropertyChanged)))

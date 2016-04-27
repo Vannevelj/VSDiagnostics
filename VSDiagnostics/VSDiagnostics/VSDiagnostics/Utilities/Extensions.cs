@@ -6,7 +6,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-
 namespace VSDiagnostics.Utilities
 {
     // TODO: after null checks, throw argumentnullexceptions instead of returning false
@@ -31,28 +30,19 @@ namespace VSDiagnostics.Utilities
             { nameof(String), "string" }
         };
 
-
-        public static bool ImplementsInterface(this ClassDeclarationSyntax classDeclaration, SemanticModel semanticModel,
-            Type interfaceType)
+        public static bool ImplementsInterfaceOrBaseClass(this INamedTypeSymbol typeSymbol, Type interfaceType)
         {
-            if (classDeclaration == null)
+            if (typeSymbol == null)
             {
                 return false;
             }
 
-            var declaredSymbol = semanticModel.GetDeclaredSymbol(classDeclaration);
-
-            if (declaredSymbol == null)
-            {
-                return false;
-            }
-
-            if (declaredSymbol.BaseType.MetadataName == typeof (INotifyPropertyChanged).Name)
+            if (typeSymbol.BaseType.MetadataName == interfaceType.Name)
             {
                 return true;
             }
 
-            foreach (var @interface in declaredSymbol.Interfaces)
+            foreach (var @interface in typeSymbol.AllInterfaces)
             {
                 if (@interface.MetadataName == interfaceType.Name)
                 {
@@ -61,12 +51,24 @@ namespace VSDiagnostics.Utilities
             }
 
             return false;
+        }
 
-            // For some peculiar reason, "class Foo : INotifyPropertyChanged" doesn't have any interfaces,
-            // But "class Foo : IFoo, INotifyPropertyChanged" has two.  "IFoo" is an interface defined by me.
-            // However, the BaseType for the first is the "INotifyPropertyChanged" symbol.
-            // Also, "class Foo : INotifyPropertyChanged, IFoo" has just one - "IFoo",
-            // But the BaseType again is "INotifyPropertyChanged".
+        public static bool ImplementsInterface(this INamedTypeSymbol typeSymbol, Type interfaceType)
+        {
+            if (typeSymbol == null)
+            {
+                return false;
+            }
+
+            foreach (var @interface in typeSymbol.AllInterfaces)
+            {
+                if (@interface.MetadataName == interfaceType.Name)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static bool InheritsFrom(this ISymbol typeSymbol, Type type)
@@ -84,7 +86,7 @@ namespace VSDiagnostics.Utilities
                 {
                     return true;
                 }
-                baseType = ((ITypeSymbol) baseType).BaseType;
+                baseType = ((ITypeSymbol)baseType).BaseType;
             }
 
             return false;
@@ -184,12 +186,11 @@ namespace VSDiagnostics.Utilities
             var interfaces = containingType.AllInterfaces;
             foreach (var @interface in interfaces)
             {
-                var interfaceMethods =
-                    @interface.GetMembers().Select(containingType.FindImplementationForInterfaceMember).ToList();
+                var interfaceMethods = @interface.GetMembers().Select(containingType.FindImplementationForInterfaceMember);
 
-                foreach (var interfaceMethod in interfaceMethods)
+                foreach (var method in interfaceMethods)
                 {
-                    if (interfaceMethod != null && interfaceMethod.Equals(methodSymbol))
+                    if (method != null && method.Equals(methodSymbol))
                     {
                         return true;
                     }
@@ -199,13 +200,16 @@ namespace VSDiagnostics.Utilities
             var baseType = containingType.BaseType;
             while (baseType != null)
             {
-                foreach (var baseMethod in baseType.GetMembers().OfType<IMethodSymbol>())
+                var baseMethods = baseType.GetMembers().OfType<IMethodSymbol>();
+
+                foreach (var method in baseMethods)
                 {
-                    if (baseMethod.Equals(methodSymbol.OverriddenMethod))
+                    if (method.Equals(methodSymbol.OverriddenMethod))
                     {
                         return true;
                     }
                 }
+
                 baseType = baseType.BaseType;
             }
 
