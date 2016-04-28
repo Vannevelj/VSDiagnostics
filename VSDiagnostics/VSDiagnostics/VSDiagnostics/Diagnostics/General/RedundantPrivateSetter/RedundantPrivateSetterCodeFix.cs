@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using VSDiagnostics.Utilities;
 
 
@@ -24,13 +25,14 @@ namespace VSDiagnostics.Diagnostics.General.RedundantPrivateSetter
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
-            var declaration = root.FindToken(diagnosticSpan.Start);
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.NullableToShorthandCodeFixTitle, x => UseReadOnlyProperty(context.Document, root, declaration), RedundantPrivateSetterAnalyzer.Rule.Id), diagnostic);
+            var declaration = root.FindNode(diagnosticSpan);
+            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.NullableToShorthandCodeFixTitle, x => UseReadOnlyPropertyAsync(context.Document, root, declaration), RedundantPrivateSetterAnalyzer.Rule.Id), diagnostic);
         }
 
-        private Task<Document> UseReadOnlyProperty(Document document, SyntaxNode root, SyntaxToken declaration)
+        private Task<Document> UseReadOnlyPropertyAsync(Document document, SyntaxNode root, SyntaxNode declaration)
         {
-            throw new NotImplementedException();
+            root = root.RemoveNode(declaration, SyntaxRemoveOptions.KeepNoTrivia);
+            return Task.FromResult(document.WithSyntaxRoot(root));
         }
     }
 }

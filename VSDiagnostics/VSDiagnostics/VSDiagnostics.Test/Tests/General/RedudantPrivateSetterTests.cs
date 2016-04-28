@@ -205,7 +205,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        public int MyProperty { get; private set; }
+        public int MyProperty { get; }
 
         public void MyMethod()
         {
