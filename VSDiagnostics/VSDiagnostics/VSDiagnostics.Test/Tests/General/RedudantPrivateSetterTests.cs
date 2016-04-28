@@ -253,5 +253,57 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(new[] {firstTree, secondTree});
         }
+
+        [TestMethod]
+        public void RedundantPrivateSetter_PartialClass_IrrelevantIdentifier()
+        {
+            var firstTree = @"
+namespace ConsoleApplication1
+{
+    partial class MyClass
+    {
+        public int MyProperty { get; private set; }
+
+        public MyClass()
+        {
+            MyProperty = 42;
+        }
+    }
+}";
+
+            var secondTree = @"
+namespace ConsoleApplication1
+{
+    partial class MyClass
+    {
+        public void MyMethod()
+        {
+            var MyProperty = 42;
+        }
+    }
+}";
+
+            VerifyDiagnostic(new[] { firstTree, secondTree }, string.Format(RedundantPrivateSetterAnalyzer.Rule.MessageFormat.ToString(), "MyProperty"));
+        }
+
+        [TestMethod]
+        public void RedundantPrivateSetter_StaticNonConstructorUsage()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public static int MyProperty { get; private set; }
+
+        public static void MyMethod()
+        {
+            MyProperty = 42;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }
