@@ -534,4 +534,13 @@
   <data name="ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerTitle" xml:space="preserve">
     <value>Implement elementary methods.</value>
   </data>
+  <data name="SwitchIsMissingDefaultSectionAnalyzerMessage" xml:space="preserve">
+    <value>Switch should have default section.</value>
+  </data>
+  <data name="SwitchIsMissingDefaultSectionAnalyzerTitle" xml:space="preserve">
+    <value>Switch is missing a default section.</value>
+  </data>
+  <data name="SwitchIsMissingDefaultSectionCodeFixTitle" xml:space="preserve">
+    <value>Add default section</value>
+  </data>
 </root>
