@@ -63,6 +63,7 @@ Currently these diagnostics are implemented:
 | General | VSD0044 | Missing enum member(s) in switched cases.
 | General | VSD0046 | Equals() and GetHashcode() must be implemented together.
 | General | VSD0047 | Implement elementary methods of type used in collection.
+| General | VSD0048 | A property with a private setter can become a read-only property instead.
 | Strings | VSD0034 | Use `string.Empty` instead of `""`.
 | Strings | VSD0035 | Adjusts the placeholders in `string.Format()` calls to be in numerical order.
 | Strings | VSD0042 | A `string.Format()` call lacks arguments and will cause a runtime exception
@@ -76,7 +77,7 @@ Simply head over to [NuGet](https://www.nuget.org/packages/VSDiagnostics/) and i
 
 ## Can I request diagnostics?
 
-Yes, you can! Create an issue and we'll take a look at your proposal. 
+Yes, you can! Create an issue and we'll take a look at your proposal.
 
 ## What if I don't like a diagnostic?
 
