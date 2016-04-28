@@ -40,7 +40,7 @@
         public const string RemoveTestSuffix = "VSD0037";
         public const string TestMethodWithoutPublicModifier = "VSD0038";
         public const string FlagsEnumValuesDontFit = "VSD0039";
-        public const string NamingConventionsConflictingMember = "VSD0040";
+        public const string NamingConventionsConflictingMember = "VSD0040"; // Unused. What to do?
         public const string SyncMethodWithAsyncSuffix = "VSD0041";
         public const string StringDotFormatWithDifferentAmountOfArguments = "VSD0042";
         public const string LoopedRandomInstantiation = "VSD0043";
@@ -48,5 +48,6 @@
         public const string DivideIntegerByInteger = "VSD0045";
         public const string EqualsAndGetHashcodeNotImplementedTogether = "VSD0046";
         public const string RedundantPrivateSetter = "VSD0047";
+        public const string ElementaryMethodsOfTypeInCollectionNotOverridden = "VSD0048";
     }
 }

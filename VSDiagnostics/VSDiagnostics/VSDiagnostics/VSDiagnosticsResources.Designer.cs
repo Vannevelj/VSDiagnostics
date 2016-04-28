@@ -395,6 +395,24 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Implement elementary methods of type used in collection..
+        /// </summary>
+        internal static string ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implement elementary methods..
+        /// </summary>
+        internal static string ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ArgumentException is thrown without a message..
         /// </summary>
         internal static string EmptyArgumentExceptionAnalyzerMessage {

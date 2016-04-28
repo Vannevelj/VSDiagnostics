@@ -45,7 +45,17 @@ namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
                 return false;
             }
 
-            return attributes.Value.Any(x => methodAttributes.Contains(x.Name.ToString()));
+            foreach (var attribute in attributes.Value)
+            {
+                var attributeName = attribute.Name.ToString();
+
+                if (methodAttributes.Contains(attributeName))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

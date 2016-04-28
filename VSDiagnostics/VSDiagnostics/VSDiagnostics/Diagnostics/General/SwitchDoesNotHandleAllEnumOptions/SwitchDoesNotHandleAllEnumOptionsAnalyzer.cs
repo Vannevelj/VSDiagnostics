@@ -5,8 +5,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
-// ReSharper disable LoopCanBeConvertedToQuery
-// ReSharper disable LoopCanBePartlyConvertedToQuery
 
 namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
 {

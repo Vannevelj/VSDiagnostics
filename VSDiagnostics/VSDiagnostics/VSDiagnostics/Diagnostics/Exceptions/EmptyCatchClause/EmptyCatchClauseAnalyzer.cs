@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -37,9 +36,12 @@ namespace VSDiagnostics.Diagnostics.Exceptions.EmptyCatchClause
                 return;
             }
 
-            if (catchClause.Block.CloseBraceToken.LeadingTrivia.Any(x => x.IsCommentTrivia()))
+            foreach (var trivia in catchClause.Block.CloseBraceToken.LeadingTrivia)
             {
-                return;
+                if (trivia.IsCommentTrivia())
+                {
+                    return;
+                }
             }
 
             context.ReportDiagnostic(Diagnostic.Create(Rule, catchClause.CatchKeyword.GetLocation()));

@@ -537,5 +537,11 @@
   </data>
   <data name="RedundantPrivateSetterCodeFixTitle" xml:space="preserve">
     <value>Turn into a read-only property</value>
+    </data>
+  <data name="ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerMessage" xml:space="preserve">
+    <value>Implement elementary methods of type used in collection.</value>
+  </data>
+  <data name="ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerTitle" xml:space="preserve">
+    <value>Implement elementary methods.</value>
   </data>
 </root>

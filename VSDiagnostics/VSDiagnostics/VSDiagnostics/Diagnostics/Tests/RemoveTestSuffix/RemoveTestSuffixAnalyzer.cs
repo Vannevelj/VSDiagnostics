@@ -52,7 +52,16 @@ namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
                 return false;
             }
 
-            return attributes.Value.Any(x => methodAttributes.Contains(x.Name.ToString()));
+            foreach (var attribute in attributes.Value)
+            {
+                var attributeName = attribute.Name.ToString();
+                if (methodAttributes.Contains(attributeName))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
