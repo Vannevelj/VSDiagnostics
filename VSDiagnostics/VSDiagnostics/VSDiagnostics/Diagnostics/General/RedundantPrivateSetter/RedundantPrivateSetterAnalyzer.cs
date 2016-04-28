@@ -52,7 +52,7 @@ namespace VSDiagnostics.Diagnostics.General.RedundantPrivateSetter
 
             // We have to check whether or not the value is being written to
             // Since SymbolFinder does not work in an analyzer, we have to simulate finding the symbol ourselves
-            // We can do this by getting the inner-most class declaration and then looking at all of its descendents
+            // We can do this by getting the inner-most class declaration and then looking at all of its descendants
             // This is a fairly intensive operation but I'm not aware of any alternative
             var classDeclaration = setAccessor.Ancestors().OfType<ClassDeclarationSyntax>(SyntaxKind.ClassDeclaration).First();
             var classSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration);

@@ -29,9 +29,9 @@ namespace VSDiagnostics.Diagnostics.General.RedundantPrivateSetter
             context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.NullableToShorthandCodeFixTitle, x => UseReadOnlyPropertyAsync(context.Document, root, declaration), RedundantPrivateSetterAnalyzer.Rule.Id), diagnostic);
         }
 
-        private Task<Document> UseReadOnlyPropertyAsync(Document document, SyntaxNode root, SyntaxNode declaration)
+        private Task<Document> UseReadOnlyPropertyAsync(Document document, SyntaxNode root, SyntaxNode setAccessor)
         {
-            root = root.RemoveNode(declaration, SyntaxRemoveOptions.KeepNoTrivia);
+            root = root.RemoveNode(setAccessor, SyntaxRemoveOptions.KeepNoTrivia);
             return Task.FromResult(document.WithSyntaxRoot(root));
         }
     }
