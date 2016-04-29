@@ -543,4 +543,13 @@
   <data name="SwitchIsMissingDefaultSectionCodeFixTitle" xml:space="preserve">
     <value>Add default label</value>
   </data>
+  <data name="UsingStatementWithoutBracesAnalyzerMessage" xml:space="preserve">
+    <value>Using statements should use braces.</value>
+  </data>
+  <data name="UsingStatementWithoutBracesAnalyzerTitle" xml:space="preserve">
+    <value>Using statement without braces.</value>
+  </data>
+  <data name="UsingStatementWithoutBracesCodeFixTitle" xml:space="preserve">
+    <value>Add braces</value>
+  </data>
 </root>
