@@ -1070,6 +1070,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Structs should implement Equals(), GetHashCode() and ToString()..
+        /// </summary>
+        internal static string StructWithoutElementaryMethodsOverriddenAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("StructWithoutElementaryMethodsOverriddenAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implement elementary methods.
+        /// </summary>
+        internal static string StructWithoutElementaryMethodsOverriddenAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("StructWithoutElementaryMethodsOverriddenAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implement {0}.
+        /// </summary>
+        internal static string StructWithoutElementaryMethodsOverriddenCodeFixTitle {
+            get {
+                return ResourceManager.GetString("StructWithoutElementaryMethodsOverriddenCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Missing enum member(s) in switched cases..
         /// </summary>
         internal static string SwitchDoesNotHandleAllEnumOptionsAnalyzerMessage {

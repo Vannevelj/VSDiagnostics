@@ -146,6 +146,7 @@
     <Compile Include="Tests\Strings\StringDotFormatWithDifferentAmountOfArgumentsTests.cs" />
     <Compile Include="Tests\Strings\StringPlaceholdersInWrongOrderTests.cs" />
     <Compile Include="Tests\Structs\StructMutateSelfTests.cs" />
+    <Compile Include="Tests\Structs\StructWithoutElementaryMethodsOverriddenTests.cs" />
     <Compile Include="Tests\Tests\RemoveTestSuffixTests.cs" />
     <Compile Include="Tests\Tests\TestMethodWithoutPublicModifierTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

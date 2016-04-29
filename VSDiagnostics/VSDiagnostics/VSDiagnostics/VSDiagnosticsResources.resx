@@ -543,4 +543,13 @@
   <data name="SwitchIsMissingDefaultSectionCodeFixTitle" xml:space="preserve">
     <value>Add default label</value>
   </data>
+  <data name="StructWithoutElementaryMethodsOverriddenAnalyzerMessage" xml:space="preserve">
+    <value>Structs should implement Equals(), GetHashCode() and ToString().</value>
+  </data>
+  <data name="StructWithoutElementaryMethodsOverriddenAnalyzerTitle" xml:space="preserve">
+    <value>Implement elementary methods</value>
+  </data>
+  <data name="StructWithoutElementaryMethodsOverriddenCodeFixTitle" xml:space="preserve">
+    <value>Implement {0}</value>
+  </data>
 </root>
