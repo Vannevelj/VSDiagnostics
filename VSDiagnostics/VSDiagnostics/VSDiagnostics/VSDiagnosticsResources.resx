@@ -449,10 +449,10 @@
     <value>Add attribute</value>
   </data>
   <data name="LoopStatementWithoutBracesAnalyzerMessage" xml:space="preserve">
-    <value>Variable {0} of type System.Random is instantiated in a loop.</value>
+    <value>Loops should use braces to improve code readability and bug prevention.</value>
   </data>
   <data name="LoopStatementWithoutBracesAnalyzerTitle" xml:space="preserve">
-    <value>An instance of type System.Random is created in a loop.</value>
+    <value>Loop instance without braces.</value>
   </data>
   <data name="LoopStatementWithoutBracesCodeFixTitle" xml:space="preserve">
     <value>Use braces</value>
