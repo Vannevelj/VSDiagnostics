@@ -377,24 +377,6 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Implement elementary methods of type used in collection..
-        /// </summary>
-        internal static string ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerMessage {
-            get {
-                return ResourceManager.GetString("ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Implement elementary methods..
-        /// </summary>
-        internal static string ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerTitle {
-            get {
-                return ResourceManager.GetString("ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The operands in the divisive expression {0} are both integers and result in an implicit rounding..
         /// </summary>
         internal static string DivideIntegerByIntegerAnalyzerMessage {
@@ -409,6 +391,24 @@ namespace VSDiagnostics {
         internal static string DivideIntegerByIntegerAnalyzerTitle {
             get {
                 return ResourceManager.GetString("DivideIntegerByIntegerAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implement elementary methods of type used in collection..
+        /// </summary>
+        internal static string ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implement elementary methods..
+        /// </summary>
+        internal static string ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerTitle", resourceCulture);
             }
         }
         
@@ -1093,6 +1093,33 @@ namespace VSDiagnostics {
         internal static string SwitchDoesNotHandleAllEnumOptionsCodeFixTitle {
             get {
                 return ResourceManager.GetString("SwitchDoesNotHandleAllEnumOptionsCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch should have default section..
+        /// </summary>
+        internal static string SwitchIsMissingDefaultSectionAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("SwitchIsMissingDefaultSectionAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch is missing a default section..
+        /// </summary>
+        internal static string SwitchIsMissingDefaultSectionAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("SwitchIsMissingDefaultSectionAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add default section.
+        /// </summary>
+        internal static string SwitchIsMissingDefaultSectionCodeFixTitle {
+            get {
+                return ResourceManager.GetString("SwitchIsMissingDefaultSectionCodeFixTitle", resourceCulture);
             }
         }
         
