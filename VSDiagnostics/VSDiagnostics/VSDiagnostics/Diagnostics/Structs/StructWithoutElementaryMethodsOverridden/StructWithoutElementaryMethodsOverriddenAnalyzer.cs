@@ -59,8 +59,8 @@ namespace VSDiagnostics.Diagnostics.Structs.StructWithoutElementaryMethodsOverri
             var structDeclaration = (StructDeclarationSyntax)context.Node;
 
             var equalsImplemented = false;
-            var getHashcodeImplemented = false;
-            var getToStringImplemented = false;
+            var getHashCodeImplemented = false;
+            var toStringImplemented = false;
 
             foreach (var node in structDeclaration.Members)
             {
@@ -95,25 +95,25 @@ namespace VSDiagnostics.Diagnostics.Structs.StructWithoutElementaryMethodsOverri
 
                 if (methodSymbol == objectGetHashCode)
                 {
-                    getHashcodeImplemented = true;
+                    getHashCodeImplemented = true;
                 }
 
                 if (methodSymbol == objectToString)
                 {
-                    getToStringImplemented = true;
+                    toStringImplemented = true;
                 }
             }
 
-            if (!equalsImplemented || !getHashcodeImplemented || !getToStringImplemented)
+            if (!equalsImplemented || !getHashCodeImplemented || !toStringImplemented)
             {
                 var isEqualsImplemented = new KeyValuePair<string, string>("IsEqualsImplemented", equalsImplemented.ToString());
-                var isGetHashcodeImplemented = new KeyValuePair<string, string>("IsGetHashCodeImplemented", getHashcodeImplemented.ToString());
-                var isGetToStringImplemented = new KeyValuePair<string, string>("IsToStringImplemented", getToStringImplemented.ToString());
+                var isGetHashcodeImplemented = new KeyValuePair<string, string>("IsGetHashCodeImplemented", getHashCodeImplemented.ToString());
+                var isGetToStringImplemented = new KeyValuePair<string, string>("IsToStringImplemented", toStringImplemented.ToString());
 
                 var properties = ImmutableDictionary.CreateRange(new[]
                     {isEqualsImplemented, isGetHashcodeImplemented, isGetToStringImplemented});
 
-                context.ReportDiagnostic(Diagnostic.Create(Rule, structDeclaration.Identifier.GetLocation(), properties));
+                context.ReportDiagnostic(Diagnostic.Create(Rule, structDeclaration.Identifier.GetLocation(), properties, structDeclaration.Identifier));
             }
         }
     }

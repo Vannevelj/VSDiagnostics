@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,6 +17,13 @@ namespace VSDiagnostics.Diagnostics.Structs.StructWithoutElementaryMethodsOverri
     [ExportCodeFixProvider(DiagnosticId.StructWithoutElementaryMethodsOverridden + "CF", LanguageNames.CSharp), Shared]
     public class StructWithoutElementaryMethodsOverriddenCodeFix : CodeFixProvider
     {
+        static StructWithoutElementaryMethodsOverriddenCodeFix()
+        {
+            EqualsMethod = GetEqualsMethod();
+            GetHashCodeMethod = GetGetHashCodeMethod();
+            ToStringMethod = GetToStringMethod();
+        }
+
         public override ImmutableArray<string> FixableDiagnosticIds
             => ImmutableArray.Create(StructWithoutElementaryMethodsOverriddenAnalyzer.Rule.Id);
 
@@ -27,21 +35,37 @@ namespace VSDiagnostics.Diagnostics.Structs.StructWithoutElementaryMethodsOverri
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
-            string implementEquals;
-            string implementGetHashCode;
-            string implementToString;
+            string implementEqualsString;
+            string implementGetHashCodeString;
+            string implementToStringString;
 
-            diagnostic.Properties.TryGetValue("IsEqualsImplemented", out implementEquals);
-            diagnostic.Properties.TryGetValue("IsGetHashCodeImplemented", out implementGetHashCode);
-            diagnostic.Properties.TryGetValue("IsToStringImplemented", out implementToString);
+            diagnostic.Properties.TryGetValue("IsEqualsImplemented", out implementEqualsString);
+            diagnostic.Properties.TryGetValue("IsGetHashCodeImplemented", out implementGetHashCodeString);
+            diagnostic.Properties.TryGetValue("IsToStringImplemented", out implementToStringString);
+            
+            var implementEquals = bool.Parse(implementEqualsString);
+            var implementGetHashCode = bool.Parse(implementGetHashCodeString);
+            var implementToString = bool.Parse(implementToStringString);
+
+            var dict = new Dictionary<string, bool>
+                {
+                    {"Equals()", implementEquals},
+                    {"GetHashCode()", implementGetHashCode},
+                    {"ToString()", implementToString}
+                };
 
             var statement = root.FindNode(diagnosticSpan);
 
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.ReplaceEmptyStringWithStringDotEmptyCodeFixTitle,
+            context.RegisterCodeFix(CodeAction.Create(
+                string.Format(VSDiagnosticsResources.StructWithoutElementaryMethodsOverriddenCodeFixTitle, FormatMissingMembers(dict)),
                     x => AddMissingMethodsAsync(context.Document, root, (StructDeclarationSyntax) statement,
-                            bool.Parse(implementEquals), bool.Parse(implementGetHashCode), bool.Parse(implementToString)),
+                            implementEquals, implementGetHashCode, implementToString),
                     StructWithoutElementaryMethodsOverriddenAnalyzer.Rule.Id), diagnostic);
         }
+
+        private static readonly MethodDeclarationSyntax EqualsMethod;
+        private static readonly MethodDeclarationSyntax GetHashCodeMethod;
+        private static readonly MethodDeclarationSyntax ToStringMethod;
 
         private Task<Document> AddMissingMethodsAsync(Document document, SyntaxNode root,
             StructDeclarationSyntax statement, bool implementEquals, bool implementGetHashCode,
@@ -51,24 +75,24 @@ namespace VSDiagnostics.Diagnostics.Structs.StructWithoutElementaryMethodsOverri
 
             if (!implementEquals)
             {
-                newStatement = newStatement.AddMembers(GetEqualsMethod());
+                newStatement = newStatement.AddMembers(EqualsMethod);
             }
 
             if (!implementGetHashCode)
             {
-                newStatement = newStatement.AddMembers(GetGetHashCodeMethod());
+                newStatement = newStatement.AddMembers(GetHashCodeMethod);
             }
 
             if (!implementToString)
             {
-                newStatement = newStatement.AddMembers(GetToStringMethod());
+                newStatement = newStatement.AddMembers(ToStringMethod);
             }
 
             var newRoot = root.ReplaceNode(statement, newStatement);
             return Task.FromResult(document.WithSyntaxRoot(newRoot));
         }
 
-        private MethodDeclarationSyntax GetEqualsMethod()
+        private static MethodDeclarationSyntax GetEqualsMethod()
         {
             var publicModifier = SyntaxFactory.Token(SyntaxKind.PublicKeyword);
             var overrideModifier = SyntaxFactory.Token(SyntaxKind.OverrideKeyword);
@@ -84,7 +108,7 @@ namespace VSDiagnostics.Diagnostics.Structs.StructWithoutElementaryMethodsOverri
                     .WithAdditionalAnnotations(Formatter.Annotation);
         }
 
-        private MethodDeclarationSyntax GetGetHashCodeMethod()
+        private static MethodDeclarationSyntax GetGetHashCodeMethod()
         {
             var publicModifier = SyntaxFactory.Token(SyntaxKind.PublicKeyword);
             var overrideModifier = SyntaxFactory.Token(SyntaxKind.OverrideKeyword);
@@ -97,7 +121,7 @@ namespace VSDiagnostics.Diagnostics.Structs.StructWithoutElementaryMethodsOverri
                     .WithAdditionalAnnotations(Formatter.Annotation);
         }
 
-        private MethodDeclarationSyntax GetToStringMethod()
+        private static MethodDeclarationSyntax GetToStringMethod()
         {
             var publicModifier = SyntaxFactory.Token(SyntaxKind.PublicKeyword);
             var overrideModifier = SyntaxFactory.Token(SyntaxKind.OverrideKeyword);
@@ -108,6 +132,46 @@ namespace VSDiagnostics.Diagnostics.Structs.StructWithoutElementaryMethodsOverri
                     .AddModifiers(publicModifier, overrideModifier)
                     .AddBodyStatements(bodyStatement)
                     .WithAdditionalAnnotations(Formatter.Annotation);
+        }
+
+        private string FormatMissingMembers(Dictionary<string, bool> members)
+        {
+            // if we get this far, there are at least 1 missing members
+            var missingMemberCount = 0;
+            foreach (var member in members)
+            {
+                if (!member.Value)
+                {
+                    missingMemberCount++;
+                }
+            }
+
+            var value = string.Empty;
+            for (var i = 0; i < members.Count; i++)
+            {
+                if (members.ElementAt(i).Value)
+                {
+                    continue;
+                }
+
+                if (missingMemberCount == 2 && !string.IsNullOrEmpty(value))
+                {
+                    value += " and ";
+                }
+
+                value += members.ElementAt(i).Key;
+                
+                if (missingMemberCount == 3 && i == 0)
+                {
+                    value += ", ";
+                }
+                else if (missingMemberCount == 3 && i == 1)
+                {
+                    value += ", and ";
+                }
+            }
+
+            return value;
         }
     }
 }

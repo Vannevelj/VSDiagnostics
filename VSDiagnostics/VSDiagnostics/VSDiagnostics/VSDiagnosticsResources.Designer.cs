@@ -1070,7 +1070,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Structs should implement Equals(), GetHashCode() and ToString()..
+        ///   Looks up a localized string similar to Implement elementary methods on struct {0}..
         /// </summary>
         internal static string StructWithoutElementaryMethodsOverriddenAnalyzerMessage {
             get {
@@ -1079,7 +1079,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Implement elementary methods.
+        ///   Looks up a localized string similar to Structs should implement Equals(), GetHashCode(), and ToString()..
         /// </summary>
         internal static string StructWithoutElementaryMethodsOverriddenAnalyzerTitle {
             get {

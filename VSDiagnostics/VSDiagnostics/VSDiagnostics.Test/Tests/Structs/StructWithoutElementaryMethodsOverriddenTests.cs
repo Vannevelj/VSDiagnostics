@@ -39,7 +39,7 @@ struct X
     }
 }";
 
-            VerifyDiagnostic(original, StructWithoutElementaryMethodsOverriddenAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, string.Format(StructWithoutElementaryMethodsOverriddenAnalyzer.Rule.MessageFormat.ToString(), "X"));
             VerifyFix(original, result);
         }
 
@@ -74,7 +74,7 @@ struct X
     }
 }";
 
-            VerifyDiagnostic(original, StructWithoutElementaryMethodsOverriddenAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, string.Format(StructWithoutElementaryMethodsOverriddenAnalyzer.Rule.MessageFormat.ToString(), "X"));
             VerifyFix(original, result);
         }
 
@@ -109,7 +109,7 @@ struct X
     }
 }";
 
-            VerifyDiagnostic(original, StructWithoutElementaryMethodsOverriddenAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, string.Format(StructWithoutElementaryMethodsOverriddenAnalyzer.Rule.MessageFormat.ToString(), "X"));
             VerifyFix(original, result);
         }
 
@@ -144,7 +144,7 @@ struct X
     }
 }";
 
-            VerifyDiagnostic(original, StructWithoutElementaryMethodsOverriddenAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, string.Format(StructWithoutElementaryMethodsOverriddenAnalyzer.Rule.MessageFormat.ToString(), "X"));
             VerifyFix(original, result);
         }
 
@@ -184,7 +184,7 @@ struct X
     }
 }";
 
-            VerifyDiagnostic(original, StructWithoutElementaryMethodsOverriddenAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, string.Format(StructWithoutElementaryMethodsOverriddenAnalyzer.Rule.MessageFormat.ToString(), "X"));
             VerifyFix(original, result);
         }
 
