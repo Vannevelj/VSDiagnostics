@@ -107,8 +107,8 @@ namespace VSDiagnostics.Diagnostics.Structs.StructWithoutElementaryMethodsOverri
             if (!equalsImplemented || !getHashcodeImplemented || !getToStringImplemented)
             {
                 var isEqualsImplemented = new KeyValuePair<string, string>("IsEqualsImplemented", equalsImplemented.ToString());
-                var isGetHashcodeImplemented = new KeyValuePair<string, string>("IsGetHashcodeImplemented", equalsImplemented.ToString());
-                var isGetToStringImplemented = new KeyValuePair<string, string>("IsGetToStringImplemented", equalsImplemented.ToString());
+                var isGetHashcodeImplemented = new KeyValuePair<string, string>("IsGetHashCodeImplemented", getHashcodeImplemented.ToString());
+                var isGetToStringImplemented = new KeyValuePair<string, string>("IsToStringImplemented", getToStringImplemented.ToString());
 
                 var properties = ImmutableDictionary.CreateRange(new[]
                     {isEqualsImplemented, isGetHashcodeImplemented, isGetToStringImplemented});

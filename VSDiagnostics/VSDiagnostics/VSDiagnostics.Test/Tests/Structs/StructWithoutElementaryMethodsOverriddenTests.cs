@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoslynTester.Helpers.CSharp;
 using VSDiagnostics.Diagnostics.Structs.StructWithoutElementaryMethodsOverridden;
@@ -6,9 +7,10 @@ using VSDiagnostics.Diagnostics.Structs.StructWithoutElementaryMethodsOverridden
 namespace VSDiagnostics.Test.Tests.Structs
 {
     [TestClass]
-    public class StructWithoutElementaryMethodsOverriddenTests : CSharpDiagnosticVerifier
+    public class StructWithoutElementaryMethodsOverriddenTests : CSharpCodeFixVerifier
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new StructWithoutElementaryMethodsOverriddenAnalyzer();
+        protected override CodeFixProvider CodeFixProvider => new StructWithoutElementaryMethodsOverriddenCodeFix();
 
         [TestMethod]
         public void StructWithoutElementaryMethodsOverridden_NoMethodsImplemented()
@@ -18,7 +20,27 @@ struct X
 {
 }";
 
+            var result = @"
+struct X
+{
+    public override bool Equals(object obj)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override int GetHashCode()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override string ToString()
+    {
+        throw new System.NotImplementedException();
+    }
+}";
+
             VerifyDiagnostic(original, StructWithoutElementaryMethodsOverriddenAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -33,7 +55,27 @@ struct X
     }
 }";
 
+            var result = @"
+struct X
+{
+    public override bool Equals(object obj)
+    {
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override string ToString()
+    {
+        throw new System.NotImplementedException();
+    }
+}";
+
             VerifyDiagnostic(original, StructWithoutElementaryMethodsOverriddenAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -48,7 +90,27 @@ struct X
     }
 }";
 
+            var result = @"
+struct X
+{
+    public override int GetHashCode()
+    {
+        return 0;
+    }
+
+    public override bool Equals(object obj)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override string ToString()
+    {
+        throw new System.NotImplementedException();
+    }
+}";
+
             VerifyDiagnostic(original, StructWithoutElementaryMethodsOverriddenAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -63,7 +125,27 @@ struct X
     }
 }";
 
+            var result = @"
+struct X
+{
+    public override string ToString()
+    {
+        return string.Empty;
+    }
+
+    public override bool Equals(object obj)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override int GetHashCode()
+    {
+        throw new System.NotImplementedException();
+    }
+}";
+
             VerifyDiagnostic(original, StructWithoutElementaryMethodsOverriddenAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
 
         [TestMethod]
@@ -83,7 +165,27 @@ struct X
     }
 }";
 
+            var result = @"
+struct X
+{
+    public override bool Equals(object obj)
+    {
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return 0;
+    }
+
+    public override string ToString()
+    {
+        throw new System.NotImplementedException();
+    }
+}";
+
             VerifyDiagnostic(original, StructWithoutElementaryMethodsOverriddenAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
         }
 
         [TestMethod]
