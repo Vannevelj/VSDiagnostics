@@ -34,10 +34,6 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
         {
             var methodDeclaration = (MethodDeclarationSyntax)context.Node;
             var parentClass = methodDeclaration.Ancestors().OfType<ClassDeclarationSyntax>(SyntaxKind.ClassDeclaration).FirstOrDefault();
-            if (parentClass == null)
-            {
-                return;
-            }
 
             var typeSymbol = context.SemanticModel.GetDeclaredSymbol(parentClass);
 
