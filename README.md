@@ -77,7 +77,7 @@ Simply head over to [NuGet](https://www.nuget.org/packages/VSDiagnostics/) and i
 
 ## Can I request diagnostics?
 
-Yes, you can! Create an issue and we'll take a look at your proposal. 
+Yes, you can! Create an issue and we'll take a look at your proposal.
 
 ## What if I don't like a diagnostic?
 
