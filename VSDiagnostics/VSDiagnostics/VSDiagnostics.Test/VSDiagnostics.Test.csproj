@@ -130,6 +130,7 @@
     <Compile Include="Tests\General\GotoDetectionTests.cs" />
     <Compile Include="Tests\General\IfStatementWithoutBracesTests.cs" />
     <Compile Include="Tests\General\LoopedRandomInstantiationTests.cs" />
+    <Compile Include="Tests\General\UsingStatementWithoutBracesTests.cs" />
     <Compile Include="Tests\General\LoopStatementWithoutBracesTests.cs" />
     <Compile Include="Tests\General\NonEncapsulatedOrMutableFieldTests.cs" />
     <Compile Include="Tests\General\NamingConventionsTests.cs" />
