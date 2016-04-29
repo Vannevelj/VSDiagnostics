@@ -1097,7 +1097,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Switch should have default section..
+        ///   Looks up a localized string similar to Switch should have default label..
         /// </summary>
         internal static string SwitchIsMissingDefaultSectionAnalyzerMessage {
             get {
@@ -1106,7 +1106,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Switch is missing a default section..
+        ///   Looks up a localized string similar to Switch is missing a default label..
         /// </summary>
         internal static string SwitchIsMissingDefaultSectionAnalyzerTitle {
             get {
@@ -1115,7 +1115,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add default section.
+        ///   Looks up a localized string similar to Add default label.
         /// </summary>
         internal static string SwitchIsMissingDefaultSectionCodeFixTitle {
             get {

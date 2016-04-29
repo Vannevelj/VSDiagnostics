@@ -535,12 +535,12 @@
     <value>Implement elementary methods.</value>
   </data>
   <data name="SwitchIsMissingDefaultSectionAnalyzerMessage" xml:space="preserve">
-    <value>Switch should have default section.</value>
+    <value>Switch should have default label.</value>
   </data>
   <data name="SwitchIsMissingDefaultSectionAnalyzerTitle" xml:space="preserve">
-    <value>Switch is missing a default section.</value>
+    <value>Switch is missing a default label.</value>
   </data>
   <data name="SwitchIsMissingDefaultSectionCodeFixTitle" xml:space="preserve">
-    <value>Add default section</value>
+    <value>Add default label</value>
   </data>
 </root>
