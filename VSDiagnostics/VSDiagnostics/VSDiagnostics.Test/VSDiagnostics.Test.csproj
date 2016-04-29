@@ -138,6 +138,7 @@
     <Compile Include="Tests\General\SimplifyExpressionBodiedMemberTests.cs" />
     <Compile Include="Tests\General\SingleEmptyConstructorTests.cs" />
     <Compile Include="Tests\General\SwitchDoesNotHandleAllEnumOptionsTests.cs" />
+    <Compile Include="Tests\General\SwitchIsMissingDefaultLabelTests.cs" />
     <Compile Include="Tests\General\TryCastUsingAsNotNullInsteadOfIsAsTests.cs" />
     <Compile Include="Tests\General\TypeToVarTests.cs" />
     <Compile Include="Tests\General\UseAliasesInsteadOfConcreteTypeTests.cs" />
