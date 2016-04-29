@@ -63,6 +63,7 @@ Currently these diagnostics are implemented:
 | General | VSD0044 | Missing enum member(s) in switched cases.
 | General | VSD0046 | Equals() and GetHashcode() must be implemented together.
 | General | VSD0047 | Implement elementary methods of type used in collection.
+| General | VSD0049 | Switch is missing a default label.
 | Strings | VSD0034 | Use `string.Empty` instead of `""`.
 | Strings | VSD0035 | Adjusts the placeholders in `string.Format()` calls to be in numerical order.
 | Strings | VSD0042 | A `string.Format()` call lacks arguments and will cause a runtime exception
