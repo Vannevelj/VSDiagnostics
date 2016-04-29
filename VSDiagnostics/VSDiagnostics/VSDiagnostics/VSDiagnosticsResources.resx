@@ -495,10 +495,10 @@
     <value>Invalid arguments for the string.Format() call.</value>
   </data>
   <data name="LoopedRandomInstantiationAnalyzerMessage" xml:space="preserve">
-    <value>Instantiate the random instance outside the loop.</value>
+    <value>Variable {0} of type System.Random is instantiated in a loop.</value>
   </data>
   <data name="LoopedRandomInstantiationAnalyzerTitle" xml:space="preserve">
-    <value>Random instance created in loop.</value>
+    <value>An instance of type System.Random is created in a loop.</value>
   </data>
   <data name="SwitchDoesNotHandleAllEnumOptionsAnalyzerMessage" xml:space="preserve">
     <value>Missing enum member(s) in switched cases.</value>
