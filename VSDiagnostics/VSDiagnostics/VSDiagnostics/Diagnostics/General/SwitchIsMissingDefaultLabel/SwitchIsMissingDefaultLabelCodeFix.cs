@@ -38,7 +38,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchIsMissingDefaultLabel
         private async Task<Document> AddDefaultCaseAsync(Document document, CompilationUnitSyntax root, SwitchStatementSyntax switchBlock)
         {
             var notImplementedException =
-                SyntaxFactory.ThrowStatement(SyntaxFactory.ParseExpression("new System.NotImplementedException()"))
+                SyntaxFactory.ThrowStatement(SyntaxFactory.ParseExpression("new System.ArgumentException()"))
                              .WithAdditionalAnnotations(Simplifier.Annotation, Formatter.Annotation);
             var statements = SyntaxFactory.List(new List<StatementSyntax> { notImplementedException });
 

@@ -57,7 +57,7 @@ namespace ConsoleApplication1
                 case MyEnum.Buzz:
                     break;
                 default:
-                    throw new System.NotImplementedException();
+                    throw new System.ArgumentException();
             }
         }
     }
@@ -102,7 +102,7 @@ namespace ConsoleApplication1
                 case ""test1"":
                     break;
                 default:
-                    throw new System.NotImplementedException();
+                    throw new System.ArgumentException();
             }
         }
     }
@@ -172,7 +172,7 @@ namespace ConsoleApplication1
                 case 6:
                     break;
                 default:
-                    throw new System.NotImplementedException();
+                    throw new System.ArgumentException();
             }
         }
     }
