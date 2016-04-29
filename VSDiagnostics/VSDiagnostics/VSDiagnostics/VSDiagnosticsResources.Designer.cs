@@ -1266,5 +1266,32 @@ namespace VSDiagnostics {
                 return ResourceManager.GetString("UseAliasesInsteadOfConcreteTypeCodeFixTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using statements should use braces..
+        /// </summary>
+        internal static string UsingStatementWithoutBracesAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("UsingStatementWithoutBracesAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using statement without braces..
+        /// </summary>
+        internal static string UsingStatementWithoutBracesAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("UsingStatementWithoutBracesAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add braces.
+        /// </summary>
+        internal static string UsingStatementWithoutBracesCodeFixTitle {
+            get {
+                return ResourceManager.GetString("UsingStatementWithoutBracesCodeFixTitle", resourceCulture);
+            }
+        }
     }
 }
