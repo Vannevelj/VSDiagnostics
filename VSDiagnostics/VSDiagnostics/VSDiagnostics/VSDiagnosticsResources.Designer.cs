@@ -638,7 +638,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Instantiate the random instance outside the loop..
+        ///   Looks up a localized string similar to Variable {0} of type System.Random is instantiated in a loop..
         /// </summary>
         internal static string LoopedRandomInstantiationAnalyzerMessage {
             get {
@@ -647,7 +647,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Random instance created in loop..
+        ///   Looks up a localized string similar to An instance of type System.Random is created in a loop..
         /// </summary>
         internal static string LoopedRandomInstantiationAnalyzerTitle {
             get {
@@ -656,7 +656,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable {0} of type System.Random is instantiated in a loop..
+        ///   Looks up a localized string similar to Loops should use braces to improve code readability and bug prevention..
         /// </summary>
         internal static string LoopStatementWithoutBracesAnalyzerMessage {
             get {
@@ -665,7 +665,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An instance of type System.Random is created in a loop..
+        ///   Looks up a localized string similar to Loop instance without braces..
         /// </summary>
         internal static string LoopStatementWithoutBracesAnalyzerTitle {
             get {
