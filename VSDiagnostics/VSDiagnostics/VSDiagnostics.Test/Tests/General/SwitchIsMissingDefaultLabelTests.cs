@@ -57,7 +57,7 @@ namespace ConsoleApplication1
                 case MyEnum.Buzz:
                     break;
                 default:
-                    throw new System.ArgumentException();
+                    throw new System.ArgumentException(nameof(e));
             }
         }
     }
@@ -102,7 +102,93 @@ namespace ConsoleApplication1
                 case ""test1"":
                     break;
                 default:
-                    throw new System.ArgumentException();
+                    throw new System.ArgumentException(nameof(e));
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, SwitchIsMissingDefaultLabelAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void SwitchIsMissingDefaultLabel_MissingDefaultStatement_SwitchOnStringLiteral()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            switch (""test"")
+            {
+                case ""test"":
+                case ""test1"":
+                    break;
+            }
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            switch (""test"")
+            {
+                case ""test"":
+                case ""test1"":
+                    break;
+                default:
+                    throw new System.ArgumentException(""test"");
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, SwitchIsMissingDefaultLabelAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void SwitchIsMissingDefaultLabel_MissingDefaultStatement_SwitchOnIntegerLiteral()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            switch (0)
+            {
+                case 0:
+                case 1:
+                    break;
+            }
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            switch (0)
+            {
+                case 0:
+                case 1:
+                    break;
+                default:
+                    throw new System.ArgumentException(0.ToString());
             }
         }
     }
@@ -172,7 +258,93 @@ namespace ConsoleApplication1
                 case 6:
                     break;
                 default:
-                    throw new System.ArgumentException();
+                    throw new System.ArgumentException(nameof(x));
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, SwitchIsMissingDefaultLabelAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void SwitchIsMissingDefaultLabel_MissingDefaultStatement_SwitchOnParenthsizedStringLiteral()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            switch ((""test""))
+            {
+                case ""test"":
+                case ""test1"":
+                    break;
+            }
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            switch ((""test""))
+            {
+                case ""test"":
+                case ""test1"":
+                    break;
+                default:
+                    throw new System.ArgumentException((""test"").ToString());
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, SwitchIsMissingDefaultLabelAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void SwitchIsMissingDefaultLabel_MissingDefaultStatement_SwitchOnParenthsizedIntegerLiteral()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            switch ((0))
+            {
+                case 0:
+                case 1:
+                    break;
+            }
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            switch ((0))
+            {
+                case 0:
+                case 1:
+                    break;
+                default:
+                    throw new System.ArgumentException((0).ToString());
             }
         }
     }
