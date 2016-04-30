@@ -65,6 +65,7 @@ Currently these diagnostics are implemented:
 | General | VSD0047 | Implement elementary methods of type used in collection.
 | General | VSD0050 | Struct does not override elementary methods.
 | General | VSD0049 | Switch is missing a default label.
+| General | VSD0051 | Using statement is missing braces.
 | Strings | VSD0034 | Use `string.Empty` instead of `""`.
 | Strings | VSD0035 | Adjusts the placeholders in `string.Format()` calls to be in numerical order.
 | Strings | VSD0042 | A `string.Format()` call lacks arguments and will cause a runtime exception
@@ -78,7 +79,7 @@ Simply head over to [NuGet](https://www.nuget.org/packages/VSDiagnostics/) and i
 
 ## Can I request diagnostics?
 
-Yes, you can! Create an issue and we'll take a look at your proposal. 
+Yes, you can! Create an issue and we'll take a look at your proposal.
 
 ## What if I don't like a diagnostic?
 
@@ -112,4 +113,4 @@ Release 2.0.0 will come with a website where we document every diagnostic includ
 
 ## How can I get in contact?
 
-You're always free to open an issue but if you would like something more direct you can drop by in [the StackExchange chat channel](http://chat.stackexchange.com/rooms/26639/vsdiagnostics) where the main contributors reside.
+You're always free to open an issue but if you would like something more direct you can drop by in [the StackExchange chat channel](http://chat.stackexchange.com/rooms/26639/vsdiagnostics) where the main contributors reside or send an email to jer_vannevel@outlook.com.

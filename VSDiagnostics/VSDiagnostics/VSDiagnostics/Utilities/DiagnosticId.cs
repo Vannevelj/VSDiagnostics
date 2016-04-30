@@ -50,5 +50,6 @@
         public const string ElementaryMethodsOfTypeInCollectionNotOverridden = "VSD0047";
         public const string SwitchIsMissingDefaultLabel = "VSD0049";
         public const string StructWithoutElementaryMethodsOverridden = "VSD0050";
+        public const string UsingStatementWithoutBraces = "VSD0051";
     }
 }

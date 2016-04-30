@@ -102,6 +102,8 @@
     <Compile Include="Diagnostics\General\TypeToVar\TypeToVarCodeFix.cs" />
     <Compile Include="Diagnostics\General\UseAliasesInsteadOfConcreteType\UseAliasesInsteadOfConcreteTypeCodeFix.cs" />
     <Compile Include="Diagnostics\General\UseAliasesInsteadOfConcreteType\UseAliasesInsteadOfConcreteTypeAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\UsingStatementWithoutBraces\UsingStatementWithoutBracesAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\UsingStatementWithoutBraces\UsingStatementWithoutBracesCodeFix.cs" />
     <Compile Include="Diagnostics\Strings\ReplaceEmptyStringWithStringDotEmpty\ReplaceEmptyStringWithStringDotEmptyAnalyzer.cs" />
     <Compile Include="Diagnostics\Strings\ReplaceEmptyStringWithStringDotEmpty\ReplaceEmptyStringWithStringDotEmptyCodeFix.cs" />
     <Compile Include="Diagnostics\Strings\StringDotFormatWithDifferentAmountOfArguments\StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.cs" />

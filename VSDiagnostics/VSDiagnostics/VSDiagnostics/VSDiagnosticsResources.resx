@@ -449,10 +449,10 @@
     <value>Add attribute</value>
   </data>
   <data name="LoopStatementWithoutBracesAnalyzerMessage" xml:space="preserve">
-    <value>Variable {0} of type System.Random is instantiated in a loop.</value>
+    <value>Loops should use braces to improve code readability and bug prevention.</value>
   </data>
   <data name="LoopStatementWithoutBracesAnalyzerTitle" xml:space="preserve">
-    <value>An instance of type System.Random is created in a loop.</value>
+    <value>Loop instance without braces.</value>
   </data>
   <data name="LoopStatementWithoutBracesCodeFixTitle" xml:space="preserve">
     <value>Use braces</value>
@@ -495,10 +495,10 @@
     <value>Invalid arguments for the string.Format() call.</value>
   </data>
   <data name="LoopedRandomInstantiationAnalyzerMessage" xml:space="preserve">
-    <value>Instantiate the random instance outside the loop.</value>
+    <value>Variable {0} of type System.Random is instantiated in a loop.</value>
   </data>
   <data name="LoopedRandomInstantiationAnalyzerTitle" xml:space="preserve">
-    <value>Random instance created in loop.</value>
+    <value>An instance of type System.Random is created in a loop.</value>
   </data>
   <data name="SwitchDoesNotHandleAllEnumOptionsAnalyzerMessage" xml:space="preserve">
     <value>Missing enum member(s) in switched cases.</value>
@@ -551,5 +551,14 @@
   </data>
   <data name="StructWithoutElementaryMethodsOverriddenCodeFixTitle" xml:space="preserve">
     <value>Implement {0}</value>
+  </data>
+  <data name="UsingStatementWithoutBracesAnalyzerMessage" xml:space="preserve">
+    <value>Using statements should use braces.</value>
+  </data>
+  <data name="UsingStatementWithoutBracesAnalyzerTitle" xml:space="preserve">
+    <value>Using statement without braces.</value>
+  </data>
+  <data name="UsingStatementWithoutBracesCodeFixTitle" xml:space="preserve">
+    <value>Add braces</value>
   </data>
 </root>

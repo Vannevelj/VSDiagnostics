@@ -142,6 +142,7 @@
     <Compile Include="Tests\General\TryCastUsingAsNotNullInsteadOfIsAsTests.cs" />
     <Compile Include="Tests\General\TypeToVarTests.cs" />
     <Compile Include="Tests\General\UseAliasesInsteadOfConcreteTypeTests.cs" />
+    <Compile Include="Tests\General\UsingStatementWithoutBracesTests.cs" />
     <Compile Include="Tests\Strings\ReplaceEmptyStringWithStringDotEmptyTests.cs" />
     <Compile Include="Tests\Strings\StringDotFormatWithDifferentAmountOfArgumentsTests.cs" />
     <Compile Include="Tests\Strings\StringPlaceholdersInWrongOrderTests.cs" />

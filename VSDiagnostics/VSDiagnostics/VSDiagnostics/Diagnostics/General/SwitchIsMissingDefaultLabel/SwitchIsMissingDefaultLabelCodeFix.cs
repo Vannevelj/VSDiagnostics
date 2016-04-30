@@ -37,15 +37,31 @@ namespace VSDiagnostics.Diagnostics.General.SwitchIsMissingDefaultLabel
 
         private async Task<Document> AddDefaultCaseAsync(Document document, CompilationUnitSyntax root, SwitchStatementSyntax switchBlock)
         {
-            var notImplementedException =
-                SyntaxFactory.ThrowStatement(SyntaxFactory.ParseExpression("new System.NotImplementedException()"))
+            var model = await document.GetSemanticModelAsync();
+
+            var symbol = model.GetSymbolInfo(switchBlock.Expression).Symbol;
+            string expression;
+            if (symbol != null)
+            {
+                expression = $"nameof({symbol.Name})";
+            }
+            else if (switchBlock.Expression.IsKind(SyntaxKind.StringLiteralExpression))
+            {
+                expression = $"{switchBlock.Expression}";
+            }
+            else
+            {
+                expression = $"{switchBlock.Expression}.ToString()";
+            }
+
+            var argumentException =
+                SyntaxFactory.ThrowStatement(SyntaxFactory.ParseExpression($"new System.ArgumentException({expression})"))
                              .WithAdditionalAnnotations(Simplifier.Annotation, Formatter.Annotation);
-            var statements = SyntaxFactory.List(new List<StatementSyntax> { notImplementedException });
+            var statements = SyntaxFactory.List(new List<StatementSyntax> { argumentException });
 
             var defaultCase = SyntaxFactory.SwitchSection(SyntaxFactory.List<SwitchLabelSyntax>(new[] { SyntaxFactory.DefaultSwitchLabel() }), statements);
 
-            var newNode = switchBlock.AddSections(defaultCase.WithAdditionalAnnotations(Formatter.Annotation,
-                    Simplifier.Annotation));
+            var newNode = switchBlock.AddSections(defaultCase.WithAdditionalAnnotations(Formatter.Annotation, Simplifier.Annotation));
 
             var newRoot = root.ReplaceNode(switchBlock, newNode);
             return await Simplifier.ReduceAsync(document.WithSyntaxRoot(newRoot));
