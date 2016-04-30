@@ -63,6 +63,7 @@ Currently these diagnostics are implemented:
 | General | VSD0044 | Missing enum member(s) in switched cases.
 | General | VSD0046 | Equals() and GetHashcode() must be implemented together.
 | General | VSD0047 | Implement elementary methods of type used in collection.
+| General | VSD0050 | Struct does not override elementary methods.
 | General | VSD0049 | Switch is missing a default label.
 | General | VSD0051 | Using statement is missing braces.
 | Strings | VSD0034 | Use `string.Empty` instead of `""`.

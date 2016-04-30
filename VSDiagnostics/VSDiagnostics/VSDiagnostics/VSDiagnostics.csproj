@@ -111,6 +111,8 @@
     <Compile Include="Diagnostics\Strings\StringPlaceholdersInWrongOrder\StringPlaceholdersInWrongOrderCodeFix.cs" />
     <Compile Include="Diagnostics\Strings\PlaceholderHelpers.cs" />
     <Compile Include="Diagnostics\Structs\StructShouldNotMutateSelf\StructShouldNotMutateSelfAnalyzer.cs" />
+    <Compile Include="Diagnostics\Structs\StructWithoutElementaryMethodsOverridden\StructWithoutElementaryMethodsOverriddenAnalyzer.cs" />
+    <Compile Include="Diagnostics\Structs\StructWithoutElementaryMethodsOverridden\StructWithoutElementaryMethodsOverriddenCodeFix.cs" />
     <Compile Include="Diagnostics\Tests\RemoveTestSuffix\RemoveTestSuffixAnalyzer.cs" />
     <Compile Include="Diagnostics\Tests\RemoveTestSuffix\RemoveTestSuffixCodeFix.cs" />
     <Compile Include="Diagnostics\Tests\TestMethodWithoutPublicModifier\TestMethodWithoutPublicModifierAnalyzer.cs" />
