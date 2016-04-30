@@ -17,13 +17,6 @@ namespace VSDiagnostics.Diagnostics.Structs.StructWithoutElementaryMethodsOverri
     [ExportCodeFixProvider(DiagnosticId.StructWithoutElementaryMethodsOverridden + "CF", LanguageNames.CSharp), Shared]
     public class StructWithoutElementaryMethodsOverriddenCodeFix : CodeFixProvider
     {
-        static StructWithoutElementaryMethodsOverriddenCodeFix()
-        {
-            EqualsMethod = GetEqualsMethod();
-            GetHashCodeMethod = GetGetHashCodeMethod();
-            ToStringMethod = GetToStringMethod();
-        }
-
         public override ImmutableArray<string> FixableDiagnosticIds
             => ImmutableArray.Create(StructWithoutElementaryMethodsOverriddenAnalyzer.Rule.Id);
 
@@ -63,9 +56,9 @@ namespace VSDiagnostics.Diagnostics.Structs.StructWithoutElementaryMethodsOverri
                     StructWithoutElementaryMethodsOverriddenAnalyzer.Rule.Id), diagnostic);
         }
 
-        private static readonly MethodDeclarationSyntax EqualsMethod;
-        private static readonly MethodDeclarationSyntax GetHashCodeMethod;
-        private static readonly MethodDeclarationSyntax ToStringMethod;
+        private static readonly MethodDeclarationSyntax EqualsMethod = GetEqualsMethod();
+        private static readonly MethodDeclarationSyntax GetHashCodeMethod = GetGetHashCodeMethod();
+        private static readonly MethodDeclarationSyntax ToStringMethod = GetToStringMethod();
 
         private Task<Document> AddMissingMethodsAsync(Document document, SyntaxNode root,
             StructDeclarationSyntax statement, bool implementEquals, bool implementGetHashCode,
