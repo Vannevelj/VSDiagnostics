@@ -1,4 +1,4 @@
-# VSDiagnostics
+﻿# VSDiagnostics
 A collection of code-quality analyzers based on the new Roslyn platform. This project aims to ensure code-quality as you type it in your editor rather than having to do this as a separate build-step. Likewise it also tries to help avoid some common pitfalls.
 
 <img src="https://cloud.githubusercontent.com/assets/2777107/12633986/2e05fc66-c576-11e5-92a2-3c192f2f0d89.gif" />
@@ -64,6 +64,7 @@ Currently these diagnostics are implemented:
 | General | VSD0046 | Equals() and GetHashcode() must be implemented together.
 | General | VSD0047 | Implement elementary methods of type used in collection.
 | General | VSD0049 | Switch is missing a default label.
+| General | VSD0051 | Using statement is missing braces.
 | Strings | VSD0034 | Use `string.Empty` instead of `""`.
 | Strings | VSD0035 | Adjusts the placeholders in `string.Format()` calls to be in numerical order.
 | Strings | VSD0042 | A `string.Format()` call lacks arguments and will cause a runtime exception
