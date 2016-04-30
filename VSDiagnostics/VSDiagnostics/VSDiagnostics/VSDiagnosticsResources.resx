@@ -552,4 +552,13 @@
   <data name="UsingStatementWithoutBracesCodeFixTitle" xml:space="preserve">
     <value>Add braces</value>
   </data>
+  <data name="ImplementEqualsAndGetHashCodeAnalyzerMessage" xml:space="preserve">
+    <value>Class {0} does not implement Equals() and GetHashCode().</value>
+  </data>
+  <data name="ImplementEqualsAndGetHashCodeAnalyzerTitle" xml:space="preserve">
+    <value>Implement Equals() and GetHashCode().</value>
+  </data>
+  <data name="ImplementEqualsAndGetHashCodeCodeFixTitle" xml:space="preserve">
+    <value>Add Equals() and GetHashCode()</value>
+  </data>
 </root>

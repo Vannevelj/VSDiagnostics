@@ -50,5 +50,6 @@
         public const string ElementaryMethodsOfTypeInCollectionNotOverridden = "VSD0047";
         public const string SwitchIsMissingDefaultLabel = "VSD0049";
         public const string UsingStatementWithoutBraces = "VSD0051";
+        public const string ImplementEqualsAndGetHashCode = "VSD0052";
     }
 }
