@@ -17,12 +17,13 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
         private static readonly string Message = VSDiagnosticsResources.ImplementEqualsAndGetHashCodeAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.ImplementEqualsAndGetHashCodeAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule
-            => new DiagnosticDescriptor(DiagnosticId.ImplementEqualsAndGetHashCode, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule =>
+            new DiagnosticDescriptor(DiagnosticId.ImplementEqualsAndGetHashCode, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.ClassDeclaration);
+        public override void Initialize(AnalysisContext context) =>
+                context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.ClassDeclaration, SyntaxKind.StructDeclaration);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
@@ -49,48 +50,52 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                 }
             }
 
-            var classDeclaration = (ClassDeclarationSyntax)context.Node;
-
-            var equalsImplemented = false;
-            var getHashcodeImplemented = false;
-            var hasfieldOrProperty = false;
-
-            foreach (var node in classDeclaration.Members)
+            if (context.Node is ClassDeclarationSyntax)
             {
-                if (node.IsKind(SyntaxKind.FieldDeclaration))
-                {
-                    hasfieldOrProperty = true;
-                }
+                var classDeclaration = (ClassDeclarationSyntax) context.Node;
 
-                if (node.IsKind(SyntaxKind.PropertyDeclaration))
+                if (MembersDoNotContainOverridenEqualsAndGetHashCode(context.SemanticModel, classDeclaration.Members, objectEquals, objectGetHashCode) &&
+                    MembersContainNonStaticFieldOrProperty(classDeclaration.Members))
                 {
-                    var property = (PropertyDeclarationSyntax)node;
-                    foreach (var accessor in property.AccessorList.Accessors)
-                    {
-                        if (accessor.IsKind(SyntaxKind.GetAccessorDeclaration))
-                        {
-                            hasfieldOrProperty = true;
-                        }
-                    }
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, classDeclaration.Identifier.GetLocation(), classDeclaration.Identifier));
                 }
+            }
+            else
+            {
+                var structDeclaration = (StructDeclarationSyntax)context.Node;
 
+                if (MembersDoNotContainOverridenEqualsAndGetHashCode(context.SemanticModel, structDeclaration.Members, objectEquals, objectGetHashCode) &&
+                    MembersContainNonStaticFieldOrProperty(structDeclaration.Members))
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, structDeclaration.Identifier.GetLocation(), structDeclaration.Identifier));
+                }
+            }
+        }
+
+        private bool MembersDoNotContainOverridenEqualsAndGetHashCode(SemanticModel model, SyntaxList<SyntaxNode> members, IMethodSymbol objectEquals, IMethodSymbol objectGetHashCode)
+        {
+            var equalsImplemented = false;
+            var getHashCodeImplemented = false;
+
+            foreach (var node in members)
+            {
                 if (!node.IsKind(SyntaxKind.MethodDeclaration))
                 {
                     continue;
                 }
 
-                var methodDeclaration = (MethodDeclarationSyntax)node;
+                var methodDeclaration = (MethodDeclarationSyntax) node;
                 if (!methodDeclaration.Modifiers.Contains(SyntaxKind.OverrideKeyword))
                 {
                     continue;
                 }
 
-                var methodSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclaration).OverriddenMethod;
+                var methodSymbol = model.GetDeclaredSymbol(methodDeclaration).OverriddenMethod;
 
                 // this will happen if the base class is deleted and there is still a derived class
                 if (methodSymbol == null)
                 {
-                    return;
+                    return false;    // well, technically, it doesn't exist
                 }
 
                 while (methodSymbol.IsOverride)
@@ -105,14 +110,42 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
 
                 if (methodSymbol == objectGetHashCode)
                 {
-                    getHashcodeImplemented = true;
+                    getHashCodeImplemented = true;
                 }
             }
 
-            if (!equalsImplemented && !getHashcodeImplemented && hasfieldOrProperty)
+            return !equalsImplemented && !getHashCodeImplemented;
+        }
+
+        private bool MembersContainNonStaticFieldOrProperty(SyntaxList<SyntaxNode> members)
+        {
+            foreach (var node in members)
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, classDeclaration.Identifier.GetLocation(), classDeclaration.Identifier));
+                if (node.IsKind(SyntaxKind.FieldDeclaration))
+                {
+                    var field = (FieldDeclarationSyntax)node;
+                    return !field.Modifiers.Contains(SyntaxKind.StaticKeyword);
+                }
+
+                if (node.IsKind(SyntaxKind.PropertyDeclaration))
+                {
+                    var property = (PropertyDeclarationSyntax) node;
+                    if (property.Modifiers.Contains(SyntaxKind.StaticKeyword))
+                    {
+                        return false;
+                    }
+
+                    foreach (var accessor in property.AccessorList.Accessors)
+                    {
+                        if (accessor.IsKind(SyntaxKind.GetAccessorDeclaration))
+                        {
+                            return true;
+                        }
+                    }
+                }
             }
+
+            return false;
         }
     }
 }

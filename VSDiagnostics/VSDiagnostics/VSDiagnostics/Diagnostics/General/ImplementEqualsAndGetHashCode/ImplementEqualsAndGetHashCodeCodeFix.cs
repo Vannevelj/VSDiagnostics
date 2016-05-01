@@ -39,14 +39,27 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
 
         private Task<Document> ImplementEqualsAndGetHashCodeAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
-            var classDeclaration = (ClassDeclarationSyntax)statement;
+            if (statement is ClassDeclarationSyntax)
+            {
+                var classDeclaration = (ClassDeclarationSyntax) statement;
 
-            var newRoot = root.ReplaceNode(classDeclaration,
-                classDeclaration.AddMembers(GetEqualsMethod(classDeclaration), GetGetHashCodeMethod(classDeclaration)));
-            return Task.FromResult(document.WithSyntaxRoot(newRoot));
+                var newRoot = root.ReplaceNode(classDeclaration,
+                    classDeclaration.AddMembers(GetEqualsMethod(classDeclaration.Identifier, classDeclaration.Members),
+                        GetGetHashCodeMethod(classDeclaration.Members)));
+                return Task.FromResult(document.WithSyntaxRoot(newRoot));
+            }
+            else
+            {
+                var structDeclaration = (StructDeclarationSyntax)statement;
+
+                var newRoot = root.ReplaceNode(structDeclaration,
+                    structDeclaration.AddMembers(GetEqualsMethod(structDeclaration.Identifier, structDeclaration.Members),
+                        GetGetHashCodeMethod(structDeclaration.Members)));
+                return Task.FromResult(document.WithSyntaxRoot(newRoot));
+            }
         }
 
-        private MethodDeclarationSyntax GetEqualsMethod(ClassDeclarationSyntax classDeclaration)
+        private MethodDeclarationSyntax GetEqualsMethod(SyntaxToken identifier, SyntaxList<SyntaxNode> members)
         {
             var publicModifier = SyntaxFactory.Token(SyntaxKind.PublicKeyword);
             var overrideModifier = SyntaxFactory.Token(SyntaxKind.OverrideKeyword);
@@ -55,18 +68,23 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                 .WithType(SyntaxFactory.ParseTypeName("object"));
 
             var ifStatement =
-                SyntaxFactory.IfStatement(SyntaxFactory.ParseExpression($"obj == null || typeof({classDeclaration.Identifier}) != obj.GetType()"),
+                SyntaxFactory.IfStatement(SyntaxFactory.ParseExpression($"obj == null || typeof({identifier}) != obj.GetType()"),
                     SyntaxFactory.Block(SyntaxFactory.ParseStatement("return false;")));
 
             var castStatement = SyntaxFactory.ParseStatement(
-                    $"var value = ({classDeclaration.Identifier}) obj;{Environment.NewLine}");
+                    $"var value = ({identifier}) obj;{Environment.NewLine}");
 
             var fieldAndPropertyEqualityStatements = new List<string>();
-            foreach (var member in classDeclaration.Members)
+            foreach (var member in members)
             {
                 if (member.IsKind(SyntaxKind.FieldDeclaration))
                 {
                     var field = (FieldDeclarationSyntax)member;
+                    if (field.Modifiers.Contains(SyntaxKind.StaticKeyword))
+                    {
+                        continue;
+                    }
+
                     fieldAndPropertyEqualityStatements.AddRange(field.Declaration.Variables.Select(
                             variable => $"{variable.Identifier} == value.{variable.Identifier}"));
                 }
@@ -74,6 +92,11 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                 if (member.IsKind(SyntaxKind.PropertyDeclaration))
                 {
                     var property = (PropertyDeclarationSyntax)member;
+                    if (property.Modifiers.Contains(SyntaxKind.StaticKeyword))
+                    {
+                        continue;
+                    }
+
                     if (property.AccessorList.Accessors.Any(a => a.IsKind(SyntaxKind.GetAccessorDeclaration)))
                     {
                         fieldAndPropertyEqualityStatements.Add($"{property.Identifier} == value.{property.Identifier}");
@@ -82,7 +105,7 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
             }
 
             var returnStatement =
-                SyntaxFactory.ParseStatement("return " + string.Join(" && ", fieldAndPropertyEqualityStatements) + ";");
+                SyntaxFactory.ParseStatement("return " + string.Join($" && ", fieldAndPropertyEqualityStatements) + ";");
 
             return SyntaxFactory.MethodDeclaration(SyntaxFactory.ParseTypeName("bool"), "Equals")
                     .AddModifiers(publicModifier, overrideModifier)
@@ -91,17 +114,22 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                     .WithAdditionalAnnotations(Formatter.Annotation);
         }
 
-        private MethodDeclarationSyntax GetGetHashCodeMethod(ClassDeclarationSyntax classDeclaration)
+        private MethodDeclarationSyntax GetGetHashCodeMethod(SyntaxList<SyntaxNode> members)
         {
             var publicModifier = SyntaxFactory.Token(SyntaxKind.PublicKeyword);
             var overrideModifier = SyntaxFactory.Token(SyntaxKind.OverrideKeyword);
 
             var fieldAndPropertyGetHashCodeStatements = new List<string>();
-            foreach (var member in classDeclaration.Members)
+            foreach (var member in members)
             {
                 if (member.IsKind(SyntaxKind.FieldDeclaration))
                 {
                     var field = (FieldDeclarationSyntax)member;
+                    if (field.Modifiers.Contains(SyntaxKind.StaticKeyword))
+                    {
+                        continue;
+                    }
+
                     fieldAndPropertyGetHashCodeStatements.AddRange(field.Declaration.Variables.Select(
                             variable => $"{variable.Identifier}.GetHashCode()"));
                 }
@@ -109,6 +137,11 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                 if (member.IsKind(SyntaxKind.PropertyDeclaration))
                 {
                     var property = (PropertyDeclarationSyntax)member;
+                    if (property.Modifiers.Contains(SyntaxKind.StaticKeyword))
+                    {
+                        continue;
+                    }
+
                     if (property.AccessorList.Accessors.Any(a => a.IsKind(SyntaxKind.GetAccessorDeclaration)))
                     {
                         fieldAndPropertyGetHashCodeStatements.Add($"{property.Identifier}.GetHashCode()");
