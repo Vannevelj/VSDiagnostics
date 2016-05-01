@@ -7,30 +7,30 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
 
-namespace VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTogether
+namespace VSDiagnostics.Diagnostics.Structs.StructWithoutElementaryMethodsOverridden
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class EqualsAndGetHashcodeNotImplementedTogetherAnalyzer : DiagnosticAnalyzer
+    public class StructWithoutElementaryMethodsOverriddenAnalyzer : DiagnosticAnalyzer
     {
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
-        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
-        private static readonly string Message = VSDiagnosticsResources.EqualsAndGetHashcodeNotImplementedTogetherAnalyzerMessage;
-        private static readonly string Title = VSDiagnosticsResources.EqualsAndGetHashcodeNotImplementedTogetherAnalyzerTitle;
+        private static readonly string Category = VSDiagnosticsResources.StructsCategory;
+        private static readonly string Message = VSDiagnosticsResources.StructWithoutElementaryMethodsOverriddenAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.StructWithoutElementaryMethodsOverriddenAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule
-            => new DiagnosticDescriptor(DiagnosticId.EqualsAndGetHashcodeNotImplementedTogether, Title, Message, Category, Severity, true);
+            => new DiagnosticDescriptor(DiagnosticId.StructWithoutElementaryMethodsOverridden, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-            => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ClassDeclaration);
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.StructDeclaration);
 
-        private void AnalyzeNode(SyntaxNodeAnalysisContext context)
+        private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var objectSymbol = context.SemanticModel.Compilation.GetSpecialType(SpecialType.System_Object);
             IMethodSymbol objectEquals = null;
             IMethodSymbol objectGetHashCode = null;
+            IMethodSymbol objectToString = null;
 
             foreach (var symbol in objectSymbol.GetMembers())
             {
@@ -49,14 +49,20 @@ namespace VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTo
                 {
                     objectGetHashCode = method;
                 }
+
+                if (method.MetadataName == nameof(ToString) && !method.Parameters.Any())
+                {
+                    objectToString = method;
+                }
             }
-            
-            var classDeclaration = (ClassDeclarationSyntax)context.Node;
+
+            var structDeclaration = (StructDeclarationSyntax)context.Node;
 
             var equalsImplemented = false;
-            var getHashcodeImplemented = false;
+            var getHashCodeImplemented = false;
+            var toStringImplemented = false;
 
-            foreach (var node in classDeclaration.Members)
+            foreach (var node in structDeclaration.Members)
             {
                 if (!node.IsKind(SyntaxKind.MethodDeclaration))
                 {
@@ -89,14 +95,25 @@ namespace VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTo
 
                 if (methodSymbol == objectGetHashCode)
                 {
-                    getHashcodeImplemented = true;
+                    getHashCodeImplemented = true;
+                }
+
+                if (methodSymbol == objectToString)
+                {
+                    toStringImplemented = true;
                 }
             }
 
-            if (equalsImplemented ^ getHashcodeImplemented)
+            if (!equalsImplemented || !getHashCodeImplemented || !toStringImplemented)
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, classDeclaration.Identifier.GetLocation(),
-                    ImmutableDictionary.CreateRange(new[] { new KeyValuePair<string, string>("IsEqualsImplemented", equalsImplemented.ToString()) })));
+                var isEqualsImplemented = new KeyValuePair<string, string>("IsEqualsImplemented", equalsImplemented.ToString());
+                var isGetHashcodeImplemented = new KeyValuePair<string, string>("IsGetHashCodeImplemented", getHashCodeImplemented.ToString());
+                var isGetToStringImplemented = new KeyValuePair<string, string>("IsToStringImplemented", toStringImplemented.ToString());
+
+                var properties = ImmutableDictionary.CreateRange(new[]
+                    {isEqualsImplemented, isGetHashcodeImplemented, isGetToStringImplemented});
+
+                context.ReportDiagnostic(Diagnostic.Create(Rule, structDeclaration.Identifier.GetLocation(), properties, structDeclaration.Identifier));
             }
         }
     }
