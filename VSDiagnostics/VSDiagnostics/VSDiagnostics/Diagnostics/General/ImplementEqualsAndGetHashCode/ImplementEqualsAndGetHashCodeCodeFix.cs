@@ -105,7 +105,7 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
             }
 
             var returnStatement =
-                SyntaxFactory.ParseStatement("return " + string.Join($" && ", fieldAndPropertyEqualityStatements) + ";");
+                SyntaxFactory.ParseStatement("return " + string.Join($" &&{Environment.NewLine}       ", fieldAndPropertyEqualityStatements) + ";");
 
             return SyntaxFactory.MethodDeclaration(SyntaxFactory.ParseTypeName("bool"), "Equals")
                     .AddModifiers(publicModifier, overrideModifier)
@@ -150,7 +150,8 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
             }
 
             var returnStatement =
-                SyntaxFactory.ParseStatement("return " + string.Join(" ^ ", fieldAndPropertyGetHashCodeStatements) + ";");
+                SyntaxFactory.ParseStatement("return " + string.Join($" ^{Environment.NewLine}       ", fieldAndPropertyGetHashCodeStatements) + ";")
+                    .WithLeadingTrivia(SyntaxFactory.ParseLeadingTrivia(Environment.NewLine));
 
             return SyntaxFactory.MethodDeclaration(SyntaxFactory.ParseTypeName("int"), "GetHashCode")
                     .AddModifiers(publicModifier, overrideModifier)

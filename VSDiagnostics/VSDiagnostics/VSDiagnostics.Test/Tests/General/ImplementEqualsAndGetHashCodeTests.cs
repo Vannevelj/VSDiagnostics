@@ -129,12 +129,18 @@ namespace ConsoleApplication1
             }
 
             var value = (MyClass)obj;
-            return _foo == value._foo && _bar == value._bar && Foo == value.Foo && Bar == value.Bar;
+            return _foo == value._foo &&
+                   _bar == value._bar &&
+                   Foo == value.Foo &&
+                   Bar == value.Bar;
         }
 
         public override int GetHashCode()
         {
-            return _foo.GetHashCode() ^ _bar.GetHashCode() ^ Foo.GetHashCode() ^ Bar.GetHashCode();
+            return _foo.GetHashCode() ^
+                   _bar.GetHashCode() ^
+                   Foo.GetHashCode() ^
+                   Bar.GetHashCode();
         }
     }
 }";
@@ -184,12 +190,16 @@ namespace ConsoleApplication1
             }
 
             var value = (MyClass)obj;
-            return _foo == value._foo && _bar == value._bar && Foo == value.Foo;
+            return _foo == value._foo &&
+                   _bar == value._bar &&
+                   Foo == value.Foo;
         }
 
         public override int GetHashCode()
         {
-            return _foo.GetHashCode() ^ _bar.GetHashCode() ^ Foo.GetHashCode();
+            return _foo.GetHashCode() ^
+                   _bar.GetHashCode() ^
+                   Foo.GetHashCode();
         }
     }
 }";
@@ -355,12 +365,18 @@ namespace ConsoleApplication1
             }
 
             var value = (MyStruct)obj;
-            return _foo == value._foo && _bar == value._bar && Foo == value.Foo && Bar == value.Bar;
+            return _foo == value._foo &&
+                   _bar == value._bar &&
+                   Foo == value.Foo &&
+                   Bar == value.Bar;
         }
 
         public override int GetHashCode()
         {
-            return _foo.GetHashCode() ^ _bar.GetHashCode() ^ Foo.GetHashCode() ^ Bar.GetHashCode();
+            return _foo.GetHashCode() ^
+                   _bar.GetHashCode() ^
+                   Foo.GetHashCode() ^
+                   Bar.GetHashCode();
         }
     }
 }";
@@ -410,12 +426,16 @@ namespace ConsoleApplication1
             }
 
             var value = (MyStruct)obj;
-            return _foo == value._foo && _bar == value._bar && Foo == value.Foo;
+            return _foo == value._foo &&
+                   _bar == value._bar &&
+                   Foo == value.Foo;
         }
 
         public override int GetHashCode()
         {
-            return _foo.GetHashCode() ^ _bar.GetHashCode() ^ Foo.GetHashCode();
+            return _foo.GetHashCode() ^
+                   _bar.GetHashCode() ^
+                   Foo.GetHashCode();
         }
     }
 }";
@@ -491,12 +511,14 @@ namespace ConsoleApplication1
             }
 
             var value = (MyClass)obj;
-            return _foo == value._foo && _bar == value._bar;
+            return _foo == value._foo &&
+                   _bar == value._bar;
         }
 
         public override int GetHashCode()
         {
-            return _foo.GetHashCode() ^ _bar.GetHashCode();
+            return _foo.GetHashCode() ^
+                   _bar.GetHashCode();
         }
     }
 }";
