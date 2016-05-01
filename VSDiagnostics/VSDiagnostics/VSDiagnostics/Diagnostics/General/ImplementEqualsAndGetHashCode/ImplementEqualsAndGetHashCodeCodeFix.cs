@@ -37,29 +37,39 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                 diagnostic);
         }
 
-        private Task<Document> ImplementEqualsAndGetHashCodeAsync(Document document, SyntaxNode root, SyntaxNode statement)
+        private async Task<Document> ImplementEqualsAndGetHashCodeAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
+            var model = await document.GetSemanticModelAsync();
+
+            var objectSymbol = model.Compilation.GetSpecialType(SpecialType.System_Object);
+            var objectEquals = objectSymbol.GetMembers().OfType<IMethodSymbol>()
+                    .First(method => method.MetadataName == nameof(Equals) && method.Parameters.Count() == 1);
+
             if (statement is ClassDeclarationSyntax)
             {
                 var classDeclaration = (ClassDeclarationSyntax) statement;
 
+                var classSymbol = model.GetDeclaredSymbol(classDeclaration);
+
                 var newRoot = root.ReplaceNode(classDeclaration,
-                    classDeclaration.AddMembers(GetEqualsMethod(classDeclaration.Identifier, classDeclaration.Members),
+                    classDeclaration.AddMembers(GetEqualsMethod(classDeclaration.Identifier, classDeclaration.Members, classSymbol, objectEquals),
                         GetGetHashCodeMethod(classDeclaration.Members)));
-                return Task.FromResult(document.WithSyntaxRoot(newRoot));
+                return document.WithSyntaxRoot(newRoot);
             }
             else
             {
                 var structDeclaration = (StructDeclarationSyntax)statement;
 
+                var structSymbol = model.GetDeclaredSymbol(structDeclaration);
+
                 var newRoot = root.ReplaceNode(structDeclaration,
-                    structDeclaration.AddMembers(GetEqualsMethod(structDeclaration.Identifier, structDeclaration.Members),
+                    structDeclaration.AddMembers(GetEqualsMethod(structDeclaration.Identifier, structDeclaration.Members, structSymbol, objectEquals),
                         GetGetHashCodeMethod(structDeclaration.Members)));
-                return Task.FromResult(document.WithSyntaxRoot(newRoot));
+                return document.WithSyntaxRoot(newRoot);
             }
         }
 
-        private MethodDeclarationSyntax GetEqualsMethod(SyntaxToken identifier, SyntaxList<SyntaxNode> members)
+        private MethodDeclarationSyntax GetEqualsMethod(SyntaxToken identifier, SyntaxList<SyntaxNode> members, INamedTypeSymbol symbol, IMethodSymbol objectEquals)
         {
             var publicModifier = SyntaxFactory.Token(SyntaxKind.PublicKeyword);
             var overrideModifier = SyntaxFactory.Token(SyntaxKind.OverrideKeyword);
@@ -104,8 +114,11 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                 }
             }
 
-            var returnStatement =
-                SyntaxFactory.ParseStatement("return " + string.Join($" &&{Environment.NewLine}       ", fieldAndPropertyEqualityStatements) + ";");
+            var symbolHasBaseTypeOverridingEquals = BaseClassImplementsEquals(objectEquals, symbol);
+
+            var returnStatement = SyntaxFactory.ParseStatement(
+                    $"return {(symbolHasBaseTypeOverridingEquals ? $"base.Equals(obj) &&{Environment.NewLine}       " : string.Empty)}" +
+                    string.Join($" &&{Environment.NewLine}       ", fieldAndPropertyEqualityStatements) + ";");
 
             return SyntaxFactory.MethodDeclaration(SyntaxFactory.ParseTypeName("bool"), "Equals")
                     .AddModifiers(publicModifier, overrideModifier)
@@ -157,6 +170,41 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                     .AddModifiers(publicModifier, overrideModifier)
                     .AddBodyStatements(returnStatement)
                     .WithAdditionalAnnotations(Formatter.Annotation);
+        }
+
+        private bool BaseClassImplementsEquals(IMethodSymbol objectEquals, INamedTypeSymbol symbol)
+        {
+            if (symbol.TypeKind != TypeKind.Class)
+            {
+                return false;
+            }
+
+            var baseType = symbol.BaseType;
+            if (baseType == null)
+            {
+                return false;
+            }
+
+            foreach (var member in baseType.GetMembers())
+            {
+                var method = member as IMethodSymbol;
+                if (method == null || !method.IsOverride)
+                {
+                    continue;
+                }
+
+                while (method.IsOverride)
+                {
+                    method = method.OverriddenMethod;
+                }
+
+                if (method == objectEquals)
+                {
+                    return true; 
+                }
+            }
+
+            return false;
         }
     }
 }

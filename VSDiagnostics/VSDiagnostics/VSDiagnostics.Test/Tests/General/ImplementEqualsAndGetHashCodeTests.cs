@@ -569,5 +569,59 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
             VerifyFix(original, result);
         }
+        
+        [TestMethod]
+        public void ImplementEqualsAndGetHashCode_ClassDoesNotImplementEither_HasBaseClassImplementingEquals()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyBaseClass
+    {
+        public override bool Equals(object obj) => true;
+    }
+
+    class MyClass : MyBaseClass
+    {
+        string _foo = ""test"";
+        static string _bar = ""test"";
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyBaseClass
+    {
+        public override bool Equals(object obj) => true;
+    }
+
+    class MyClass : MyBaseClass
+    {
+        string _foo = ""test"";
+        static string _bar = ""test"";
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || typeof(MyClass) != obj.GetType())
+            {
+                return false;
+            }
+
+            var value = (MyClass)obj;
+            return base.Equals(obj) &&
+                   _foo == value._foo;
+        }
+
+        public override int GetHashCode()
+        {
+            return _foo.GetHashCode();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyFix(original, result);
+        }
     }
 }
