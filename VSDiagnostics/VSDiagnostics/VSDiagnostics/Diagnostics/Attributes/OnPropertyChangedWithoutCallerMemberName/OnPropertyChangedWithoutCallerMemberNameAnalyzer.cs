@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -33,8 +32,8 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var methodDeclaration = (MethodDeclarationSyntax)context.Node;
-            var parentClass = methodDeclaration.Ancestors().OfType<ClassDeclarationSyntax>(SyntaxKind.ClassDeclaration).FirstOrDefault();
-            var typeSymbol = context.SemanticModel.GetDeclaredSymbol(parentClass);
+            var parentNode = GetParent(methodDeclaration);
+            var typeSymbol = (INamedTypeSymbol)context.SemanticModel.GetDeclaredSymbol(parentNode);
 
             // class must implement INotifyPropertyChanged
             if (!typeSymbol.ImplementsInterfaceOrBaseClass(typeof(INotifyPropertyChanged)))
@@ -79,6 +78,19 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
             }
 
             context.ReportDiagnostic(Diagnostic.Create(Rule, methodDeclaration.GetLocation()));
+        }
+
+        private SyntaxNode GetParent(MethodDeclarationSyntax methodDeclaration)
+        {
+            foreach (var ancestor in methodDeclaration.Ancestors())
+            {
+                if (ancestor.IsKind(SyntaxKind.ClassDeclaration) || ancestor.IsKind(SyntaxKind.StructDeclaration))
+                {
+                    return ancestor;
+                }
+            }
+
+            throw new System.ArgumentException("Methods are always in a class or struct");
         }
     }
 }
