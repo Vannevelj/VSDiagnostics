@@ -11,7 +11,7 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ImplementEqualsAndGetHashCodeAnalyzer : DiagnosticAnalyzer
     {
-        private const DiagnosticSeverity Severity = DiagnosticSeverity.Info;
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Hidden;
 
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.ImplementEqualsAndGetHashCodeAnalyzerMessage;

@@ -55,7 +55,7 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                 .WithType(SyntaxFactory.ParseTypeName("object"));
 
             var ifStatement =
-                SyntaxFactory.IfStatement(SyntaxFactory.ParseExpression("obj == null || GetType() != obj.GetType()"),
+                SyntaxFactory.IfStatement(SyntaxFactory.ParseExpression($"obj == null || typeof({classDeclaration.Identifier}) != obj.GetType()"),
                     SyntaxFactory.Block(SyntaxFactory.ParseStatement("return false;")));
 
             var castStatement = SyntaxFactory.ParseStatement(

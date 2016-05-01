@@ -33,7 +33,7 @@ namespace ConsoleApplication1
 
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (obj == null || typeof(MyClass) != obj.GetType())
             {
                 return false;
             }
@@ -74,7 +74,7 @@ namespace ConsoleApplication1
 
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (obj == null || typeof(MyClass) != obj.GetType())
             {
                 return false;
             }
@@ -123,7 +123,7 @@ namespace ConsoleApplication1
 
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (obj == null || typeof(MyClass) != obj.GetType())
             {
                 return false;
             }
@@ -178,7 +178,7 @@ namespace ConsoleApplication1
 
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (obj == null || typeof(MyClass) != obj.GetType())
             {
                 return false;
             }
@@ -224,7 +224,7 @@ namespace ConsoleApplication1
 
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (obj == null || typeof(MyClass) != obj.GetType())
             {
                 return false;
             }
