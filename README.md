@@ -47,6 +47,7 @@ Currently these diagnostics are implemented:
 | Exceptions | VSD0057 | An exception is thrown from a Dispose method.
 | Exceptions | VSD0058 | An exception is thrown from a finalizer method.
 | Exceptions | VSD0059 | An exception is thrown from a GetHashCode() method.
+| Exceptions | VSD0060 | An exception is thrown from an Equals() method.
 | General | VSD0013 | Allows you to change as statements to cast statements.
 | General | VSD0014 | Allows you to change cast statements to as statements.
 | General | VSD0015 | A boolean expression doesn't have to be compared to `false`.

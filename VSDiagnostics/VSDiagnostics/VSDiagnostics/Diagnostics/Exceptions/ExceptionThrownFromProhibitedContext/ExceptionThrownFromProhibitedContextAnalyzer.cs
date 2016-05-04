@@ -55,6 +55,11 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ExceptionThrownFromProhibitedCont
                 VSDiagnosticsResources.ExceptionThrownFromGetHashCodeAnalyzerTitle,
                 VSDiagnosticsResources.ExceptionThrownFromGetHashCodeAnalyzerMessage, Category, Severity, true);
 
+        private static DiagnosticDescriptor EqualsRule
+            => new DiagnosticDescriptor(DiagnosticId.ExceptionThrownFromEquals,
+                VSDiagnosticsResources.ExceptionThrownFromEqualsAnalyzerTitle,
+                VSDiagnosticsResources.ExceptionThrownFromEqualsAnalyzerMessage, Category, Severity, true);
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
             => ImmutableArray.Create(
                 ImplicitOperatorRule,
@@ -64,7 +69,8 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ExceptionThrownFromProhibitedCont
                 EqualityOperatorRule,
                 DisposeRule,
                 FinalizerRule,
-                GetHashCodeRule);
+                GetHashCodeRule,
+                EqualsRule);
 
         public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ThrowStatement);
 
@@ -92,6 +98,12 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ExceptionThrownFromProhibitedCont
                     if (methodName == "GetHashCode")
                     {
                         context.ReportDiagnostic(Diagnostic.Create(GetHashCodeRule, warningLocation, containingType.Name));
+                        return;
+                    }
+
+                    if (methodName == "Equals" && method.ParameterList.Parameters.Count == 1)
+                    {
+                        context.ReportDiagnostic(Diagnostic.Create(EqualsRule, warningLocation, method.ParameterList.Parameters[0].Type.ToString(), containingType.Name));
                         return;
                     }
                 }

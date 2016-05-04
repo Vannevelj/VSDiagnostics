@@ -569,5 +569,68 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void ExceptionThrownFromProhibitedContext_Equals()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    public class MyClass
+    {
+	    public override bool Equals(object o)
+        {
+            throw new ArgumentException();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, "An exception is thrown from the Equals(object) method in type MyClass");
+        }
+
+        [TestMethod]
+        public void ExceptionThrownFromProhibitedContext_Equals_IEquatable()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    public class MyClass : IEquatable<MyClass>
+    {
+	    public bool Equals(MyClass o)
+        {
+            throw new ArgumentException();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, "An exception is thrown from the Equals(MyClass) method in type MyClass");
+        }
+
+        [TestMethod]
+        public void ExceptionThrownFromProhibitedContext_Equals_NoThrow()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    public class MyClass
+    {
+	    public override bool Equals(object o)
+        {
+            return false;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }

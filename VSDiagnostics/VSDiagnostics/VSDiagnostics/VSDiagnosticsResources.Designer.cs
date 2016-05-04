@@ -548,6 +548,24 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from the Equals({0}) method in type {1}.
+        /// </summary>
+        internal static string ExceptionThrownFromEqualsAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromEqualsAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from an Equals() method..
+        /// </summary>
+        internal static string ExceptionThrownFromEqualsAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromEqualsAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An exception is thrown from the finalizer method in type {0}.
         /// </summary>
         internal static string ExceptionThrownFromFinalizerAnalyzerMessage {
