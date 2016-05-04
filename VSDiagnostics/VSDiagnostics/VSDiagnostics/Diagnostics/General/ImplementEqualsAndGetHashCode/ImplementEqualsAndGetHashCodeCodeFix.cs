@@ -52,8 +52,8 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                 var classSymbol = model.GetDeclaredSymbol(classDeclaration);
 
                 var newRoot = root.ReplaceNode(classDeclaration,
-                    classDeclaration.AddMembers(GetEqualsMethod(classDeclaration.Identifier, classDeclaration.Members, classSymbol, objectEquals),
-                        GetGetHashCodeMethod(classDeclaration.Members)));
+                    classDeclaration.AddMembers(GetEqualsMethod(model, classDeclaration.Identifier, classDeclaration.Members, classSymbol, objectEquals),
+                        GetGetHashCodeMethod(model, classDeclaration.Members)));
                 return document.WithSyntaxRoot(newRoot);
             }
             else
@@ -63,13 +63,13 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                 var structSymbol = model.GetDeclaredSymbol(structDeclaration);
 
                 var newRoot = root.ReplaceNode(structDeclaration,
-                    structDeclaration.AddMembers(GetEqualsMethod(structDeclaration.Identifier, structDeclaration.Members, structSymbol, objectEquals),
-                        GetGetHashCodeMethod(structDeclaration.Members)));
+                    structDeclaration.AddMembers(GetEqualsMethod(model, structDeclaration.Identifier, structDeclaration.Members, structSymbol, objectEquals),
+                        GetGetHashCodeMethod(model, structDeclaration.Members)));
                 return document.WithSyntaxRoot(newRoot);
             }
         }
 
-        private MethodDeclarationSyntax GetEqualsMethod(SyntaxToken identifier, SyntaxList<SyntaxNode> members, INamedTypeSymbol symbol, IMethodSymbol objectEquals)
+        private MethodDeclarationSyntax GetEqualsMethod(SemanticModel model, SyntaxToken identifier, SyntaxList<SyntaxNode> members, INamedTypeSymbol typeSymbol, IMethodSymbol objectEquals)
         {
             var publicModifier = SyntaxFactory.Token(SyntaxKind.PublicKeyword);
             var overrideModifier = SyntaxFactory.Token(SyntaxKind.OverrideKeyword);
@@ -95,8 +95,17 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                         continue;
                     }
 
-                    fieldAndPropertyEqualityStatements.AddRange(field.Declaration.Variables.Select(
+                    var symbol = model.GetTypeInfo(field.Declaration.Type).Type;
+                    if (symbol.IsValueType)
+                    {
+                        fieldAndPropertyEqualityStatements.AddRange(field.Declaration.Variables.Select(
+                            variable => $"{variable.Identifier}.Equals(value.{variable.Identifier})"));
+                    }
+                    else
+                    {
+                        fieldAndPropertyEqualityStatements.AddRange(field.Declaration.Variables.Select(
                             variable => $"{variable.Identifier} == value.{variable.Identifier}"));
+                    }
                 }
 
                 if (member.IsKind(SyntaxKind.PropertyDeclaration))
@@ -109,12 +118,15 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
 
                     if (property.AccessorList.Accessors.Any(a => a.IsKind(SyntaxKind.GetAccessorDeclaration)))
                     {
-                        fieldAndPropertyEqualityStatements.Add($"{property.Identifier} == value.{property.Identifier}");
+                        var symbol = model.GetTypeInfo(property.Type).Type;
+                        fieldAndPropertyEqualityStatements.Add(symbol.IsValueType
+                            ? $"{property.Identifier}.Equals(value.{property.Identifier})"
+                            : $"{property.Identifier} == value.{property.Identifier}");
                     }
                 }
             }
 
-            var symbolHasBaseTypeOverridingEquals = BaseClassImplementsEquals(objectEquals, symbol);
+            var symbolHasBaseTypeOverridingEquals = BaseClassImplementsEquals(objectEquals, typeSymbol);
 
             var returnStatement = SyntaxFactory.ParseStatement(
                     $"return {(symbolHasBaseTypeOverridingEquals ? $"base.Equals(obj) &&{Environment.NewLine}       " : string.Empty)}" +
@@ -127,7 +139,7 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                     .WithAdditionalAnnotations(Formatter.Annotation);
         }
 
-        private MethodDeclarationSyntax GetGetHashCodeMethod(SyntaxList<SyntaxNode> members)
+        private MethodDeclarationSyntax GetGetHashCodeMethod(SemanticModel model, SyntaxList<SyntaxNode> members)
         {
             var publicModifier = SyntaxFactory.Token(SyntaxKind.PublicKeyword);
             var overrideModifier = SyntaxFactory.Token(SyntaxKind.OverrideKeyword);
@@ -138,13 +150,18 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                 if (member.IsKind(SyntaxKind.FieldDeclaration))
                 {
                     var field = (FieldDeclarationSyntax)member;
-                    if (field.Modifiers.Contains(SyntaxKind.StaticKeyword))
+                    if (field.Modifiers.ContainsAny(SyntaxKind.StaticKeyword, SyntaxKind.ConstKeyword))
                     {
                         continue;
                     }
 
-                    fieldAndPropertyGetHashCodeStatements.AddRange(field.Declaration.Variables.Select(
+                    var symbol = model.GetTypeInfo(field.Declaration.Type).Type;
+                    if (field.Modifiers.Contains(SyntaxKind.ReadOnlyKeyword) ||
+                        (symbol != null && symbol.IsValueType))
+                    {
+                        fieldAndPropertyGetHashCodeStatements.AddRange(field.Declaration.Variables.Select(
                             variable => $"{variable.Identifier}.GetHashCode()"));
+                    }
                 }
 
                 if (member.IsKind(SyntaxKind.PropertyDeclaration))
@@ -154,8 +171,8 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                     {
                         continue;
                     }
-
-                    if (property.AccessorList.Accessors.Any(a => a.IsKind(SyntaxKind.GetAccessorDeclaration)))
+                    
+                    if (!property.AccessorList.Accessors.Any(a => a.IsKind(SyntaxKind.SetAccessorDeclaration)))
                     {
                         fieldAndPropertyGetHashCodeStatements.Add($"{property.Identifier}.GetHashCode()");
                     }

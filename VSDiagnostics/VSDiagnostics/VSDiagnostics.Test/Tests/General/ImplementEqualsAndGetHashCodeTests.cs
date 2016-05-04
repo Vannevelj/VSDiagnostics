@@ -13,14 +13,14 @@ namespace VSDiagnostics.Test.Tests.General
         protected override CodeFixProvider CodeFixProvider => new ImplementEqualsAndGetHashCodeCodeFix();
 
         [TestMethod]
-        public void ImplementEqualsAndGetHashCode_ClassDoesNotImplementEither_HasField()
+        public void ImplementEqualsAndGetHashCode_ClassDoesNotImplementEither_HasReadonlyField()
         {
             var original = @"
 namespace ConsoleApplication1
 {
     class MyClass
     {
-        string _foo = ""test"";
+        readonly string _foo = ""test"";
     }
 }";
 
@@ -29,7 +29,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        string _foo = ""test"";
+        readonly string _foo = ""test"";
 
         public override bool Equals(object obj)
         {
@@ -54,14 +54,14 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ImplementEqualsAndGetHashCode_ClassDoesNotImplementEither_HasProperty()
+        public void ImplementEqualsAndGetHashCode_ClassDoesNotImplementEither_HasGetOnlyProperty()
         {
             var original = @"
 namespace ConsoleApplication1
 {
     class MyClass
     {
-        string Foo { get; set; } = ""test"";
+        string Foo { get; } = ""test"";
     }
 }";
 
@@ -70,7 +70,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        string Foo { get; set; } = ""test"";
+        string Foo { get; } = ""test"";
 
         public override bool Equals(object obj)
         {
@@ -102,11 +102,11 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        string _foo = ""test"";
-        string _bar = ""test"";
+        readonly string _foo = ""test"";
+        readonly string _bar = ""test"";
 
-        string Foo { get; set; } = ""test"";
-        string Bar { get; set; } = ""test"";
+        string Foo { get; } = ""test"";
+        string Bar { get; } = ""test"";
     }
 }";
 
@@ -115,11 +115,11 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        string _foo = ""test"";
-        string _bar = ""test"";
+        readonly string _foo = ""test"";
+        readonly string _bar = ""test"";
 
-        string Foo { get; set; } = ""test"";
-        string Bar { get; set; } = ""test"";
+        string Foo { get; } = ""test"";
+        string Bar { get; } = ""test"";
 
         public override bool Equals(object obj)
         {
@@ -157,10 +157,10 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        string _foo = ""test"";
+        readonly string _foo = ""test"";
         string _bar = ""test"";
 
-        string Foo { get; set; } = ""test"";
+        string Foo { get; } = ""test"";
         string Bar
         {
             set { _bar = value; }
@@ -173,10 +173,10 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        string _foo = ""test"";
+        readonly string _foo = ""test"";
         string _bar = ""test"";
 
-        string Foo { get; set; } = ""test"";
+        string Foo { get; } = ""test"";
         string Bar
         {
             set { _bar = value; }
@@ -198,7 +198,6 @@ namespace ConsoleApplication1
         public override int GetHashCode()
         {
             return _foo.GetHashCode() ^
-                   _bar.GetHashCode() ^
                    Foo.GetHashCode();
         }
     }
@@ -256,7 +255,7 @@ namespace ConsoleApplication1
 {
     struct MyStruct
     {
-        string _foo;
+        readonly string _foo;
     }
 }";
 
@@ -265,7 +264,7 @@ namespace ConsoleApplication1
 {
     struct MyStruct
     {
-        string _foo;
+        readonly string _foo;
 
         public override bool Equals(object obj)
         {
@@ -297,7 +296,7 @@ namespace ConsoleApplication1
 {
     struct MyStruct
     {
-        string Foo { get; set; }
+        string Foo { get; }
     }
 }";
 
@@ -306,7 +305,7 @@ namespace ConsoleApplication1
 {
     struct MyStruct
     {
-        string Foo { get; set; }
+        string Foo { get; }
 
         public override bool Equals(object obj)
         {
@@ -338,11 +337,11 @@ namespace ConsoleApplication1
 {
     struct MyStruct
     {
-        string _foo;
-        string _bar;
+        readonly string _foo;
+        readonly string _bar;
 
-        string Foo { get; set; }
-        string Bar { get; set; }
+        string Foo { get; }
+        string Bar { get; }
     }
 }";
 
@@ -351,11 +350,11 @@ namespace ConsoleApplication1
 {
     struct MyStruct
     {
-        string _foo;
-        string _bar;
+        readonly string _foo;
+        readonly string _bar;
 
-        string Foo { get; set; }
-        string Bar { get; set; }
+        string Foo { get; }
+        string Bar { get; }
 
         public override bool Equals(object obj)
         {
@@ -393,10 +392,10 @@ namespace ConsoleApplication1
 {
     struct MyStruct
     {
-        string _foo;
+        readonly string _foo;
         string _bar;
 
-        string Foo { get; set; }
+        string Foo { get; }
         string Bar
         {
             set { _bar = value; }
@@ -409,10 +408,10 @@ namespace ConsoleApplication1
 {
     struct MyStruct
     {
-        string _foo;
+        readonly string _foo;
         string _bar;
 
-        string Foo { get; set; }
+        string Foo { get; }
         string Bar
         {
             set { _bar = value; }
@@ -434,7 +433,6 @@ namespace ConsoleApplication1
         public override int GetHashCode()
         {
             return _foo.GetHashCode() ^
-                   _bar.GetHashCode() ^
                    Foo.GetHashCode();
         }
     }
@@ -492,7 +490,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        string _foo = ""test"", _bar = ""test"";
+        readonly string _foo = ""test"", _bar = ""test"";
     }
 }";
 
@@ -501,7 +499,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        string _foo = ""test"", _bar = ""test"";
+        readonly string _foo = ""test"", _bar = ""test"";
 
         public override bool Equals(object obj)
         {
@@ -535,7 +533,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        string _foo = ""test"";
+        readonly string _foo = ""test"";
         static string _bar = ""test"";
     }
 }";
@@ -545,7 +543,7 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        string _foo = ""test"";
+        readonly string _foo = ""test"";
         static string _bar = ""test"";
 
         public override bool Equals(object obj)
@@ -583,7 +581,7 @@ namespace ConsoleApplication1
 
     class MyClass : MyBaseClass
     {
-        string _foo = ""test"";
+        readonly string _foo = ""test"";
         static string _bar = ""test"";
     }
 }";
@@ -598,7 +596,7 @@ namespace ConsoleApplication1
 
     class MyClass : MyBaseClass
     {
-        string _foo = ""test"";
+        readonly string _foo = ""test"";
         static string _bar = ""test"";
 
         public override bool Equals(object obj)
@@ -639,7 +637,7 @@ namespace ConsoleApplication1
 
     class MyClass : MyBaseClass, IClass
     {
-        string _foo = ""test"";
+        readonly string _foo = ""test"";
         static string _bar = ""test"";
     }
 }";
@@ -656,7 +654,7 @@ namespace ConsoleApplication1
 
     class MyClass : MyBaseClass, IClass
     {
-        string _foo = ""test"";
+        readonly string _foo = ""test"";
         static string _bar = ""test"";
 
         public override bool Equals(object obj)
@@ -692,7 +690,7 @@ namespace ConsoleApplication1
 
     struct MyStruct : IStruct
     {
-        string _foo;
+        readonly string _foo;
         static string _bar;
     }
 }";
@@ -704,7 +702,7 @@ namespace ConsoleApplication1
 
     struct MyStruct : IStruct
     {
-        string _foo;
+        readonly string _foo;
         static string _bar;
 
         public override bool Equals(object obj)
@@ -743,7 +741,7 @@ namespace ConsoleApplication1
 
     class MyClass : MyBaseClass
     {
-        string _foo = ""test"";
+        readonly string _foo = ""test"";
         static string _bar = ""test"";
     }
 }";
@@ -759,7 +757,7 @@ namespace ConsoleApplication1
 
     class MyClass : MyBaseClass
     {
-        string _foo = ""test"";
+        readonly string _foo = ""test"";
         static string _bar = ""test"";
 
         public override bool Equals(object obj)
@@ -799,7 +797,7 @@ namespace ConsoleApplication1
 
     class MyClass : MyBaseClass
     {
-        string _foo = ""test"";
+        readonly string _foo = ""test"";
         static string _bar = ""test"";
     }
 }";
@@ -815,7 +813,7 @@ namespace ConsoleApplication1
 
     class MyClass : MyBaseClass
     {
-        string _foo = ""test"";
+        readonly string _foo = ""test"";
         static string _bar = ""test"";
 
         public override bool Equals(object obj)
@@ -848,15 +846,15 @@ namespace ConsoleApplication1
 {
     class MyBaseClass
     {
-        public virtual string Bar { get; set; }
+        public virtual string Bar { get; }
         public override bool Equals(object obj) => true;
     }
 
     class MyClass : MyBaseClass
     {
-        string _foo = ""test"";
+        readonly string _foo = ""test"";
         static string _bar = ""test"";
-        public override string Bar { get; set; }
+        public override string Bar { get; }
     }
 }";
 
@@ -865,15 +863,15 @@ namespace ConsoleApplication1
 {
     class MyBaseClass
     {
-        public virtual string Bar { get; set; }
+        public virtual string Bar { get; }
         public override bool Equals(object obj) => true;
     }
 
     class MyClass : MyBaseClass
     {
-        string _foo = ""test"";
+        readonly string _foo = ""test"";
         static string _bar = ""test"";
-        public override string Bar { get; set; }
+        public override string Bar { get; }
 
         public override bool Equals(object obj)
         {
@@ -892,6 +890,191 @@ namespace ConsoleApplication1
         {
             return _foo.GetHashCode() ^
                    Bar.GetHashCode();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ImplementEqualsAndGetHashCode_ClassDoesNotImplementEither_EqualsComparesAll_GetHashCodeUsesReadonly()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        readonly string _foo = ""test"";
+        string _bar = ""test"";
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        readonly string _foo = ""test"";
+        string _bar = ""test"";
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || typeof(MyClass) != obj.GetType())
+            {
+                return false;
+            }
+
+            var value = (MyClass)obj;
+            return _foo == value._foo &&
+                   _bar == value._bar;
+        }
+
+        public override int GetHashCode()
+        {
+            return _foo.GetHashCode();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ImplementEqualsAndGetHashCode_ClassDoesNotImplementEither_EqualsComparesAll_GetHashCodeUsesValueTypes()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    struct MyStruct { }
+
+    class MyClass
+    {
+        string _foo = ""test"";
+        MyStruct _bar;
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    struct MyStruct { }
+
+    class MyClass
+    {
+        string _foo = ""test"";
+        MyStruct _bar;
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || typeof(MyClass) != obj.GetType())
+            {
+                return false;
+            }
+
+            var value = (MyClass)obj;
+            return _foo == value._foo &&
+                   _bar.Equals(value._bar);
+        }
+
+        public override int GetHashCode()
+        {
+            return _bar.GetHashCode();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ImplementEqualsAndGetHashCode_ClassDoesNotImplementEither_EqualsComparesAll_GetHashCodeUsesGetOnlyProperties()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        string _foo { get; set; }
+        string _bar { get; }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        string _foo { get; set; }
+        string _bar { get; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || typeof(MyClass) != obj.GetType())
+            {
+                return false;
+            }
+
+            var value = (MyClass)obj;
+            return _foo == value._foo &&
+                   _bar == value._bar;
+        }
+
+        public override int GetHashCode()
+        {
+            return _bar.GetHashCode();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ImplementEqualsAndGetHashCode_ClassDoesNotImplementEither_EqualsUsesEqualsOnValueTypes()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    struct MyStruct { }
+
+    class MyClass
+    {
+        MyStruct _foo;
+        MyStruct _bar { get; }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    struct MyStruct { }
+
+    class MyClass
+    {
+        MyStruct _foo;
+        MyStruct _bar { get; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || typeof(MyClass) != obj.GetType())
+            {
+                return false;
+            }
+
+            var value = (MyClass)obj;
+            return _foo.Equals(value._foo) &&
+                   _bar.Equals(value._bar);
+        }
+
+        public override int GetHashCode()
+        {
+            return _foo.GetHashCode() ^
+                   _bar.GetHashCode();
         }
     }
 }";
