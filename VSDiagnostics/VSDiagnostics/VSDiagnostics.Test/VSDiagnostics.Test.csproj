@@ -114,6 +114,7 @@
     <Compile Include="Tests\Exceptions\CatchNullReferenceExceptionTests.cs" />
     <Compile Include="Tests\Exceptions\EmptyArgumentExceptionTests.cs" />
     <Compile Include="Tests\Exceptions\EmptyCatchClauseTests.cs" />
+    <Compile Include="Tests\Exceptions\ExceptionThrownFromProhibitedContextTests.cs" />
     <Compile Include="Tests\Exceptions\RethrowExceptionWithoutLosingStracktraceTests.cs" />
     <Compile Include="Tests\Exceptions\SingleGeneralExceptionTests.cs" />
     <Compile Include="Tests\General\EqualsAndGetHashcodeNotImplementedTogetherTests.cs" />

@@ -51,5 +51,13 @@
         public const string SwitchIsMissingDefaultLabel = "VSD0049";
         public const string StructWithoutElementaryMethodsOverridden = "VSD0050";
         public const string UsingStatementWithoutBraces = "VSD0051";
+        public const string ExceptionThrownFromImplicitOperator = "VSD0052";
+        public const string ExceptionThrownFromPropertyGetter = "VSD0053";
+        public const string ExceptionThrownFromStaticConstructor = "VSD0054";
+        public const string ExceptionThrownFromFinallyBlock = "VSD0055";
+        public const string ExceptionThrownFromEqualityOperator = "VSD0056";
+        public const string ExceptionThrownFromDispose = "VSD0057";
+        public const string ExceptionThrownFromFinalizer = "VSD0058";
+        public const string ExceptionThrownFromGetHashCode = "VSD0059";
     }
 }

@@ -512,6 +512,150 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from the {0} method in type {1}.
+        /// </summary>
+        internal static string ExceptionThrownFromDisposeAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromDisposeAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from a Dispose method..
+        /// </summary>
+        internal static string ExceptionThrownFromDisposeAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromDisposeAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from the {0} operator between {1} and {2} in type {3}.
+        /// </summary>
+        internal static string ExceptionThrownFromEqualityOperatorAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromEqualityOperatorAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from an equality operator..
+        /// </summary>
+        internal static string ExceptionThrownFromEqualityOperatorAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromEqualityOperatorAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from the finalizer method in type {0}.
+        /// </summary>
+        internal static string ExceptionThrownFromFinalizerAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromFinalizerAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from a finalizer method..
+        /// </summary>
+        internal static string ExceptionThrownFromFinalizerAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromFinalizerAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from a finally block.
+        /// </summary>
+        internal static string ExceptionThrownFromFinallyBlockAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromFinallyBlockAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from a finally block..
+        /// </summary>
+        internal static string ExceptionThrownFromFinallyBlockAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromFinallyBlockAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from the GetHashCode() method in type {0}.
+        /// </summary>
+        internal static string ExceptionThrownFromGetHashCodeAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromGetHashCodeAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from a GetHashCode() method..
+        /// </summary>
+        internal static string ExceptionThrownFromGetHashCodeAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromGetHashCodeAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from implicit operator {0} in type {1}.
+        /// </summary>
+        internal static string ExceptionThrownFromImplicitOperatorAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromImplicitOperatorAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from an implicit operator..
+        /// </summary>
+        internal static string ExceptionThrownFromImplicitOperatorAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromImplicitOperatorAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from the getter of property {0}.
+        /// </summary>
+        internal static string ExceptionThrownFromPropertyGetterAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromPropertyGetterAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from a property getter..
+        /// </summary>
+        internal static string ExceptionThrownFromPropertyGetterAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromPropertyGetterAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from {0} its static constructor.
+        /// </summary>
+        internal static string ExceptionThrownFromStaticConstructorAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromStaticConstructorAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from a static constructor..
+        /// </summary>
+        internal static string ExceptionThrownFromStaticConstructorAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromStaticConstructorAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use explicit {0} modifier..
         /// </summary>
         internal static string ExplicitAccessModifiersAnalyzerMessage {
