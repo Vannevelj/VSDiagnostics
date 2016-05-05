@@ -63,7 +63,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="RoslynTester, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\RoslynTester.1.6.2\lib\RoslynTester.dll</HintPath>
+      <HintPath>..\..\packages\RoslynTester.1.6.3\lib\RoslynTester.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
