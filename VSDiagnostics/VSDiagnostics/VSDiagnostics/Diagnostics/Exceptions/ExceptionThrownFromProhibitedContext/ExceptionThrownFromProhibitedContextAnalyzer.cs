@@ -97,10 +97,27 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ExceptionThrownFromProhibitedCont
 
                     if (methodName == "GetHashCode")
                     {
-                        context.ReportDiagnostic(Diagnostic.Create(GetHashCodeRule, warningLocation, containingType.Name));
-                        return;
+                        // Make sure we're dealing with the actual members defined in 'Object' in case they're hidden in a subclass
+                        var currentMethodSymbol = context.SemanticModel.GetDeclaredSymbol(method);
+
+                        var objectSymbol = context.SemanticModel.Compilation.GetSpecialType(SpecialType.System_Object);
+                        var objectGetHashCodeSymbol = objectSymbol.GetMembers("GetHashCode").Single();
+
+                        while (currentMethodSymbol.IsOverride)
+                        {
+                            currentMethodSymbol = currentMethodSymbol.OverriddenMethod;
+                        }
+
+                        if (currentMethodSymbol.Equals(objectGetHashCodeSymbol))
+                        {
+                            context.ReportDiagnostic(Diagnostic.Create(GetHashCodeRule, warningLocation, containingType.Name));
+                            return;
+                        }
                     }
 
+                    // We don't verify we're dealing with the 'Object' overridden method of 'Equals' because that would exclude Equals(T) in IEquatable
+                    // Furthermore we can expect to have multiple overloads of 'Equals' on argument type to provide a better equality comparison experience
+                    // This is not the case for GetHashCode() where we only expect one implementation
                     if (methodName == "Equals" && method.ParameterList.Parameters.Count == 1)
                     {
                         context.ReportDiagnostic(Diagnostic.Create(EqualsRule, warningLocation, method.ParameterList.Parameters[0].Type.ToString(), containingType.Name));

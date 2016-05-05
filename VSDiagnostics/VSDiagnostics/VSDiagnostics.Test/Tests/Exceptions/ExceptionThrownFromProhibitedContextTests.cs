@@ -571,6 +571,27 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void ExceptionThrownFromProhibitedContext_GetHashCode_HidingMember()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    public class MyClass
+    {
+	    public int GetHashCode()
+        {
+            throw new ArgumentException();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
         public void ExceptionThrownFromProhibitedContext_Equals()
         {
             var original = @"
@@ -631,6 +652,27 @@ namespace ConsoleApplication1
 }";
 
             VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ExceptionThrownFromProhibitedContext_Equals_HidingMember()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    public class MyClass
+    {
+	    public bool Equals(object o)
+        {
+            throw new ArgumentException();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, "An exception is thrown from the Equals(object) method in type MyClass");
         }
     }
 }
