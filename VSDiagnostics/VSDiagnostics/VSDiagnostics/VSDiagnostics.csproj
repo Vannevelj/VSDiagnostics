@@ -49,6 +49,7 @@
     <Compile Include="Diagnostics\Exceptions\CatchNullReferenceException\CatchingNullReferenceExceptionAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\EmptyArgumentException\EmptyArgumentExceptionAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\EmptyCatchClause\EmptyCatchClauseAnalyzer.cs" />
+    <Compile Include="Diagnostics\Exceptions\ExceptionThrownFromProhibitedContext\ExceptionThrownFromProhibitedContextAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\RethrowExceptionWithoutLosingStacktrace\RethrowExceptionWithoutLosingStacktraceAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\RethrowExceptionWithoutLosingStacktrace\RethrowExceptionWithoutLosingStacktraceCodeFix.cs" />
     <Compile Include="Diagnostics\Exceptions\SingleGeneralException\SingleGeneralExceptionAnalyzer.cs" />

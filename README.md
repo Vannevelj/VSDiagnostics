@@ -39,6 +39,15 @@ Currently these diagnostics are implemented:
 | Exceptions | VSD0010 | Warns when an exception catch block is empty.
 | Exceptions | VSD0011 | Warns when an exception is rethrown in a way that it loses the stacktrace.
 | Exceptions | VSD0012 | Guards against using a catch-all clause.
+| Exceptions | VSD0052 | An exception is thrown from an implicit operator.
+| Exceptions | VSD0053 | An exception is thrown from a property getter.
+| Exceptions | VSD0054 | An exception is thrown from a static constructor.
+| Exceptions | VSD0055 | An exception is thrown from a finally block.
+| Exceptions | VSD0056 | An exception is thrown from an equality operator.
+| Exceptions | VSD0057 | An exception is thrown from a Dispose method.
+| Exceptions | VSD0058 | An exception is thrown from a finalizer method.
+| Exceptions | VSD0059 | An exception is thrown from a GetHashCode() method.
+| Exceptions | VSD0060 | An exception is thrown from an Equals() method.
 | General | VSD0013 | Allows you to change as statements to cast statements.
 | General | VSD0014 | Allows you to change cast statements to as statements.
 | General | VSD0015 | A boolean expression doesn't have to be compared to `false`.
