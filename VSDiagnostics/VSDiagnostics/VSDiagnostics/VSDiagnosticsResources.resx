@@ -449,10 +449,10 @@
     <value>Add attribute</value>
   </data>
   <data name="LoopStatementWithoutBracesAnalyzerMessage" xml:space="preserve">
-    <value>Variable {0} of type System.Random is instantiated in a loop.</value>
+    <value>Loops should use braces to improve code readability and bug prevention.</value>
   </data>
   <data name="LoopStatementWithoutBracesAnalyzerTitle" xml:space="preserve">
-    <value>An instance of type System.Random is created in a loop.</value>
+    <value>Loop instance without braces.</value>
   </data>
   <data name="LoopStatementWithoutBracesCodeFixTitle" xml:space="preserve">
     <value>Use braces</value>
@@ -495,10 +495,10 @@
     <value>Invalid arguments for the string.Format() call.</value>
   </data>
   <data name="LoopedRandomInstantiationAnalyzerMessage" xml:space="preserve">
-    <value>Instantiate the random instance outside the loop.</value>
+    <value>Variable {0} of type System.Random is instantiated in a loop.</value>
   </data>
   <data name="LoopedRandomInstantiationAnalyzerTitle" xml:space="preserve">
-    <value>Random instance created in loop.</value>
+    <value>An instance of type System.Random is created in a loop.</value>
   </data>
   <data name="SwitchDoesNotHandleAllEnumOptionsAnalyzerMessage" xml:space="preserve">
     <value>Missing enum member(s) in switched cases.</value>
@@ -543,5 +543,99 @@
   </data>
   <data name="ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerTitle" xml:space="preserve">
     <value>Implement elementary methods.</value>
+  </data>
+  <data name="SwitchIsMissingDefaultSectionAnalyzerMessage" xml:space="preserve">
+    <value>Switch should have default label.</value>
+  </data>
+  <data name="SwitchIsMissingDefaultSectionAnalyzerTitle" xml:space="preserve">
+    <value>Switch is missing a default label.</value>
+  </data>
+  <data name="SwitchIsMissingDefaultSectionCodeFixTitle" xml:space="preserve">
+    <value>Add default label</value>
+  </data>
+  <data name="StructWithoutElementaryMethodsOverriddenAnalyzerMessage" xml:space="preserve">
+    <value>Implement elementary methods on struct {0}.</value>
+  </data>
+  <data name="StructWithoutElementaryMethodsOverriddenAnalyzerTitle" xml:space="preserve">
+    <value>Structs should implement Equals(), GetHashCode(), and ToString().</value>
+  </data>
+  <data name="StructWithoutElementaryMethodsOverriddenCodeFixTitle" xml:space="preserve">
+    <value>Implement {0}</value>
+  </data>
+  <data name="UsingStatementWithoutBracesAnalyzerMessage" xml:space="preserve">
+    <value>Using statements should use braces.</value>
+  </data>
+  <data name="UsingStatementWithoutBracesAnalyzerTitle" xml:space="preserve">
+    <value>Using statement without braces.</value>
+  </data>
+  <data name="UsingStatementWithoutBracesCodeFixTitle" xml:space="preserve">
+    <value>Add braces</value>
+  </data>
+  <data name="ExceptionThrownFromDisposeAnalyzerMessage" xml:space="preserve">
+    <value>An exception is thrown from the {0} method in type {1}</value>
+    <comment>{0} - Dispose() or Dispose(bool)
+{1} - Containing type</comment>
+  </data>
+  <data name="ExceptionThrownFromDisposeAnalyzerTitle" xml:space="preserve">
+    <value>An exception is thrown from a Dispose method.</value>
+  </data>
+  <data name="ExceptionThrownFromEqualityOperatorAnalyzerMessage" xml:space="preserve">
+    <value>An exception is thrown from the {0} operator between {1} and {2} in type {3}</value>
+    <comment>{0} - Operator
+{1} - First parameter type
+{2} - Second parameter type
+{3} - Containing type</comment>
+  </data>
+  <data name="ExceptionThrownFromEqualityOperatorAnalyzerTitle" xml:space="preserve">
+    <value>An exception is thrown from an equality operator.</value>
+  </data>
+  <data name="ExceptionThrownFromEqualsAnalyzerMessage" xml:space="preserve">
+    <value>An exception is thrown from the Equals({0}) method in type {1}</value>
+    <comment>{0} - Type of parameter</comment>
+  </data>
+  <data name="ExceptionThrownFromEqualsAnalyzerTitle" xml:space="preserve">
+    <value>An exception is thrown from an Equals() method.</value>
+  </data>
+  <data name="ExceptionThrownFromFinalizerAnalyzerMessage" xml:space="preserve">
+    <value>An exception is thrown from the finalizer method in type {0}</value>
+    <comment>{0} - Containing type</comment>
+  </data>
+  <data name="ExceptionThrownFromFinalizerAnalyzerTitle" xml:space="preserve">
+    <value>An exception is thrown from a finalizer method.</value>
+  </data>
+  <data name="ExceptionThrownFromFinallyBlockAnalyzerMessage" xml:space="preserve">
+    <value>An exception is thrown from a finally block</value>
+  </data>
+  <data name="ExceptionThrownFromFinallyBlockAnalyzerTitle" xml:space="preserve">
+    <value>An exception is thrown from a finally block.</value>
+  </data>
+  <data name="ExceptionThrownFromGetHashCodeAnalyzerMessage" xml:space="preserve">
+    <value>An exception is thrown from the GetHashCode() method in type {0}</value>
+    <comment>{0} - Containing type</comment>
+  </data>
+  <data name="ExceptionThrownFromGetHashCodeAnalyzerTitle" xml:space="preserve">
+    <value>An exception is thrown from a GetHashCode() method.</value>
+  </data>
+  <data name="ExceptionThrownFromImplicitOperatorAnalyzerMessage" xml:space="preserve">
+    <value>An exception is thrown from implicit operator {0} in type {1}</value>
+    <comment>{0} - The type being cast to
+{1} - The type being cast from</comment>
+  </data>
+  <data name="ExceptionThrownFromImplicitOperatorAnalyzerTitle" xml:space="preserve">
+    <value>An exception is thrown from an implicit operator.</value>
+  </data>
+  <data name="ExceptionThrownFromPropertyGetterAnalyzerMessage" xml:space="preserve">
+    <value>An exception is thrown from the getter of property {0}</value>
+    <comment>{0} - Property name</comment>
+  </data>
+  <data name="ExceptionThrownFromPropertyGetterAnalyzerTitle" xml:space="preserve">
+    <value>An exception is thrown from a property getter.</value>
+  </data>
+  <data name="ExceptionThrownFromStaticConstructorAnalyzerMessage" xml:space="preserve">
+    <value>An exception is thrown from {0} its static constructor</value>
+    <comment>{0} - Type name</comment>
+  </data>
+  <data name="ExceptionThrownFromStaticConstructorAnalyzerTitle" xml:space="preserve">
+    <value>An exception is thrown from a static constructor.</value>
   </data>
 </root>

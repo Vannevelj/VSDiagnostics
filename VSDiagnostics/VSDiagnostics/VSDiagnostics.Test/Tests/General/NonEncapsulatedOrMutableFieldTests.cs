@@ -370,6 +370,57 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void NonEncapsulatedOrMutableField_Param()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public int myField;
+
+        void DoSomething()
+        {
+            MyMethod(myField);
+        }
+
+        void MyMethod(int x)
+        {
+
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        public int myField { get; set; }
+
+        void DoSomething()
+        {
+            MyMethod(myField);
+        }
+
+        void MyMethod(int x)
+        {
+
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(NonEncapsulatedOrMutableFieldAnalyzer.Rule.MessageFormat.ToString(), "myField"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
         public void NonEncapsulatedOrMutableField_Ref()
         {
             var original = @"

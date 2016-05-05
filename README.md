@@ -1,4 +1,4 @@
-# VSDiagnostics
+﻿# VSDiagnostics
 A collection of code-quality analyzers based on the new Roslyn platform. This project aims to ensure code-quality as you type it in your editor rather than having to do this as a separate build-step. Likewise it also tries to help avoid some common pitfalls.
 
 <img src="https://cloud.githubusercontent.com/assets/2777107/12633986/2e05fc66-c576-11e5-92a2-3c192f2f0d89.gif" />
@@ -39,6 +39,15 @@ Currently these diagnostics are implemented:
 | Exceptions | VSD0010 | Warns when an exception catch block is empty.
 | Exceptions | VSD0011 | Warns when an exception is rethrown in a way that it loses the stacktrace.
 | Exceptions | VSD0012 | Guards against using a catch-all clause.
+| Exceptions | VSD0052 | An exception is thrown from an implicit operator.
+| Exceptions | VSD0053 | An exception is thrown from a property getter.
+| Exceptions | VSD0054 | An exception is thrown from a static constructor.
+| Exceptions | VSD0055 | An exception is thrown from a finally block.
+| Exceptions | VSD0056 | An exception is thrown from an equality operator.
+| Exceptions | VSD0057 | An exception is thrown from a Dispose method.
+| Exceptions | VSD0058 | An exception is thrown from a finalizer method.
+| Exceptions | VSD0059 | An exception is thrown from a GetHashCode() method.
+| Exceptions | VSD0060 | An exception is thrown from an Equals() method.
 | General | VSD0013 | Allows you to change as statements to cast statements.
 | General | VSD0014 | Allows you to change cast statements to as statements.
 | General | VSD0015 | A boolean expression doesn't have to be compared to `false`.
@@ -64,6 +73,9 @@ Currently these diagnostics are implemented:
 | General | VSD0046 | Equals() and GetHashcode() must be implemented together.
 | General | VSD0047 | Implement elementary methods of type used in collection.
 | General | VSD0048 | A property with a private setter can become a read-only property instead.
+| General | VSD0050 | Struct does not override elementary methods.
+| General | VSD0049 | Switch is missing a default label.
+| General | VSD0051 | Using statement is missing braces.
 | Strings | VSD0034 | Use `string.Empty` instead of `""`.
 | Strings | VSD0035 | Adjusts the placeholders in `string.Format()` calls to be in numerical order.
 | Strings | VSD0042 | A `string.Format()` call lacks arguments and will cause a runtime exception
@@ -111,4 +123,4 @@ Release 2.0.0 will come with a website where we document every diagnostic includ
 
 ## How can I get in contact?
 
-You're always free to open an issue but if you would like something more direct you can drop by in [the StackExchange chat channel](http://chat.stackexchange.com/rooms/26639/vsdiagnostics) where the main contributors reside.
+You're always free to open an issue but if you would like something more direct you can drop by in [the StackExchange chat channel](http://chat.stackexchange.com/rooms/26639/vsdiagnostics) where the main contributors reside or send an email to jer_vannevel@outlook.com.
