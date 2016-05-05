@@ -89,6 +89,8 @@
     <Compile Include="Diagnostics\General\OnPropertyChangedWithoutNameOfOperator\OnPropertyChangedWithoutNameOfOperatorAnalyzer.cs" />
     <Compile Include="Diagnostics\General\OnPropertyChangedWithoutNameOfOperator\OnPropertyChangedWithoutNameOfOperatorCodeFix.cs" />
     <Compile Include="Diagnostics\General\LoopedRandomInstantiation\LoopedRandomInstantiationAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\RedundantPrivateSetter\RedundantPrivateSetterAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\RedundantPrivateSetter\RedundantPrivateSetterCodeFix.cs" />
     <Compile Include="Diagnostics\General\SimplifyExpressionBodiedMember\SimplifyExpressionBodiedMemberAnalyzer.cs" />
     <Compile Include="Diagnostics\General\SimplifyExpressionBodiedMember\SimplifyExpressionBodiedMemberCodeFix.cs" />
     <Compile Include="Diagnostics\General\SingleEmptyConstructor\SingleEmptyConstructorAnalyzer.cs" />
