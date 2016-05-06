@@ -674,5 +674,28 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original, "An exception is thrown from the Equals(object) method in type MyClass");
         }
+
+        [TestMethod]
+        public void ExceptionThrownFromProhibitedContext_Indexer()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+	    public string this[int i]
+	    {
+		    get
+		    {
+			    throw new ArgumentException();
+		    }
+
+		    set { }
+	    }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }

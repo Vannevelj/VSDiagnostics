@@ -247,6 +247,19 @@ namespace VSDiagnostics.Utilities
             return identifier != null && identifier.Identifier.ValueText == "nameof";
         }
 
+        public static SyntaxNode GetEnclosingTypeNode(this SyntaxNode syntaxNode)
+        {
+            foreach (var ancestor in syntaxNode.AncestorsAndSelf())
+            {
+                if (ancestor.IsKind(SyntaxKind.ClassDeclaration) || ancestor.IsKind(SyntaxKind.StructDeclaration))
+                {
+                    return ancestor;
+                }
+            }
+
+            throw new ArgumentException("The node is not contained in a type", nameof(syntaxNode));
+        }
+
         public static List<T> OfType<T>(this IEnumerable<SyntaxNode> enumerable, SyntaxKind kind) where T : SyntaxNode
         {
             var list = new List<T>();
