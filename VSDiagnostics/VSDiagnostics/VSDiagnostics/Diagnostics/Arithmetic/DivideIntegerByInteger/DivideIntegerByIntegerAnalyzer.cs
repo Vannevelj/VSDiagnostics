@@ -23,15 +23,12 @@ namespace VSDiagnostics.Diagnostics.Arithmetic.DivideIntegerByInteger
         private static readonly string Message = VSDiagnosticsResources.DivideIntegerByIntegerAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.DivideIntegerByIntegerAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule
-            =>
-                new DiagnosticDescriptor(DiagnosticId.DivideIntegerByInteger, Title, Message, Category, Severity,
-                    isEnabledByDefault: true);
+        internal static DiagnosticDescriptor Rule =>
+                new DiagnosticDescriptor(DiagnosticId.DivideIntegerByInteger, Title, Message, Category, Severity, isEnabledByDefault: true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-            => context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.DivideExpression);
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.DivideExpression);
 
         private void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {

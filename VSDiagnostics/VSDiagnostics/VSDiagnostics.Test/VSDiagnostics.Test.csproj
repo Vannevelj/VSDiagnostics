@@ -63,7 +63,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="RoslynTester, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\RoslynTester.1.6.2\lib\RoslynTester.dll</HintPath>
+      <HintPath>..\..\packages\RoslynTester.1.6.3\lib\RoslynTester.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -114,6 +114,7 @@
     <Compile Include="Tests\Exceptions\CatchNullReferenceExceptionTests.cs" />
     <Compile Include="Tests\Exceptions\EmptyArgumentExceptionTests.cs" />
     <Compile Include="Tests\Exceptions\EmptyCatchClauseTests.cs" />
+    <Compile Include="Tests\Exceptions\ExceptionThrownFromProhibitedContextTests.cs" />
     <Compile Include="Tests\Exceptions\RethrowExceptionWithoutLosingStracktraceTests.cs" />
     <Compile Include="Tests\Exceptions\SingleGeneralExceptionTests.cs" />
     <Compile Include="Tests\General\EqualsAndGetHashcodeNotImplementedTogetherTests.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="Tests\General\ConditionIsConstantTests.cs" />
     <Compile Include="Tests\General\ExplicitAccessModifiersTests.cs" />
     <Compile Include="Tests\Attributes\FlagsEnumValuesAreNotPowersOfTwoTests.cs" />
+    <Compile Include="Tests\General\RedudantPrivateSetterTests.cs" />
     <Compile Include="Tests\General\GotoDetectionTests.cs" />
     <Compile Include="Tests\General\IfStatementWithoutBracesTests.cs" />
     <Compile Include="Tests\General\ImplementEqualsAndGetHashCodeTests.cs" />
@@ -148,6 +150,7 @@
     <Compile Include="Tests\Strings\StringDotFormatWithDifferentAmountOfArgumentsTests.cs" />
     <Compile Include="Tests\Strings\StringPlaceholdersInWrongOrderTests.cs" />
     <Compile Include="Tests\Structs\StructMutateSelfTests.cs" />
+    <Compile Include="Tests\Structs\StructWithoutElementaryMethodsOverriddenTests.cs" />
     <Compile Include="Tests\Tests\RemoveTestSuffixTests.cs" />
     <Compile Include="Tests\Tests\TestMethodWithoutPublicModifierTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

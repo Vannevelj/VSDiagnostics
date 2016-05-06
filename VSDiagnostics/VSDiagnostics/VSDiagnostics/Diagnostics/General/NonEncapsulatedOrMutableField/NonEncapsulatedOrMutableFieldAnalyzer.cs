@@ -86,7 +86,7 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
                             // The field is being referenced
                             // Next we check whether it is referenced as an argument and passed by ref/out
                             var argument = descendant.AncestorsAndSelf().OfType<ArgumentSyntax>(SyntaxKind.Argument).FirstOrDefault();
-                            if (argument != null && !argument.RefOrOutKeyword.IsMissing)
+                            if (argument != null && !argument.RefOrOutKeyword.IsKind(SyntaxKind.None))
                             {
                                 return;
                             }

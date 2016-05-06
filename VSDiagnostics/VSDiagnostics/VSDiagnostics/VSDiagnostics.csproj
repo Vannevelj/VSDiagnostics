@@ -49,6 +49,7 @@
     <Compile Include="Diagnostics\Exceptions\CatchNullReferenceException\CatchingNullReferenceExceptionAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\EmptyArgumentException\EmptyArgumentExceptionAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\EmptyCatchClause\EmptyCatchClauseAnalyzer.cs" />
+    <Compile Include="Diagnostics\Exceptions\ExceptionThrownFromProhibitedContext\ExceptionThrownFromProhibitedContextAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\RethrowExceptionWithoutLosingStacktrace\RethrowExceptionWithoutLosingStacktraceAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\RethrowExceptionWithoutLosingStacktrace\RethrowExceptionWithoutLosingStacktraceCodeFix.cs" />
     <Compile Include="Diagnostics\Exceptions\SingleGeneralException\SingleGeneralExceptionAnalyzer.cs" />
@@ -90,6 +91,8 @@
     <Compile Include="Diagnostics\General\OnPropertyChangedWithoutNameOfOperator\OnPropertyChangedWithoutNameOfOperatorAnalyzer.cs" />
     <Compile Include="Diagnostics\General\OnPropertyChangedWithoutNameOfOperator\OnPropertyChangedWithoutNameOfOperatorCodeFix.cs" />
     <Compile Include="Diagnostics\General\LoopedRandomInstantiation\LoopedRandomInstantiationAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\RedundantPrivateSetter\RedundantPrivateSetterAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\RedundantPrivateSetter\RedundantPrivateSetterCodeFix.cs" />
     <Compile Include="Diagnostics\General\SimplifyExpressionBodiedMember\SimplifyExpressionBodiedMemberAnalyzer.cs" />
     <Compile Include="Diagnostics\General\SimplifyExpressionBodiedMember\SimplifyExpressionBodiedMemberCodeFix.cs" />
     <Compile Include="Diagnostics\General\SingleEmptyConstructor\SingleEmptyConstructorAnalyzer.cs" />
@@ -113,6 +116,8 @@
     <Compile Include="Diagnostics\Strings\StringPlaceholdersInWrongOrder\StringPlaceholdersInWrongOrderCodeFix.cs" />
     <Compile Include="Diagnostics\Strings\PlaceholderHelpers.cs" />
     <Compile Include="Diagnostics\Structs\StructShouldNotMutateSelf\StructShouldNotMutateSelfAnalyzer.cs" />
+    <Compile Include="Diagnostics\Structs\StructWithoutElementaryMethodsOverridden\StructWithoutElementaryMethodsOverriddenAnalyzer.cs" />
+    <Compile Include="Diagnostics\Structs\StructWithoutElementaryMethodsOverridden\StructWithoutElementaryMethodsOverriddenCodeFix.cs" />
     <Compile Include="Diagnostics\Tests\RemoveTestSuffix\RemoveTestSuffixAnalyzer.cs" />
     <Compile Include="Diagnostics\Tests\RemoveTestSuffix\RemoveTestSuffixCodeFix.cs" />
     <Compile Include="Diagnostics\Tests\TestMethodWithoutPublicModifier\TestMethodWithoutPublicModifierAnalyzer.cs" />
