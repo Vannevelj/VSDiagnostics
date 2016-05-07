@@ -127,6 +127,10 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ExceptionThrownFromProhibitedCont
                 else if (ancestor.IsKind(SyntaxKind.GetAccessorDeclaration))
                 {
                     var property = ancestor.Ancestors().OfType<PropertyDeclarationSyntax>(SyntaxKind.PropertyDeclaration).FirstOrDefault();
+                    if (property == null)
+                    {
+                        return;
+                    }
                     context.ReportDiagnostic(Diagnostic.Create(PropertyGetterRule, warningLocation, property.Identifier.ValueText));
                     return;
                 }

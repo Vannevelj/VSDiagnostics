@@ -31,21 +31,19 @@ namespace VSDiagnostics.Diagnostics.General.RedundantPrivateSetter
 
             // Since there are no modifiers that can work with 'private', we can just assume that there should be one modifier: private
             var hasOneKeyword = setAccessor.Modifiers.Count == 1;
-            var hasPrivateKeyword = setAccessor.Modifiers[0].IsKind(SyntaxKind.PrivateKeyword);
-            if (!(hasOneKeyword && hasPrivateKeyword))
+            if (!hasOneKeyword)
             {
                 return;
             }
 
-            var property = default(PropertyDeclarationSyntax);
-            foreach (var ancestor in context.Node.Ancestors())
+            var hasPrivateKeyword = setAccessor.Modifiers[0].IsKind(SyntaxKind.PrivateKeyword);
+            if (!hasPrivateKeyword)
             {
-                if (ancestor.IsKind(SyntaxKind.PropertyDeclaration))
-                {
-                    property = (PropertyDeclarationSyntax) ancestor;
-                }
+                return;
             }
-            if (property == default(PropertyDeclarationSyntax))
+
+            var property = context.Node.Ancestors().OfType<PropertyDeclarationSyntax>(SyntaxKind.PropertyDeclaration).FirstOrDefault();
+            if (property == null)
             {
                 return;
             }
@@ -54,7 +52,7 @@ namespace VSDiagnostics.Diagnostics.General.RedundantPrivateSetter
             // Since SymbolFinder does not work in an analyzer, we have to simulate finding the symbol ourselves
             // We can do this by getting the inner-most class declaration and then looking at all of its descendants
             // This is a fairly intensive operation but I'm not aware of any alternative
-            var classDeclaration = setAccessor.Ancestors().OfType<ClassDeclarationSyntax>(SyntaxKind.ClassDeclaration).First();
+            var classDeclaration = setAccessor.GetEnclosingTypeNode();
             var classSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration);
             var propertySymbol = context.SemanticModel.GetDeclaredSymbol(property);
 
@@ -96,7 +94,7 @@ namespace VSDiagnostics.Diagnostics.General.RedundantPrivateSetter
                 }
             }
 
-            context.ReportDiagnostic(Diagnostic.Create(Rule, setAccessor.GetLocation(), property?.Identifier.ValueText));
+            context.ReportDiagnostic(Diagnostic.Create(Rule, setAccessor.GetLocation(), property.Identifier.ValueText));
         }
     }
 }

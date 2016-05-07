@@ -305,5 +305,54 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void RedundantPrivateSetter_Indexer()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+	    public string this[int i]
+	    {
+		    get
+		    {
+			    return string.Empty;
+		    }
+
+		    private set { }
+	    }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void RedundantPrivateSetter_Struct()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    struct MyStruct
+    {
+        public int MyProperty { get; private set; }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    struct MyStruct
+    {
+        public int MyProperty { get; }
+    }
+}";
+
+            VerifyDiagnostic(original,
+                string.Format(RedundantPrivateSetterAnalyzer.Rule.MessageFormat.ToString(), "MyProperty"));
+            VerifyFix(original, result);
+        }
     }
 }
