@@ -528,6 +528,16 @@
   <data name="EqualsAndGetHashcodeNotImplementedTogetherCodeFixTitle" xml:space="preserve">
     <value>Implement {0}.</value>
   </data>
+  <data name="RedundantPrivateSetterAnalyzerMessage" xml:space="preserve">
+    <value>Property {0} its private setter can be omitted.</value>
+    <comment>{0} - Property name</comment>
+  </data>
+  <data name="RedundantPrivateSetterAnalyzerTitle" xml:space="preserve">
+    <value>A property with a private setter can become a read-only property instead.</value>
+  </data>
+  <data name="RedundantPrivateSetterCodeFixTitle" xml:space="preserve">
+    <value>Turn into a read-only property</value>
+    </data>
   <data name="ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerMessage" xml:space="preserve">
     <value>Implement elementary methods of type used in collection.</value>
   </data>
@@ -560,5 +570,72 @@
   </data>
   <data name="UsingStatementWithoutBracesCodeFixTitle" xml:space="preserve">
     <value>Add braces</value>
+  </data>
+  <data name="ExceptionThrownFromDisposeAnalyzerMessage" xml:space="preserve">
+    <value>An exception is thrown from the {0} method in type {1}</value>
+    <comment>{0} - Dispose() or Dispose(bool)
+{1} - Containing type</comment>
+  </data>
+  <data name="ExceptionThrownFromDisposeAnalyzerTitle" xml:space="preserve">
+    <value>An exception is thrown from a Dispose method.</value>
+  </data>
+  <data name="ExceptionThrownFromEqualityOperatorAnalyzerMessage" xml:space="preserve">
+    <value>An exception is thrown from the {0} operator between {1} and {2} in type {3}</value>
+    <comment>{0} - Operator
+{1} - First parameter type
+{2} - Second parameter type
+{3} - Containing type</comment>
+  </data>
+  <data name="ExceptionThrownFromEqualityOperatorAnalyzerTitle" xml:space="preserve">
+    <value>An exception is thrown from an equality operator.</value>
+  </data>
+  <data name="ExceptionThrownFromEqualsAnalyzerMessage" xml:space="preserve">
+    <value>An exception is thrown from the Equals({0}) method in type {1}</value>
+    <comment>{0} - Type of parameter</comment>
+  </data>
+  <data name="ExceptionThrownFromEqualsAnalyzerTitle" xml:space="preserve">
+    <value>An exception is thrown from an Equals() method.</value>
+  </data>
+  <data name="ExceptionThrownFromFinalizerAnalyzerMessage" xml:space="preserve">
+    <value>An exception is thrown from the finalizer method in type {0}</value>
+    <comment>{0} - Containing type</comment>
+  </data>
+  <data name="ExceptionThrownFromFinalizerAnalyzerTitle" xml:space="preserve">
+    <value>An exception is thrown from a finalizer method.</value>
+  </data>
+  <data name="ExceptionThrownFromFinallyBlockAnalyzerMessage" xml:space="preserve">
+    <value>An exception is thrown from a finally block</value>
+  </data>
+  <data name="ExceptionThrownFromFinallyBlockAnalyzerTitle" xml:space="preserve">
+    <value>An exception is thrown from a finally block.</value>
+  </data>
+  <data name="ExceptionThrownFromGetHashCodeAnalyzerMessage" xml:space="preserve">
+    <value>An exception is thrown from the GetHashCode() method in type {0}</value>
+    <comment>{0} - Containing type</comment>
+  </data>
+  <data name="ExceptionThrownFromGetHashCodeAnalyzerTitle" xml:space="preserve">
+    <value>An exception is thrown from a GetHashCode() method.</value>
+  </data>
+  <data name="ExceptionThrownFromImplicitOperatorAnalyzerMessage" xml:space="preserve">
+    <value>An exception is thrown from implicit operator {0} in type {1}</value>
+    <comment>{0} - The type being cast to
+{1} - The type being cast from</comment>
+  </data>
+  <data name="ExceptionThrownFromImplicitOperatorAnalyzerTitle" xml:space="preserve">
+    <value>An exception is thrown from an implicit operator.</value>
+  </data>
+  <data name="ExceptionThrownFromPropertyGetterAnalyzerMessage" xml:space="preserve">
+    <value>An exception is thrown from the getter of property {0}</value>
+    <comment>{0} - Property name</comment>
+  </data>
+  <data name="ExceptionThrownFromPropertyGetterAnalyzerTitle" xml:space="preserve">
+    <value>An exception is thrown from a property getter.</value>
+  </data>
+  <data name="ExceptionThrownFromStaticConstructorAnalyzerMessage" xml:space="preserve">
+    <value>An exception is thrown from {0} its static constructor</value>
+    <comment>{0} - Type name</comment>
+  </data>
+  <data name="ExceptionThrownFromStaticConstructorAnalyzerTitle" xml:space="preserve">
+    <value>An exception is thrown from a static constructor.</value>
   </data>
 </root>
