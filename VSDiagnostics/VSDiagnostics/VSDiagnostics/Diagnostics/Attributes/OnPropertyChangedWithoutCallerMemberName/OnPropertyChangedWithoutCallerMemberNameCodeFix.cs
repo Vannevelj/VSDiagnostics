@@ -51,7 +51,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
 
             editor.ReplaceNode(param, newParam);
 
-            var parentNode = GetParent(methodDeclaration);
+            var parentNode = methodDeclaration.GetEnclosingTypeNode();
             var methodInvocations =
                 parentNode.DescendantNodes()
                            .OfType<InvocationExpressionSyntax>().Where(i =>
@@ -87,19 +87,6 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
 
             var newDocument = document.WithSyntaxRoot(newRoot);
             return newDocument.Project.Solution;
-        }
-
-        private SyntaxNode GetParent(MethodDeclarationSyntax methodDeclaration)
-        {
-            foreach (var ancestor in methodDeclaration.Ancestors())
-            {
-                if (ancestor.IsKind(SyntaxKind.ClassDeclaration) || ancestor.IsKind(SyntaxKind.StructDeclaration))
-                {
-                    return ancestor;
-                }
-            }
-
-            throw new System.ArgumentException("Methods are always in a class or struct");
         }
     }
 }

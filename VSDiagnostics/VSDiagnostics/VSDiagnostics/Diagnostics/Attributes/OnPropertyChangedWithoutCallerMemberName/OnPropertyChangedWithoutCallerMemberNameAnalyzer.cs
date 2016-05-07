@@ -32,7 +32,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var methodDeclaration = (MethodDeclarationSyntax)context.Node;
-            var parentNode = GetParent(methodDeclaration);
+            var parentNode = methodDeclaration.GetEnclosingTypeNode();
             var typeSymbol = (INamedTypeSymbol)context.SemanticModel.GetDeclaredSymbol(parentNode);
 
             // class must implement INotifyPropertyChanged
@@ -78,19 +78,6 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
             }
 
             context.ReportDiagnostic(Diagnostic.Create(Rule, methodDeclaration.GetLocation()));
-        }
-
-        private SyntaxNode GetParent(MethodDeclarationSyntax methodDeclaration)
-        {
-            foreach (var ancestor in methodDeclaration.Ancestors())
-            {
-                if (ancestor.IsKind(SyntaxKind.ClassDeclaration) || ancestor.IsKind(SyntaxKind.StructDeclaration))
-                {
-                    return ancestor;
-                }
-            }
-
-            throw new System.ArgumentException("Methods are always in a class or struct");
         }
     }
 }
