@@ -156,8 +156,12 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                     }
 
                     var symbol = model.GetTypeInfo(field.Declaration.Type).Type;
-                    if (field.Modifiers.Contains(SyntaxKind.ReadOnlyKeyword) ||
-                        (symbol != null && symbol.IsValueType))
+                    if (symbol == null || !symbol.IsValueType && symbol.SpecialType != SpecialType.System_String)
+                    {
+                        continue;
+                    }
+
+                    if (field.Modifiers.Contains(SyntaxKind.ReadOnlyKeyword))
                     {
                         fieldAndPropertyGetHashCodeStatements.AddRange(field.Declaration.Variables.Select(
                             variable => $"{variable.Identifier}.GetHashCode()"));
@@ -171,17 +175,42 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                     {
                         continue;
                     }
-                    
-                    if (!property.AccessorList.Accessors.Any(a => a.IsKind(SyntaxKind.SetAccessorDeclaration)))
+
+                    var symbol = model.GetTypeInfo(property.Type).Type;
+                    if (symbol == null || !symbol.IsValueType && symbol.SpecialType != SpecialType.System_String)
+                    {
+                        continue;
+                    }
+
+                    if (property.AccessorList.Accessors.Any(a => a.IsKind(SyntaxKind.SetAccessorDeclaration)))
+                    {
+                        continue;
+                    }
+
+                    // ensure getter does not have body
+                    // the property has to have at least one of {get, set}, and it doesn't have a set (see above)
+                    // this will not have an NRE in First()
+                    if (property.AccessorList.Accessors.First(a => a.IsKind(SyntaxKind.GetAccessorDeclaration)).Body == null)
                     {
                         fieldAndPropertyGetHashCodeStatements.Add($"{property.Identifier}.GetHashCode()");
                     }
                 }
             }
 
+            if (!fieldAndPropertyGetHashCodeStatements.Any())
+            {
+                fieldAndPropertyGetHashCodeStatements.Add("0");
+            }
+
             var returnStatement =
-                SyntaxFactory.ParseStatement("return " + string.Join($" ^{Environment.NewLine}       ", fieldAndPropertyGetHashCodeStatements) + ";")
-                    .WithLeadingTrivia(SyntaxFactory.ParseLeadingTrivia(Environment.NewLine));
+                SyntaxFactory.ParseStatement("return " +
+                                             string.Join($" ^{Environment.NewLine}       ",
+                                                 fieldAndPropertyGetHashCodeStatements) + ";")
+                    .WithLeadingTrivia(
+                        SyntaxFactory.ParseLeadingTrivia(
+@"// Add any fields you're interested in, taking into account the guidelines described in
+// https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
+"));
 
             return SyntaxFactory.MethodDeclaration(SyntaxFactory.ParseTypeName("int"), "GetHashCode")
                     .AddModifiers(publicModifier, overrideModifier)

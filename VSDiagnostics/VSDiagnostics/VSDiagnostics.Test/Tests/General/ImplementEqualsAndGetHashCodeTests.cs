@@ -44,6 +44,8 @@ namespace ConsoleApplication1
 
         public override int GetHashCode()
         {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
             return _foo.GetHashCode();
         }
     }
@@ -85,6 +87,8 @@ namespace ConsoleApplication1
 
         public override int GetHashCode()
         {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
             return Foo.GetHashCode();
         }
     }
@@ -137,6 +141,8 @@ namespace ConsoleApplication1
 
         public override int GetHashCode()
         {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
             return _foo.GetHashCode() ^
                    _bar.GetHashCode() ^
                    Foo.GetHashCode() ^
@@ -197,6 +203,8 @@ namespace ConsoleApplication1
 
         public override int GetHashCode()
         {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
             return _foo.GetHashCode() ^
                    Foo.GetHashCode();
         }
@@ -279,6 +287,8 @@ namespace ConsoleApplication1
 
         public override int GetHashCode()
         {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
             return _foo.GetHashCode();
         }
     }
@@ -320,6 +330,8 @@ namespace ConsoleApplication1
 
         public override int GetHashCode()
         {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
             return Foo.GetHashCode();
         }
     }
@@ -372,6 +384,8 @@ namespace ConsoleApplication1
 
         public override int GetHashCode()
         {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
             return _foo.GetHashCode() ^
                    _bar.GetHashCode() ^
                    Foo.GetHashCode() ^
@@ -432,6 +446,8 @@ namespace ConsoleApplication1
 
         public override int GetHashCode()
         {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
             return _foo.GetHashCode() ^
                    Foo.GetHashCode();
         }
@@ -515,6 +531,8 @@ namespace ConsoleApplication1
 
         public override int GetHashCode()
         {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
             return _foo.GetHashCode() ^
                    _bar.GetHashCode();
         }
@@ -559,6 +577,8 @@ namespace ConsoleApplication1
 
         public override int GetHashCode()
         {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
             return _foo.GetHashCode();
         }
     }
@@ -613,6 +633,8 @@ namespace ConsoleApplication1
 
         public override int GetHashCode()
         {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
             return _foo.GetHashCode();
         }
     }
@@ -671,6 +693,8 @@ namespace ConsoleApplication1
 
         public override int GetHashCode()
         {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
             return _foo.GetHashCode();
         }
     }
@@ -718,6 +742,8 @@ namespace ConsoleApplication1
 
         public override int GetHashCode()
         {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
             return _foo.GetHashCode();
         }
     }
@@ -774,6 +800,8 @@ namespace ConsoleApplication1
 
         public override int GetHashCode()
         {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
             return _foo.GetHashCode();
         }
     }
@@ -829,6 +857,8 @@ namespace ConsoleApplication1
 
         public override int GetHashCode()
         {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
             return _foo.GetHashCode();
         }
     }
@@ -888,6 +918,8 @@ namespace ConsoleApplication1
 
         public override int GetHashCode()
         {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
             return _foo.GetHashCode() ^
                    Bar.GetHashCode();
         }
@@ -933,6 +965,8 @@ namespace ConsoleApplication1
 
         public override int GetHashCode()
         {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
             return _foo.GetHashCode();
         }
     }
@@ -949,11 +983,13 @@ namespace ConsoleApplication1
 namespace ConsoleApplication1
 {
     struct MyStruct { }
+    class MyClassN { }
 
     class MyClass
     {
-        string _foo = ""test"";
-        MyStruct _bar;
+        readonly int _foo = 0;
+        readonly MyStruct _bar;
+        readonly MyClassN _fizz;
     }
 }";
 
@@ -961,11 +997,13 @@ namespace ConsoleApplication1
 namespace ConsoleApplication1
 {
     struct MyStruct { }
+    class MyClassN { }
 
     class MyClass
     {
-        string _foo = ""test"";
-        MyStruct _bar;
+        readonly int _foo = 0;
+        readonly MyStruct _bar;
+        readonly MyClassN _fizz;
 
         public override bool Equals(object obj)
         {
@@ -975,13 +1013,17 @@ namespace ConsoleApplication1
             }
 
             var value = (MyClass)obj;
-            return _foo == value._foo &&
-                   _bar.Equals(value._bar);
+            return _foo.Equals(value._foo) &&
+                   _bar.Equals(value._bar) &&
+                   _fizz == value._fizz;
         }
 
         public override int GetHashCode()
         {
-            return _bar.GetHashCode();
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
+            return _foo.GetHashCode() ^
+                   _bar.GetHashCode();
         }
     }
 }";
@@ -991,15 +1033,14 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ImplementEqualsAndGetHashCode_ClassDoesNotImplementEither_EqualsComparesAll_GetHashCodeUsesGetOnlyProperties()
+        public void ImplementEqualsAndGetHashCode_ClassDoesNotImplementEither_EqualsComparesAll_GetHashCodeUsesString()
         {
             var original = @"
 namespace ConsoleApplication1
 {
     class MyClass
     {
-        string _foo { get; set; }
-        string _bar { get; }
+        readonly string _foo;
     }
 }";
 
@@ -1008,8 +1049,56 @@ namespace ConsoleApplication1
 {
     class MyClass
     {
-        string _foo { get; set; }
-        string _bar { get; }
+        readonly string _foo;
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || typeof(MyClass) != obj.GetType())
+            {
+                return false;
+            }
+
+            var value = (MyClass)obj;
+            return _foo == value._foo;
+        }
+
+        public override int GetHashCode()
+        {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
+            return _foo.GetHashCode();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ImplementEqualsAndGetHashCode_ClassDoesNotImplementEither_EqualsComparesAll_GetHashCodeDoesNotUseInterface()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    interface IClass { }
+
+    class MyClass
+    {
+        readonly string _foo;
+        readonly IClass _bar;
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    interface IClass { }
+
+    class MyClass
+    {
+        readonly string _foo;
+        readonly IClass _bar;
 
         public override bool Equals(object obj)
         {
@@ -1025,7 +1114,150 @@ namespace ConsoleApplication1
 
         public override int GetHashCode()
         {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
+            return _foo.GetHashCode();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ImplementEqualsAndGetHashCode_ClassDoesNotImplementEither_EqualsComparesAll_GetHashCodeReturnsZeroWhenNoEligbleValues()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    interface IClass { }
+
+    class MyClass
+    {
+        readonly IClass _bar;
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    interface IClass { }
+
+    class MyClass
+    {
+        readonly IClass _bar;
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || typeof(MyClass) != obj.GetType())
+            {
+                return false;
+            }
+
+            var value = (MyClass)obj;
+            return _bar == value._bar;
+        }
+
+        public override int GetHashCode()
+        {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
+            return 0;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ImplementEqualsAndGetHashCode_ClassDoesNotImplementEither_EqualsComparesAll_GetHashCodeUsesBodylessGetOnlyProperties()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        string _foo { get; set; }
+        string _bar { get; }
+        string _fizz { get { return ""test""; } }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        string _foo { get; set; }
+        string _bar { get; }
+        string _fizz { get { return ""test""; } }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || typeof(MyClass) != obj.GetType())
+            {
+                return false;
+            }
+
+            var value = (MyClass)obj;
+            return _foo == value._foo &&
+                   _bar == value._bar &&
+                   _fizz == value._fizz;
+        }
+
+        public override int GetHashCode()
+        {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
             return _bar.GetHashCode();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ImplementEqualsAndGetHashCode_ClassDoesNotImplementEither_NeitherUsesDelegates()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        string _foo { get; }
+        public delegate int PerformCalculation(int x, int y);
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        string _foo { get; }
+        public delegate int PerformCalculation(int x, int y);
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || typeof(MyClass) != obj.GetType())
+            {
+                return false;
+            }
+
+            var value = (MyClass)obj;
+            return _foo == value._foo;
+        }
+
+        public override int GetHashCode()
+        {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
+            return _foo.GetHashCode();
         }
     }
 }";
@@ -1044,7 +1276,7 @@ namespace ConsoleApplication1
 
     class MyClass
     {
-        MyStruct _foo;
+        readonly MyStruct _foo;
         MyStruct _bar { get; }
     }
 }";
@@ -1056,7 +1288,7 @@ namespace ConsoleApplication1
 
     class MyClass
     {
-        MyStruct _foo;
+        readonly MyStruct _foo;
         MyStruct _bar { get; }
 
         public override bool Equals(object obj)
@@ -1073,6 +1305,8 @@ namespace ConsoleApplication1
 
         public override int GetHashCode()
         {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
             return _foo.GetHashCode() ^
                    _bar.GetHashCode();
         }

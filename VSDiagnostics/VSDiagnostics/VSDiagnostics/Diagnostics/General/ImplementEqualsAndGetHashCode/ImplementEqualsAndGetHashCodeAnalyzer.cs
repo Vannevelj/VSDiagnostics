@@ -55,8 +55,7 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                 var classDeclaration = (ClassDeclarationSyntax) context.Node;
 
                 if (MembersDoNotContainOverridenEqualsAndGetHashCode(context.SemanticModel, classDeclaration.Members, objectEquals, objectGetHashCode) &&
-                    MembersContainNonStaticFieldOrProperty(classDeclaration.Members) &&
-                    MembersContainReadonlyOrValueSemanticFieldOrProperty(context.SemanticModel, classDeclaration.Members))
+                    MembersContainNonStaticFieldOrProperty(classDeclaration.Members))
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, classDeclaration.Identifier.GetLocation(), classDeclaration.Identifier));
                 }
@@ -66,8 +65,7 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                 var structDeclaration = (StructDeclarationSyntax)context.Node;
 
                 if (MembersDoNotContainOverridenEqualsAndGetHashCode(context.SemanticModel, structDeclaration.Members, objectEquals, objectGetHashCode) &&
-                    MembersContainNonStaticFieldOrProperty(structDeclaration.Members) &&
-                    MembersContainReadonlyOrValueSemanticFieldOrProperty(context.SemanticModel, structDeclaration.Members))
+                    MembersContainNonStaticFieldOrProperty(structDeclaration.Members))
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, structDeclaration.Identifier.GetLocation(), structDeclaration.Identifier));
                 }
@@ -144,49 +142,6 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                                 return true;
                             }
                         }
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        private bool MembersContainReadonlyOrValueSemanticFieldOrProperty(SemanticModel model, SyntaxList<SyntaxNode> members)
-        {
-            foreach (var node in members)
-            {
-                if (node.IsKind(SyntaxKind.FieldDeclaration))
-                {
-                    var field = (FieldDeclarationSyntax) node;
-                    if (field.Modifiers.Contains(SyntaxKind.ConstKeyword))
-                    {
-                        continue;
-                    }
-
-                    var symbol = model.GetTypeInfo(field.Declaration.Type).Type;
-                    if (field.Modifiers.Contains(SyntaxKind.ReadOnlyKeyword) ||
-                        (symbol != null && symbol.IsValueType))
-                    {
-                        return true;
-                    }
-                }
-
-                if (node.IsKind(SyntaxKind.PropertyDeclaration))
-                {
-                    var property = (PropertyDeclarationSyntax)node;
-                    var containsSetAccessor = false;
-
-                    foreach (var accessor in property.AccessorList.Accessors)
-                    {
-                        if (accessor.IsKind(SyntaxKind.SetAccessorDeclaration))
-                        {
-                            containsSetAccessor = true;
-                        }
-                    }
-
-                    if (!containsSetAccessor)
-                    {
-                        return true;
                     }
                 }
             }
