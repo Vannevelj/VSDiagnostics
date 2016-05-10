@@ -1126,7 +1126,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void ImplementEqualsAndGetHashCode_ClassDoesNotImplementEither_EqualsComparesAll_GetHashCodeReturnsZeroWhenNoEligbleValues()
+        public void ImplementEqualsAndGetHashCode_ClassDoesNotImplementEither_EqualsComparesAll_GetHashCodeReturnsBaseGetHashCodeWhenNoEligbleValues()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -1163,7 +1163,7 @@ namespace ConsoleApplication1
         {
             // Add any fields you're interested in, taking into account the guidelines described in
             // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
-            return 0;
+            return base.GetHashCode();
         }
     }
 }";

@@ -199,7 +199,7 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
 
             if (!fieldAndPropertyGetHashCodeStatements.Any())
             {
-                fieldAndPropertyGetHashCodeStatements.Add("0");
+                fieldAndPropertyGetHashCodeStatements.Add("base.GetHashCode()");
             }
 
             var returnStatement =
