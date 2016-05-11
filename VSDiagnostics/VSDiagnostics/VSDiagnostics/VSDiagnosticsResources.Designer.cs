@@ -1394,6 +1394,24 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Method {0} might be mistakingly missing a test attribute.
+        /// </summary>
+        internal static string TestMethodWithoutTestAttributeAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("TestMethodWithoutTestAttributeAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A method might be missing a test attribute..
+        /// </summary>
+        internal static string TestMethodWithoutTestAttributeAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("TestMethodWithoutTestAttributeAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tests.
         /// </summary>
         internal static string TestsCategory {

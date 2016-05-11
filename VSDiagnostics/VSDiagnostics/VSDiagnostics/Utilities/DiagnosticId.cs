@@ -61,5 +61,6 @@
         public const string ExceptionThrownFromFinalizer = "VSD0058";
         public const string ExceptionThrownFromGetHashCode = "VSD0059";
         public const string ExceptionThrownFromEquals = "VSD0060";
+        public const string TestMethodWithoutTestAttribute = "VSD0062";
     }
 }

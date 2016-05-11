@@ -52,8 +52,13 @@ namespace VSDiagnostics.Diagnostics.General.RedundantPrivateSetter
             // Since SymbolFinder does not work in an analyzer, we have to simulate finding the symbol ourselves
             // We can do this by getting the inner-most class declaration and then looking at all of its descendants
             // This is a fairly intensive operation but I'm not aware of any alternative
-            var classDeclaration = setAccessor.GetEnclosingTypeNode();
-            var classSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration);
+            var enclosingTypeNode = setAccessor.GetEnclosingTypeNode();
+            if (!enclosingTypeNode.IsKind(SyntaxKind.StructDeclaration) && !enclosingTypeNode.IsKind(SyntaxKind.ClassDeclaration))
+            {
+                return;
+            }
+
+            var classSymbol = context.SemanticModel.GetDeclaredSymbol(enclosingTypeNode);
             var propertySymbol = context.SemanticModel.GetDeclaredSymbol(property);
 
             foreach (var partialDeclaration in classSymbol.DeclaringSyntaxReferences)
