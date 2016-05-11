@@ -33,6 +33,11 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
         {
             var methodDeclaration = (MethodDeclarationSyntax)context.Node;
             var parentNode = methodDeclaration.GetEnclosingTypeNode();
+            if (!parentNode.IsKind(SyntaxKind.StructDeclaration) && !parentNode.IsKind(SyntaxKind.ClassDeclaration))
+            {
+                return;
+            }
+
             var typeSymbol = (INamedTypeSymbol)context.SemanticModel.GetDeclaredSymbol(parentNode);
 
             // class must implement INotifyPropertyChanged

@@ -28,34 +28,11 @@ namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
         {
             var method = (MethodDeclarationSyntax) context.Node;
 
-            if (IsTestMethod(method) && !method.Modifiers.Any(SyntaxKind.PublicKeyword))
+            if (method.HasTestAttribute() && !method.Modifiers.Any(SyntaxKind.PublicKeyword))
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule, method.Identifier.GetLocation(),
                     method.Identifier.Text));
             }
-        }
-
-        private static bool IsTestMethod(MethodDeclarationSyntax method)
-        {
-            var methodAttributes = new[] { "Test", "TestMethod", "Fact" };
-            var attributes = method.AttributeLists.FirstOrDefault()?.Attributes;
-
-            if (attributes == null)
-            {
-                return false;
-            }
-
-            foreach (var attribute in attributes.Value)
-            {
-                var attributeName = attribute.Name.ToString();
-
-                if (methodAttributes.Contains(attributeName))
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }
