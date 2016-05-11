@@ -800,7 +800,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Class {0} does not implement Equals() and GetHashCode()..
+        ///   Looks up a localized string similar to {0} {1} does not implement Equals() and GetHashCode()..
         /// </summary>
         internal static string ImplementEqualsAndGetHashCodeAnalyzerMessage {
             get {
@@ -809,7 +809,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Implement Equals() and GetHashCode()..
+        ///   Looks up a localized string similar to Add Equals() and GetHashCode() implementations.
         /// </summary>
         internal static string ImplementEqualsAndGetHashCodeAnalyzerTitle {
             get {

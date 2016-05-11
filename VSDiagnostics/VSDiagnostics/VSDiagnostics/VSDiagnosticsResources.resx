@@ -537,7 +537,7 @@
   </data>
   <data name="RedundantPrivateSetterCodeFixTitle" xml:space="preserve">
     <value>Turn into a read-only property</value>
-    </data>
+  </data>
   <data name="ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerMessage" xml:space="preserve">
     <value>Implement elementary methods of type used in collection.</value>
   </data>
@@ -572,10 +572,10 @@
     <value>Add braces</value>
   </data>
   <data name="ImplementEqualsAndGetHashCodeAnalyzerMessage" xml:space="preserve">
-    <value>Class {0} does not implement Equals() and GetHashCode().</value>
+    <value>{0} {1} does not implement Equals() and GetHashCode().</value>
   </data>
   <data name="ImplementEqualsAndGetHashCodeAnalyzerTitle" xml:space="preserve">
-    <value>Implement Equals() and GetHashCode().</value>
+    <value>Add Equals() and GetHashCode() implementations</value>
   </data>
   <data name="ImplementEqualsAndGetHashCodeCodeFixTitle" xml:space="preserve">
     <value>Add Equals() and GetHashCode()</value>

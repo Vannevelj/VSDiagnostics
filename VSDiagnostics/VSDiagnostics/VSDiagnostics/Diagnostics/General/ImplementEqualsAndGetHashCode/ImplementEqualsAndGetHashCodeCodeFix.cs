@@ -43,7 +43,7 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
 
             var objectSymbol = model.Compilation.GetSpecialType(SpecialType.System_Object);
             var objectEquals = objectSymbol.GetMembers().OfType<IMethodSymbol>()
-                    .First(method => method.MetadataName == nameof(Equals) && method.Parameters.Count() == 1);
+                    .Single(method => method.MetadataName == nameof(Equals) && method.Parameters.Count() == 1);
 
             if (statement is ClassDeclarationSyntax)
             {
@@ -81,6 +81,7 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                 SyntaxFactory.IfStatement(SyntaxFactory.ParseExpression($"obj == null || typeof({identifier}) != obj.GetType()"),
                     SyntaxFactory.Block(SyntaxFactory.ParseStatement("return false;")));
 
+            // the default formatting is a single space--we want a new line
             var castStatement = SyntaxFactory.ParseStatement(
                     $"var value = ({identifier}) obj;{Environment.NewLine}");
 
@@ -250,7 +251,7 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                 }
             }
 
-            return false;
+            return BaseClassImplementsEquals(objectEquals, baseType);
         }
     }
 }

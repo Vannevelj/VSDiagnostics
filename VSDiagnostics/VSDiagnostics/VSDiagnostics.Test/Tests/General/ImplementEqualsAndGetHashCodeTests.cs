@@ -51,7 +51,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
             VerifyFix(original, result);
         }
 
@@ -94,7 +94,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
             VerifyFix(original, result);
         }
 
@@ -151,7 +151,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
             VerifyFix(original, result);
         }
 
@@ -211,7 +211,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
             VerifyFix(original, result);
         }
 
@@ -294,7 +294,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyStruct"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Struct", "MyStruct"));
             VerifyFix(original, result);
         }
 
@@ -337,7 +337,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyStruct"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Struct", "MyStruct"));
             VerifyFix(original, result);
         }
 
@@ -394,7 +394,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyStruct"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Struct", "MyStruct"));
             VerifyFix(original, result);
         }
 
@@ -454,7 +454,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyStruct"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Struct", "MyStruct"));
             VerifyFix(original, result);
         }
 
@@ -539,7 +539,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
             VerifyFix(original, result);
         }
 
@@ -584,7 +584,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
             VerifyFix(original, result);
         }
         
@@ -640,7 +640,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
             VerifyFix(original, result);
         }
 
@@ -700,7 +700,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
             VerifyFix(original, result);
         }
 
@@ -749,7 +749,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyStruct"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Struct", "MyStruct"));
             VerifyFix(original, result);
         }
 
@@ -807,7 +807,67 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ImplementEqualsAndGetHashCode_ClassDoesNotImplementEither_HasBaseBaseClassImplementingEquals_BaseBaseClassHasField()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class A
+    {
+        public virtual bool M { get { return true; } }
+        public override bool Equals(object obj) => true;
+    }
+
+    class B : A { }
+
+    class C : B
+    {
+        public override bool M { get { return true; } }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class A
+    {
+        public virtual bool M { get { return true; } }
+        public override bool Equals(object obj) => true;
+    }
+
+    class B : A { }
+
+    class C : B
+    {
+        public override bool M { get { return true; } }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || typeof(C) != obj.GetType())
+            {
+                return false;
+            }
+
+            var value = (C)obj;
+            return base.Equals(obj) &&
+                   M.Equals(value.M);
+        }
+
+        public override int GetHashCode()
+        {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
+            return base.GetHashCode();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "C"));
             VerifyFix(original, result);
         }
 
@@ -864,7 +924,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
             VerifyFix(original, result);
         }
 
@@ -926,7 +986,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
             VerifyFix(original, result);
         }
 
@@ -972,7 +1032,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
             VerifyFix(original, result);
         }
 
@@ -1028,7 +1088,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
             VerifyFix(original, result);
         }
 
@@ -1071,7 +1131,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
             VerifyFix(original, result);
         }
 
@@ -1121,7 +1181,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
             VerifyFix(original, result);
         }
 
@@ -1168,7 +1228,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
             VerifyFix(original, result);
         }
 
@@ -1217,7 +1277,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
             VerifyFix(original, result);
         }
 
@@ -1262,7 +1322,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
             VerifyFix(original, result);
         }
 
@@ -1313,8 +1373,41 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "MyClass"));
+            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
             VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ImplementEqualsAndGetHashCode_ExplicitlyCheckMessage_Class()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    struct MyStruct { }
+
+    class MyClass
+    {
+        readonly MyStruct _foo;
+        MyStruct _bar { get; }
+    }
+}";
+            
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
+        }
+
+        [TestMethod]
+        public void ImplementEqualsAndGetHashCode_ExplicitlyCheckMessage_Struct()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    struct MyStruct
+    {
+        readonly int _foo;
+    }
+}";
+
+            VerifyDiagnostic(original, "Struct MyStruct does not implement Equals() and GetHashCode().");
         }
     }
 }

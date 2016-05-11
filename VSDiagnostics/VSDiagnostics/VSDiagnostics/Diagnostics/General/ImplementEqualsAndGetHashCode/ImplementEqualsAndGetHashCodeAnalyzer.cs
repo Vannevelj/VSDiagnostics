@@ -54,25 +54,25 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
             {
                 var classDeclaration = (ClassDeclarationSyntax) context.Node;
 
-                if (MembersDoNotContainOverridenEqualsAndGetHashCode(context.SemanticModel, classDeclaration.Members, objectEquals, objectGetHashCode) &&
+                if (!MembersContainOverridenEqualsOrGetHashCode(context.SemanticModel, classDeclaration.Members, objectEquals, objectGetHashCode) &&
                     MembersContainNonStaticFieldOrProperty(classDeclaration.Members))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, classDeclaration.Identifier.GetLocation(), classDeclaration.Identifier));
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, classDeclaration.Identifier.GetLocation(), "Class", classDeclaration.Identifier));
                 }
             }
             else
             {
                 var structDeclaration = (StructDeclarationSyntax)context.Node;
 
-                if (MembersDoNotContainOverridenEqualsAndGetHashCode(context.SemanticModel, structDeclaration.Members, objectEquals, objectGetHashCode) &&
+                if (!MembersContainOverridenEqualsOrGetHashCode(context.SemanticModel, structDeclaration.Members, objectEquals, objectGetHashCode) &&
                     MembersContainNonStaticFieldOrProperty(structDeclaration.Members))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, structDeclaration.Identifier.GetLocation(), structDeclaration.Identifier));
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, structDeclaration.Identifier.GetLocation(), "Struct", structDeclaration.Identifier));
                 }
             }
         }
 
-        private bool MembersDoNotContainOverridenEqualsAndGetHashCode(SemanticModel model, SyntaxList<SyntaxNode> members, IMethodSymbol objectEquals, IMethodSymbol objectGetHashCode)
+        private bool MembersContainOverridenEqualsOrGetHashCode(SemanticModel model, SyntaxList<SyntaxNode> members, IMethodSymbol objectEquals, IMethodSymbol objectGetHashCode)
         {
             var equalsImplemented = false;
             var getHashCodeImplemented = false;
@@ -114,7 +114,7 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                 }
             }
 
-            return !equalsImplemented && !getHashCodeImplemented;
+            return equalsImplemented || getHashCodeImplemented;
         }
 
         private bool MembersContainNonStaticFieldOrProperty(SyntaxList<SyntaxNode> members)
