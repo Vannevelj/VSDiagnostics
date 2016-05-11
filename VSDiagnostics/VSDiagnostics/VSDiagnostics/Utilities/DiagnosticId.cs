@@ -62,5 +62,6 @@
         public const string ExceptionThrownFromGetHashCode = "VSD0059";
         public const string ExceptionThrownFromEquals = "VSD0060";
         public const string ImplementEqualsAndGetHashCode = "VSD0061";
+        public const string TestMethodWithoutTestAttribute = "VSD0062";
     }
 }

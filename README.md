@@ -83,6 +83,7 @@ Currently these diagnostics are implemented:
 | Structs | VSD0036 | Warns when a struct attempts to assign 'this' to a new instance of the struct.
 | Tests | VSD0037 | Test methods do not need to use the "Test" suffic.
 | Tests | VSD0038 | Change the access modifier to `public` for all methods annotated as test. Supports NUnit, MSTest and xUnit.net.
+| Tests | VSD0062 | A method might be missing a test attribute.
 
 ## How do I use this?
 

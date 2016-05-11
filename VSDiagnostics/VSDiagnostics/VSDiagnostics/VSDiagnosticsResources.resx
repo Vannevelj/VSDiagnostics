@@ -647,4 +647,11 @@
   <data name="ExceptionThrownFromStaticConstructorAnalyzerTitle" xml:space="preserve">
     <value>An exception is thrown from a static constructor.</value>
   </data>
+  <data name="TestMethodWithoutTestAttributeAnalyzerMessage" xml:space="preserve">
+    <value>Method {0} might be mistakingly missing a test attribute</value>
+    <comment>{0} - Method name</comment>
+  </data>
+  <data name="TestMethodWithoutTestAttributeAnalyzerTitle" xml:space="preserve">
+    <value>A method might be missing a test attribute.</value>
+  </data>
 </root>

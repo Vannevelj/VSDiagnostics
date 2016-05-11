@@ -247,11 +247,17 @@ namespace VSDiagnostics.Utilities
             return identifier != null && identifier.Identifier.ValueText == "nameof";
         }
 
+        /// <summary>
+        /// Gets the innermost surrounding class, struct or interface declaration
+        /// </summary>
+        /// <param name="syntaxNode">The node to start from</param>
+        /// <returns>The surrounding declaration node</returns>
+        /// <exception cref="ArgumentException">Thrown when there is no surrounding class, struct or interface declaration"/></exception>
         public static SyntaxNode GetEnclosingTypeNode(this SyntaxNode syntaxNode)
         {
             foreach (var ancestor in syntaxNode.AncestorsAndSelf())
             {
-                if (ancestor.IsKind(SyntaxKind.ClassDeclaration) || ancestor.IsKind(SyntaxKind.StructDeclaration))
+                if (ancestor.IsKind(SyntaxKind.ClassDeclaration) || ancestor.IsKind(SyntaxKind.StructDeclaration) || ancestor.IsKind(SyntaxKind.InterfaceDeclaration))
                 {
                     return ancestor;
                 }

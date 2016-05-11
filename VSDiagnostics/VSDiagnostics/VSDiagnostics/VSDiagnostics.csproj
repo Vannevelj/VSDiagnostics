@@ -120,8 +120,10 @@
     <Compile Include="Diagnostics\Structs\StructWithoutElementaryMethodsOverridden\StructWithoutElementaryMethodsOverriddenCodeFix.cs" />
     <Compile Include="Diagnostics\Tests\RemoveTestSuffix\RemoveTestSuffixAnalyzer.cs" />
     <Compile Include="Diagnostics\Tests\RemoveTestSuffix\RemoveTestSuffixCodeFix.cs" />
+    <Compile Include="Diagnostics\Tests\TestHelpers.cs" />
     <Compile Include="Diagnostics\Tests\TestMethodWithoutPublicModifier\TestMethodWithoutPublicModifierAnalyzer.cs" />
     <Compile Include="Diagnostics\Tests\TestMethodWithoutPublicModifier\TestMethodWithoutPublicModifierCodeFix.cs" />
+    <Compile Include="Diagnostics\Tests\TestMethodWithoutTestAttribute\TestMethodWithoutTestAttributeAnalyzer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\DiagnosticId.cs" />
     <Compile Include="Utilities\Extensions.cs" />
