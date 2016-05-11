@@ -51,7 +51,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -94,7 +94,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -151,7 +151,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -211,7 +211,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -294,7 +294,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Struct", "MyStruct"));
+            VerifyDiagnostic(original, "Struct MyStruct does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -337,7 +337,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Struct", "MyStruct"));
+            VerifyDiagnostic(original, "Struct MyStruct does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -394,7 +394,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Struct", "MyStruct"));
+            VerifyDiagnostic(original, "Struct MyStruct does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -454,7 +454,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Struct", "MyStruct"));
+            VerifyDiagnostic(original, "Struct MyStruct does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -539,7 +539,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -584,7 +584,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
         
@@ -640,7 +640,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -700,7 +700,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -749,7 +749,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Struct", "MyStruct"));
+            VerifyDiagnostic(original, "Struct MyStruct does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -807,7 +807,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -867,7 +867,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "C"));
+            VerifyDiagnostic(original, "Class C does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -924,7 +924,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -986,7 +986,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -1032,7 +1032,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -1088,7 +1088,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -1131,7 +1131,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -1181,7 +1181,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -1228,7 +1228,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -1277,7 +1277,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -1322,7 +1322,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
 
@@ -1373,41 +1373,8 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, string.Format(ImplementEqualsAndGetHashCodeAnalyzer.Rule.MessageFormat.ToString(), "Class", "MyClass"));
-            VerifyFix(original, result);
-        }
-
-        [TestMethod]
-        public void ImplementEqualsAndGetHashCode_ExplicitlyCheckMessage_Class()
-        {
-            var original = @"
-namespace ConsoleApplication1
-{
-    struct MyStruct { }
-
-    class MyClass
-    {
-        readonly MyStruct _foo;
-        MyStruct _bar { get; }
-    }
-}";
-            
             VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
-        }
-
-        [TestMethod]
-        public void ImplementEqualsAndGetHashCode_ExplicitlyCheckMessage_Struct()
-        {
-            var original = @"
-namespace ConsoleApplication1
-{
-    struct MyStruct
-    {
-        readonly int _foo;
-    }
-}";
-
-            VerifyDiagnostic(original, "Struct MyStruct does not implement Equals() and GetHashCode().");
+            VerifyFix(original, result);
         }
     }
 }
