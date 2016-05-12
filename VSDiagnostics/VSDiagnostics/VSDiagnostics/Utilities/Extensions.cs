@@ -323,6 +323,17 @@ namespace VSDiagnostics.Utilities
             return false;
         }
 
-        public static bool IsAnyKind(this SyntaxNode node, params SyntaxKind[] kinds) => kinds.Any(node.IsKind);
+        public static bool IsAnyKind(this SyntaxNode node, params SyntaxKind[] kinds)
+        {
+            foreach (var kind in kinds)
+            {
+                if (node.IsKind(kind))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
