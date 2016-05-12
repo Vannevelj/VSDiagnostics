@@ -91,7 +91,7 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                 if (member.IsKind(SyntaxKind.FieldDeclaration))
                 {
                     var field = (FieldDeclarationSyntax)member;
-                    if (field.Modifiers.Contains(SyntaxKind.StaticKeyword))
+                    if (field.Modifiers.ContainsAny(SyntaxKind.StaticKeyword, SyntaxKind.ConstKeyword))
                     {
                         continue;
                     }
