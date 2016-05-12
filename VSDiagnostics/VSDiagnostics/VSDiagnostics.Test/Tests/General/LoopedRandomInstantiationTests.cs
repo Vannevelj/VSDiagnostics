@@ -212,5 +212,48 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void LoopedRandomInstantiation_Struct()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    struct MyStruct
+    {
+        void Method()
+        {
+            while (true)
+            {
+                var rand = new Random();
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(LoopedRandomInstantiationAnalyzer.Rule.MessageFormat.ToString(), "rand"));
+        }
+
+        [TestMethod]
+        public void LoopedRandomInstantiation_NotInLoop_Struct()
+        {
+            var original = @"
+using System;
+
+namespace ConsoleApplication1
+{
+    struct MyStruct
+    {
+        void Method()
+        {
+            var rand = new Random();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }

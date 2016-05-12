@@ -322,5 +322,7 @@ namespace VSDiagnostics.Utilities
 
             return false;
         }
+
+        public static bool IsAnyKind(this SyntaxNode node, params SyntaxKind[] kinds) => kinds.Any(node.IsKind);
     }
 }
