@@ -42,7 +42,7 @@ namespace VSDiagnostics.Diagnostics.General.LoopedRandomInstantiation
             }
 
             SyntaxNode currentNode = variableDeclaration;
-            while (!currentNode.IsKind(SyntaxKind.ClassDeclaration))
+            while (!currentNode.IsAnyKind(SyntaxKind.ClassDeclaration, SyntaxKind.StructDeclaration))
             {
                 if (_loopTypes.Contains(currentNode.Kind()))
                 {
