@@ -27,10 +27,26 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var objectSymbol = context.SemanticModel.Compilation.GetSpecialType(SpecialType.System_Object);
-            IMethodSymbol objectEquals = null;
-            IMethodSymbol objectGetHashCode = null;
+            IMethodSymbol objectEquals;
+            IMethodSymbol objectGetHashCode;
+            GetEqualsAndGetHashCodeSymbols(context.SemanticModel, out objectEquals, out objectGetHashCode);
 
+            var declaration = (TypeDeclarationSyntax)context.Node;
+
+            if (!TypeMembersContainOverridenEqualsOrGetHashCode(context.SemanticModel, declaration.Members, objectEquals, objectGetHashCode) &&
+                MembersContainNonStaticFieldOrProperty(declaration.Members))
+            {
+                context.ReportDiagnostic(Diagnostic.Create(Rule, declaration.Identifier.GetLocation(),
+                    declaration.IsKind(SyntaxKind.ClassDeclaration) ? "Class" : "Struct", declaration.Identifier));
+            }
+        }
+
+        private void GetEqualsAndGetHashCodeSymbols(SemanticModel model, out IMethodSymbol equalsSymbol, out IMethodSymbol getHashCodeSymbol)
+        {
+            equalsSymbol = null;
+            getHashCodeSymbol = null;
+
+            var objectSymbol = model.Compilation.GetSpecialType(SpecialType.System_Object);
             foreach (var symbol in objectSymbol.GetMembers())
             {
                 if (!(symbol is IMethodSymbol))
@@ -41,38 +57,17 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                 var method = (IMethodSymbol)symbol;
                 if (method.MetadataName == nameof(Equals) && method.Parameters.Count() == 1)
                 {
-                    objectEquals = method;
+                    equalsSymbol = method;
                 }
 
                 if (method.MetadataName == nameof(GetHashCode) && !method.Parameters.Any())
                 {
-                    objectGetHashCode = method;
-                }
-            }
-
-            if (context.Node is ClassDeclarationSyntax)
-            {
-                var classDeclaration = (ClassDeclarationSyntax) context.Node;
-
-                if (!MembersContainOverridenEqualsOrGetHashCode(context.SemanticModel, classDeclaration.Members, objectEquals, objectGetHashCode) &&
-                    MembersContainNonStaticFieldOrProperty(classDeclaration.Members))
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, classDeclaration.Identifier.GetLocation(), "Class", classDeclaration.Identifier));
-                }
-            }
-            else
-            {
-                var structDeclaration = (StructDeclarationSyntax)context.Node;
-
-                if (!MembersContainOverridenEqualsOrGetHashCode(context.SemanticModel, structDeclaration.Members, objectEquals, objectGetHashCode) &&
-                    MembersContainNonStaticFieldOrProperty(structDeclaration.Members))
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, structDeclaration.Identifier.GetLocation(), "Struct", structDeclaration.Identifier));
+                    getHashCodeSymbol = method;
                 }
             }
         }
 
-        private bool MembersContainOverridenEqualsOrGetHashCode(SemanticModel model, SyntaxList<SyntaxNode> members, IMethodSymbol objectEquals, IMethodSymbol objectGetHashCode)
+        private bool TypeMembersContainOverridenEqualsOrGetHashCode(SemanticModel model, SyntaxList<SyntaxNode> members, IMethodSymbol objectEquals, IMethodSymbol objectGetHashCode)
         {
             var equalsImplemented = false;
             var getHashCodeImplemented = false;
@@ -130,19 +125,16 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                     }
                 }
 
-                if (node.IsKind(SyntaxKind.PropertyDeclaration))
+                if (!node.IsKind(SyntaxKind.PropertyDeclaration))
                 {
-                    var property = (PropertyDeclarationSyntax) node;
-                    if (!property.Modifiers.Contains(SyntaxKind.StaticKeyword))
-                    {
-                        foreach (var accessor in property.AccessorList.Accessors)
-                        {
-                            if (accessor.IsKind(SyntaxKind.GetAccessorDeclaration))
-                            {
-                                return true;
-                            }
-                        }
-                    }
+                    continue;
+                }
+
+                var property = (PropertyDeclarationSyntax) node;
+                if (!property.Modifiers.Contains(SyntaxKind.StaticKeyword) &&
+                    property.AccessorList.Accessors.Any(SyntaxKind.GetAccessorDeclaration))
+                {
+                    return true;
                 }
             }
 

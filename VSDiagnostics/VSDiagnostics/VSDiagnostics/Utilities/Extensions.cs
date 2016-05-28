@@ -322,5 +322,18 @@ namespace VSDiagnostics.Utilities
 
             return false;
         }
+
+        public static bool Any(this IEnumerable<SyntaxNode> list, SyntaxKind kind)
+        {
+            foreach (var node in list)
+            {
+                if (node.IsKind(kind))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
