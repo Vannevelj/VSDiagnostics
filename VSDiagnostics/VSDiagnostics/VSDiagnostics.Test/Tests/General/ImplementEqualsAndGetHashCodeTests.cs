@@ -1421,5 +1421,136 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void ImplementEqualsAndGetHashCode_ClassDoesNotImplementEither_HasExpressionBodiedProperty()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        string Foo => ""test"";
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        string Foo => ""test"";
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || typeof(MyClass) != obj.GetType())
+            {
+                return false;
+            }
+
+            var value = (MyClass)obj;
+            return Foo == value.Foo;
+        }
+
+        public override int GetHashCode()
+        {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
+            return base.GetHashCode();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().");
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ImplementEqualsAndGetHashCode_PartialClassDoesNotImplementEither_ImplementsAllTypesInSplitClass()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public partial class MyClass
+    {
+        private int _foo;
+    }
+
+    public partial class MyClass
+    {
+        private int _bar;
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    public partial class MyClass
+    {
+        private int _foo;
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || typeof(MyClass) != obj.GetType())
+            {
+                return false;
+            }
+
+            var value = (MyClass)obj;
+            return _bar.Equals(value._bar) &&
+                   _foo.Equals(value._foo);
+        }
+
+        public override int GetHashCode()
+        {
+            // Add any fields you're interested in, taking into account the guidelines described in
+            // https://msdn.microsoft.com/en-us/library/system.object.gethashcode%28v=vs.110%29.aspx
+            return base.GetHashCode();
+        }
+    }
+
+    public partial class MyClass
+    {
+        private int _bar;
+    }
+}";
+
+            // two diagnostics because it is reported in two places
+            VerifyDiagnostic(original, "Class MyClass does not implement Equals() and GetHashCode().",
+                "Class MyClass does not implement Equals() and GetHashCode().");
+            VerifyFix(original, result, 0);
+        }
+
+        [TestMethod]
+        public void ImplementEqualsAndGetHashCode_PartialClassImplementsEquals()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public partial class MyClass
+    {
+        private int _foo;
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || typeof(MyClass) != obj.GetType())
+            {
+                return false;
+            }
+
+            var value = (MyClass)obj;
+            return _bar.Equals(value._bar) &&
+                   _foo.Equals(value._foo);
+        }
+    }
+
+    public partial class MyClass
+    {
+        private int _bar;
+    }
+}";
+            
+            VerifyDiagnostic(original);
+        }
     }
 }

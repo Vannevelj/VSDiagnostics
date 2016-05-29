@@ -1,8 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
 
@@ -23,38 +21,44 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context) =>
-                context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.ClassDeclaration, SyntaxKind.StructDeclaration);
+            context.RegisterSymbolAction(AnalyzeSymbol, SymbolKind.NamedType);
 
-        private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
+        private void AnalyzeSymbol(SymbolAnalysisContext symbol)
         {
             IMethodSymbol objectEquals;
             IMethodSymbol objectGetHashCode;
-            GetEqualsAndGetHashCodeSymbols(context.SemanticModel, out objectEquals, out objectGetHashCode);
 
-            var declaration = (TypeDeclarationSyntax)context.Node;
+            var namedType = (INamedTypeSymbol)symbol.Symbol;
+            GetEqualsAndGetHashCodeSymbols(namedType, out objectEquals, out objectGetHashCode);
 
-            if (!TypeMembersContainOverridenEqualsOrGetHashCode(context.SemanticModel, declaration.Members, objectEquals, objectGetHashCode) &&
-                MembersContainNonStaticFieldOrProperty(declaration.Members))
+            if (objectEquals != null || objectGetHashCode != null) { return; }
+
+            if (MembersContainNonStaticFieldOrProperty(namedType.GetMembers()))
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, declaration.Identifier.GetLocation(),
-                    declaration.IsKind(SyntaxKind.ClassDeclaration) ? "Class" : "Struct", declaration.Identifier));
+                // it is only reported at the main location--the other locations are (apparently) just passed as data
+                // todo--ask the Roslyn team about this
+                for (var i = 0; i < namedType.Locations.Count(); i++)
+                {
+                    symbol.ReportDiagnostic(Diagnostic.Create(Rule, namedType.Locations[i],
+                    namedType.Locations.RemoveAt(i),
+                    namedType.TypeKind == TypeKind.Class ? "Class" : "Struct", namedType.Name));
+                }
             }
         }
 
-        private void GetEqualsAndGetHashCodeSymbols(SemanticModel model, out IMethodSymbol equalsSymbol, out IMethodSymbol getHashCodeSymbol)
+        private void GetEqualsAndGetHashCodeSymbols(INamedTypeSymbol symbol, out IMethodSymbol equalsSymbol, out IMethodSymbol getHashCodeSymbol)
         {
             equalsSymbol = null;
             getHashCodeSymbol = null;
 
-            var objectSymbol = model.Compilation.GetSpecialType(SpecialType.System_Object);
-            foreach (var symbol in objectSymbol.GetMembers())
+            foreach (var member in symbol.GetMembers())
             {
-                if (!(symbol is IMethodSymbol))
+                if (!(member is IMethodSymbol))
                 {
                     continue;
                 }
 
-                var method = (IMethodSymbol)symbol;
+                var method = (IMethodSymbol)member;
                 if (method.MetadataName == nameof(Equals) && method.Parameters.Count() == 1)
                 {
                     equalsSymbol = method;
@@ -67,72 +71,27 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
             }
         }
 
-        private bool TypeMembersContainOverridenEqualsOrGetHashCode(SemanticModel model, SyntaxList<SyntaxNode> members, IMethodSymbol objectEquals, IMethodSymbol objectGetHashCode)
+        private bool MembersContainNonStaticFieldOrProperty(ImmutableArray<ISymbol> members)
         {
-            var equalsImplemented = false;
-            var getHashCodeImplemented = false;
-
-            foreach (var node in members)
+            foreach (var member in members)
             {
-                if (!node.IsKind(SyntaxKind.MethodDeclaration))
+                if (member.Kind != SymbolKind.Field && member.Kind != SymbolKind.Property)
                 {
                     continue;
                 }
 
-                var methodDeclaration = (MethodDeclarationSyntax) node;
-                if (!methodDeclaration.Modifiers.Contains(SyntaxKind.OverrideKeyword))
+                if (member.IsStatic)
                 {
                     continue;
                 }
 
-                var methodSymbol = model.GetDeclaredSymbol(methodDeclaration).OverriddenMethod;
-
-                // this will happen if the base class is deleted and there is still a derived class
-                if (methodSymbol == null)
+                if (member.Kind == SymbolKind.Field)
                 {
-                    return false;    // well, technically, it doesn't exist
+                    return true;
                 }
 
-                while (methodSymbol.IsOverride)
-                {
-                    methodSymbol = methodSymbol.OverriddenMethod;
-                }
-
-                if (methodSymbol == objectEquals)
-                {
-                    equalsImplemented = true;
-                }
-
-                if (methodSymbol == objectGetHashCode)
-                {
-                    getHashCodeImplemented = true;
-                }
-            }
-
-            return equalsImplemented || getHashCodeImplemented;
-        }
-
-        private bool MembersContainNonStaticFieldOrProperty(SyntaxList<SyntaxNode> members)
-        {
-            foreach (var node in members)
-            {
-                if (node.IsKind(SyntaxKind.FieldDeclaration))
-                {
-                    var field = (FieldDeclarationSyntax)node;
-                    if (!field.Modifiers.Contains(SyntaxKind.StaticKeyword))
-                    {
-                        return true;
-                    }
-                }
-
-                if (!node.IsKind(SyntaxKind.PropertyDeclaration))
-                {
-                    continue;
-                }
-
-                var property = (PropertyDeclarationSyntax) node;
-                if (!property.Modifiers.Contains(SyntaxKind.StaticKeyword) &&
-                    property.AccessorList.Accessors.Any(SyntaxKind.GetAccessorDeclaration))
+                var property = (IPropertySymbol) member;
+                if (property.GetMethod != null)
                 {
                     return true;
                 }

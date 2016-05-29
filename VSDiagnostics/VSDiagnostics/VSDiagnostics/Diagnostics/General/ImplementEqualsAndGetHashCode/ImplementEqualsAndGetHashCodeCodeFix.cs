@@ -29,15 +29,15 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var statement = root.FindNode(diagnosticSpan);
-
+            
             context.RegisterCodeFix(
                 CodeAction.Create(string.Format(VSDiagnosticsResources.ImplementEqualsAndGetHashCodeCodeFixTitle),
-                    x => ImplementEqualsAndGetHashCodeAsync(context.Document, root, statement),
+                    x => ImplementEqualsAndGetHashCodeAsync(context.Document, diagnostic.AdditionalLocations.ToImmutableList().Add(diagnostic.Location), root, statement),
                     ImplementEqualsAndGetHashCodeAnalyzer.Rule.Id),
                 diagnostic);
         }
 
-        private async Task<Document> ImplementEqualsAndGetHashCodeAsync(Document document, SyntaxNode root, SyntaxNode statement)
+        private async Task<Document> ImplementEqualsAndGetHashCodeAsync(Document document, IEnumerable<Location> locations, SyntaxNode root, SyntaxNode declaration)
         {
             var model = await document.GetSemanticModelAsync();
 
@@ -45,20 +45,27 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
             var objectEquals = objectSymbol.GetMembers().OfType<IMethodSymbol>()
                     .Single(method => method.MetadataName == nameof(Equals) && method.Parameters.Count() == 1);
 
-            var typeDeclaration = (TypeDeclarationSyntax) statement;
+            var typeDeclaration = (TypeDeclarationSyntax) declaration;
             var typeSymbol = model.GetDeclaredSymbol(typeDeclaration);
 
-            var equalsMethod = GetEqualsMethod(model, typeDeclaration.Identifier, typeDeclaration.Members, typeSymbol, objectEquals);
-            var getHashCodeMethod = GetGetHashCodeMethod(model, typeDeclaration.Members);
+            var members = new List<SyntaxNode>();
+            foreach (var location in locations)
+            {
+                var node = (TypeDeclarationSyntax) root.FindNode(location.SourceSpan);
+                members.AddRange(node.Members);
+            }
 
-            var newNode = statement.IsKind(SyntaxKind.ClassDeclaration)
+            var equalsMethod = GetEqualsMethod(model, typeDeclaration.Identifier, members, typeSymbol, objectEquals);
+            var getHashCodeMethod = GetGetHashCodeMethod(model, members);
+
+            var newNode = declaration.IsKind(SyntaxKind.ClassDeclaration)
                 ? (TypeDeclarationSyntax)((ClassDeclarationSyntax)typeDeclaration).AddMembers(equalsMethod, getHashCodeMethod)
                 : (TypeDeclarationSyntax)((StructDeclarationSyntax)typeDeclaration).AddMembers(equalsMethod, getHashCodeMethod);
             
             return document.WithSyntaxRoot(root.ReplaceNode(typeDeclaration, newNode));
         }
 
-        private MethodDeclarationSyntax GetEqualsMethod(SemanticModel model, SyntaxToken identifier, SyntaxList<SyntaxNode> members, INamedTypeSymbol typeSymbol, IMethodSymbol objectEquals)
+        private MethodDeclarationSyntax GetEqualsMethod(SemanticModel model, SyntaxToken identifier, List<SyntaxNode> members, INamedTypeSymbol typeSymbol, IMethodSymbol objectEquals)
         {
             var publicModifier = SyntaxFactory.Token(SyntaxKind.PublicKeyword);
             var overrideModifier = SyntaxFactory.Token(SyntaxKind.OverrideKeyword);
@@ -122,21 +129,27 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
             {
                 return string.Empty;
             }
-
+            
             var property = (PropertyDeclarationSyntax)member;
-            if (property.Modifiers.Contains(SyntaxKind.StaticKeyword) ||
-                !property.AccessorList.Accessors.Any(a => a.IsKind(SyntaxKind.GetAccessorDeclaration)))
+            if (property.Modifiers.Contains(SyntaxKind.StaticKeyword))
             {
                 return string.Empty;
             }
 
-            var symbol = model.GetTypeInfo(property.Type).Type;
-            return symbol.IsValueType
+            if (property.ExpressionBody == null &&
+                (property.AccessorList != null &&
+                !property.AccessorList.Accessors.Any(a => a.IsKind(SyntaxKind.GetAccessorDeclaration))))
+            {
+                return string.Empty;
+            }
+
+            var type = model.GetTypeInfo(property.Type).Type;
+            return type.IsValueType
                 ? $"{property.Identifier}.Equals(value.{property.Identifier})"
                 : $"{property.Identifier} == value.{property.Identifier}";
         }
 
-        private MethodDeclarationSyntax GetGetHashCodeMethod(SemanticModel model, SyntaxList<SyntaxNode> members)
+        private MethodDeclarationSyntax GetGetHashCodeMethod(SemanticModel model, List<SyntaxNode> members)
         {
             var publicModifier = SyntaxFactory.Token(SyntaxKind.PublicKeyword);
             var overrideModifier = SyntaxFactory.Token(SyntaxKind.OverrideKeyword);
@@ -220,7 +233,7 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                 return string.Empty;
             }
 
-            if (property.AccessorList.Accessors.Any(a => a.IsKind(SyntaxKind.SetAccessorDeclaration)))
+            if (property.AccessorList != null && property.AccessorList.Accessors.Any(a => a.IsKind(SyntaxKind.SetAccessorDeclaration)))
             {
                 return string.Empty;
             }
@@ -228,7 +241,7 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
             // ensure getter does not have body
             // the property has to have at least one of {get, set}, and it doesn't have a set (see above)
             // this will not have an NRE in First()
-            if (property.AccessorList.Accessors.First(a => a.IsKind(SyntaxKind.GetAccessorDeclaration)).Body == null)
+            if (property.AccessorList != null && property.AccessorList.Accessors.First(a => a.IsKind(SyntaxKind.GetAccessorDeclaration)).Body == null)
             {
                 return $"{property.Identifier}.GetHashCode()";
             }
