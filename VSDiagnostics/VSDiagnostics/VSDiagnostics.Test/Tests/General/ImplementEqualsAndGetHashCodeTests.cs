@@ -1524,7 +1524,7 @@ namespace ConsoleApplication1
         [TestMethod]
         public void ImplementEqualsAndGetHashCode_PartialClassImplementsEquals()
         {
-            var original = @"
+            var firstTree = @"
 namespace ConsoleApplication1
 {
     public partial class MyClass
@@ -1543,14 +1543,18 @@ namespace ConsoleApplication1
                    _foo.Equals(value._foo);
         }
     }
+}";
 
+        var secondTree = @"
+namespace ConsoleApplication1
+{
     public partial class MyClass
     {
         private int _bar;
     }
 }";
             
-            VerifyDiagnostic(original);
+            VerifyDiagnostic(new[] {firstTree, secondTree});
         }
     }
 }

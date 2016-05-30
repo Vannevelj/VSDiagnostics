@@ -35,8 +35,6 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
 
             if (MembersContainNonStaticFieldOrProperty(namedType.GetMembers()))
             {
-                // it is only reported at the main location--the other locations are (apparently) just passed as data
-                // todo--ask the Roslyn team about this
                 for (var i = 0; i < namedType.Locations.Count(); i++)
                 {
                     symbol.ReportDiagnostic(Diagnostic.Create(Rule, namedType.Locations[i],
