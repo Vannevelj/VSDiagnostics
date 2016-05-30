@@ -94,47 +94,33 @@ namespace VSDiagnostics.Utilities
 
         public static bool IsCommentTrivia(this SyntaxTrivia trivia)
         {
-            var commentTrivias = new[]
+            switch (trivia.Kind())
             {
-                SyntaxKind.SingleLineCommentTrivia,
-                SyntaxKind.MultiLineCommentTrivia,
-                SyntaxKind.DocumentationCommentExteriorTrivia,
-                SyntaxKind.SingleLineDocumentationCommentTrivia,
-                SyntaxKind.MultiLineDocumentationCommentTrivia,
-                SyntaxKind.EndOfDocumentationCommentToken,
-                SyntaxKind.XmlComment,
-                SyntaxKind.XmlCommentEndToken,
-                SyntaxKind.XmlCommentStartToken
-            };
-
-            foreach (var commentTrivia in commentTrivias)
-            {
-                if (trivia.IsKind(commentTrivia))
-                {
+                case SyntaxKind.SingleLineCommentTrivia:
+                case SyntaxKind.MultiLineCommentTrivia:
+                case SyntaxKind.DocumentationCommentExteriorTrivia:
+                case SyntaxKind.SingleLineDocumentationCommentTrivia:
+                case SyntaxKind.MultiLineDocumentationCommentTrivia:
+                case SyntaxKind.EndOfDocumentationCommentToken:
+                case SyntaxKind.XmlComment:
+                case SyntaxKind.XmlCommentEndToken:
+                case SyntaxKind.XmlCommentStartToken:
                     return true;
-                }
+                default:
+                    return false;
             }
-
-            return false;
         }
 
         public static bool IsWhitespaceTrivia(this SyntaxTrivia trivia)
         {
-            var whitespaceTrivias = new[]
+            switch (trivia.Kind())
             {
-                SyntaxKind.WhitespaceTrivia,
-                SyntaxKind.EndOfLineTrivia
-            };
-
-            foreach (var whitespaceTrivia in whitespaceTrivias)
-            {
-                if (trivia.IsKind(whitespaceTrivia))
-                {
+                case SyntaxKind.WhitespaceTrivia:
+                case SyntaxKind.EndOfLineTrivia:
                     return true;
-                }
+                default:
+                    return false;
             }
-
-            return false;
         }
 
         public static string ToAlias(this string type)
@@ -170,9 +156,9 @@ namespace VSDiagnostics.Utilities
         /// </summary>
         public static bool IsAsync(this IMethodSymbol methodSymbol)
         {
-            return methodSymbol.IsAsync
-                   || methodSymbol.ReturnType.MetadataName == typeof(Task).Name
-                   || methodSymbol.ReturnType.MetadataName == typeof(Task<>).Name;
+            return methodSymbol.IsAsync || 
+                   methodSymbol.ReturnType.MetadataName == typeof(Task).Name || 
+                   methodSymbol.ReturnType.MetadataName == typeof(Task<>).Name;
         }
 
         public static bool IsDefinedInAncestor(this IMethodSymbol methodSymbol)
@@ -266,19 +252,15 @@ namespace VSDiagnostics.Utilities
             throw new ArgumentException("The node is not contained in a type", nameof(syntaxNode));
         }
 
-        public static List<T> OfType<T>(this IEnumerable<SyntaxNode> enumerable, SyntaxKind kind) where T : SyntaxNode
+        public static IEnumerable<T> OfType<T>(this IEnumerable<SyntaxNode> enumerable, SyntaxKind kind) where T : SyntaxNode
         {
-            var list = new List<T>();
-
             foreach (var node in enumerable)
             {
                 if (node.IsKind(kind))
                 {
-                    list.Add((T)node);
+                    yield return (T) node;
                 }
             }
-
-            return list;
         }
 
         public static bool ContainsAny(this SyntaxTokenList list, params SyntaxKind[] kinds)
@@ -287,7 +269,7 @@ namespace VSDiagnostics.Utilities
             {
                 foreach (var kind in kinds)
                 {
-                    if (item.Kind() == kind)
+                    if (item.IsKind(kind))
                     {
                         return true;
                     }

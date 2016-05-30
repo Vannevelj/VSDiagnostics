@@ -79,7 +79,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 
             var enumName = context.SemanticModel.GetDeclaredSymbol(declarationExpression).Name;
             var enumMemberDeclarations =
-                declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>(SyntaxKind.EnumMemberDeclaration);
+                declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>(SyntaxKind.EnumMemberDeclaration).ToArray();
 
             foreach (var member in enumMemberDeclarations)
             {
@@ -133,7 +133,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 
             // We have to make sure that by moving to powers of two, we won't exceed the type's maximum value 
             // For example: 255 is the last possible value for a byte enum
-            if (IsOutsideOfRange(keyword, enumMemberDeclarations.Count))
+            if (IsOutsideOfRange(keyword, enumMemberDeclarations.Length))
             {
                 context.ReportDiagnostic(Diagnostic.Create(ValuesDontFitRule,
                     declarationExpression.Identifier.GetLocation(),
