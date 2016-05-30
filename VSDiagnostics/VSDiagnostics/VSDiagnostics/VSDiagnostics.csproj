@@ -77,6 +77,8 @@
     <Compile Include="Diagnostics\General\GotoDetection\GotoDetectionAnalyzer.cs" />
     <Compile Include="Diagnostics\General\IfStatementWithoutBraces\IfStatementWithoutBracesAnalyzer.cs" />
     <Compile Include="Diagnostics\General\IfStatementWithoutBraces\IfStatementWithoutBracesCodeFix.cs" />
+    <Compile Include="Diagnostics\General\ImplementEqualsAndGetHashCode\ImplementEqualsAndGetHashCodeAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\ImplementEqualsAndGetHashCode\ImplementEqualsAndGetHashCodeCodeFix.cs" />
     <Compile Include="Diagnostics\General\LoopStatementWithoutBraces\LoopStatementWithoutBracesAnalyzer.cs" />
     <Compile Include="Diagnostics\General\LoopStatementWithoutBraces\LoopStatementWithoutBracesCodeFix.cs" />
     <Compile Include="Diagnostics\General\NamingConventions\NamingConventionExtensions.cs" />

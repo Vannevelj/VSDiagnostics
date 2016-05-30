@@ -800,6 +800,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} {1} does not implement Equals() and GetHashCode()..
+        /// </summary>
+        internal static string ImplementEqualsAndGetHashCodeAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ImplementEqualsAndGetHashCodeAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Equals() and GetHashCode() implementations.
+        /// </summary>
+        internal static string ImplementEqualsAndGetHashCodeAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ImplementEqualsAndGetHashCodeAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Equals() and GetHashCode().
+        /// </summary>
+        internal static string ImplementEqualsAndGetHashCodeCodeFixTitle {
+            get {
+                return ResourceManager.GetString("ImplementEqualsAndGetHashCodeCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Variable {0} of type System.Random is instantiated in a loop..
         /// </summary>
         internal static string LoopedRandomInstantiationAnalyzerMessage {

@@ -571,6 +571,15 @@
   <data name="UsingStatementWithoutBracesCodeFixTitle" xml:space="preserve">
     <value>Add braces</value>
   </data>
+  <data name="ImplementEqualsAndGetHashCodeAnalyzerMessage" xml:space="preserve">
+    <value>{0} {1} does not implement Equals() and GetHashCode().</value>
+  </data>
+  <data name="ImplementEqualsAndGetHashCodeAnalyzerTitle" xml:space="preserve">
+    <value>Add Equals() and GetHashCode() implementations</value>
+  </data>
+  <data name="ImplementEqualsAndGetHashCodeCodeFixTitle" xml:space="preserve">
+    <value>Add Equals() and GetHashCode()</value>
+  </data>
   <data name="ExceptionThrownFromDisposeAnalyzerMessage" xml:space="preserve">
     <value>An exception is thrown from the {0} method in type {1}</value>
     <comment>{0} - Dispose() or Dispose(bool)

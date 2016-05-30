@@ -70,12 +70,13 @@ Currently these diagnostics are implemented:
 | General | VSD0032 | Use `var` instead of an explicit type.
 | General | VSD0033 | Use the built-in type aliases instead of the concrete type.
 | General | VSD0044 | Missing enum member(s) in switched cases.
-| General | VSD0046 | Equals() and GetHashcode() must be implemented together.
+| General | VSD0046 | Equals() and GetHashCode() must be implemented together.
 | General | VSD0047 | Implement elementary methods of type used in collection.
 | General | VSD0048 | A property with a private setter can become a read-only property instead.
 | General | VSD0050 | Struct does not override elementary methods.
 | General | VSD0049 | Switch is missing a default label.
 | General | VSD0051 | Using statement is missing braces.
+| General | VSD0052 | Implement Equals() and GetHashCode() using existing fields and properties.
 | Strings | VSD0034 | Use `string.Empty` instead of `""`.
 | Strings | VSD0035 | Adjusts the placeholders in `string.Format()` calls to be in numerical order.
 | Strings | VSD0042 | A `string.Format()` call lacks arguments and will cause a runtime exception
