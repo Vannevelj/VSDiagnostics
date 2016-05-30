@@ -280,5 +280,26 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void TypeToVar_WithLambdaExpression_NoType()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            Action x = () => { };
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }
