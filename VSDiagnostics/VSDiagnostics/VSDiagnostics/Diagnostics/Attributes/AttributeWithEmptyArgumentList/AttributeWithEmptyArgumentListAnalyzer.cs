@@ -27,17 +27,19 @@ namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
 
         private void AnalyzeCSharpSymbol(SyntaxNodeAnalysisContext context)
         {
-            var attributeExpression = (AttributeSyntax) context.Node;
+            var attributeSyntax = (AttributeSyntax) context.Node;
 
             // attribute must have arguments
             // if there are no parenthesis, the ArgumentList is null
             // if there are empty parenthesis, the ArgumentList is empty
-            if (attributeExpression.ArgumentList == null || attributeExpression.ArgumentList.Arguments.Any())
+            if (attributeSyntax.ArgumentList == null || attributeSyntax.ArgumentList.Arguments.Any())
             {
                 return;
             }
 
-            context.ReportDiagnostic(Diagnostic.Create(Rule, attributeExpression.GetLocation()));
+            var attributeName = attributeSyntax.Name.ToString();
+
+            context.ReportDiagnostic(Diagnostic.Create(Rule, attributeSyntax.GetLocation(), attributeName));
         }
     }
 }

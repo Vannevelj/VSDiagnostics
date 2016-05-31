@@ -26,7 +26,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, "Method MyMethod might be mistakingly missing a test attribute");
+            VerifyDiagnostic(original, "Method MyMethod might be missing a test attribute");
         }
 
         [TestMethod]
@@ -44,7 +44,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, "Method MyMethod might be mistakingly missing a test attribute");
+            VerifyDiagnostic(original, "Method MyMethod might be missing a test attribute");
         }
 
         [TestMethod]
@@ -83,7 +83,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, "Method MyMethod might be mistakingly missing a test attribute");
+            VerifyDiagnostic(original, "Method MyMethod might be missing a test attribute");
         }
 
         [TestMethod]
@@ -101,7 +101,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, "Method MyMethod might be mistakingly missing a test attribute");
+            VerifyDiagnostic(original, "Method MyMethod might be missing a test attribute");
         }
 
         [TestMethod]
@@ -122,7 +122,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, "Method MyMethod might be mistakingly missing a test attribute");
+            VerifyDiagnostic(original, "Method MyMethod might be missing a test attribute");
         }
 
         [TestMethod]
@@ -143,7 +143,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, "Method MyMethod might be mistakingly missing a test attribute");
+            VerifyDiagnostic(original, "Method MyMethod might be missing a test attribute");
         }
 
         [TestMethod]

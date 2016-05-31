@@ -13,13 +13,11 @@ namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithAsyncSuffix
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.AsyncCategory;
-        private static readonly string Message = VSDiagnosticsResources.SyncMethodWithSyncSuffixAnalyzerMessage;
-        private static readonly string Title = VSDiagnosticsResources.SyncMethodWithSyncSuffixAnalyzerTitle;
+        private static readonly string Message = VSDiagnosticsResources.SyncMethodWithAsyncSuffixAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.SyncMethodWithAsyncSuffixAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule
-            =>
-                new DiagnosticDescriptor(DiagnosticId.SyncMethodWithAsyncSuffix, Title, Message, Category, Severity,
-                    isEnabledByDefault: true);
+            => new DiagnosticDescriptor(DiagnosticId.SyncMethodWithAsyncSuffix, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
