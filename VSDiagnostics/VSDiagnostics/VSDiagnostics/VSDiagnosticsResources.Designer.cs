@@ -692,7 +692,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add modifier.
+        ///   Looks up a localized string similar to Add accessibility modifier.
         /// </summary>
         internal static string ExplicitAccessModifiersCodeFixTitle {
             get {

@@ -341,7 +341,7 @@
     <value>Remove conditional</value>
   </data>
   <data name="ExplicitAccessModifiersCodeFixTitle" xml:space="preserve">
-    <value>Add modifier</value>
+    <value>Add accessibility modifier</value>
   </data>
   <data name="IfStatementWithoutBracesCodeFixTitle" xml:space="preserve">
     <value>Use braces</value>
