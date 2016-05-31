@@ -62,7 +62,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The field {0} is used in an ArgumentException as string. Consider using the nameof operator instead..
+        ///   Looks up a localized string similar to The variable {0} is used in an ArgumentException as string. Consider using the nameof operator instead..
         /// </summary>
         internal static string ArgumentExceptionWithoutNameofOperatorAnalyzerMessage {
             get {
@@ -71,7 +71,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Suggest using the nameof operator in an ArgumentException..
+        ///   Looks up a localized string similar to An ArgumentException should use nameof() to refer to a variable..
         /// </summary>
         internal static string ArgumentExceptionWithoutNameofOperatorAnalyzerTitle {
             get {
@@ -80,7 +80,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use nameof.
+        ///   Looks up a localized string similar to Use nameof().
         /// </summary>
         internal static string ArgumentExceptionWithoutNameofOperatorCodeFixTitle {
             get {
@@ -107,7 +107,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use cast instead of as..
+        ///   Looks up a localized string similar to Changes an &apos;as&apos; expression to a cast..
         /// </summary>
         internal static string AsToCastAnalyzerTitle {
             get {
@@ -143,7 +143,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verifies whether an async method has the &apos;Async&apos; suffix..
+        ///   Looks up a localized string similar to Asynchronous methods should end with the -Async suffix..
         /// </summary>
         internal static string AsyncMethodWithoutAsyncSuffixAnalyzerTitle {
             get {
@@ -152,7 +152,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add suffix.
+        ///   Looks up a localized string similar to Add -Async suffix.
         /// </summary>
         internal static string AsyncMethodWithoutAsyncSuffixCodeFixTitle {
             get {
@@ -170,7 +170,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Attribute has empty argument list..
+        ///   Looks up a localized string similar to Attribute &quot;{0}&quot; has an empty argument list..
         /// </summary>
         internal static string AttributeWithEmptyArgumentListAnalyzerMessage {
             get {
@@ -179,7 +179,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove empty argument list from attribute..
+        ///   Looks up a localized string similar to An attribute should not have an empty argument list..
         /// </summary>
         internal static string AttributeWithEmptyArgumentListAnalyzerTitle {
             get {
@@ -188,7 +188,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove Parentheses.
+        ///   Looks up a localized string similar to Remove parentheses from argument list.
         /// </summary>
         internal static string AttributeWithEmptyArgumentListCodeFixTitle {
             get {
@@ -206,7 +206,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use as instead of a cast..
+        ///   Looks up a localized string similar to Changes a cast expression to &apos;as&apos;..
         /// </summary>
         internal static string CastToAsAnalyzerTitle {
             get {
@@ -233,7 +233,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verifies whether no NullReferenceExceptions are caught..
+        ///   Looks up a localized string similar to Verifies no NullReferenceException is caught..
         /// </summary>
         internal static string CatchNullReferenceExceptionAnalyzerTitle {
             get {
@@ -251,7 +251,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A boolean expression doesn&apos;t have to be compared to false..
+        ///   Looks up a localized string similar to A boolean expression comparing to false can be simplified..
         /// </summary>
         internal static string CompareBooleanToFalseLiteralAnalyzerTitle {
             get {
@@ -278,7 +278,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A boolean expression doesn&apos;t have to be compared to true..
+        ///   Looks up a localized string similar to A boolean expression comparing to true can be simplified..
         /// </summary>
         internal static string CompareBooleanToTrueLiteralAnalyzerTitle {
             get {
@@ -305,7 +305,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The conditional operator shouldn&apos;t return redundant true and false literals..
+        ///   Looks up a localized string similar to The conditional operator shouldn&apos;t return redundant default options..
         /// </summary>
         internal static string ConditionalOperatorReturnsDefaultOptionsAnalyzerTitle {
             get {
@@ -314,7 +314,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove conditional.
+        ///   Looks up a localized string similar to Remove conditional operator.
         /// </summary>
         internal static string ConditionalOperatorReturnsDefaultOptionsCodeFixTitle {
             get {
@@ -332,7 +332,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The conditional operator shouldn&apos;t return redundant true and false literals..
+        ///   Looks up a localized string similar to The conditional operator shouldn&apos;t return redundant inverted default options..
         /// </summary>
         internal static string ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzerTitle {
             get {
@@ -341,7 +341,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove conditional.
+        ///   Looks up a localized string similar to Remove conditional operator.
         /// </summary>
         internal static string ConditionalOperatorReturnsInvertedDefaultOptionsCodeFixTitle {
             get {
@@ -359,7 +359,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition is constant..
+        ///   Looks up a localized string similar to The condition is a constant and thus unnecessary..
         /// </summary>
         internal static string ConditionIsConstantAnalyzerTitle {
             get {
@@ -404,7 +404,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Implement elementary methods..
+        ///   Looks up a localized string similar to Implement elementary methods for a type used in a collection..
         /// </summary>
         internal static string ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerTitle {
             get {
@@ -413,7 +413,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ArgumentException is thrown without a message..
+        ///   Looks up a localized string similar to An ArgumentException is thrown without a message..
         /// </summary>
         internal static string EmptyArgumentExceptionAnalyzerMessage {
             get {
@@ -449,7 +449,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enum can have Flags attribute..
+        ///   Looks up a localized string similar to Enum can have [Flags] attribute..
         /// </summary>
         internal static string EnumCanHaveFlagsAttributeAnalyzerMessage {
             get {
@@ -458,7 +458,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inform that enums can have the Flags attribute..
+        ///   Looks up a localized string similar to Gives an enum the `[Flags]` attribute..
         /// </summary>
         internal static string EnumCanHaveFlagsAttributeAnalyzerTitle {
             get {
@@ -467,7 +467,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add Flags attribute.
+        ///   Looks up a localized string similar to Add [Flags] attribute.
         /// </summary>
         internal static string EnumCanHaveFlagsAttributeCodeFixTitle {
             get {
@@ -683,7 +683,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use explicit {0} modifier..
+        ///   Looks up a localized string similar to Inserts the default accessibility modifier for a declaration..
         /// </summary>
         internal static string ExplicitAccessModifiersAnalyzerTitle {
             get {
@@ -710,7 +710,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Flags] enum its values are not explicit powers of 2.
+        ///   Looks up a localized string similar to A [Flags] enum its values are not explicit powers of 2.
         /// </summary>
         internal static string FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle {
             get {
@@ -737,7 +737,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Flags] enum its values are not explicit powers of 2 and its values dont fit in the specified enum type..
+        ///   Looks up a localized string similar to A [Flags] enum its values are not explicit powers of 2 and its values dont fit in the specified enum type..
         /// </summary>
         internal static string FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerTitle {
             get {
@@ -809,7 +809,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add Equals() and GetHashCode() implementations.
+        ///   Looks up a localized string similar to Implements Equals() and GetHashCode() using existing fields and properties..
         /// </summary>
         internal static string ImplementEqualsAndGetHashCodeAnalyzerTitle {
             get {
@@ -845,7 +845,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loops should use braces to improve code readability and bug prevention..
+        ///   Looks up a localized string similar to A loop is not delimited with braces..
         /// </summary>
         internal static string LoopStatementWithoutBracesAnalyzerMessage {
             get {
@@ -854,7 +854,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loop instance without braces..
+        ///   Looks up a localized string similar to Loop blocks should use braces to denote start and end..
         /// </summary>
         internal static string LoopStatementWithoutBracesAnalyzerTitle {
             get {
@@ -881,7 +881,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A member does not follow naming conventions..
+        ///   Looks up a localized string similar to Implements the most common configuration of naming conventions..
         /// </summary>
         internal static string NamingConventionsAnalyzerTitle {
             get {
@@ -917,7 +917,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use property.
+        ///   Looks up a localized string similar to Implement as property.
         /// </summary>
         internal static string NonEncapsulatedOrMutableFieldCodeFixTitle {
             get {
@@ -953,7 +953,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Give a reason for the Obsolete attribute..
+        ///   Looks up a localized string similar to Give a reason for the [Obsolete] attribute..
         /// </summary>
         internal static string ObsoleteAttributeWithoutReasonAnalyzerMessage {
             get {
@@ -962,7 +962,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Obsolete attribute doesn&apos;t have a reason..
+        ///   Looks up a localized string similar to The [Obsolete] attribute doesn&apos;t have a reason..
         /// </summary>
         internal static string ObsoleteAttributeWithoutReasonAnalyzerTitle {
             get {
@@ -971,7 +971,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the CallerMemberName attribute..
+        ///   Looks up a localized string similar to OnPropertyChanged() can use the [CallerMemberName] attribute..
         /// </summary>
         internal static string OnPropertyChangedWithoutCallerMemberNameAnalyzerMessage {
             get {
@@ -980,7 +980,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the CallerMemberName attribute to automatically pass the property name..
+        ///   Looks up a localized string similar to OnPropertyChanged() can use the [CallerMemberName] attribute to automatically pass the property name..
         /// </summary>
         internal static string OnPropertyChangedWithoutCallerMemberNameAnalyzerTitle {
             get {
@@ -1007,7 +1007,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the nameof() operator in conjunection with OnPropertyChanged.
+        ///   Looks up a localized string similar to Use the nameof() operator in conjunction with OnPropertyChanged().
         /// </summary>
         internal static string OnPropertyChangedWithoutNameOfOperatorAnalyzerTitle {
             get {
@@ -1016,7 +1016,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use nameof.
+        ///   Looks up a localized string similar to Use nameof().
         /// </summary>
         internal static string OnPropertyChangedWithoutNameOfOperatorCodeFixTitle {
             get {
@@ -1052,7 +1052,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test method &quot;{0}&quot; should not end with &quot;Test&quot;..
+        ///   Looks up a localized string similar to Test method &quot;{0}&quot; should not end with &quot;-Test&quot;.
         /// </summary>
         internal static string RemoveTestSuffixAnalyzerMessage {
             get {
@@ -1061,7 +1061,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verifies whether a test method ends with &quot;Test&quot;..
+        ///   Looks up a localized string similar to A test method should not end with -Test..
         /// </summary>
         internal static string RemoveTestSuffixAnalyzerTitle {
             get {
@@ -1070,7 +1070,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove &quot;Test&quot; suffix.
+        ///   Looks up a localized string similar to Remove &quot;-Test&quot; suffix.
         /// </summary>
         internal static string RemoveTestSuffixCodeFixTitle {
             get {
@@ -1169,7 +1169,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your constructor is the same as a default constructor and can be removed..
+        ///   Looks up a localized string similar to A constructor is the same as a default constructor and can be removed..
         /// </summary>
         internal static string SingleEmptyConstructorAnalyzerTitle {
             get {
@@ -1187,7 +1187,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A single catch-all clause has been used. Consider adding specific exception handlers or a comment..
+        ///   Looks up a localized string similar to A single catch-all clause has been used. Consider adding specific exception handlers..
         /// </summary>
         internal static string SingleGeneralExceptionAnalyzerMessage {
             get {
@@ -1196,7 +1196,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verifies whether a try-catch block does not contain just a single Exception clause..
+        ///   Looks up a localized string similar to Verifies whether a try-catch block does not defer all exception handling to a single Exception clause..
         /// </summary>
         internal static string SingleGeneralExceptionAnalyzerTitle {
             get {
@@ -1214,7 +1214,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid arguments for the string.Format() call..
+        ///   Looks up a localized string similar to A string.Format() call lacks arguments and will cause a runtime exception..
         /// </summary>
         internal static string StringDotFormatWithDifferentAmountOfArgumentsTitle {
             get {
@@ -1232,7 +1232,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Placeholders are not in ascending order..
+        ///   Looks up a localized string similar to string.Format() Placeholders are not in ascending order..
         /// </summary>
         internal static string StringPlaceholdersInWrongOrderMessage {
             get {
@@ -1313,7 +1313,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Missing enum member(s) in switched cases..
+        ///   Looks up a localized string similar to Missing enum member in switched cases..
         /// </summary>
         internal static string SwitchDoesNotHandleAllEnumOptionsAnalyzerMessage {
             get {
@@ -1322,7 +1322,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add cases for missing enum member(s)..
+        ///   Looks up a localized string similar to Add cases for missing enum member..
         /// </summary>
         internal static string SwitchDoesNotHandleAllEnumOptionsAnalyzerTitle {
             get {
@@ -1331,7 +1331,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add case(s)..
+        ///   Looks up a localized string similar to Add cases..
         /// </summary>
         internal static string SwitchDoesNotHandleAllEnumOptionsCodeFixTitle {
             get {
@@ -1367,29 +1367,29 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove suffix.
+        ///   Looks up a localized string similar to Remove -Async suffix.
         /// </summary>
-        internal static string SyncMethodWithSyncSuffixAnalyzerCodeFixTitle {
+        internal static string SyncMethodWithAsyncSuffixAnalyzerCodeFixTitle {
             get {
-                return ResourceManager.GetString("SyncMethodWithSyncSuffixAnalyzerCodeFixTitle", resourceCulture);
+                return ResourceManager.GetString("SyncMethodWithAsyncSuffixAnalyzerCodeFixTitle", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Synchronous method &quot;{0}&quot; should not end with &apos;Async&apos;..
         /// </summary>
-        internal static string SyncMethodWithSyncSuffixAnalyzerMessage {
+        internal static string SyncMethodWithAsyncSuffixAnalyzerMessage {
             get {
-                return ResourceManager.GetString("SyncMethodWithSyncSuffixAnalyzerMessage", resourceCulture);
+                return ResourceManager.GetString("SyncMethodWithAsyncSuffixAnalyzerMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your method is not async, and should not have the &apos;Async&apos; suffix..
+        ///   Looks up a localized string similar to A non-async, non-Task method should not end with -Async..
         /// </summary>
-        internal static string SyncMethodWithSyncSuffixAnalyzerTitle {
+        internal static string SyncMethodWithAsyncSuffixAnalyzerTitle {
             get {
-                return ResourceManager.GetString("SyncMethodWithSyncSuffixAnalyzerTitle", resourceCulture);
+                return ResourceManager.GetString("SyncMethodWithAsyncSuffixAnalyzerTitle", resourceCulture);
             }
         }
         
@@ -1421,7 +1421,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method {0} might be mistakingly missing a test attribute.
+        ///   Looks up a localized string similar to Method {0} might be missing a test attribute.
         /// </summary>
         internal static string TestMethodWithoutTestAttributeAnalyzerMessage {
             get {
@@ -1457,7 +1457,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The conversion can be performed without casting twice..
+        ///   Looks up a localized string similar to Use as/null instead of is/as..
         /// </summary>
         internal static string TryCastWithoutUsingAsNotNullAnalyzerTitle {
             get {
@@ -1475,7 +1475,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Actual type can be replaced with &apos;var&apos;..
+        ///   Looks up a localized string similar to Replace the explicit type with &apos;var&apos;.
         /// </summary>
         internal static string TypeToVarAnalyzerMessage {
             get {
@@ -1484,7 +1484,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use var instead of type..
+        ///   Looks up a localized string similar to Use var instead of the explicit type..
         /// </summary>
         internal static string TypeToVarAnalyzerTitle {
             get {
@@ -1511,7 +1511,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use alias instead of concrete type..
+        ///   Looks up a localized string similar to Use the built-in type alias instead of the concrete type..
         /// </summary>
         internal static string UseAliasesInsteadOfConcreteTypeAnalyzerTitle {
             get {
@@ -1529,7 +1529,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Using statements should use braces..
+        ///   Looks up a localized string similar to A using tatement is not delimited with braces..
         /// </summary>
         internal static string UsingStatementWithoutBracesAnalyzerMessage {
             get {
@@ -1538,7 +1538,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Using statement without braces..
+        ///   Looks up a localized string similar to A using statement is missing braces..
         /// </summary>
         internal static string UsingStatementWithoutBracesAnalyzerTitle {
             get {

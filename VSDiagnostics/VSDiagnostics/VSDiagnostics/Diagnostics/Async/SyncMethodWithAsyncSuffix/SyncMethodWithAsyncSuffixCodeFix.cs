@@ -26,7 +26,7 @@ namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithAsyncSuffix
                 root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
 
             context.RegisterCodeFix(
-                CodeAction.Create(VSDiagnosticsResources.SyncMethodWithSyncSuffixAnalyzerCodeFixTitle,
+                CodeAction.Create(VSDiagnosticsResources.SyncMethodWithAsyncSuffixAnalyzerCodeFixTitle,
                     x => RemoveSuffixAsync(context.Document, methodDeclaration, root, context.CancellationToken),
                     SyncMethodWithAsyncSuffixAnalyzer.Rule.Id),
                 diagnostic);

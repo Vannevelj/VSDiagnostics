@@ -44,7 +44,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, AttributeWithEmptyArgumentListAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, string.Format(AttributeWithEmptyArgumentListAnalyzer.Rule.MessageFormat.ToString(), "Obsolete"));
             VerifyFix(original, result);
         }
 
@@ -122,7 +122,7 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original, AttributeWithEmptyArgumentListAnalyzer.Rule.MessageFormat.ToString());
+            VerifyDiagnostic(original, string.Format(AttributeWithEmptyArgumentListAnalyzer.Rule.MessageFormat.ToString(), "Flags"));
             VerifyFix(original, result);
         }
 
