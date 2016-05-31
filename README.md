@@ -84,7 +84,7 @@ Currently these diagnostics are implemented:
 | Structs | VSD0036 | Warns when a struct replaces `this` with a new instance.
 | Structs | VSD0050 | Structs should implement `Equals()`, `GetHashCode()`, and `ToString()`.
 | Tests | VSD0037 | A test method should not end with -Test.
-| Tests | VSD0038 | Verifies whether a test method has the public modifier.
+| Tests | VSD0038 | Verifies whether a test method has the `public` modifier.
 | Tests | VSD0062 | A method might be missing a test attribute.
 
 ## How do I use this?
