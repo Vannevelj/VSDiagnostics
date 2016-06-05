@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.Composition;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
@@ -37,32 +38,61 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOpe
                     ArgumentExceptionWithoutNameofOperatorAnalyzer.Rule.Id), diagnostic);
         }
 
-        private Task<Solution> UseNameofAsync(Document document, SyntaxNode root,
-                                              ObjectCreationExpressionSyntax objectCreationExpression)
+        private Task<Solution> UseNameofAsync(Document document, SyntaxNode root, ObjectCreationExpressionSyntax objectCreationExpression)
         {
-            var method = objectCreationExpression.Ancestors().OfType<MethodDeclarationSyntax>().First();
-            var methodParameters = method.ParameterList.Parameters;
+            var method = objectCreationExpression.Ancestors().OfType<MethodDeclarationSyntax>(SyntaxKind.MethodDeclaration).FirstOrDefault();
+            PropertyDeclarationSyntax property = default(PropertyDeclarationSyntax);
+            if (method == null)
+            {
+                // Fired from a property setter
+                property = objectCreationExpression.Ancestors()
+                        .OfType<PropertyDeclarationSyntax>(SyntaxKind.PropertyDeclaration)
+                        .First();
+            }
+            
             var expressionArguments =
                 objectCreationExpression.ArgumentList.Arguments.Select(x => x.Expression)
                                         .OfType<LiteralExpressionSyntax>();
 
             foreach (var expressionArgument in expressionArguments)
             {
-                foreach (var methodParameter in methodParameters)
+                if (property != default(PropertyDeclarationSyntax))
                 {
-                    if (string.Equals((string) methodParameter.Identifier.Value, (string) expressionArgument.Token.Value,
-                        StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(expressionArgument.Token.ValueText, "value", StringComparison.OrdinalIgnoreCase))
                     {
-                        var newExpression = SyntaxFactory.ParseExpression($"nameof({methodParameter.Identifier})");
-                        var newParent = objectCreationExpression.ReplaceNode(expressionArgument, newExpression);
-                        var newRoot = root.ReplaceNode(objectCreationExpression, newParent);
-                        var newDocument = document.WithSyntaxRoot(newRoot);
-                        return Task.FromResult(newDocument.Project.Solution);
+                        return CreateNewExpressionAsync(root, "value", objectCreationExpression, expressionArgument, document);
                     }
                 }
+                else
+                {
+                    Debug.Assert(method != null);
+                    var methodParameters = method.ParameterList.Parameters;
+                    foreach (var methodParameter in methodParameters)
+                    {
+                        if (string.Equals(methodParameter.Identifier.ValueText, expressionArgument.Token.ValueText, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return CreateNewExpressionAsync(root, methodParameter.Identifier.ValueText, objectCreationExpression, expressionArgument, document);
+                        }
+                    }
+                }
+                
             }
 
-            return null;
+            throw new InvalidOperationException("No corresponding parameter could be found");
+        }
+
+        private Task<Solution> CreateNewExpressionAsync(
+            SyntaxNode root, 
+            string newIdentifier,
+            ObjectCreationExpressionSyntax objectCreationExpression,
+            ExpressionSyntax argumentExpression,
+            Document document)
+        {
+            var newExpression = SyntaxFactory.ParseExpression($"nameof({newIdentifier})");
+            var newParent = objectCreationExpression.ReplaceNode(argumentExpression, newExpression);
+            var newRoot = root.ReplaceNode(objectCreationExpression, newParent);
+            var newDocument = document.WithSyntaxRoot(newRoot);
+            return Task.FromResult(newDocument.Project.Solution);
         }
     }
 }

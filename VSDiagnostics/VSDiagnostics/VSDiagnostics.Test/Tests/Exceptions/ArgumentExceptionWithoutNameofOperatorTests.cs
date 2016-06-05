@@ -434,5 +434,105 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, string.Format(ArgumentExceptionWithoutNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "input"));
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void ArgumentExceptionWithoutNameofOperator_PropertySetter()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            public int MyProperty 
+            { 
+                get { return 5; }
+                set { throw new ArgumentException(""value""); }
+            }
+        }
+    }";
+
+            var result = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            public int MyProperty 
+            { 
+                get { return 5; }
+                set { throw new ArgumentException(nameof(value)); }
+            }
+        }
+    }";
+
+            VerifyDiagnostic(original, string.Format(ArgumentExceptionWithoutNameofOperatorAnalyzer.Rule.MessageFormat.ToString(), "value"));
+            VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void ArgumentExceptionWithoutNameofOperator_PropertyGetterOnly()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            public int MyProperty 
+            { 
+                get { return 5; }
+            }
+        }
+    }";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ArgumentExceptionWithoutNameofOperator_PropertyExpressionBodied()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            public int MyProperty => 5;
+        }
+    }";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ArgumentExceptionWithoutNameofOperator_PropertySetterDoesNotReferToValue()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            public int MyProperty 
+            { 
+                get { return 5; }
+                set { throw new ArgumentNullException(""test""); }
+            }
+        }
+    }";
+
+            VerifyDiagnostic(original);
+        }
     }
 }
