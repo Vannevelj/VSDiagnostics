@@ -58,32 +58,49 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOpe
                                             .FirstOrDefault()?
                                             .ParameterList.Parameters;
 
-                // Exception is declared outside a method
-                if (methodParameters == null)
+                // Exception is declared inside a method
+                if (methodParameters != null)
+                {
+                    foreach (var argument in arguments)
+                    {
+                        var argumentName = argument.Token.ValueText;
+                        ParameterSyntax correspondingParameter = null;
+
+                        foreach (var parameter in methodParameters)
+                        {
+                            if (string.Equals((string)parameter.Identifier.Value, argumentName,
+                                StringComparison.OrdinalIgnoreCase))
+                            {
+                                correspondingParameter = parameter;
+                                break;
+                            }
+                        }
+
+                        if (correspondingParameter != null)
+                        {
+                            context.ReportDiagnostic(Diagnostic.Create(Rule, argument.GetLocation(),
+                                correspondingParameter.Identifier.Value));
+                            return;
+                        }
+                    }
+                }
+
+                // We also account for the situation where an exception is thrown from a property setter and refers to the contextual keyword "value"
+                var propertyDeclaration = objectCreationExpression.Ancestors()
+                    .OfType<PropertyDeclarationSyntax>(SyntaxKind.PropertyDeclaration)
+                    .FirstOrDefault();
+
+                if (propertyDeclaration == null)
                 {
                     return;
                 }
 
-                foreach (var argument in arguments)
+                foreach (var argument in objectCreationExpression.ArgumentList.Arguments)
                 {
-                    var argumentName = argument.Token.ValueText;
-                    ParameterSyntax correspondingParameter = null;
-
-                    foreach (var parameter in methodParameters.Value)
+                    var constantValue = context.SemanticModel.GetConstantValue(argument.Expression);
+                    if (constantValue.HasValue && (string)constantValue.Value == "value")
                     {
-                        if (string.Equals((string) parameter.Identifier.Value, argumentName,
-                            StringComparison.OrdinalIgnoreCase))
-                        {
-                            correspondingParameter = parameter;
-                            break;
-                        }
-                    }
-
-
-                    if (correspondingParameter != null)
-                    {
-                        context.ReportDiagnostic(Diagnostic.Create(Rule, argument.GetLocation(),
-                            correspondingParameter.Identifier.Value));
+                        context.ReportDiagnostic(Diagnostic.Create(Rule, argument.GetLocation(), "value"));
                         return;
                     }
                 }
