@@ -10,7 +10,11 @@ namespace VSDiagnostics.Test.Tests.Exceptions
     {
         protected override DiagnosticAnalyzer DiagnosticAnalyzer => new SingleGeneralExceptionAnalyzer();
 
+        /// <summary>
+        /// Ignored until https://github.com/Vannevelj/RoslynTester/issues/32
+        /// </summary>
         [TestMethod]
+        [Ignore]
         public void SingleGeneralException_WithSingleGeneralException()
         {
             var test = @"
