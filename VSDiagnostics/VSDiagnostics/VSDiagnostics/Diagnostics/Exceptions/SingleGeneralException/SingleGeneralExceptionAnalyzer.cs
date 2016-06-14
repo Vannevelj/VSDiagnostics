@@ -18,7 +18,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.SingleGeneralException
         private static readonly string Title = VSDiagnosticsResources.SingleGeneralExceptionAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule
-            => new DiagnosticDescriptor(DiagnosticId.SingleGeneralException, Title, Message, Category, Severity, true);
+            => new DiagnosticDescriptor(DiagnosticId.SingleGeneralException, Title, Message, Category, Severity, isEnabledByDefault: false);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
