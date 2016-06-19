@@ -1,0 +1,195 @@
+﻿using System;
+using System.Collections.Immutable;
+using System.Linq;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
+using VSDiagnostics.Utilities;
+using System.Threading;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+namespace VSDiagnostics.Diagnostics.General.GetHashCodeRefersToMutableMember
+{
+    [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    public class GetHashCodeRefersToMutableMemberAnalyzer : DiagnosticAnalyzer
+    {
+        private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
+
+        private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Message = VSDiagnosticsResources.GetHashCodeRefersToMutableFieldAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.GetHashCodeRefersToMutableFieldAnalyzerTitle;
+
+        internal static DiagnosticDescriptor Rule =>
+            new DiagnosticDescriptor(DiagnosticId.GetHashCodeRefersToMutableField, Title, Message, Category, Severity, true);
+
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+        
+        public override void Initialize(AnalysisContext context) =>
+            context.RegisterSymbolAction(AnalyzeSymbol, SymbolKind.NamedType);
+
+        private void AnalyzeSymbol(SymbolAnalysisContext context)
+        {
+            var namedType = (INamedTypeSymbol)context.Symbol;
+            var semanticModel = context.Compilation.GetSemanticModel(context.Symbol.Locations[0].SourceTree);
+
+            IMethodSymbol getHashCode;
+            GetHashCodeSymbol(namedType, out getHashCode);
+            if (getHashCode == null) { return; }
+
+            var getHashCodeLocation = getHashCode.Locations.FirstOrDefault();
+            var root = getHashCodeLocation?.SourceTree.GetRoot(context.CancellationToken);
+            if (root == null)
+            {
+                return;
+            }
+
+            var getHashCodeNode = (MethodDeclarationSyntax)root.FindNode(getHashCodeLocation.SourceSpan);
+            var nodes = getHashCodeNode.DescendantNodes(descendIntoChildren: target => true);
+
+            var identifierNameNodes = nodes.OfType<IdentifierNameSyntax>(SyntaxKind.IdentifierName);
+            foreach (var node in identifierNameNodes)
+            {
+                var symbol = semanticModel.GetSymbolInfo(node).Symbol;
+                if (symbol == null)
+                {
+                    continue;
+                }
+
+                // make sure we are directly referencing a member in this type
+                // if we do not use this limitation, we start reporting things like
+                // `GetHashCode` in `Foo.GetHashCode()`.
+                if (symbol.ContainingType != getHashCode.ContainingType)
+                {
+                    continue;
+                }
+
+                if (symbol.Kind == SymbolKind.Field)
+                {
+                    var fieldIsMutableOrStatic = FieldIsMutableOrStatic((IFieldSymbol) symbol);
+                    if (fieldIsMutableOrStatic.Item1)
+                    {
+                        context.ReportDiagnostic(Diagnostic.Create(Rule, getHashCode.Locations[0],
+                            fieldIsMutableOrStatic.Item2));
+                    }
+                }
+                else if (symbol.Kind == SymbolKind.Property)
+                {
+                    var propertyIsMutable = PropertyIsMutable((IPropertySymbol) symbol, context.CancellationToken);
+                    if (propertyIsMutable.Item1)
+                    {
+                        context.ReportDiagnostic(Diagnostic.Create(Rule, getHashCode.Locations[0],
+                            propertyIsMutable.Item2));
+                    }
+                }
+                else
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(Rule, getHashCode.Locations[0],
+                        symbol.Kind.ToString().ToLowerInvariant() + " " + symbol.Name));
+                }
+            }
+        }
+
+        private void GetHashCodeSymbol(INamedTypeSymbol symbol, out IMethodSymbol getHashCodeSymbol)
+        {
+            getHashCodeSymbol = null;
+
+            foreach (var member in symbol.GetMembers())
+            {
+                if (!(member is IMethodSymbol))
+                {
+                    continue;
+                }
+
+                var method = (IMethodSymbol)member;
+                if (method.MetadataName == nameof(GetHashCode) && !method.Parameters.Any())
+                {
+                    getHashCodeSymbol = method;
+                }
+            }
+        }
+        
+        private Tuple<bool, string> FieldIsMutableOrStatic(IFieldSymbol field)
+        {
+            var description = string.Empty;
+            var returnResult = false;
+
+            if (field.IsConst)
+            {
+                description += "const ";
+                returnResult = true;
+            }
+
+            // constant fields are marked static
+            if (field.IsStatic && !field.IsConst)
+            {
+                description += "static ";
+                returnResult = true;
+            }
+            
+            // constant fields are marked non-readonly
+            if (!field.IsReadOnly && !field.IsConst)
+            {
+                description += "non-readonly ";
+                returnResult = true;
+            }
+
+            if (!field.Type.IsValueType && field.Type.SpecialType != SpecialType.System_String)
+            {
+                description += "non-value type, non-string ";
+                returnResult = true;
+            }
+
+            return Tuple.Create(returnResult, description + "field " + field.Name);
+        }
+
+        private Tuple<bool, string> PropertyIsMutable(IPropertySymbol property, CancellationToken token)
+        {
+            var description = string.Empty;
+            var returnResult = false;
+
+            if (property.IsStatic)
+            {
+                description += "static ";
+                returnResult = true;
+            }
+
+            if (!property.Type.IsValueType && property.Type.SpecialType != SpecialType.System_String)
+            {
+                description += "non-value type, non-string ";
+                returnResult = true;
+            }
+
+            if (property.SetMethod != null)
+            {
+                description += "settable ";
+                returnResult = true;
+            }
+
+            var propertyLocation = property.Locations.FirstOrDefault();
+            var root = propertyLocation?.SourceTree.GetRoot(token);
+            if (root == null)
+            {
+                return Tuple.Create(false, string.Empty);    // rather be safe than wrong
+            }
+
+            var propertyNode = (PropertyDeclarationSyntax) root.FindNode(propertyLocation.SourceSpan);
+
+            // ensure getter does not have body
+            // the property has to have at least one of {get, set}, and it doesn't have a set (see above)
+            // this will not have an NRE in First()
+            // the accessor list might be null if it uses the arrow operator `=>`
+            if (propertyNode.AccessorList == null ||
+                propertyNode.AccessorList.Accessors.First(a => a.IsKind(SyntaxKind.GetAccessorDeclaration)).Body != null)
+            {
+                description += "property with bodied getter ";
+                returnResult = true;
+            }
+            else
+            {
+                description += "property ";
+            }
+
+            return Tuple.Create(returnResult, description + property.Name);
+        }
+    }
+}

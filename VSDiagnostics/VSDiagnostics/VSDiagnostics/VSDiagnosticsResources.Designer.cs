@@ -755,6 +755,24 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to GetHashCode() refers to {0}.
+        /// </summary>
+        internal static string GetHashCodeRefersToMutableFieldAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("GetHashCodeRefersToMutableFieldAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GetHashCode() refers to mutable, static, or constant member.
+        /// </summary>
+        internal static string GetHashCodeRefersToMutableFieldAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("GetHashCodeRefersToMutableFieldAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use of &quot;goto&quot; detected.  Consider using a method or loop instead..
         /// </summary>
         internal static string GotoDetectionAnalyzerMessage {
