@@ -317,23 +317,45 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void GetHashCodeRefersToMutableMember_Method()
+        public void GetHashCodeRefersToMutableMember_InOtherType_PropertyWithExpressionBodiedGetter()
         {
             var original = @"
 namespace ConsoleApplication1
 {
+    public struct Bar
+    {
+        public int Fuzz => 0;
+    }
+
     public class Foo
     {
-        public char Boo() { return '1'; }
-
-        public override int GetHashCode()
-        {
-            return Boo().GetHashCode();
-        }
+        private readonly Bar _bar = new Bar();
+        public override int GetHashCode() => _bar.Fuzz.GetHashCode();
     }
 }";
 
-            VerifyDiagnostic(original, "GetHashCode() refers to method Boo");
+            VerifyDiagnostic(original, "GetHashCode() refers to property with bodied getter Fuzz");
+        }
+
+        [TestMethod]
+        public void GetHashCodeRefersToMutableMember_InOtherType_ImmutableProperty_NoDiagnostic()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    public struct Bar
+    {
+        public int Fizz { get; }
+    }
+
+    public class Foo
+    {
+        private readonly Bar _bar = new Bar();
+        public override int GetHashCode() => _bar.Fizz.GetHashCode();
+    }
+}";
+
+            VerifyDiagnostic(original);
         }
     }
 }

@@ -55,14 +55,6 @@ namespace VSDiagnostics.Diagnostics.General.GetHashCodeRefersToMutableMember
                     continue;
                 }
 
-                // make sure we are directly referencing a member in this type
-                // if we do not use this limitation, we start reporting things like
-                // `GetHashCode` in `Foo.GetHashCode()`.
-                if (symbol.ContainingType != getHashCode.ContainingType)
-                {
-                    continue;
-                }
-
                 if (symbol.Kind == SymbolKind.Field)
                 {
                     var fieldIsMutableOrStatic = FieldIsMutableOrStatic((IFieldSymbol) symbol);
@@ -80,11 +72,6 @@ namespace VSDiagnostics.Diagnostics.General.GetHashCodeRefersToMutableMember
                         context.ReportDiagnostic(Diagnostic.Create(Rule, getHashCode.Locations[0],
                             propertyIsMutable.Item2));
                     }
-                }
-                else
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, getHashCode.Locations[0],
-                        symbol.Kind.ToString().ToLowerInvariant() + " " + symbol.Name));
                 }
             }
         }
