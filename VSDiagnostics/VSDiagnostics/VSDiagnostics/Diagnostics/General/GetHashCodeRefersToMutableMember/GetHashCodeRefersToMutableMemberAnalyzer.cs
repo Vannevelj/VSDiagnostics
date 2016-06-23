@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
-using System.Threading;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -32,11 +30,10 @@ namespace VSDiagnostics.Diagnostics.General.GetHashCodeRefersToMutableMember
             var namedType = (INamedTypeSymbol)context.Symbol;
             var semanticModel = context.Compilation.GetSemanticModel(context.Symbol.Locations[0].SourceTree);
 
-            IMethodSymbol getHashCode;
-            GetHashCodeSymbol(namedType, out getHashCode);
+            var getHashCode = GetHashCodeSymbol(namedType);
             if (getHashCode == null) { return; }
 
-            var getHashCodeLocation = getHashCode.Locations.FirstOrDefault();
+            var getHashCodeLocation = getHashCode.Locations[0];
             var root = getHashCodeLocation?.SourceTree.GetRoot(context.CancellationToken);
             if (root == null)
             {
@@ -66,7 +63,7 @@ namespace VSDiagnostics.Diagnostics.General.GetHashCodeRefersToMutableMember
                 }
                 else if (symbol.Kind == SymbolKind.Property)
                 {
-                    var propertyIsMutable = PropertyIsMutable((IPropertySymbol) symbol, context.CancellationToken);
+                    var propertyIsMutable = PropertyIsMutable((IPropertySymbol) symbol, root);
                     if (propertyIsMutable.Item1)
                     {
                         context.ReportDiagnostic(Diagnostic.Create(Rule, getHashCode.Locations[0],
@@ -76,10 +73,8 @@ namespace VSDiagnostics.Diagnostics.General.GetHashCodeRefersToMutableMember
             }
         }
 
-        private void GetHashCodeSymbol(INamedTypeSymbol symbol, out IMethodSymbol getHashCodeSymbol)
+        private IMethodSymbol GetHashCodeSymbol(INamedTypeSymbol symbol)
         {
-            getHashCodeSymbol = null;
-
             foreach (var member in symbol.GetMembers())
             {
                 if (!(member is IMethodSymbol))
@@ -88,11 +83,13 @@ namespace VSDiagnostics.Diagnostics.General.GetHashCodeRefersToMutableMember
                 }
 
                 var method = (IMethodSymbol)member;
-                if (method.MetadataName == nameof(GetHashCode) && !method.Parameters.Any())
+                if (method.MetadataName == nameof(GetHashCode) && method.Parameters.Length == 0)
                 {
-                    getHashCodeSymbol = method;
+                    return method;
                 }
             }
+
+            return null;
         }
         
         private Tuple<bool, string> FieldIsMutableOrStatic(IFieldSymbol field)
@@ -129,7 +126,7 @@ namespace VSDiagnostics.Diagnostics.General.GetHashCodeRefersToMutableMember
             return Tuple.Create(returnResult, description + "field " + field.Name);
         }
 
-        private Tuple<bool, string> PropertyIsMutable(IPropertySymbol property, CancellationToken token)
+        private Tuple<bool, string> PropertyIsMutable(IPropertySymbol property, SyntaxNode root)
         {
             var description = string.Empty;
             var returnResult = false;
@@ -152,13 +149,7 @@ namespace VSDiagnostics.Diagnostics.General.GetHashCodeRefersToMutableMember
                 returnResult = true;
             }
 
-            var propertyLocation = property.Locations.FirstOrDefault();
-            var root = propertyLocation?.SourceTree.GetRoot(token);
-            if (root == null)
-            {
-                return Tuple.Create(false, string.Empty);    // rather be safe than wrong
-            }
-
+            var propertyLocation = property.Locations[0];
             var propertyNode = (PropertyDeclarationSyntax) root.FindNode(propertyLocation.SourceSpan);
 
             // ensure getter does not have body
@@ -166,7 +157,7 @@ namespace VSDiagnostics.Diagnostics.General.GetHashCodeRefersToMutableMember
             // this will not have an NRE in First()
             // the accessor list might be null if it uses the arrow operator `=>`
             if (propertyNode.AccessorList == null ||
-                propertyNode.AccessorList.Accessors.First(a => a.IsKind(SyntaxKind.GetAccessorDeclaration)).Body != null)
+                propertyNode.AccessorList.Accessors[0].Body != null)
             {
                 description += "property with bodied getter ";
                 returnResult = true;
