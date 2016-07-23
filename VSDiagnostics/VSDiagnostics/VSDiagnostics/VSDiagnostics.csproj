@@ -75,12 +75,10 @@
     <Compile Include="Diagnostics\Attributes\FlagsEnumValuesAreNotPowersOfTwo\FlagsEnumValuesAreNotPowersOfTwoAnalyzer.cs" />
     <Compile Include="Diagnostics\Attributes\FlagsEnumValuesAreNotPowersOfTwo\FlagsEnumValuesAreNotPowersOfTwoCodeFix.cs" />
     <Compile Include="Diagnostics\General\GotoDetection\GotoDetectionAnalyzer.cs" />
-    <Compile Include="Diagnostics\General\IfStatementWithoutBraces\IfStatementWithoutBracesAnalyzer.cs" />
-    <Compile Include="Diagnostics\General\IfStatementWithoutBraces\IfStatementWithoutBracesCodeFix.cs" />
     <Compile Include="Diagnostics\General\ImplementEqualsAndGetHashCode\ImplementEqualsAndGetHashCodeAnalyzer.cs" />
     <Compile Include="Diagnostics\General\ImplementEqualsAndGetHashCode\ImplementEqualsAndGetHashCodeCodeFix.cs" />
-    <Compile Include="Diagnostics\General\LoopStatementWithoutBraces\LoopStatementWithoutBracesAnalyzer.cs" />
-    <Compile Include="Diagnostics\General\LoopStatementWithoutBraces\LoopStatementWithoutBracesCodeFix.cs" />
+    <Compile Include="Diagnostics\General\MissingBraces\MissingBracesAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\MissingBraces\MissingBracesCodeFix.cs" />
     <Compile Include="Diagnostics\General\NamingConventions\NamingConventionExtensions.cs" />
     <Compile Include="Diagnostics\General\NonEncapsulatedOrMutableField\NonEncapsulatedOrMutableFieldAnalyzer.cs" />
     <Compile Include="Diagnostics\General\NonEncapsulatedOrMutableField\NonEncapsulatedOrMutableFieldCodeFix.cs" />
@@ -107,8 +105,6 @@
     <Compile Include="Diagnostics\General\TypeToVar\TypeToVarCodeFix.cs" />
     <Compile Include="Diagnostics\General\UseAliasesInsteadOfConcreteType\UseAliasesInsteadOfConcreteTypeCodeFix.cs" />
     <Compile Include="Diagnostics\General\UseAliasesInsteadOfConcreteType\UseAliasesInsteadOfConcreteTypeAnalyzer.cs" />
-    <Compile Include="Diagnostics\General\UsingStatementWithoutBraces\UsingStatementWithoutBracesAnalyzer.cs" />
-    <Compile Include="Diagnostics\General\UsingStatementWithoutBraces\UsingStatementWithoutBracesCodeFix.cs" />
     <Compile Include="Diagnostics\Strings\ReplaceEmptyStringWithStringDotEmpty\ReplaceEmptyStringWithStringDotEmptyAnalyzer.cs" />
     <Compile Include="Diagnostics\Strings\ReplaceEmptyStringWithStringDotEmpty\ReplaceEmptyStringWithStringDotEmptyCodeFix.cs" />
     <Compile Include="Diagnostics\Strings\StringDotFormatWithDifferentAmountOfArguments\StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.cs" />

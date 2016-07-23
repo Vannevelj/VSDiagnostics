@@ -654,4 +654,14 @@
   <data name="TestMethodWithoutTestAttributeAnalyzerTitle" xml:space="preserve">
     <value>A method might be missing a test attribute.</value>
   </data>
+  <data name="MissingBracesAnalyzerMessage" xml:space="preserve">
+    <value>A{0} {1} statement should be written with braces</value>
+    <comment>{0} - A/An</comment>
+  </data>
+  <data name="MissingBracesAnalyzerTitle" xml:space="preserve">
+    <value>{0} blocks should use braces to denote start and end.</value>
+  </data>
+  <data name="MissingBracesCodeFixTitle" xml:space="preserve">
+    <value>Use braces</value>
+  </data>
 </root>
