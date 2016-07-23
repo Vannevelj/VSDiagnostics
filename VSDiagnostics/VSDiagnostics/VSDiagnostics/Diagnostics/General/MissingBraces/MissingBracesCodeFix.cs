@@ -21,7 +21,7 @@ namespace VSDiagnostics.Diagnostics.General.MissingBraces
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
-        public override Task RegisterCodeFixesAsync(CodeFixContext context) => new Task(() =>
+        public override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var diagnostic = context.Diagnostics.First();
 
@@ -29,7 +29,7 @@ namespace VSDiagnostics.Diagnostics.General.MissingBraces
                 CodeAction.Create(VSDiagnosticsResources.MissingBracesCodeFixTitle,
                     x => AddBracesAsync(context, x),
                     MissingBracesAnalyzer.Rule.Id), diagnostic);
-        });
+        }
 
         private async Task<Document> AddBracesAsync(CodeFixContext context, CancellationToken cancellationToken)
         {

@@ -872,7 +872,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A{0} {1} statement should be written with braces.
+        ///   Looks up a localized string similar to {0} {1} statement should be written with braces.
         /// </summary>
         internal static string MissingBracesAnalyzerMessage {
             get {

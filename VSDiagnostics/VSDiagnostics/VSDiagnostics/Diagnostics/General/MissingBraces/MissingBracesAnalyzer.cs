@@ -41,7 +41,7 @@ namespace VSDiagnostics.Diagnostics.General.MissingBraces
             if (!ifStatement.Statement.IsKind(SyntaxKind.Block))
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule,
-                    ifStatement.IfKeyword.GetLocation(), "n", SyntaxFacts.GetText(SyntaxKind.IfKeyword)));
+                    ifStatement.IfKeyword.GetLocation(), "An", SyntaxFacts.GetText(SyntaxKind.IfKeyword)));
             }
         }
 
@@ -52,7 +52,7 @@ namespace VSDiagnostics.Diagnostics.General.MissingBraces
                 !elseClause.Statement.IsKind(SyntaxKind.IfStatement))
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule,
-                    elseClause.ElseKeyword.GetLocation(), "n", SyntaxFacts.GetText(SyntaxKind.ElseKeyword)));
+                    elseClause.ElseKeyword.GetLocation(), "An", SyntaxFacts.GetText(SyntaxKind.ElseKeyword)));
             }
         }
 
@@ -62,7 +62,7 @@ namespace VSDiagnostics.Diagnostics.General.MissingBraces
             if (!forStatement.Statement.IsKind(SyntaxKind.Block))
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule,
-                    forStatement.ForKeyword.GetLocation(), string.Empty, SyntaxFacts.GetText(SyntaxKind.ForKeyword)));
+                    forStatement.ForKeyword.GetLocation(), "A", SyntaxFacts.GetText(SyntaxKind.ForKeyword)));
             }
         }
 
@@ -72,7 +72,7 @@ namespace VSDiagnostics.Diagnostics.General.MissingBraces
             if (!forEachStatement.Statement.IsKind(SyntaxKind.Block))
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule,
-                    forEachStatement.ForEachKeyword.GetLocation(), string.Empty, SyntaxFacts.GetText(SyntaxKind.ForEachKeyword)));
+                    forEachStatement.ForEachKeyword.GetLocation(), "A", SyntaxFacts.GetText(SyntaxKind.ForEachKeyword)));
             }
         }
 
@@ -82,7 +82,7 @@ namespace VSDiagnostics.Diagnostics.General.MissingBraces
             if (!whileStatement.Statement.IsKind(SyntaxKind.Block))
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule,
-                    whileStatement.WhileKeyword.GetLocation(), string.Empty, SyntaxFacts.GetText(SyntaxKind.WhileKeyword)));
+                    whileStatement.WhileKeyword.GetLocation(), "A", SyntaxFacts.GetText(SyntaxKind.WhileKeyword)));
             }
         }
 
@@ -92,7 +92,7 @@ namespace VSDiagnostics.Diagnostics.General.MissingBraces
             if (!doStatement.Statement.IsKind(SyntaxKind.Block))
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule,
-                    doStatement.DoKeyword.GetLocation(), string.Empty, SyntaxFacts.GetText(SyntaxKind.DoKeyword)));
+                    doStatement.DoKeyword.GetLocation(), "A", SyntaxFacts.GetText(SyntaxKind.DoKeyword)));
             }
         }
 
@@ -103,7 +103,7 @@ namespace VSDiagnostics.Diagnostics.General.MissingBraces
                 !usingStatement.Statement.IsKind(SyntaxKind.UsingStatement))
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule,
-                    usingStatement.UsingKeyword.GetLocation(), string.Empty, SyntaxFacts.GetText(SyntaxKind.UsingKeyword)));
+                    usingStatement.UsingKeyword.GetLocation(), "A", SyntaxFacts.GetText(SyntaxKind.UsingKeyword)));
             }
         }
 
@@ -114,7 +114,7 @@ namespace VSDiagnostics.Diagnostics.General.MissingBraces
                 !lockStatement.Statement.IsKind(SyntaxKind.LockStatement))
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule,
-                    lockStatement.LockKeyword.GetLocation(), string.Empty, SyntaxFacts.GetText(SyntaxKind.LockKeyword)));
+                    lockStatement.LockKeyword.GetLocation(), "A", SyntaxFacts.GetText(SyntaxKind.LockKeyword)));
             }
         }
 
@@ -125,7 +125,7 @@ namespace VSDiagnostics.Diagnostics.General.MissingBraces
                 !fixedStatement.Statement.IsKind(SyntaxKind.FixedStatement))
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule,
-                    fixedStatement.FixedKeyword.GetLocation(), string.Empty, SyntaxFacts.GetText(SyntaxKind.FixedKeyword)));
+                    fixedStatement.FixedKeyword.GetLocation(), "A", SyntaxFacts.GetText(SyntaxKind.FixedKeyword)));
             }
         }
 
@@ -135,7 +135,7 @@ namespace VSDiagnostics.Diagnostics.General.MissingBraces
             if (switchSection.Statements.Count != 1 || !switchSection.Statements[0].IsKind(SyntaxKind.Block))
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule,
-                    switchSection.GetLocation(), string.Empty, "switch section"));
+                    switchSection.GetLocation(), "A", "switch section"));
             }
         }
     }
