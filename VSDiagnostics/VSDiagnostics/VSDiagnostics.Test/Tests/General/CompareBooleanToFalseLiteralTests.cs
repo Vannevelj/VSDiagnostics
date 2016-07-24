@@ -966,5 +966,44 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, CompareBooleanToFalseLiteralAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void CompareBooleanToFalseLiteral_DoesNotReformatEntireDocment()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method ()  // formatting removes space before parens
+        {
+            bool isAwesome = false;
+            if(isAwesome == false)  // formatting adds space before parens
+            {
+                System.Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method ()  // formatting removes space before parens
+        {
+            bool isAwesome = false;
+            if(!isAwesome)  // formatting adds space before parens
+            {
+                System.Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, CompareBooleanToFalseLiteralAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
     }
 }

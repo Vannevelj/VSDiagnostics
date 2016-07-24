@@ -252,5 +252,40 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void ConditionalOperatorReturnsInvertedDefaultOptions_DoesNotReformatEntireDocument()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method ()  // formatter removes space before parens
+        {
+            int legalAge = 18;
+            int myAge = 22;
+            bool canDrink = myAge >= legalAge ? false : true;
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method ()  // formatter removes space before parens
+        {
+            int legalAge = 18;
+            int myAge = 22;
+            bool canDrink = !(myAge >= legalAge);
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
     }
 }

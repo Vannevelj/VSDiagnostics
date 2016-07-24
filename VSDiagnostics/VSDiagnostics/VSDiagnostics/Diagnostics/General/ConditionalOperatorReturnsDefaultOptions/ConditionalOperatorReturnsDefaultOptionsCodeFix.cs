@@ -37,8 +37,7 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsDefaultOpt
             var conditionalExpression = (ConditionalExpressionSyntax) statement;
 
             var newRoot =
-                root.ReplaceNode(conditionalExpression, conditionalExpression.Condition)
-                    .WithAdditionalAnnotations(Formatter.Annotation);
+                root.ReplaceNode(conditionalExpression, conditionalExpression.Condition.WithAdditionalAnnotations(Formatter.Annotation));
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);
         }
