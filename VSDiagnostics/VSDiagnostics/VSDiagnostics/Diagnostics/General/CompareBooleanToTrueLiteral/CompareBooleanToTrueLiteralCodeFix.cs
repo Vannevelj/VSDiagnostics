@@ -85,7 +85,7 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
             }
 
             var newRoot =
-                root.ReplaceNode(binaryExpression, newExpression).WithAdditionalAnnotations(Formatter.Annotation);
+                root.ReplaceNode(binaryExpression, newExpression.WithAdditionalAnnotations(Formatter.Annotation));
 
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);
