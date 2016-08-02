@@ -710,11 +710,29 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [Flags] enum {0}&apos;s values are not explicit powers of 2.
+        /// </summary>
+        internal static string FlagsEnumValuesAreNotPowersOfTwoAnalyzerMessage1 {
+            get {
+                return ResourceManager.GetString("FlagsEnumValuesAreNotPowersOfTwoAnalyzerMessage1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A [Flags] enum its values are not explicit powers of 2.
         /// </summary>
         internal static string FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle {
             get {
                 return ResourceManager.GetString("FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Flags] enum&apos;s values are not explicit powers of 2.
+        /// </summary>
+        internal static string FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle1 {
+            get {
+                return ResourceManager.GetString("FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle1", resourceCulture);
             }
         }
         
@@ -728,6 +746,15 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use powers of 2.
+        /// </summary>
+        internal static string FlagsEnumValuesAreNotPowersOfTwoCodeFixTitle1 {
+            get {
+                return ResourceManager.GetString("FlagsEnumValuesAreNotPowersOfTwoCodeFixTitle1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [Flags] enum {0} its values are not explicit powers of 2 and does not fit in a {1} enum type..
         /// </summary>
         internal static string FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerMessage {
@@ -737,11 +764,29 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [Flags] enum {0}&apos;s values are not explicit powers of 2 and do not fit in a {1} enum type..
+        /// </summary>
+        internal static string FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerMessage1 {
+            get {
+                return ResourceManager.GetString("FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerMessage1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A [Flags] enum its values are not explicit powers of 2 and its values dont fit in the specified enum type..
         /// </summary>
         internal static string FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerTitle {
             get {
                 return ResourceManager.GetString("FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Flags] enum&apos;s values are not explicit powers of 2 and its values do not fit in the specified enum type..
+        /// </summary>
+        internal static string FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerTitle1 {
+            get {
+                return ResourceManager.GetString("FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerTitle1", resourceCulture);
             }
         }
         
