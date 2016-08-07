@@ -145,9 +145,19 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
-            if (!Nodes.Contains(methodDeclaration.Body.Statements[0].Kind()))
+            var statement = methodDeclaration.Body.Statements[0];
+            if (!Nodes.Contains(statement.Kind()))
             {
                 return null;
+            }
+
+            if (statement.IsKind(SyntaxKind.ReturnStatement))
+            {
+                var returnStatement = (ReturnStatementSyntax) statement;
+                if (returnStatement.Expression == null)
+                {
+                    return null;
+                }
             }
 
             return Diagnostic.Create(Rule, methodDeclaration.Identifier.GetLocation(), "Method",
