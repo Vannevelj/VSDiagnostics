@@ -910,5 +910,25 @@ namespace ConsoleApplication1
 }";
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void SimplifyExpressionBodiedMember_WithVoidMethod_EmptyReturn()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void MyMethod()
+        {
+            return;
+        }
+    }
+}";
+            VerifyDiagnostic(original);
+        }
     }
 }
