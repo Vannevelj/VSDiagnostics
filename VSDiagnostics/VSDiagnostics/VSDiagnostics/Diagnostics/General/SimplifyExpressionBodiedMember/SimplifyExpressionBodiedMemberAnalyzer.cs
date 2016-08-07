@@ -151,10 +151,10 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 return null;
             }
 
-            if(statement.IsKind(SyntaxKind.ReturnStatement))
+            if (statement.IsKind(SyntaxKind.ReturnStatement))
             {
                 var returnStatement = (ReturnStatementSyntax) statement;
-                if(returnStatement.Expression == null)
+                if (returnStatement.Expression == null)
                 {
                     return null;
                 }
