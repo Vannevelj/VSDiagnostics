@@ -402,16 +402,6 @@
   <data name="UseAliasesInsteadOfConcreteTypeCodeFixTitle" xml:space="preserve">
     <value>Use alias</value>
   </data>
-  <data name="FlagsEnumValuesAreNotPowersOfTwoAnalyzerMessage" xml:space="preserve">
-    <value>[Flags] enum {0} its values are not explicit powers of 2</value>
-    <comment>{0} - Enum typename</comment>
-  </data>
-  <data name="FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle" xml:space="preserve">
-    <value>A [Flags] enum its values are not explicit powers of 2</value>
-  </data>
-  <data name="FlagsEnumValuesAreNotPowersOfTwoCodeFixTitle" xml:space="preserve">
-    <value>Use powers of 2</value>
-  </data>
   <data name="EnumCanHaveFlagsAttributeAnalyzerMessage" xml:space="preserve">
     <value>Enum can have [Flags] attribute.</value>
   </data>
@@ -469,14 +459,6 @@
   </data>
   <data name="StructsShouldNotMutateSelfAnalyzerTitle" xml:space="preserve">
     <value>Warns when a struct replaces 'this' with a new instance.</value>
-  </data>
-  <data name="FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerMessage" xml:space="preserve">
-    <value>[Flags] enum {0} its values are not explicit powers of 2 and does not fit in a {1} enum type.</value>
-    <comment>{0} - Enum typename
-{1} - Enum basetypename</comment>
-  </data>
-  <data name="FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerTitle" xml:space="preserve">
-    <value>A [Flags] enum its values are not explicit powers of 2 and its values dont fit in the specified enum type.</value>
   </data>
   <data name="SyncMethodWithAsyncSuffixAnalyzerMessage" xml:space="preserve">
     <value>Synchronous method "{0}" should not end with 'Async'.</value>
@@ -654,22 +636,22 @@
   <data name="TestMethodWithoutTestAttributeAnalyzerTitle" xml:space="preserve">
     <value>A method might be missing a test attribute.</value>
   </data>
-  <data name="FlagsEnumValuesAreNotPowersOfTwoAnalyzerMessage1" xml:space="preserve">
+  <data name="FlagsEnumValuesAreNotPowersOfTwoAnalyzerMessage" xml:space="preserve">
     <value>[Flags] enum {0}'s values are not explicit powers of 2</value>
     <comment>{0} - Enum typename</comment>
   </data>
-  <data name="FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle1" xml:space="preserve">
+  <data name="FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle" xml:space="preserve">
     <value>[Flags] enum's values are not explicit powers of 2</value>
   </data>
-  <data name="FlagsEnumValuesAreNotPowersOfTwoCodeFixTitle1" xml:space="preserve">
+  <data name="FlagsEnumValuesAreNotPowersOfTwoCodeFixTitle" xml:space="preserve">
     <value>Use powers of 2</value>
   </data>
-  <data name="FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerMessage1" xml:space="preserve">
+  <data name="FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerMessage" xml:space="preserve">
     <value>[Flags] enum {0}'s values are not explicit powers of 2 and do not fit in a {1} enum type.</value>
     <comment>{0} - Enum typename
 {1} - Enum basetypename</comment>
   </data>
-  <data name="FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerTitle1" xml:space="preserve">
+  <data name="FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerTitle" xml:space="preserve">
     <value>[Flags] enum's values are not explicit powers of 2 and its values do not fit in the specified enum type.</value>
   </data>
 </root>
