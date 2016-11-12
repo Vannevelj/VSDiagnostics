@@ -13,22 +13,17 @@ namespace VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTo
     public class EqualsAndGetHashcodeNotImplementedTogetherAnalyzer : DiagnosticAnalyzer
     {
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.EqualsAndGetHashcodeNotImplementedTogetherAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.EqualsAndGetHashcodeNotImplementedTogetherAnalyzerTitle;
 
-        internal static DiagnosticDescriptor Rule
-            => new DiagnosticDescriptor(DiagnosticId.EqualsAndGetHashcodeNotImplementedTogether, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId.EqualsAndGetHashcodeNotImplementedTogether, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-            => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ClassDeclaration);
-
-        private void AnalyzeNode(SyntaxNodeAnalysisContext context)
+        public override void Initialize(AnalysisContext context) => context.RegisterCompilationStartAction((compilationContext) => 
         {
-            var objectSymbol = context.SemanticModel.Compilation.GetSpecialType(SpecialType.System_Object);
+            var objectSymbol = compilationContext.Compilation.GetSpecialType(SpecialType.System_Object);
             IMethodSymbol objectEquals = null;
             IMethodSymbol objectGetHashCode = null;
 
@@ -40,7 +35,7 @@ namespace VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTo
                 }
 
                 var method = (IMethodSymbol)symbol;
-                if (method.MetadataName == nameof(Equals) && method.Parameters.Count() == 1)
+                if (method.MetadataName == nameof(Equals) && method.Parameters.Length == 1)
                 {
                     objectEquals = method;
                 }
@@ -50,54 +45,57 @@ namespace VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTo
                     objectGetHashCode = method;
                 }
             }
-            
-            var classDeclaration = (ClassDeclarationSyntax)context.Node;
 
-            var equalsImplemented = false;
-            var getHashcodeImplemented = false;
-
-            foreach (var node in classDeclaration.Members)
+            compilationContext.RegisterSyntaxNodeAction((syntaxNodeContext) => 
             {
-                if (!node.IsKind(SyntaxKind.MethodDeclaration))
+                var classDeclaration = (ClassDeclarationSyntax) syntaxNodeContext.Node;
+
+                var equalsImplemented = false;
+                var getHashcodeImplemented = false;
+
+                foreach (var node in classDeclaration.Members)
                 {
-                    continue;
+                    if (!node.IsKind(SyntaxKind.MethodDeclaration))
+                    {
+                        continue;
+                    }
+
+                    var methodDeclaration = (MethodDeclarationSyntax)node;
+                    if (!methodDeclaration.Modifiers.Contains(SyntaxKind.OverrideKeyword))
+                    {
+                        continue;
+                    }
+
+                    var methodSymbol = syntaxNodeContext.SemanticModel.GetDeclaredSymbol(methodDeclaration).OverriddenMethod;
+                    
+                    // this will happen if the base class is deleted and there is still a derived class
+                    if (methodSymbol == null)
+                    {
+                        return;
+                    }
+
+                    while (methodSymbol.IsOverride)
+                    {
+                        methodSymbol = methodSymbol.OverriddenMethod;
+                    }
+
+                    if (methodSymbol == objectEquals)
+                    {
+                        equalsImplemented = true;
+                    }
+
+                    if (methodSymbol == objectGetHashCode)
+                    {
+                        getHashcodeImplemented = true;
+                    }
                 }
 
-                var methodDeclaration = (MethodDeclarationSyntax)node;
-                if (!methodDeclaration.Modifiers.Contains(SyntaxKind.OverrideKeyword))
+                if (equalsImplemented ^ getHashcodeImplemented)
                 {
-                    continue;
+                    syntaxNodeContext.ReportDiagnostic(Diagnostic.Create(Rule, classDeclaration.Identifier.GetLocation(),
+                        ImmutableDictionary.CreateRange(new[] { new KeyValuePair<string, string>("IsEqualsImplemented", equalsImplemented.ToString()) })));
                 }
-
-                var methodSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclaration).OverriddenMethod;
-
-                // this will happen if the base class is deleted and there is still a derived class
-                if (methodSymbol == null)
-                {
-                    return;
-                }
-
-                while (methodSymbol.IsOverride)
-                {
-                    methodSymbol = methodSymbol.OverriddenMethod;
-                }
-
-                if (methodSymbol == objectEquals)
-                {
-                    equalsImplemented = true;
-                }
-
-                if (methodSymbol == objectGetHashCode)
-                {
-                    getHashcodeImplemented = true;
-                }
-            }
-
-            if (equalsImplemented ^ getHashcodeImplemented)
-            {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, classDeclaration.Identifier.GetLocation(),
-                    ImmutableDictionary.CreateRange(new[] { new KeyValuePair<string, string>("IsEqualsImplemented", equalsImplemented.ToString()) })));
-            }
-        }
+            }, SyntaxKind.ClassDeclaration);
+        });            
     }
 }

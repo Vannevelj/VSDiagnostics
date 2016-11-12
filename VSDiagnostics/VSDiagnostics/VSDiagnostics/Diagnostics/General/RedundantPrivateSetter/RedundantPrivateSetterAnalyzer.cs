@@ -81,15 +81,7 @@ namespace VSDiagnostics.Diagnostics.General.RedundantPrivateSetter
 
                         if (assignedSymbol != null && assignedSymbol.Equals(propertySymbol))
                         {
-                            var hasConstructorAncestor = false;
-                            foreach (var ancestor in assignment.Ancestors())
-                            {
-                                if (ancestor.IsKind(SyntaxKind.ConstructorDeclaration))
-                                {
-                                    hasConstructorAncestor = true;
-                                }
-                            }
-
+                            var hasConstructorAncestor = assignment.Ancestors().Any(SyntaxKind.ConstructorDeclaration);
                             if (!hasConstructorAncestor)
                             {
                                 return;

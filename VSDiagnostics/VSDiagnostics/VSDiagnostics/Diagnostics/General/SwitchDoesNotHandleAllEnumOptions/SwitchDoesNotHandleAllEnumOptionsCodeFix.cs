@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
@@ -101,7 +100,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
             labels.AddRange(caseLabels.OfType<IdentifierNameSyntax>().Select(l => l.Identifier.ValueText));
 
             // don't create members like ".ctor"
-            return enumType.MemberNames.Except(labels).Where(m => !m.StartsWith("."));
+            return enumType.GetMembers().Where(member => !labels.Contains(member.Name) && !member.IsImplicitlyDeclared).Select(member => member.Name);
         }
 
         private string GetQualifierForException(CompilationUnitSyntax root)

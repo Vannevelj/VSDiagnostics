@@ -30,7 +30,10 @@ namespace VSDiagnostics.Diagnostics.General.LoopedRandomInstantiation
             var variableDeclaration = (VariableDeclarationSyntax) context.Node;
 
             var type = variableDeclaration.Type;
-            if (type == null) { return; }
+            if (type == null)
+            {
+                return;
+            }
 
             var typeInfo = context.SemanticModel.GetTypeInfo(type).Type;
 
