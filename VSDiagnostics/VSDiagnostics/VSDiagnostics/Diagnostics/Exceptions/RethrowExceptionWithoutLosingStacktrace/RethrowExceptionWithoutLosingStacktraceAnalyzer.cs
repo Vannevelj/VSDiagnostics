@@ -13,17 +13,11 @@ namespace VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStac
     public class RethrowExceptionWithoutLosingStacktraceAnalyzer : DiagnosticAnalyzer
     {
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-
         private static readonly string Category = VSDiagnosticsResources.ExceptionsCategory;
+        private static readonly string Message = VSDiagnosticsResources.RethrowExceptionWithoutLosingStacktraceAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.RethrowExceptionWithoutLosingStacktraceAnalyzerTitle;
 
-        private static readonly string Message =
-            VSDiagnosticsResources.RethrowExceptionWithoutLosingStacktraceAnalyzerMessage;
-
-        private static readonly string Title =
-            VSDiagnosticsResources.RethrowExceptionWithoutLosingStacktraceAnalyzerTitle;
-
-        internal static DiagnosticDescriptor Rule
-            => new DiagnosticDescriptor(DiagnosticId.RethrowExceptionWithoutLosingStacktrace, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId.RethrowExceptionWithoutLosingStacktrace, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -48,10 +42,10 @@ namespace VSDiagnostics.Diagnostics.Exceptions.RethrowExceptionWithoutLosingStac
                 return;
             }
 
-            var catchClauseIdentifier = exceptionIdentifier.Value.ToString();
-            var thrownIdentifier = throwIdentifierSyntax.Identifier.Value.ToString();
+            var catchClauseIdentifier = exceptionIdentifier.Value.ValueText;
+            var thrownIdentifier = throwIdentifierSyntax.Identifier.ValueText;
 
-            if (string.Equals(catchClauseIdentifier, thrownIdentifier, StringComparison.Ordinal))
+            if (catchClauseIdentifier == thrownIdentifier)
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule, throwStatement.GetLocation()));
             }

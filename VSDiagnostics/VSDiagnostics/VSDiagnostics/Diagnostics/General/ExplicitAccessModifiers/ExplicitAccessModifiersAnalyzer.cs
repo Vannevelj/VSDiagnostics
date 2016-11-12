@@ -11,7 +11,6 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
     internal class ExplicitAccessModifiersAnalyzer : DiagnosticAnalyzer
     {
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Hidden;
-
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
         private static readonly string Message = VSDiagnosticsResources.ExplicitAccessModifiersAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.ExplicitAccessModifiersAnalyzerTitle;
@@ -24,185 +23,181 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
             SyntaxKind.PrivateKeyword
         };
 
-        internal static DiagnosticDescriptor Rule
-            => new DiagnosticDescriptor(DiagnosticId.ExplicitAccessModifiers, Title, Message, Category, Severity, true);
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId.ExplicitAccessModifiers, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol,
-            SyntaxKind.ClassDeclaration,
-            SyntaxKind.ConstructorDeclaration,
-            SyntaxKind.DelegateDeclaration,
-            SyntaxKind.EnumDeclaration,
-            SyntaxKind.EventDeclaration,
-            SyntaxKind.EventFieldDeclaration,
-            SyntaxKind.FieldDeclaration,
-            SyntaxKind.IndexerDeclaration,
-            SyntaxKind.InterfaceDeclaration,
-            SyntaxKind.MethodDeclaration,
-            SyntaxKind.PropertyDeclaration,
-            SyntaxKind.StructDeclaration);
+        public override void Initialize(AnalysisContext context)
+        {
+            context.RegisterSyntaxNodeAction(HandleClass, SyntaxKind.ClassDeclaration);
+            context.RegisterSyntaxNodeAction(HandleConstructor, SyntaxKind.ConstructorDeclaration);
+            context.RegisterSyntaxNodeAction(HandleDelegate, SyntaxKind.DelegateDeclaration);
+            context.RegisterSyntaxNodeAction(HandleEnum, SyntaxKind.EnumDeclaration);
+            context.RegisterSyntaxNodeAction(HandleEvent, SyntaxKind.EventDeclaration);
+            context.RegisterSyntaxNodeAction(HandleEventField, SyntaxKind.EventFieldDeclaration);
+            context.RegisterSyntaxNodeAction(HandleField, SyntaxKind.FieldDeclaration);
+            context.RegisterSyntaxNodeAction(HandleIndexer, SyntaxKind.IndexerDeclaration);
+            context.RegisterSyntaxNodeAction(HandleInterface, SyntaxKind.InterfaceDeclaration);
+            context.RegisterSyntaxNodeAction(HandleMethod, SyntaxKind.MethodDeclaration);
+            context.RegisterSyntaxNodeAction(HandleProperty, SyntaxKind.PropertyDeclaration);
+            context.RegisterSyntaxNodeAction(HandleStruct, SyntaxKind.StructDeclaration);
+        }
 
-        private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
+        private void HandleClass(SyntaxNodeAnalysisContext context)
+        {
+            var declarationExpression = (ClassDeclarationSyntax) context.Node;
+            if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds))
+            {
+                var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
+                    accessibility.ToString().ToLowerInvariant()));
+            }
+        }
+
+        private void HandleStruct(SyntaxNodeAnalysisContext context)
+        {
+            var declarationExpression = (StructDeclarationSyntax) context.Node;
+            if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds))
+            {
+                var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
+                    accessibility.ToString().ToLowerInvariant()));
+            }
+        }
+
+        private void HandleEnum(SyntaxNodeAnalysisContext context)
+        {
+            var declarationExpression = (EnumDeclarationSyntax) context.Node;
+            if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds))
+            {
+                var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
+                    accessibility.ToString().ToLowerInvariant()));
+            }
+        }
+
+        private void HandleDelegate(SyntaxNodeAnalysisContext context)
+        {
+            var declarationExpression = (DelegateDeclarationSyntax) context.Node;
+            if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds))
+            {
+                var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
+                    accessibility.ToString().ToLowerInvariant()));
+            }
+        }
+
+        private void HandleInterface(SyntaxNodeAnalysisContext context)
+        {
+            var declarationExpression = (InterfaceDeclarationSyntax) context.Node;
+            if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds))
+            {
+                var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
+                    accessibility.ToString().ToLowerInvariant()));
+            }
+        }
+
+        private void HandleField(SyntaxNodeAnalysisContext context)
+        {
+            var declarationExpression = (FieldDeclarationSyntax) context.Node;
+            if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds))
+            {
+                context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), "private"));
+            }
+        }
+
+        private void HandleProperty(SyntaxNodeAnalysisContext context)
         {
             if (context.Node.Parent.IsKind(SyntaxKind.InterfaceDeclaration))
             {
                 return;
             }
 
-            if (context.Node.IsKind(SyntaxKind.ClassDeclaration))
+            var declarationExpression = (PropertyDeclarationSyntax) context.Node;
+            if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds) &&
+                declarationExpression.ExplicitInterfaceSpecifier == null)
             {
-                var declarationExpression = (ClassDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds))
-                {
-                    var accessibility =
-                        context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
+                    accessibility.ToString().ToLowerInvariant()));
+            }
+        }
 
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLowerInvariant()));
-                }
+        private void HandleMethod(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node.Parent.IsKind(SyntaxKind.InterfaceDeclaration))
+            {
+                return;
             }
 
-            if (context.Node.IsKind(SyntaxKind.StructDeclaration))
+            var declarationExpression = (MethodDeclarationSyntax) context.Node;
+            if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds) &&
+                !declarationExpression.Modifiers.Contains(SyntaxKind.PartialKeyword) &&
+                declarationExpression.ExplicitInterfaceSpecifier == null)
             {
-                var declarationExpression = (StructDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds))
-                {
-                    var accessibility =
-                        context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
+                    accessibility.ToString().ToLowerInvariant()));
+            }
+        }
 
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLowerInvariant()));
-                }
+        private void HandleConstructor(SyntaxNodeAnalysisContext context)
+        {
+            var declarationExpression = (ConstructorDeclarationSyntax) context.Node;
+            if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds) &&
+                !declarationExpression.Modifiers.Contains(SyntaxKind.StaticKeyword))
+            {
+                var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
+                    accessibility.ToString().ToLowerInvariant()));
+            }
+        }
+
+        private void HandleEventField(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node.Parent.IsKind(SyntaxKind.InterfaceDeclaration))
+            {
+                return;
             }
 
-            if (context.Node.IsKind(SyntaxKind.EnumDeclaration))
+            var declarationExpression = (EventFieldDeclarationSyntax) context.Node;
+            if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds))
             {
-                var declarationExpression = (EnumDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds))
-                {
-                    var accessibility =
-                        context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(), "private"));
+            }
+        }
 
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLowerInvariant()));
-                }
+        private void HandleEvent(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node.Parent.IsKind(SyntaxKind.InterfaceDeclaration))
+            {
+                return;
             }
 
-            if (context.Node.IsKind(SyntaxKind.DelegateDeclaration))
+            var declarationExpression = (EventDeclarationSyntax) context.Node;
+            if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds))
             {
-                var declarationExpression = (DelegateDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds))
-                {
-                    var accessibility =
-                        context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
+                    accessibility.ToString().ToLowerInvariant()));
+            }
+        }
 
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLowerInvariant()));
-                }
+        private void HandleIndexer(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node.Parent.IsKind(SyntaxKind.InterfaceDeclaration))
+            {
+                return;
             }
 
-            if (context.Node.IsKind(SyntaxKind.InterfaceDeclaration))
+            var declarationExpression = (IndexerDeclarationSyntax) context.Node;
+            if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds) &&
+                declarationExpression.ExplicitInterfaceSpecifier == null)
             {
-                var declarationExpression = (InterfaceDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds))
-                {
-                    var accessibility =
-                        context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLowerInvariant()));
-                }
-            }
-
-            if (context.Node.IsKind(SyntaxKind.FieldDeclaration))
-            {
-                var declarationExpression = (FieldDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds))
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        "private"));
-                }
-            }
-
-            if (context.Node.IsKind(SyntaxKind.PropertyDeclaration))
-            {
-                var declarationExpression = (PropertyDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds) &&
-                    declarationExpression.ExplicitInterfaceSpecifier == null)
-                {
-                    var accessibility =
-                        context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLowerInvariant()));
-                }
-            }
-
-            if (context.Node.IsKind(SyntaxKind.MethodDeclaration))
-            {
-                var declarationExpression = (MethodDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds) &&
-                    !declarationExpression.Modifiers.Contains(SyntaxKind.PartialKeyword) &&
-                    declarationExpression.ExplicitInterfaceSpecifier == null)
-                {
-                    var accessibility =
-                        context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLowerInvariant()));
-                }
-            }
-
-            if (context.Node.IsKind(SyntaxKind.ConstructorDeclaration))
-            {
-                var declarationExpression = (ConstructorDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds) &&
-                    !declarationExpression.Modifiers.Contains(SyntaxKind.StaticKeyword))
-                {
-                    var accessibility =
-                        context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLowerInvariant()));
-                }
-            }
-
-            if (context.Node.IsKind(SyntaxKind.EventFieldDeclaration))
-            {
-                var declarationExpression = (EventFieldDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds))
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        "private"));
-                }
-            }
-
-            if (context.Node.IsKind(SyntaxKind.EventDeclaration))
-            {
-                var declarationExpression = (EventDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds))
-                {
-                    var accessibility =
-                        context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLowerInvariant()));
-                }
-            }
-
-            if (context.Node.IsKind(SyntaxKind.IndexerDeclaration))
-            {
-                var declarationExpression = (IndexerDeclarationSyntax) context.Node;
-                if (!declarationExpression.Modifiers.ContainsAny(_accessModifierKinds) &&
-                    declarationExpression.ExplicitInterfaceSpecifier == null)
-                {
-                    var accessibility =
-                        context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
-
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
-                        accessibility.ToString().ToLowerInvariant()));
-                }
+                var accessibility = context.SemanticModel.GetDeclaredSymbol(declarationExpression).DeclaredAccessibility;
+                context.ReportDiagnostic(Diagnostic.Create(Rule, declarationExpression.GetLocation(),
+                    accessibility.ToString().ToLowerInvariant()));
             }
         }
     }
