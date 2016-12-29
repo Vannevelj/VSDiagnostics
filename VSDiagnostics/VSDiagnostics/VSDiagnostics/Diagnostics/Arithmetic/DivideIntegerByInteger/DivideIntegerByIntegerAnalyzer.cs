@@ -18,7 +18,6 @@ namespace VSDiagnostics.Diagnostics.Arithmetic.DivideIntegerByInteger
         };
 
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-
         private static readonly string Category = VSDiagnosticsResources.ArithmeticCategory;
         private static readonly string Message = VSDiagnosticsResources.DivideIntegerByIntegerAnalyzerMessage;
         private static readonly string Title = VSDiagnosticsResources.DivideIntegerByIntegerAnalyzerTitle;

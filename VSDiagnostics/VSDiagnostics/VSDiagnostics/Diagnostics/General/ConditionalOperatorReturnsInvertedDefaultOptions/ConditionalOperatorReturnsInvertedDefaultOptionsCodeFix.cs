@@ -48,7 +48,7 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsInvertedDe
             }
 
             var newRoot =
-                root.ReplaceNode(conditionalExpression, newExpression).WithAdditionalAnnotations(Formatter.Annotation);
+                root.ReplaceNode(conditionalExpression, newExpression.WithAdditionalAnnotations(Formatter.Annotation));
 
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);
