@@ -57,18 +57,18 @@ namespace VSDiagnostics.Diagnostics.General.FieldCanBeReadonly
 
         private static List<IFieldSymbol> WalkTree(SemanticModel model, SyntaxNode node, List<IFieldSymbol> unassignedSymbols)
         {
-            // todo check whether node is reference to a field
-            // check whether reference is assignment or ref/out param
             foreach (var child in node.ChildNodes())
             {
-                if (child is ConstructorDeclarationSyntax)
-                {
-                    continue;
-                }
-
                 var symbol = model.GetSymbolInfo(child).Symbol as IFieldSymbol;
                 if (symbol != null && unassignedSymbols.Contains(symbol))
                 {
+                    ConstructorDeclarationSyntax ctorNode;
+                    if (IsDescendentOfCtor(child, out ctorNode) &&
+                        !ctorNode.Modifiers.ContainsAny(SyntaxKind.StaticKeyword) && symbol.IsStatic)
+                    {
+                        unassignedSymbols.Remove(symbol);
+                    }
+
                     var assignmentNode = child.Parent as AssignmentExpressionSyntax;
                     if (assignmentNode?.Left == child)
                     {
@@ -98,6 +98,25 @@ namespace VSDiagnostics.Diagnostics.General.FieldCanBeReadonly
             }
 
             return unassignedSymbols;
+        }
+
+        private static bool IsDescendentOfCtor(SyntaxNode node, out ConstructorDeclarationSyntax ctor)
+        {
+            ctor = null;
+
+            var parent = node.Parent;
+            while (!parent.IsKind(SyntaxKind.ClassDeclaration) && !parent.IsKind(SyntaxKind.StructDeclaration))
+            {
+                if (parent.IsKind(SyntaxKind.ConstructorDeclaration))
+                {
+                    ctor = (ConstructorDeclarationSyntax)parent;
+                    return true;
+                }
+
+                parent = parent.Parent;
+            }
+
+            return false;
         }
     }
 }

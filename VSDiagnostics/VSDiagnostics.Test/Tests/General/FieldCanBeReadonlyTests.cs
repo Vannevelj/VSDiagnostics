@@ -264,6 +264,26 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void FieldCannotBeReadonly_StaticFieldIsAssignedInNonStaticCtor()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private static int _foo;
+
+        static MyClass()
+        {
+            _foo = 0;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
         public void FieldIsReadonly_AssignedInline()
         {
             var original = @"
