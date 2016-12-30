@@ -21,19 +21,19 @@ namespace VSDiagnostics.Diagnostics.General.FieldCanBeReadonly
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.ClassDeclaration);
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.ClassDeclaration, SyntaxKind.StructDeclaration);
 
         private static void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var classSymbol = (ITypeSymbol)context.SemanticModel.GetDeclaredSymbol(context.Node);
-            if (classSymbol.TypeKind != TypeKind.Class &&
-                classSymbol.TypeKind != TypeKind.Struct)
+            var typeSymbol = (ITypeSymbol)context.SemanticModel.GetDeclaredSymbol(context.Node);
+            if (typeSymbol.TypeKind != TypeKind.Class &&
+                typeSymbol.TypeKind != TypeKind.Struct)
             {
                 return;
             }
 
             var nonReadonlyFieldMembers = new HashSet<IFieldSymbol>();
-            foreach (var item in classSymbol.GetMembers())
+            foreach (var item in typeSymbol.GetMembers())
             {
                 var symbol = item as IFieldSymbol;
                 if (symbol != null && symbol.DeclaredAccessibility == Accessibility.Private && !symbol.IsReadOnly)
@@ -43,7 +43,7 @@ namespace VSDiagnostics.Diagnostics.General.FieldCanBeReadonly
             }
 
             var membersCanBeReadonly = nonReadonlyFieldMembers;
-            foreach (var syntaxReference in classSymbol.DeclaringSyntaxReferences)
+            foreach (var syntaxReference in typeSymbol.DeclaringSyntaxReferences)
             {
                 var classNode = syntaxReference.SyntaxTree.GetRoot().FindNode(syntaxReference.Span);
                 membersCanBeReadonly = WalkTree(context.SemanticModel, classNode, membersCanBeReadonly);

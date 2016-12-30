@@ -297,5 +297,30 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void FieldCanBeReadonly_AssignedInline_InStruct()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    struct MyClass
+    {
+        private int _foo = 0;
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    struct MyStruct
+    {
+        private readonly int _foo = 0;
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(FieldCanBeReadonlyAnalyzer.Rule.MessageFormat.ToString(), "_foo"));
+            VerifyFix(original, result);
+        }
     }
 }
