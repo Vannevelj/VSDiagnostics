@@ -32,7 +32,7 @@ namespace VSDiagnostics.Diagnostics.General.FieldCanBeReadonly
                 return;
             }
 
-            var nonReadonlyFieldMembers = new List<IFieldSymbol>();
+            var nonReadonlyFieldMembers = new HashSet<IFieldSymbol>();
             foreach (var item in classSymbol.GetMembers())
             {
                 var symbol = item as IFieldSymbol;
@@ -55,7 +55,7 @@ namespace VSDiagnostics.Diagnostics.General.FieldCanBeReadonly
             }
         }
 
-        private static List<IFieldSymbol> WalkTree(SemanticModel model, SyntaxNode node, List<IFieldSymbol> unassignedSymbols)
+        private static HashSet<IFieldSymbol> WalkTree(SemanticModel model, SyntaxNode node, HashSet<IFieldSymbol> unassignedSymbols)
         {
             foreach (var child in node.ChildNodes())
             {
@@ -63,10 +63,15 @@ namespace VSDiagnostics.Diagnostics.General.FieldCanBeReadonly
                 if (symbol != null && unassignedSymbols.Contains(symbol))
                 {
                     ConstructorDeclarationSyntax ctorNode;
-                    if (IsDescendentOfCtor(child, out ctorNode) &&
-                        !ctorNode.Modifiers.ContainsAny(SyntaxKind.StaticKeyword) && symbol.IsStatic)
+                    if (IsDescendentOfCtor(child, out ctorNode))
                     {
-                        unassignedSymbols.Remove(symbol);
+                        if (!ctorNode.Modifiers.ContainsAny(SyntaxKind.StaticKeyword) && symbol.IsStatic)
+                        {
+                            unassignedSymbols.Remove(symbol);
+                        }
+
+                        // assignments in the ctor don't matter other than the modifiers point checked above
+                        continue;
                     }
 
                     var assignmentNode = child.Parent as AssignmentExpressionSyntax;
