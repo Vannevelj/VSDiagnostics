@@ -475,6 +475,28 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void ArgumentExceptionWithoutNameofOperator_PropertySetter_UsesNameofValue()
+        {
+            var original = @"
+    using System;
+    using System.Text;
+
+    namespace ConsoleApplication1
+    {
+        class MyClass
+        {   
+            public int MyProperty 
+            { 
+                get { return 5; }
+                set { throw new ArgumentException(nameof(value)); }
+            }
+        }
+    }";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
         public void ArgumentExceptionWithoutNameofOperator_PropertyGetterOnly()
         {
             var original = @"
