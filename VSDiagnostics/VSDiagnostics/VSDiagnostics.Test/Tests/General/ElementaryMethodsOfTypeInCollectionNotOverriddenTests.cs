@@ -310,5 +310,45 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void ElementaryMethodsOfTypeInCollectionNotOverridden_GenericTypeFromClass()
+        {
+            var original = @"
+using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    internal class MyClass<T>
+    {
+        public static List<T> Method()
+        {
+            var newList = new List<T>();
+            return newList;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void ElementaryMethodsOfTypeInCollectionNotOverridden_GenericTypeFromMethod()
+        {
+            var original = @"
+using System.Collections.Generic;
+namespace ConsoleApplication1
+{
+    internal class MyClass
+    {
+        public static List<T1> Method<T1>()
+        {
+            var newList = new List<T1>();
+            return newList;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }
