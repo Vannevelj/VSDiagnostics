@@ -264,7 +264,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void FieldCannotBeReadonly_StaticFieldIsAssignedInNonStaticCtor()
+        public void FieldCannotBeReadonly_StaticFieldIsAssignedInStaticCtor()
         {
             var original = @"
 namespace ConsoleApplication1
@@ -296,6 +296,26 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original, string.Format(FieldCanBeReadonlyAnalyzer.Rule.MessageFormat.ToString(), "_foo"));
             VerifyFix(original, result);
+        }
+
+        [TestMethod]
+        public void FieldCannotBeReadonly_StaticFieldIsAssignedInNonStaticCtor()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private static int _foo;
+
+        MyClass()
+        {
+            _foo = 0;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
         }
 
         [TestMethod]
