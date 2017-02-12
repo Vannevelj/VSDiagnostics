@@ -280,7 +280,22 @@ namespace ConsoleApplication1
     }
 }";
 
-            VerifyDiagnostic(original);
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        private static readonly int _foo;
+
+        static MyClass()
+        {
+            _foo = 0;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, string.Format(FieldCanBeReadonlyAnalyzer.Rule.MessageFormat.ToString(), "_foo"));
+            VerifyFix(original, result);
         }
 
         [TestMethod]
