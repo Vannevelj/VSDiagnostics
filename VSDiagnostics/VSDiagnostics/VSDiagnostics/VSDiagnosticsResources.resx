@@ -657,10 +657,10 @@
   <data name="FieldCanBeReadonlyAnalyzerMessage" xml:space="preserve">
     <value>Field {0} can be made readonly.</value>
   </data>
-  <data name="FieldCanBeReadonlyAnalyzerTitle" xml:space="preserve">
-    <value>Field {0} is only assigned inline or in a constructor.</value>
-  </data>
   <data name="FieldCanBeReadonlyCodeFixTitle" xml:space="preserve">
     <value>Make field readonly</value>
+  </data>
+  <data name="FieldCanBeReadonlyAnalyzerTitle" xml:space="preserve">
+    <value>A field that is only assigned inline or in a constructor should be readonly.</value>
   </data>
 </root>

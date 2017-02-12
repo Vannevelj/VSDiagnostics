@@ -710,7 +710,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field {0} is only assigned inline or in a constructor..
+        ///   Looks up a localized string similar to A field that is only assigned inline or in a constructor should be readonly..
         /// </summary>
         internal static string FieldCanBeReadonlyAnalyzerTitle {
             get {

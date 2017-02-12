@@ -78,6 +78,7 @@ Currently these diagnostics are implemented:
 | General | VSD0049 | A `switch` is missing a `default` label.
 | General | VSD0051 | A `using` statement is missing braces.
 | General | VSD0052 | Implement `Equals()` and `GetHashCode()` using existing fields and properties.
+| General | VSD0063 | A field that is only assigned inline or in a constructor should be readonly.
 | Strings | VSD0034 | Replaces an empty string literal with the more expressive `string.Empty`.
 | Strings | VSD0035 | Orders the arguments of a `string.Format()` call in ascending order according to index.
 | Strings | VSD0042 | A `string.Format()` call lacks arguments and will cause a runtime exception.
