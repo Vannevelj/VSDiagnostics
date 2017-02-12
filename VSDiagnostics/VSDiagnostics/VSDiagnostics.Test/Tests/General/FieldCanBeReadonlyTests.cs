@@ -319,9 +319,9 @@ namespace ConsoleApplication1
             var original = @"
 namespace ConsoleApplication1
 {
-    struct MyClass
+    struct MyStruct
     {
-        private int _foo = 0;
+        private static int _foo = 0;
     }
 }";
 
@@ -330,7 +330,7 @@ namespace ConsoleApplication1
 {
     struct MyStruct
     {
-        private readonly int _foo = 0;
+        private static readonly int _foo = 0;
     }
 }";
 
