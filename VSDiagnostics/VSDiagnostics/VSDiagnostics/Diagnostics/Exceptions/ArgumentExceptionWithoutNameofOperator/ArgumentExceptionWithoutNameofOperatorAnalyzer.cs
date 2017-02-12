@@ -97,11 +97,14 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOpe
 
                 foreach (var argument in objectCreationExpression.ArgumentList.Arguments)
                 {
-                    var constantValue = context.SemanticModel.GetConstantValue(argument.Expression);
-                    if (constantValue.HasValue && (string)constantValue.Value == "value")
+                    if (argument.Expression.IsKind(SyntaxKind.StringLiteralExpression))
                     {
-                        context.ReportDiagnostic(Diagnostic.Create(Rule, argument.GetLocation(), "value"));
-                        return;
+                        var stringLiteral = (LiteralExpressionSyntax) argument.Expression;
+                        if (stringLiteral.Token.ValueText == "value")
+                        {
+                            context.ReportDiagnostic(Diagnostic.Create(Rule, argument.GetLocation(), "value"));
+                            return;
+                        }
                     }
                 }
             }
