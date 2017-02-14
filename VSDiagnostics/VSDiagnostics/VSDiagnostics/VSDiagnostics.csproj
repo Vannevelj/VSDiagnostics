@@ -74,6 +74,8 @@
     <Compile Include="Diagnostics\General\ExplicitAccessModifiers\ExplicitAccessModifiersCodeFix.cs" />
     <Compile Include="Diagnostics\Attributes\FlagsEnumValuesAreNotPowersOfTwo\FlagsEnumValuesAreNotPowersOfTwoAnalyzer.cs" />
     <Compile Include="Diagnostics\Attributes\FlagsEnumValuesAreNotPowersOfTwo\FlagsEnumValuesAreNotPowersOfTwoCodeFix.cs" />
+    <Compile Include="Diagnostics\General\FieldCanBeReadonly\FieldCanBeReadonlyAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\FieldCanBeReadonly\FieldCanBeReadonlyCodeFix.cs" />
     <Compile Include="Diagnostics\General\GotoDetection\GotoDetectionAnalyzer.cs" />
     <Compile Include="Diagnostics\General\IfStatementWithoutBraces\IfStatementWithoutBracesAnalyzer.cs" />
     <Compile Include="Diagnostics\General\IfStatementWithoutBraces\IfStatementWithoutBracesCodeFix.cs" />
@@ -206,6 +208,7 @@
       <Private>True</Private>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Choose>
     <When Condition=" $(NUGETLOCAL) != '' ">
