@@ -24,7 +24,10 @@ namespace VSDiagnostics.Diagnostics.General.RedundantPrivateSetter
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             var declaration = root.FindNode(diagnosticSpan);
-            context.RegisterCodeFix(CodeAction.Create(VSDiagnosticsResources.NullableToShorthandCodeFixTitle, x => UseReadOnlyPropertyAsync(context.Document, root, declaration), RedundantPrivateSetterAnalyzer.Rule.Id), diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(VSDiagnosticsResources.NullableToShorthandCodeFixTitle,
+                    x => UseReadOnlyPropertyAsync(context.Document, root, declaration),
+                    RedundantPrivateSetterAnalyzer.Rule.Id), diagnostic);
         }
 
         private Task<Document> UseReadOnlyPropertyAsync(Document document, SyntaxNode root, SyntaxNode setAccessor)

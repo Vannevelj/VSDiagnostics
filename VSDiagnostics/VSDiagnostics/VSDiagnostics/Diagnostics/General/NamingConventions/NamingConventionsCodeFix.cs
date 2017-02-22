@@ -28,7 +28,7 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             var identifier = root.FindToken(diagnosticSpan.Start);
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.NamingConventionsCodeFixTitle,
-                    x => RenameAsync(context.Document, identifier, root, diagnostic, context.CancellationToken), NamingConventionsAnalyzer.Rule.Id), diagnostic);
+                    x => RenameAsync(context.Document, identifier, root, diagnostic, x), NamingConventionsAnalyzer.Rule.Id), diagnostic);
         }
 
         private async Task<Solution> RenameAsync(Document document, SyntaxToken identifier, SyntaxNode root, Diagnostic diagnostic, CancellationToken cancellationToken)
