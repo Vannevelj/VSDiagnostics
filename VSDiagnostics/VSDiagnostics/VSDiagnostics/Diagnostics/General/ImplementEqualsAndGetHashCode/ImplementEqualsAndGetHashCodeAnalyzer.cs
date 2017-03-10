@@ -38,7 +38,6 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                 for (var i = 0; i < namedType.Locations.Count(); i++)
                 {
                     symbol.ReportDiagnostic(Diagnostic.Create(Rule, namedType.Locations[i],
-                    namedType.Locations.RemoveAt(i),
                     namedType.TypeKind == TypeKind.Class ? "Class" : "Struct", namedType.Name));
                 }
             }
