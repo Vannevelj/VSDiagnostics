@@ -59,7 +59,8 @@ namespace VSDiagnostics.Diagnostics.General.FieldCanBeReadonly
         {
             foreach (var child in node.ChildNodes())
             {
-                var symbol = model.GetSymbolInfo(child).Symbol as IFieldSymbol;
+                var semanticModelForTree = model.Compilation.GetSemanticModel(child.SyntaxTree);
+                var symbol = semanticModelForTree.GetSymbolInfo(child).Symbol as IFieldSymbol;
                 if (symbol != null && unassignedSymbols.Contains(symbol))
                 {
                     ConstructorDeclarationSyntax ctorNode;
