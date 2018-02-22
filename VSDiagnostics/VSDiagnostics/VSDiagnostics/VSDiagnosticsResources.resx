@@ -664,4 +664,10 @@
   <data name="MissingBracesCodeFixTitle" xml:space="preserve">
     <value>Use braces</value>
   </data>
+  <data name="GetHashCodeRefersToMutableFieldAnalyzerMessage" xml:space="preserve">
+    <value>GetHashCode() refers to {0}</value>
+  </data>
+  <data name="GetHashCodeRefersToMutableFieldAnalyzerTitle" xml:space="preserve">
+    <value>GetHashCode() refers to mutable, static, or constant member</value>
+  </data>
 </root>

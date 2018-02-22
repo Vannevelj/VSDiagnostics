@@ -61,5 +61,6 @@
         public const string ExceptionThrownFromEquals = "VSD0060";
         public const string ImplementEqualsAndGetHashCode = "VSD0061";
         public const string TestMethodWithoutTestAttribute = "VSD0062";
+        public const string GetHashCodeRefersToMutableField = "VSD0062";
     }
 }

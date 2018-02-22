@@ -74,6 +74,7 @@
     <Compile Include="Diagnostics\General\ExplicitAccessModifiers\ExplicitAccessModifiersCodeFix.cs" />
     <Compile Include="Diagnostics\Attributes\FlagsEnumValuesAreNotPowersOfTwo\FlagsEnumValuesAreNotPowersOfTwoAnalyzer.cs" />
     <Compile Include="Diagnostics\Attributes\FlagsEnumValuesAreNotPowersOfTwo\FlagsEnumValuesAreNotPowersOfTwoCodeFix.cs" />
+    <Compile Include="Diagnostics\General\GetHashCodeRefersToMutableMember\GetHashCodeRefersToMutableMemberAnalyzer.cs" />
     <Compile Include="Diagnostics\General\GotoDetection\GotoDetectionAnalyzer.cs" />
     <Compile Include="Diagnostics\General\ImplementEqualsAndGetHashCode\ImplementEqualsAndGetHashCodeAnalyzer.cs" />
     <Compile Include="Diagnostics\General\ImplementEqualsAndGetHashCode\ImplementEqualsAndGetHashCodeCodeFix.cs" />
@@ -149,6 +150,7 @@
     <EmbeddedResource Include="VSDiagnosticsResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>VSDiagnosticsResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
