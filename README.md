@@ -59,8 +59,7 @@ Currently these diagnostics are implemented:
 | General | VSD0020 | The condition is a constant (true) and thus unnecessary.
 | General | VSD0021 | Inserts the default access modifier for a declaration.
 | General | VSD0022 | Detects usage of the `goto` keyword.
-| General | VSD0023 | Changes one-liner `if` and `else` statements to be surrounded in a block.
-| General | VSD0024 | Loop blocks should use braces to denote start and end.
+| General | VSD0023 | Requires braces for `if`, `else`, `for`, `foreach`, `while`, `do`, `using`, `lock`, `fixed` and `switch` constructs.
 | General | VSD0025 | Implements the most common configuration of naming conventions.
 | General | VSD0026 | A `public`, `internal` or `protected internal` non-`const`, non-`readonly` field should be used as a property.
 | General | VSD0027 | Changes `Nullable<T>` to `T?`.
@@ -75,8 +74,7 @@ Currently these diagnostics are implemented:
 | General | VSD0046 | `Equals()` and `GetHashCode()` must be implemented together.
 | General | VSD0047 | Implement elementary methods for a type used in a collection.
 | General | VSD0048 | A property with a private setter can become a read-only property instead.
-| General | VSD0049 | A `switch` is missing a `default` label.
-| General | VSD0051 | A `using` statement is missing braces.
+| General | VSD0049 | A `switch` is missing a `default` label.\
 | General | VSD0052 | Implement `Equals()` and `GetHashCode()` using existing fields and properties.
 | Strings | VSD0034 | Replaces an empty string literal with the more expressive `string.Empty`.
 | Strings | VSD0035 | Orders the arguments of a `string.Format()` call in ascending order according to index.
