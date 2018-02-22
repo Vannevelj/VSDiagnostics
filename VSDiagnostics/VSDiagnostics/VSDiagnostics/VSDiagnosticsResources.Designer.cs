@@ -872,6 +872,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} {1} statement should be written with braces.
+        /// </summary>
+        internal static string MissingBracesAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("MissingBracesAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} blocks should use braces to denote start and end..
+        /// </summary>
+        internal static string MissingBracesAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("MissingBracesAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use braces.
+        /// </summary>
+        internal static string MissingBracesCodeFixTitle {
+            get {
+                return ResourceManager.GetString("MissingBracesCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The {0} {1} does not follow naming conventions. Should be {2}..
         /// </summary>
         internal static string NamingConventionsAnalyzerMessage {
