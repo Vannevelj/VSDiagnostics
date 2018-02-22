@@ -32,12 +32,12 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
             
             context.RegisterCodeFix(
                 CodeAction.Create(string.Format(VSDiagnosticsResources.ImplementEqualsAndGetHashCodeCodeFixTitle),
-                    x => ImplementEqualsAndGetHashCodeAsync(context.Document, diagnostic.AdditionalLocations.ToImmutableList().Add(diagnostic.Location), root, statement),
+                    x => ImplementEqualsAndGetHashCodeAsync(context.Document, root, statement),
                     ImplementEqualsAndGetHashCodeAnalyzer.Rule.Id),
                 diagnostic);
         }
 
-        private async Task<Document> ImplementEqualsAndGetHashCodeAsync(Document document, IEnumerable<Location> locations, SyntaxNode root, SyntaxNode declaration)
+        private async Task<Document> ImplementEqualsAndGetHashCodeAsync(Document document, SyntaxNode root, SyntaxNode declaration)
         {
             var model = await document.GetSemanticModelAsync();
 
@@ -48,15 +48,8 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
             var typeDeclaration = (TypeDeclarationSyntax) declaration;
             var typeSymbol = model.GetDeclaredSymbol(typeDeclaration);
 
-            var members = new List<SyntaxNode>();
-            foreach (var location in locations)
-            {
-                var node = (TypeDeclarationSyntax) root.FindNode(location.SourceSpan);
-                members.AddRange(node.Members);
-            }
-
-            var equalsMethod = GetEqualsMethod(model, typeDeclaration.Identifier, members, typeSymbol, objectEquals);
-            var getHashCodeMethod = GetGetHashCodeMethod(model, members);
+            var equalsMethod = GetEqualsMethod(typeDeclaration.Identifier, typeSymbol.GetMembers(), typeSymbol, objectEquals);
+            var getHashCodeMethod = GetGetHashCodeMethod(typeSymbol.GetMembers());
 
             var newNode = declaration.IsKind(SyntaxKind.ClassDeclaration)
                 ? (TypeDeclarationSyntax)((ClassDeclarationSyntax)typeDeclaration).AddMembers(equalsMethod, getHashCodeMethod)
@@ -65,7 +58,7 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
             return document.WithSyntaxRoot(root.ReplaceNode(typeDeclaration, newNode));
         }
 
-        private MethodDeclarationSyntax GetEqualsMethod(SemanticModel model, SyntaxToken identifier, List<SyntaxNode> members, INamedTypeSymbol typeSymbol, IMethodSymbol objectEquals)
+        private MethodDeclarationSyntax GetEqualsMethod(SyntaxToken identifier, ImmutableArray<ISymbol> members, INamedTypeSymbol typeSymbol, IMethodSymbol objectEquals)
         {
             var publicModifier = SyntaxFactory.Token(SyntaxKind.PublicKeyword);
             var overrideModifier = SyntaxFactory.Token(SyntaxKind.OverrideKeyword);
@@ -82,9 +75,13 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
             var fieldAndPropertyEqualityStatements = new List<string>();
             foreach (var member in members)
             {
-                fieldAndPropertyEqualityStatements.AddRange(GetFieldComparisonStatements(model, member));
+                var fieldEqualityStatement = GetFieldComparisonStatement(member);
+                if (!string.IsNullOrEmpty(fieldEqualityStatement))
+                {
+                    fieldAndPropertyEqualityStatements.Add(fieldEqualityStatement);
+                }
 
-                var propertyEqualityStatement = GetPropertyComparisonStatement(model, member);
+                var propertyEqualityStatement = GetPropertyComparisonStatement(member);
                 if (!string.IsNullOrEmpty(propertyEqualityStatement))
                 {
                     fieldAndPropertyEqualityStatements.Add(propertyEqualityStatement);
@@ -104,52 +101,53 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                     .WithAdditionalAnnotations(Formatter.Annotation);
         }
 
-        private IEnumerable<string> GetFieldComparisonStatements(SemanticModel model, SyntaxNode member)
+        private string GetFieldComparisonStatement(ISymbol member)
         {
-            if (!member.IsKind(SyntaxKind.FieldDeclaration))
+            if (member.Kind != SymbolKind.Field)
             {
-                return Enumerable.Empty<string>();
+                return string.Empty;
             }
 
-            var field = (FieldDeclarationSyntax)member;
-            if (field.Modifiers.ContainsAny(SyntaxKind.StaticKeyword, SyntaxKind.ConstKeyword))
+            var field = (IFieldSymbol)member;
+            if (field.IsStatic || field.IsConst)
             {
-                return Enumerable.Empty<string>();
+                return string.Empty;
             }
 
-            var symbol = model.GetTypeInfo(field.Declaration.Type).Type;
-            return symbol.IsValueType
-                ? field.Declaration.Variables.Select(variable => $"{variable.Identifier}.Equals(value.{variable.Identifier})")
-                : field.Declaration.Variables.Select(variable => $"{variable.Identifier} == value.{variable.Identifier}");
-        }
-
-        private string GetPropertyComparisonStatement(SemanticModel model, SyntaxNode member)
-        {
-            if (!member.IsKind(SyntaxKind.PropertyDeclaration))
+            if (!field.DeclaringSyntaxReferences.Any())
             {
                 return string.Empty;
             }
             
-            var property = (PropertyDeclarationSyntax)member;
-            if (property.Modifiers.Contains(SyntaxKind.StaticKeyword))
-            {
-                return string.Empty;
-            }
-
-            if (property.ExpressionBody == null &&
-                (property.AccessorList != null &&
-                !property.AccessorList.Accessors.Any(a => a.IsKind(SyntaxKind.GetAccessorDeclaration))))
-            {
-                return string.Empty;
-            }
-
-            var type = model.GetTypeInfo(property.Type).Type;
-            return type.IsValueType
-                ? $"{property.Identifier}.Equals(value.{property.Identifier})"
-                : $"{property.Identifier} == value.{property.Identifier}";
+            return field.Type.IsValueType
+                ? $"{member.Name}.Equals(value.{member.Name})"
+                : $"{member.Name} == value.{member.Name}";
         }
 
-        private MethodDeclarationSyntax GetGetHashCodeMethod(SemanticModel model, List<SyntaxNode> members)
+        private string GetPropertyComparisonStatement(ISymbol member)
+        {
+            if (member.Kind != SymbolKind.Property)
+            {
+                return string.Empty;
+            }
+            
+            var property = (IPropertySymbol)member;
+            if (property.IsStatic)
+            {
+                return string.Empty;
+            }
+            
+            if (property.IsWriteOnly)
+            {
+                return string.Empty;
+            }
+
+            return property.Type.IsValueType
+                ? $"{property.Name}.Equals(value.{property.Name})"
+                : $"{property.Name} == value.{property.Name}";
+        }
+
+        private MethodDeclarationSyntax GetGetHashCodeMethod(ImmutableArray<ISymbol> members)
         {
             var publicModifier = SyntaxFactory.Token(SyntaxKind.PublicKeyword);
             var overrideModifier = SyntaxFactory.Token(SyntaxKind.OverrideKeyword);
@@ -157,9 +155,13 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
             var fieldAndPropertyGetHashCodeStatements = new List<string>();
             foreach (var member in members)
             {
-                fieldAndPropertyGetHashCodeStatements.AddRange(GetFieldHashCodeStatements(model, member));
+                var fieldGetHashCodeStatement = GetFieldHashCodeStatements(member);
+                if (!string.IsNullOrEmpty(fieldGetHashCodeStatement))
+                {
+                    fieldAndPropertyGetHashCodeStatements.Add(fieldGetHashCodeStatement);
+                }
 
-                var propertyGetHashCodeStatement = GetPropertyHashCodeStatement(model, member);
+                var propertyGetHashCodeStatement = GetPropertyHashCodeStatement(member);
                 if (!string.IsNullOrEmpty(propertyGetHashCodeStatement))
                 {
                     fieldAndPropertyGetHashCodeStatements.Add(propertyGetHashCodeStatement);
@@ -186,64 +188,67 @@ namespace VSDiagnostics.Diagnostics.General.ImplementEqualsAndGetHashCode
                     .WithAdditionalAnnotations(Formatter.Annotation);
         }
 
-        private IEnumerable<string> GetFieldHashCodeStatements(SemanticModel model, SyntaxNode member)
+        private string GetFieldHashCodeStatements(ISymbol member)
         {
-            if (!member.IsKind(SyntaxKind.FieldDeclaration))
+            if (member.Kind != SymbolKind.Field)
             {
-                return Enumerable.Empty<string>();
+                return string.Empty;
             }
 
-            var field = (FieldDeclarationSyntax) member;
-            if (field.Modifiers.ContainsAny(SyntaxKind.StaticKeyword, SyntaxKind.ConstKeyword))
+            var field = (IFieldSymbol) member;
+            if (field.IsStatic || field.IsConst)
             {
-                return Enumerable.Empty<string>();
+                return string.Empty;
             }
 
-            var symbol = model.GetTypeInfo(field.Declaration.Type).Type;
-            if (symbol == null || !symbol.IsValueType && symbol.SpecialType != SpecialType.System_String)
+            if (!field.DeclaringSyntaxReferences.Any())
             {
-                return Enumerable.Empty<string>();
+                return string.Empty;
             }
 
-            if (field.Modifiers.Contains(SyntaxKind.ReadOnlyKeyword))
+            var symbol = field.Type;
+            if (!symbol.IsValueType && symbol.SpecialType != SpecialType.System_String)
             {
-                return field.Declaration.Variables.Select(
-                    variable => $"{variable.Identifier}.GetHashCode()");
+                return string.Empty;
             }
 
-            return Enumerable.Empty<string>();
+            if (field.IsReadOnly)
+            {
+                return $"{field.Name}.GetHashCode()";
+            }
+
+            return string.Empty;
         }
 
-        private string GetPropertyHashCodeStatement(SemanticModel model, SyntaxNode member)
+        private string GetPropertyHashCodeStatement(ISymbol member)
         {
-            if (!member.IsKind(SyntaxKind.PropertyDeclaration))
+            if (member.Kind != SymbolKind.Property)
             {
                 return string.Empty;
             }
 
-            var property = (PropertyDeclarationSyntax)member;
-            if (property.Modifiers.Contains(SyntaxKind.StaticKeyword))
+            var property = (IPropertySymbol)member;
+            if (property.IsStatic)
             {
                 return string.Empty;
             }
 
-            var symbol = model.GetTypeInfo(property.Type).Type;
-            if (symbol == null || !symbol.IsValueType && symbol.SpecialType != SpecialType.System_String)
+            var symbol = property.Type;
+            if (!symbol.IsValueType && symbol.SpecialType != SpecialType.System_String)
             {
                 return string.Empty;
             }
 
-            if (property.AccessorList != null && property.AccessorList.Accessors.Any(a => a.IsKind(SyntaxKind.SetAccessorDeclaration)))
+            if (!property.IsReadOnly)
             {
                 return string.Empty;
             }
 
-            // ensure getter does not have body
-            // the property has to have at least one of {get, set}, and it doesn't have a set (see above)
-            // this will not have an NRE in First()
-            if (property.AccessorList != null && property.AccessorList.Accessors.First(a => a.IsKind(SyntaxKind.GetAccessorDeclaration)).Body == null)
+            var propertyNode = (PropertyDeclarationSyntax)property.DeclaringSyntaxReferences.First().GetSyntax();
+            if (propertyNode.AccessorList != null &&
+                propertyNode.AccessorList.Accessors.First(a => a.IsKind(SyntaxKind.GetAccessorDeclaration)).Body == null)
             {
-                return $"{property.Identifier}.GetHashCode()";
+                return $"{property.Name}.GetHashCode()";
             }
 
             return string.Empty;

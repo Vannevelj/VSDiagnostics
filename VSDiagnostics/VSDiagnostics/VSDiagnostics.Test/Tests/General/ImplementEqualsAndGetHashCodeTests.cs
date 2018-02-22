@@ -1497,8 +1497,8 @@ namespace ConsoleApplication1
             }
 
             var value = (MyClass)obj;
-            return _bar.Equals(value._bar) &&
-                   _foo.Equals(value._foo);
+            return _foo.Equals(value._foo) &&
+                   _bar.Equals(value._bar);
         }
 
         public override int GetHashCode()
