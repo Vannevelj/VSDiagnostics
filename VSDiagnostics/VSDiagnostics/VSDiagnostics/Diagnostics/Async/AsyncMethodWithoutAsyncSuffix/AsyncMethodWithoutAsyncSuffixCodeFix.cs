@@ -29,7 +29,7 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
 
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.AsyncMethodWithoutAsyncSuffixCodeFixTitle,
-                    x => AddSuffixAsync(context.Document, methodDeclaration, root, context.CancellationToken),
+                    x => AddSuffixAsync(context.Document, methodDeclaration, root, x),
                     AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id),
                 diagnostic);
         }

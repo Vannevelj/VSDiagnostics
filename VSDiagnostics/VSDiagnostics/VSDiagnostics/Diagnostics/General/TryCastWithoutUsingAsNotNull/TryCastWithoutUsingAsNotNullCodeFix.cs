@@ -33,7 +33,7 @@ namespace VSDiagnostics.Diagnostics.General.TryCastWithoutUsingAsNotNull
             var statement = root.FindNode(diagnosticSpan);
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.TryCastWithoutUsingAsNotNullCodeFixTitle,
-                    x => UseAsAsync(context.Document, statement, context.CancellationToken), TryCastWithoutUsingAsNotNullAnalyzer.Rule.Id),
+                    x => UseAsAsync(context.Document, statement, x), TryCastWithoutUsingAsNotNullAnalyzer.Rule.Id),
                 diagnostic);
         }
 

@@ -31,7 +31,7 @@ namespace VSDiagnostics.Diagnostics.Tests.RemoveTestSuffix
 
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.RemoveTestSuffixCodeFixTitle,
-                    x => RemoveTestSuffixAsync(context.Document, root, methodDeclaration, context.CancellationToken), RemoveTestSuffixAnalyzer.Rule.Id),
+                    x => RemoveTestSuffixAsync(context.Document, root, methodDeclaration, x), RemoveTestSuffixAnalyzer.Rule.Id),
                 diagnostic);
         }
 
