@@ -161,6 +161,24 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Method {0} is marked as async but has a void return type.
+        /// </summary>
+        internal static string AsyncMethodWithVoidReturnTypeMessage {
+            get {
+                return ResourceManager.GetString("AsyncMethodWithVoidReturnTypeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Async methods should return a Task to make them awaitable.
+        /// </summary>
+        internal static string AsyncMethodWithVoidReturnTypeTitle {
+            get {
+                return ResourceManager.GetString("AsyncMethodWithVoidReturnTypeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Attributes.
         /// </summary>
         internal static string AttributesCategory {

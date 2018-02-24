@@ -105,6 +105,7 @@
   <ItemGroup>
     <Compile Include="Tests\Arithmetic\DivideIntegerByIntegerTests.cs" />
     <Compile Include="Tests\Async\AsyncMethodWithoutAsyncSuffixTests.cs" />
+    <Compile Include="Tests\Async\AsyncMethodWithVoidReturnTypeTests.cs" />
     <Compile Include="Tests\Async\SyncMethodWithAsyncSuffixTests.cs" />
     <Compile Include="Tests\Attributes\AttributeWithEmptyArgumentListTests.cs" />
     <Compile Include="Tests\Attributes\EnumCanHaveFlagsAttributeTests.cs" />

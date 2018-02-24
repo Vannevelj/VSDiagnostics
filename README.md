@@ -28,6 +28,7 @@ Currently these diagnostics are implemented:
 | Arithmetic | VSD0045 | The operands of a divisive expression are both integers and result in an implicit rounding.
 | Async | VSD0001 | Asynchronous methods should end with the -Async suffix.
 | Async | VSD0041 | A non-`async`, non-`Task` method should not end with -Async.
+| Async | VSD0064 | Async methods should return a `Task` to make them awaitable.
 | Attributes | VSD0002 | An attribute should not have an empty argument list.
 | Attributes | VSD0003 | Gives an enum the `[Flags]` attribute.
 | Attributes | VSD0004 | A `[Flags]` enum its values are not explicit powers of 2

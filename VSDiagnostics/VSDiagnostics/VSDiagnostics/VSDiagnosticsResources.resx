@@ -670,4 +670,11 @@
   <data name="GetHashCodeRefersToMutableFieldAnalyzerTitle" xml:space="preserve">
     <value>GetHashCode() refers to mutable, static, or constant member</value>
   </data>
+  <data name="AsyncMethodWithVoidReturnTypeMessage" xml:space="preserve">
+    <value>Method {0} is marked as async but has a void return type</value>
+    <comment>{0} - Method name</comment>
+  </data>
+  <data name="AsyncMethodWithVoidReturnTypeTitle" xml:space="preserve">
+    <value>Async methods should return a Task to make them awaitable</value>
+  </data>
 </root>
