@@ -33,7 +33,7 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithVoidReturnType
                 root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
 
             context.RegisterCodeFix(
-                CodeAction.Create(VSDiagnosticsResources.AsyncMethodWithVoidReturnTypeTitle,
+                CodeAction.Create(VSDiagnosticsResources.AsyncMethodWithVoidReturnTypeCodeFixTitle,
                     x => ChangeReturnTypeAsync(context.Document, methodDeclaration, root, x),
                     AsyncMethodWithVoidReturnTypeAnalyzer.Rule.Id),
                 diagnostic);

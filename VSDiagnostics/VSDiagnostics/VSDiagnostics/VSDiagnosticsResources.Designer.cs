@@ -161,6 +161,15 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use Task as return type.
+        /// </summary>
+        internal static string AsyncMethodWithVoidReturnTypeCodeFixTitle {
+            get {
+                return ResourceManager.GetString("AsyncMethodWithVoidReturnTypeCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Method {0} is marked as async but has a void return type.
         /// </summary>
         internal static string AsyncMethodWithVoidReturnTypeMessage {
@@ -1507,6 +1516,15 @@ namespace VSDiagnostics {
         internal static string TestsCategory {
             get {
                 return ResourceManager.GetString("TestsCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Throwing null will always result in a runtime exception.
+        /// </summary>
+        internal static string ThrowNullMessage {
+            get {
+                return ResourceManager.GetString("ThrowNullMessage", resourceCulture);
             }
         }
         

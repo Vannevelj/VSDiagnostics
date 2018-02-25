@@ -63,5 +63,6 @@
         public const string TestMethodWithoutTestAttribute = "VSD0062";
         public const string GetHashCodeRefersToMutableField = "VSD0063";
         public const string AsyncMethodWithVoidReturnType = "VSD0064";
+        public const string ThrowNull = "VSD0065";
     }
 }

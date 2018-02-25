@@ -677,4 +677,10 @@
   <data name="AsyncMethodWithVoidReturnTypeTitle" xml:space="preserve">
     <value>Async methods should return a Task to make them awaitable</value>
   </data>
+  <data name="AsyncMethodWithVoidReturnTypeCodeFixTitle" xml:space="preserve">
+    <value>Use Task as return type</value>
+  </data>
+  <data name="ThrowNullMessage" xml:space="preserve">
+    <value>Throwing null will always result in a runtime exception</value>
+  </data>
 </root>

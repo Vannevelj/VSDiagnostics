@@ -50,6 +50,7 @@ Currently these diagnostics are implemented:
 | Exceptions | VSD0058 | An exception is thrown from a finalizer method.
 | Exceptions | VSD0059 | An exception is thrown from a `GetHashCode()` method.
 | Exceptions | VSD0060 | An exception is thrown from an `Equals()` method.
+| Exceptions | VSD0065 | A `null` object is attempted to get thrown.
 | General | VSD0013 | Changes an `as` expression to a cast.
 | General | VSD0014 | Changes a cast expression to `as`.
 | General | VSD0015 | A boolean expression comparing to `false` can be simplified.
