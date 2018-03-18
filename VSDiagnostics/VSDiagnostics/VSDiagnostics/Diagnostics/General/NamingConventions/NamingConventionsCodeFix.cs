@@ -7,13 +7,11 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.NamingConventions
 {
-    [ExportCodeFixProvider(nameof(NamingConventionsCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.NamingConventions + "CF", LanguageNames.CSharp), Shared]
     public class NamingConventionsCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
@@ -30,7 +28,7 @@ namespace VSDiagnostics.Diagnostics.General.NamingConventions
             var identifier = root.FindToken(diagnosticSpan.Start);
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.NamingConventionsCodeFixTitle,
-                    x => RenameAsync(context.Document, identifier, root, diagnostic, context.CancellationToken), NamingConventionsAnalyzer.Rule.Id), diagnostic);
+                    x => RenameAsync(context.Document, identifier, root, diagnostic, x), NamingConventionsAnalyzer.Rule.Id), diagnostic);
         }
 
         private async Task<Solution> RenameAsync(Document document, SyntaxToken identifier, SyntaxNode root, Diagnostic diagnostic, CancellationToken cancellationToken)

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
@@ -31,26 +30,45 @@ namespace VSDiagnostics.Utilities
             { nameof(String), "string" }
         };
 
-
-        public static bool ImplementsInterface(this ClassDeclarationSyntax classDeclaration, SemanticModel semanticModel,
-                                               Type interfaceType)
+        public static bool ImplementsInterfaceOrBaseClass(this INamedTypeSymbol typeSymbol, Type interfaceType)
         {
-            if (classDeclaration == null)
+            if (typeSymbol == null)
             {
                 return false;
             }
 
-            var declaredSymbol = semanticModel.GetDeclaredSymbol(classDeclaration);
+            if (typeSymbol.BaseType.MetadataName == interfaceType.Name)
+            {
+                return true;
+            }
 
-            return declaredSymbol != null &&
-                   (declaredSymbol.Interfaces.Any(i => i.MetadataName == interfaceType.Name) ||
-                    declaredSymbol.BaseType.MetadataName == typeof(INotifyPropertyChanged).Name);
+            foreach (var @interface in typeSymbol.AllInterfaces)
+            {
+                if (@interface.MetadataName == interfaceType.Name)
+                {
+                    return true;
+                }
+            }
 
-            // For some peculiar reason, "class Foo : INotifyPropertyChanged" doesn't have any interfaces,
-            // But "class Foo : IFoo, INotifyPropertyChanged" has two.  "IFoo" is an interface defined by me.
-            // However, the BaseType for the first is the "INotifyPropertyChanged" symbol.
-            // Also, "class Foo : INotifyPropertyChanged, IFoo" has just one - "IFoo",
-            // But the BaseType again is "INotifyPropertyChanged".
+            return false;
+        }
+
+        public static bool ImplementsInterface(this INamedTypeSymbol typeSymbol, Type interfaceType)
+        {
+            if (typeSymbol == null)
+            {
+                return false;
+            }
+
+            foreach (var @interface in typeSymbol.AllInterfaces)
+            {
+                if (@interface.MetadataName == interfaceType.Name)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static bool InheritsFrom(this ISymbol typeSymbol, Type type)
@@ -68,7 +86,7 @@ namespace VSDiagnostics.Utilities
                 {
                     return true;
                 }
-                baseType = ((ITypeSymbol) baseType).BaseType;
+                baseType = ((ITypeSymbol)baseType).BaseType;
             }
 
             return false;
@@ -76,37 +94,33 @@ namespace VSDiagnostics.Utilities
 
         public static bool IsCommentTrivia(this SyntaxTrivia trivia)
         {
-            var commentTrivias = new[]
+            switch (trivia.Kind())
             {
-                SyntaxKind.SingleLineCommentTrivia,
-                SyntaxKind.MultiLineCommentTrivia,
-                SyntaxKind.DocumentationCommentExteriorTrivia,
-                SyntaxKind.SingleLineDocumentationCommentTrivia,
-                SyntaxKind.MultiLineDocumentationCommentTrivia,
-                SyntaxKind.EndOfDocumentationCommentToken,
-                SyntaxKind.XmlComment,
-                SyntaxKind.XmlCommentEndToken,
-                SyntaxKind.XmlCommentStartToken
-            };
-
-            return commentTrivias.Any(x => trivia.IsKind(x));
+                case SyntaxKind.SingleLineCommentTrivia:
+                case SyntaxKind.MultiLineCommentTrivia:
+                case SyntaxKind.DocumentationCommentExteriorTrivia:
+                case SyntaxKind.SingleLineDocumentationCommentTrivia:
+                case SyntaxKind.MultiLineDocumentationCommentTrivia:
+                case SyntaxKind.EndOfDocumentationCommentToken:
+                case SyntaxKind.XmlComment:
+                case SyntaxKind.XmlCommentEndToken:
+                case SyntaxKind.XmlCommentStartToken:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         public static bool IsWhitespaceTrivia(this SyntaxTrivia trivia)
         {
-            var whitespaceTrivia = new[]
+            switch (trivia.Kind())
             {
-                SyntaxKind.WhitespaceTrivia,
-                SyntaxKind.EndOfLineTrivia
-            };
-
-            return whitespaceTrivia.Any(x => trivia.IsKind(x));
-        }
-
-        public static bool IsNullable(this ITypeSymbol typeSymbol)
-        {
-            //TODO: this is really ugly.
-            return typeSymbol.IsValueType && typeSymbol.MetadataName.StartsWith(typeof(Nullable).Name);
+                case SyntaxKind.WhitespaceTrivia:
+                case SyntaxKind.EndOfLineTrivia:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         public static string ToAlias(this string type)
@@ -135,16 +149,6 @@ namespace VSDiagnostics.Utilities
             return AliasMapping.TryGetValue(type, out alias);
         }
 
-        public static bool HasAlias(this string type)
-        {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
-
-            return AliasMapping.Keys.Contains(type);
-        }
-
         /// <summary>
         ///     Determines whether or not the specified <see cref="IMethodSymbol" /> is the symbol of an asynchronous method. This
         ///     can be a method declared as async (e.g. returning <see cref="Task" /> or <see cref="Task{TResult}" />), or a method
@@ -152,9 +156,9 @@ namespace VSDiagnostics.Utilities
         /// </summary>
         public static bool IsAsync(this IMethodSymbol methodSymbol)
         {
-            return methodSymbol.IsAsync
-                   || methodSymbol.ReturnType.MetadataName == typeof(Task).Name
-                   || methodSymbol.ReturnType.MetadataName == typeof(Task<>).Name;
+            return methodSymbol.IsAsync || 
+                   methodSymbol.ReturnType.MetadataName == typeof(Task).Name || 
+                   methodSymbol.ReturnType.MetadataName == typeof(Task<>).Name;
         }
 
         public static bool IsDefinedInAncestor(this IMethodSymbol methodSymbol)
@@ -168,12 +172,14 @@ namespace VSDiagnostics.Utilities
             var interfaces = containingType.AllInterfaces;
             foreach (var @interface in interfaces)
             {
-                var interfaceMethods =
-                    @interface.GetMembers().Select(containingType.FindImplementationForInterfaceMember).Where(x => x != null);
+                var interfaceMethods = @interface.GetMembers().Select(containingType.FindImplementationForInterfaceMember);
 
-                if (interfaceMethods.Any(method => method.Equals(methodSymbol)))
+                foreach (var method in interfaceMethods)
                 {
-                    return true;
+                    if (method != null && method.Equals(methodSymbol))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -181,10 +187,15 @@ namespace VSDiagnostics.Utilities
             while (baseType != null)
             {
                 var baseMethods = baseType.GetMembers().OfType<IMethodSymbol>();
-                if (baseMethods.Any(method => method.Equals(methodSymbol.OverriddenMethod)))
+
+                foreach (var method in baseMethods)
                 {
-                    return true;
+                    if (method.Equals(methodSymbol.OverriddenMethod))
+                    {
+                        return true;
+                    }
                 }
+
                 baseType = baseType.BaseType;
             }
 
@@ -208,12 +219,6 @@ namespace VSDiagnostics.Utilities
         }
 
         // TODO: tests
-        public static T ElementAtOrDefault<T>(this IEnumerable<T> list, int index, T @default)
-        {
-            return index >= 0 && index < list.Count() ? list.ElementAt(index) : @default;
-        }
-
-        // TODO: tests
         public static bool IsNameofInvocation(this InvocationExpressionSyntax invocation)
         {
             if (invocation == null)
@@ -226,6 +231,104 @@ namespace VSDiagnostics.Utilities
                                        .FirstOrDefault();
 
             return identifier != null && identifier.Identifier.ValueText == "nameof";
+        }
+
+        /// <summary>
+        /// Gets the innermost surrounding class, struct or interface declaration
+        /// </summary>
+        /// <param name="syntaxNode">The node to start from</param>
+        /// <returns>The surrounding declaration node</returns>
+        /// <exception cref="ArgumentException">Thrown when there is no surrounding class, struct or interface declaration"/></exception>
+        public static SyntaxNode GetEnclosingTypeNode(this SyntaxNode syntaxNode)
+        {
+            foreach (var ancestor in syntaxNode.AncestorsAndSelf())
+            {
+                if (ancestor.IsKind(SyntaxKind.ClassDeclaration) || ancestor.IsKind(SyntaxKind.StructDeclaration) || ancestor.IsKind(SyntaxKind.InterfaceDeclaration))
+                {
+                    return ancestor;
+                }
+            }
+
+            throw new ArgumentException("The node is not contained in a type", nameof(syntaxNode));
+        }
+
+        public static IEnumerable<T> OfType<T>(this IEnumerable<SyntaxNode> enumerable, SyntaxKind kind) where T : SyntaxNode
+        {
+            foreach (var node in enumerable)
+            {
+                if (node.IsKind(kind))
+                {
+                    yield return (T) node;
+                }
+            }
+        }
+
+        public static bool ContainsAny(this SyntaxTokenList list, params SyntaxKind[] kinds)
+        {
+            foreach (var item in list)
+            {
+                foreach (var kind in kinds)
+                {
+                    if (item.IsKind(kind))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public static bool Contains(this SyntaxTokenList list, SyntaxKind kind)
+        {
+            foreach (var item in list)
+            {
+                if (item.Kind() == kind)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool Contains(this IEnumerable<SyntaxKind> list, SyntaxKind kind)
+        {
+            foreach (var syntaxKind in list)
+            {
+                if (syntaxKind == kind)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool Any(this IEnumerable<SyntaxNode> list, SyntaxKind kind)
+        {
+            foreach (var node in list)
+            {
+                if (node.IsKind(kind))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool IsAnyKind(this SyntaxNode node, params SyntaxKind[] kinds)
+        {
+            foreach (var kind in kinds)
+            {
+                if (node.IsKind(kind))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

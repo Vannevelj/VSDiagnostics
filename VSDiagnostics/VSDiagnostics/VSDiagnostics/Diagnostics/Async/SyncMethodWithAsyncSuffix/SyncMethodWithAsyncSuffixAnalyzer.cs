@@ -1,12 +1,11 @@
 ﻿using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
 
-namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithSyncSuffix
+namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithAsyncSuffix
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class SyncMethodWithAsyncSuffixAnalyzer : DiagnosticAnalyzer
@@ -14,28 +13,19 @@ namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithSyncSuffix
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
 
         private static readonly string Category = VSDiagnosticsResources.AsyncCategory;
-        private static readonly string Message = VSDiagnosticsResources.SyncMethodWithSyncSuffixAnalyzerMessage;
-        private static readonly string Title = VSDiagnosticsResources.SyncMethodWithSyncSuffixAnalyzerTitle;
+        private static readonly string Message = VSDiagnosticsResources.SyncMethodWithAsyncSuffixAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.SyncMethodWithAsyncSuffixAnalyzerTitle;
 
         internal static DiagnosticDescriptor Rule
-            =>
-                new DiagnosticDescriptor(DiagnosticId.SyncMethodWithAsyncSuffix, Title, Message, Category, Severity,
-                    isEnabledByDefault: true);
+            => new DiagnosticDescriptor(DiagnosticId.SyncMethodWithAsyncSuffix, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.MethodDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.MethodDeclaration);
 
         private static void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
-            var method = context.Node as MethodDeclarationSyntax;
-            if (method == null)
-            {
-                return;
-            }
+            var method = (MethodDeclarationSyntax) context.Node;
 
             if (method.Modifiers.Any(SyntaxKind.OverrideKeyword))
             {
@@ -62,7 +52,7 @@ namespace VSDiagnostics.Diagnostics.Async.SyncMethodWithSyncSuffix
             if (!declaredSymbol.IsAsync() && method.Identifier.Text.EndsWith("Async"))
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule, method.Identifier.GetLocation(),
-                      method.Identifier.Text));
+                    method.Identifier.Text));
             }
         }
     }

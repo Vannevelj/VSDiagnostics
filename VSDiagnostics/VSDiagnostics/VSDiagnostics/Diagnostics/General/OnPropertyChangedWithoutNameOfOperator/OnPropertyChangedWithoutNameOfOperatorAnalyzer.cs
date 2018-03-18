@@ -15,32 +15,21 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
     public class OnPropertyChangedWithoutNameOfOperatorAnalyzer : DiagnosticAnalyzer
     {
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Message = VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorAnalyzerTitle;
 
-        private static readonly string Message =
-            VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorAnalyzerMessage;
-
-        private static readonly string Title =
-            VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorAnalyzerTitle;
-
-        internal static DiagnosticDescriptor Rule
-            =>
-                new DiagnosticDescriptor(DiagnosticId.OnPropertyChangedWithoutNameofOperator, Title, Message, Category,
-                    Severity, true);
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId.OnPropertyChangedWithoutNameofOperator, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.InvocationExpression);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.InvocationExpression);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var invocation = context.Node as InvocationExpressionSyntax;
+            var invocation = (InvocationExpressionSyntax) context.Node;
 
-            var identifierExpression = invocation?.Expression as IdentifierNameSyntax;
+            var identifierExpression = invocation.Expression as IdentifierNameSyntax;
             if (identifierExpression == null)
             {
                 return;
@@ -64,9 +53,12 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
             }
 
             // We use the descendent nodes in case it's wrapped in another level. For example: OnPropertyChanged(((nameof(MyProperty))))
-            if (invokedProperty.DescendantNodesAndSelf().OfType<InvocationExpressionSyntax>().Any(x => x.IsNameofInvocation()))
+            foreach (var expression in invokedProperty.DescendantNodesAndSelf().OfType<InvocationExpressionSyntax>(SyntaxKind.InvocationExpression))
             {
-                return;
+                if (expression.IsNameofInvocation())
+                {
+                    return;
+                }
             }
 
             var invocationArgument = context.SemanticModel.GetConstantValue(invokedProperty.Expression);
@@ -77,7 +69,7 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
 
             // Get all the properties defined in this type
             // We can't just get all the descendents of the classdeclaration because that would pass by some of a partial class' properties
-            var classDeclaration = invocation.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+            var classDeclaration = invocation.Ancestors().OfType<ClassDeclarationSyntax>(SyntaxKind.ClassDeclaration).FirstOrDefault();
             if (classDeclaration == null)
             {
                 return;
@@ -93,11 +85,13 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
             {
                 if (string.Equals(property.Name, (string) invocationArgument.Value, StringComparison.OrdinalIgnoreCase))
                 {
-                    var location = invokedProperty.Expression.DescendantNodesAndSelf().Last().GetLocation();
+                    // The original Linq was `Last()`.  I used `LastOrDefault()` just because I didn't feel the need to implement a
+                    // version to throw an `InvalidOperationException()` rather than a `NullReferenceException()` in this case.
+                    var location = invokedProperty.Expression.DescendantNodesAndSelf().LastOrDefault().GetLocation();
                     var data = ImmutableDictionary.CreateRange(new[]
                     {
                         new KeyValuePair<string, string>("parameterName", property.Name),
-                        new KeyValuePair<string, string>("startLocation", location.SourceSpan.Start.ToString(CultureInfo.InvariantCulture)),
+                        new KeyValuePair<string, string>("startLocation", location.SourceSpan.Start.ToString(CultureInfo.InvariantCulture))
                     });
                     context.ReportDiagnostic(Diagnostic.Create(Rule, location, data, property.Name));
                 }

@@ -7,10 +7,11 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
 {
-    [ExportCodeFixProvider(nameof(SimplifyExpressionBodiedMemberCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.SimplifyExpressionBodiedMember + "CF", LanguageNames.CSharp), Shared]
     public class SimplifyExpressionBodiedMemberCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
@@ -32,20 +33,16 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 diagnostic);
         }
 
-        private Task<Solution> UseExpressionBodiedMemberAsync(Document document, SyntaxNode root, SyntaxNode statement)
+        private Task<Document> UseExpressionBodiedMemberAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var property = statement.AncestorsAndSelf().OfType<PropertyDeclarationSyntax>().FirstOrDefault();
             if (property != null)
             {
-                var firstStatement =
-                    property.AccessorList.Accessors.FirstOrDefault(x => x.Keyword.IsKind(SyntaxKind.GetKeyword))
-                        .Body.Statements.First();
-                var arrowClause =
-                    SyntaxFactory.ArrowExpressionClause(((ReturnStatementSyntax) firstStatement).Expression);
+                var firstStatement = property.AccessorList.Accessors.Single(x => x.Keyword.IsKind(SyntaxKind.GetKeyword)).Body.Statements.First();
+                var arrowClause = SyntaxFactory.ArrowExpressionClause(((ReturnStatementSyntax) firstStatement).Expression);
                 var newProperty = property.RemoveNode(property.AccessorList, SyntaxRemoveOptions.KeepNoTrivia)
-                    .WithExpressionBody(arrowClause)
-                    .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
-
+                                          .WithExpressionBody(arrowClause)
+                                          .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
                 root = root.ReplaceNode(property, newProperty);
             }
@@ -54,16 +51,16 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
             if (method != null)
             {
                 var firstStatement = method.Body.Statements.First();
-                var expression = firstStatement is ExpressionStatementSyntax
+                var expression = firstStatement.IsKind(SyntaxKind.ExpressionStatement)
                     ? ((ExpressionStatementSyntax) firstStatement).Expression
                     : ((ReturnStatementSyntax) firstStatement).Expression;
                 var arrowClause = SyntaxFactory.ArrowExpressionClause(expression);
                 root = root.ReplaceNode(method, method.RemoveNode(method.Body, SyntaxRemoveOptions.KeepNoTrivia)
-                    .WithExpressionBody(arrowClause)
-                    .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
+                                                      .WithExpressionBody(arrowClause)
+                                                      .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
             }
 
-            return Task.FromResult(document.WithSyntaxRoot(root).Project.Solution);
+            return Task.FromResult(document.WithSyntaxRoot(root));
         }
     }
 }

@@ -21,18 +21,11 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.TrueLiteralExpression);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.TrueLiteralExpression);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var literalExpression = context.Node as LiteralExpressionSyntax;
-            if (literalExpression == null)
-            {
-                return;
-            }
+            var literalExpression = (LiteralExpressionSyntax) context.Node;
 
             if (!(literalExpression.Token.IsKind(SyntaxKind.TrueKeyword) && literalExpression.Token.Value is bool))
             {
@@ -54,7 +47,7 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
                     return;
                 }
 
-                if (rightSymbol.Type.IsNullable())
+                if (rightSymbol.Type.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T)
                 {
                     return;
                 }
@@ -68,7 +61,7 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
                     return;
                 }
 
-                if (leftSymbol.Type.IsNullable())
+                if (leftSymbol.Type.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T)
                 {
                     return;
                 }

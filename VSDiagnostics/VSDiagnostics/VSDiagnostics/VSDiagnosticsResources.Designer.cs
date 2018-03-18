@@ -20,7 +20,7 @@ namespace VSDiagnostics {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class VSDiagnosticsResources {
@@ -62,7 +62,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The field {0} is used in an ArgumentException as string. Consider using the nameof operator instead..
+        ///   Looks up a localized string similar to The variable {0} is used in an ArgumentException as string. Consider using the nameof operator instead..
         /// </summary>
         internal static string ArgumentExceptionWithoutNameofOperatorAnalyzerMessage {
             get {
@@ -71,7 +71,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Suggest using the nameof operator in an ArgumentException..
+        ///   Looks up a localized string similar to An ArgumentException should use nameof() to refer to a variable..
         /// </summary>
         internal static string ArgumentExceptionWithoutNameofOperatorAnalyzerTitle {
             get {
@@ -80,11 +80,20 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use nameof.
+        ///   Looks up a localized string similar to Use nameof().
         /// </summary>
         internal static string ArgumentExceptionWithoutNameofOperatorCodeFixTitle {
             get {
                 return ResourceManager.GetString("ArgumentExceptionWithoutNameofOperatorCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Arithmetic.
+        /// </summary>
+        internal static string ArithmeticCategory {
+            get {
+                return ResourceManager.GetString("ArithmeticCategory", resourceCulture);
             }
         }
         
@@ -98,7 +107,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use cast instead of as..
+        ///   Looks up a localized string similar to Changes an &apos;as&apos; expression to a cast..
         /// </summary>
         internal static string AsToCastAnalyzerTitle {
             get {
@@ -134,7 +143,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verifies whether an async method has the &apos;Async&apos; suffix..
+        ///   Looks up a localized string similar to Asynchronous methods should end with the -Async suffix..
         /// </summary>
         internal static string AsyncMethodWithoutAsyncSuffixAnalyzerTitle {
             get {
@@ -143,11 +152,38 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add suffix.
+        ///   Looks up a localized string similar to Add -Async suffix.
         /// </summary>
         internal static string AsyncMethodWithoutAsyncSuffixCodeFixTitle {
             get {
                 return ResourceManager.GetString("AsyncMethodWithoutAsyncSuffixCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Task as return type.
+        /// </summary>
+        internal static string AsyncMethodWithVoidReturnTypeCodeFixTitle {
+            get {
+                return ResourceManager.GetString("AsyncMethodWithVoidReturnTypeCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method {0} is marked as async but has a void return type.
+        /// </summary>
+        internal static string AsyncMethodWithVoidReturnTypeMessage {
+            get {
+                return ResourceManager.GetString("AsyncMethodWithVoidReturnTypeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Async methods should return a Task to make them awaitable.
+        /// </summary>
+        internal static string AsyncMethodWithVoidReturnTypeTitle {
+            get {
+                return ResourceManager.GetString("AsyncMethodWithVoidReturnTypeTitle", resourceCulture);
             }
         }
         
@@ -161,7 +197,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Attribute has empty argument list..
+        ///   Looks up a localized string similar to Attribute &quot;{0}&quot; has an empty argument list..
         /// </summary>
         internal static string AttributeWithEmptyArgumentListAnalyzerMessage {
             get {
@@ -170,7 +206,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove empty argument list from attribute..
+        ///   Looks up a localized string similar to An attribute should not have an empty argument list..
         /// </summary>
         internal static string AttributeWithEmptyArgumentListAnalyzerTitle {
             get {
@@ -179,7 +215,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove Parentheses.
+        ///   Looks up a localized string similar to Remove parentheses from argument list.
         /// </summary>
         internal static string AttributeWithEmptyArgumentListCodeFixTitle {
             get {
@@ -197,7 +233,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use as instead of a cast..
+        ///   Looks up a localized string similar to Changes a cast expression to &apos;as&apos;..
         /// </summary>
         internal static string CastToAsAnalyzerTitle {
             get {
@@ -224,7 +260,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verifies whether no NullReferenceExceptions are caught..
+        ///   Looks up a localized string similar to Verifies no NullReferenceException is caught..
         /// </summary>
         internal static string CatchNullReferenceExceptionAnalyzerTitle {
             get {
@@ -242,7 +278,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A boolean expression doesn&apos;t have to be compared to false..
+        ///   Looks up a localized string similar to A boolean expression comparing to false can be simplified..
         /// </summary>
         internal static string CompareBooleanToFalseLiteralAnalyzerTitle {
             get {
@@ -269,7 +305,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A boolean expression doesn&apos;t have to be compared to true..
+        ///   Looks up a localized string similar to A boolean expression comparing to true can be simplified..
         /// </summary>
         internal static string CompareBooleanToTrueLiteralAnalyzerTitle {
             get {
@@ -296,7 +332,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The conditional operator shouldn&apos;t return redundant true and false literals..
+        ///   Looks up a localized string similar to The conditional operator shouldn&apos;t return redundant default options..
         /// </summary>
         internal static string ConditionalOperatorReturnsDefaultOptionsAnalyzerTitle {
             get {
@@ -305,7 +341,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove conditional.
+        ///   Looks up a localized string similar to Remove conditional operator.
         /// </summary>
         internal static string ConditionalOperatorReturnsDefaultOptionsCodeFixTitle {
             get {
@@ -323,7 +359,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The conditional operator shouldn&apos;t return redundant true and false literals..
+        ///   Looks up a localized string similar to The conditional operator shouldn&apos;t return redundant inverted default options..
         /// </summary>
         internal static string ConditionalOperatorReturnsInvertedDefaultOptionsAnalyzerTitle {
             get {
@@ -332,7 +368,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove conditional.
+        ///   Looks up a localized string similar to Remove conditional operator.
         /// </summary>
         internal static string ConditionalOperatorReturnsInvertedDefaultOptionsCodeFixTitle {
             get {
@@ -341,61 +377,70 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition is always false..
+        ///   Looks up a localized string similar to Condition is always {0}..
         /// </summary>
-        internal static string ConditionIsAlwaysFalseAnalyzerMessage {
+        internal static string ConditionIsConstantAnalyzerMessage {
             get {
-                return ResourceManager.GetString("ConditionIsAlwaysFalseAnalyzerMessage", resourceCulture);
+                return ResourceManager.GetString("ConditionIsConstantAnalyzerMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition is always false..
+        ///   Looks up a localized string similar to The condition is a constant and thus unnecessary..
         /// </summary>
-        internal static string ConditionIsAlwaysFalseAnalyzerTitle {
+        internal static string ConditionIsConstantAnalyzerTitle {
             get {
-                return ResourceManager.GetString("ConditionIsAlwaysFalseAnalyzerTitle", resourceCulture);
+                return ResourceManager.GetString("ConditionIsConstantAnalyzerTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove condition and body..
+        ///   Looks up a localized string similar to Remove condition and unreachable code..
         /// </summary>
-        internal static string ConditionIsAlwaysFalseCodeFixTitle {
+        internal static string ConditionIsConstantCodeFixTitle {
             get {
-                return ResourceManager.GetString("ConditionIsAlwaysFalseCodeFixTitle", resourceCulture);
+                return ResourceManager.GetString("ConditionIsConstantCodeFixTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition is always true..
+        ///   Looks up a localized string similar to The operands in the divisive expression {0} are both integers and result in an implicit rounding..
         /// </summary>
-        internal static string ConditionIsAlwaysTrueAnalyzerMessage {
+        internal static string DivideIntegerByIntegerAnalyzerMessage {
             get {
-                return ResourceManager.GetString("ConditionIsAlwaysTrueAnalyzerMessage", resourceCulture);
+                return ResourceManager.GetString("DivideIntegerByIntegerAnalyzerMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition is always true..
+        ///   Looks up a localized string similar to The operands of a divisive expression are both integers and result in an implicit rounding..
         /// </summary>
-        internal static string ConditionIsAlwaysTrueAnalyzerTitle {
+        internal static string DivideIntegerByIntegerAnalyzerTitle {
             get {
-                return ResourceManager.GetString("ConditionIsAlwaysTrueAnalyzerTitle", resourceCulture);
+                return ResourceManager.GetString("DivideIntegerByIntegerAnalyzerTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove condition..
+        ///   Looks up a localized string similar to Implement elementary methods of type used in collection..
         /// </summary>
-        internal static string ConditionIsAlwaysTrueCodeFixTitle {
+        internal static string ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerMessage {
             get {
-                return ResourceManager.GetString("ConditionIsAlwaysTrueCodeFixTitle", resourceCulture);
+                return ResourceManager.GetString("ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ArgumentException is thrown without a message..
+        ///   Looks up a localized string similar to Implement elementary methods for a type used in a collection..
+        /// </summary>
+        internal static string ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An ArgumentException is thrown without a message..
         /// </summary>
         internal static string EmptyArgumentExceptionAnalyzerMessage {
             get {
@@ -431,7 +476,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enum can have Flags attribute..
+        ///   Looks up a localized string similar to Enum can have [Flags] attribute..
         /// </summary>
         internal static string EnumCanHaveFlagsAttributeAnalyzerMessage {
             get {
@@ -440,7 +485,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inform that enums can have the Flags attribute..
+        ///   Looks up a localized string similar to Gives an enum the `[Flags]` attribute..
         /// </summary>
         internal static string EnumCanHaveFlagsAttributeAnalyzerTitle {
             get {
@@ -449,11 +494,38 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add Flags attribute.
+        ///   Looks up a localized string similar to Add [Flags] attribute.
         /// </summary>
         internal static string EnumCanHaveFlagsAttributeCodeFixTitle {
             get {
                 return ResourceManager.GetString("EnumCanHaveFlagsAttributeCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Equals() and GetHashcode() must be implemented together..
+        /// </summary>
+        internal static string EqualsAndGetHashcodeNotImplementedTogetherAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("EqualsAndGetHashcodeNotImplementedTogetherAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implement Equals() and GetHashcode() together..
+        /// </summary>
+        internal static string EqualsAndGetHashcodeNotImplementedTogetherAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("EqualsAndGetHashcodeNotImplementedTogetherAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implement {0}..
+        /// </summary>
+        internal static string EqualsAndGetHashcodeNotImplementedTogetherCodeFixTitle {
+            get {
+                return ResourceManager.GetString("EqualsAndGetHashcodeNotImplementedTogetherCodeFixTitle", resourceCulture);
             }
         }
         
@@ -467,6 +539,168 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from the {0} method in type {1}.
+        /// </summary>
+        internal static string ExceptionThrownFromDisposeAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromDisposeAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from a Dispose method..
+        /// </summary>
+        internal static string ExceptionThrownFromDisposeAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromDisposeAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from the {0} operator between {1} and {2} in type {3}.
+        /// </summary>
+        internal static string ExceptionThrownFromEqualityOperatorAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromEqualityOperatorAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from an equality operator..
+        /// </summary>
+        internal static string ExceptionThrownFromEqualityOperatorAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromEqualityOperatorAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from the Equals({0}) method in type {1}.
+        /// </summary>
+        internal static string ExceptionThrownFromEqualsAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromEqualsAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from an Equals() method..
+        /// </summary>
+        internal static string ExceptionThrownFromEqualsAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromEqualsAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from the finalizer method in type {0}.
+        /// </summary>
+        internal static string ExceptionThrownFromFinalizerAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromFinalizerAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from a finalizer method..
+        /// </summary>
+        internal static string ExceptionThrownFromFinalizerAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromFinalizerAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from a finally block.
+        /// </summary>
+        internal static string ExceptionThrownFromFinallyBlockAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromFinallyBlockAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from a finally block..
+        /// </summary>
+        internal static string ExceptionThrownFromFinallyBlockAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromFinallyBlockAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from the GetHashCode() method in type {0}.
+        /// </summary>
+        internal static string ExceptionThrownFromGetHashCodeAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromGetHashCodeAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from a GetHashCode() method..
+        /// </summary>
+        internal static string ExceptionThrownFromGetHashCodeAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromGetHashCodeAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from implicit operator {0} in type {1}.
+        /// </summary>
+        internal static string ExceptionThrownFromImplicitOperatorAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromImplicitOperatorAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from an implicit operator..
+        /// </summary>
+        internal static string ExceptionThrownFromImplicitOperatorAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromImplicitOperatorAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from the getter of property {0}.
+        /// </summary>
+        internal static string ExceptionThrownFromPropertyGetterAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromPropertyGetterAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from a property getter..
+        /// </summary>
+        internal static string ExceptionThrownFromPropertyGetterAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromPropertyGetterAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from {0} its static constructor.
+        /// </summary>
+        internal static string ExceptionThrownFromStaticConstructorAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromStaticConstructorAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception is thrown from a static constructor..
+        /// </summary>
+        internal static string ExceptionThrownFromStaticConstructorAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ExceptionThrownFromStaticConstructorAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use explicit {0} modifier..
         /// </summary>
         internal static string ExplicitAccessModifiersAnalyzerMessage {
@@ -476,7 +710,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use explicit {0} modifier..
+        ///   Looks up a localized string similar to Inserts the default accessibility modifier for a declaration..
         /// </summary>
         internal static string ExplicitAccessModifiersAnalyzerTitle {
             get {
@@ -485,7 +719,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add modifier.
+        ///   Looks up a localized string similar to Add accessibility modifier.
         /// </summary>
         internal static string ExplicitAccessModifiersCodeFixTitle {
             get {
@@ -503,7 +737,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Flags] enum its values are not explicit powers of 2.
+        ///   Looks up a localized string similar to A [Flags] enum its values are not explicit powers of 2.
         /// </summary>
         internal static string FlagsEnumValuesAreNotPowersOfTwoAnalyzerTitle {
             get {
@@ -530,7 +764,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Flags] enum its values are not explicit powers of 2 and its values dont fit in the specified enum type..
+        ///   Looks up a localized string similar to A [Flags] enum its values are not explicit powers of 2 and its values dont fit in the specified enum type..
         /// </summary>
         internal static string FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerTitle {
             get {
@@ -544,6 +778,24 @@ namespace VSDiagnostics {
         internal static string GeneralCategory {
             get {
                 return ResourceManager.GetString("GeneralCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GetHashCode() refers to {0}.
+        /// </summary>
+        internal static string GetHashCodeRefersToMutableFieldAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("GetHashCodeRefersToMutableFieldAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GetHashCode() refers to mutable, static, or constant member.
+        /// </summary>
+        internal static string GetHashCodeRefersToMutableFieldAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("GetHashCodeRefersToMutableFieldAnalyzerTitle", resourceCulture);
             }
         }
         
@@ -593,7 +845,52 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A loop-statement should be written using braces..
+        ///   Looks up a localized string similar to {0} {1} does not implement Equals() and GetHashCode()..
+        /// </summary>
+        internal static string ImplementEqualsAndGetHashCodeAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("ImplementEqualsAndGetHashCodeAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implements Equals() and GetHashCode() using existing fields and properties..
+        /// </summary>
+        internal static string ImplementEqualsAndGetHashCodeAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ImplementEqualsAndGetHashCodeAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Equals() and GetHashCode().
+        /// </summary>
+        internal static string ImplementEqualsAndGetHashCodeCodeFixTitle {
+            get {
+                return ResourceManager.GetString("ImplementEqualsAndGetHashCodeCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable {0} of type System.Random is instantiated in a loop..
+        /// </summary>
+        internal static string LoopedRandomInstantiationAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("LoopedRandomInstantiationAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An instance of type System.Random is created in a loop..
+        /// </summary>
+        internal static string LoopedRandomInstantiationAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("LoopedRandomInstantiationAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A loop is not delimited with braces..
         /// </summary>
         internal static string LoopStatementWithoutBracesAnalyzerMessage {
             get {
@@ -620,6 +917,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} {1} statement should be written with braces.
+        /// </summary>
+        internal static string MissingBracesAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("MissingBracesAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} blocks should use braces to denote start and end..
+        /// </summary>
+        internal static string MissingBracesAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("MissingBracesAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use braces.
+        /// </summary>
+        internal static string MissingBracesCodeFixTitle {
+            get {
+                return ResourceManager.GetString("MissingBracesCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The {0} {1} does not follow naming conventions. Should be {2}..
         /// </summary>
         internal static string NamingConventionsAnalyzerMessage {
@@ -629,7 +953,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A member does not follow naming conventions..
+        ///   Looks up a localized string similar to Implements the most common configuration of naming conventions..
         /// </summary>
         internal static string NamingConventionsAnalyzerTitle {
             get {
@@ -665,7 +989,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use property.
+        ///   Looks up a localized string similar to Implement as property.
         /// </summary>
         internal static string NonEncapsulatedOrMutableFieldCodeFixTitle {
             get {
@@ -701,7 +1025,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Give a reason for the Obsolete attribute..
+        ///   Looks up a localized string similar to Give a reason for the [Obsolete] attribute..
         /// </summary>
         internal static string ObsoleteAttributeWithoutReasonAnalyzerMessage {
             get {
@@ -710,7 +1034,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Obsolete attribute doesn&apos;t have a reason..
+        ///   Looks up a localized string similar to The [Obsolete] attribute doesn&apos;t have a reason..
         /// </summary>
         internal static string ObsoleteAttributeWithoutReasonAnalyzerTitle {
             get {
@@ -719,7 +1043,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the CallerMemberName attribute..
+        ///   Looks up a localized string similar to OnPropertyChanged() can use the [CallerMemberName] attribute..
         /// </summary>
         internal static string OnPropertyChangedWithoutCallerMemberNameAnalyzerMessage {
             get {
@@ -728,7 +1052,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the CallerMemberName attribute to automatically pass the property name..
+        ///   Looks up a localized string similar to OnPropertyChanged() can use the [CallerMemberName] attribute to automatically pass the property name..
         /// </summary>
         internal static string OnPropertyChangedWithoutCallerMemberNameAnalyzerTitle {
             get {
@@ -755,7 +1079,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the nameof() operator in conjunection with OnPropertyChanged.
+        ///   Looks up a localized string similar to Use the nameof() operator in conjunction with OnPropertyChanged().
         /// </summary>
         internal static string OnPropertyChangedWithoutNameOfOperatorAnalyzerTitle {
             get {
@@ -764,7 +1088,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use nameof.
+        ///   Looks up a localized string similar to Use nameof().
         /// </summary>
         internal static string OnPropertyChangedWithoutNameOfOperatorCodeFixTitle {
             get {
@@ -773,7 +1097,34 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test method &quot;{0}&quot; should not end with &quot;Test&quot;..
+        ///   Looks up a localized string similar to Property {0} its private setter can be omitted..
+        /// </summary>
+        internal static string RedundantPrivateSetterAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("RedundantPrivateSetterAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A property with a private setter can become a read-only property instead..
+        /// </summary>
+        internal static string RedundantPrivateSetterAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("RedundantPrivateSetterAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Turn into a read-only property.
+        /// </summary>
+        internal static string RedundantPrivateSetterCodeFixTitle {
+            get {
+                return ResourceManager.GetString("RedundantPrivateSetterCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test method &quot;{0}&quot; should not end with &quot;-Test&quot;.
         /// </summary>
         internal static string RemoveTestSuffixAnalyzerMessage {
             get {
@@ -782,7 +1133,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verifies whether a test method ends with &quot;Test&quot;..
+        ///   Looks up a localized string similar to A test method should not end with -Test..
         /// </summary>
         internal static string RemoveTestSuffixAnalyzerTitle {
             get {
@@ -791,7 +1142,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove &quot;Test&quot; suffix.
+        ///   Looks up a localized string similar to Remove &quot;-Test&quot; suffix.
         /// </summary>
         internal static string RemoveTestSuffixCodeFixTitle {
             get {
@@ -890,7 +1241,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your constructor is the same as a default constructor and can be removed..
+        ///   Looks up a localized string similar to A constructor is the same as a default constructor and can be removed..
         /// </summary>
         internal static string SingleEmptyConstructorAnalyzerTitle {
             get {
@@ -908,7 +1259,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A single catch-all clause has been used. Consider adding specific exception handlers or a comment..
+        ///   Looks up a localized string similar to A single catch-all clause has been used. Consider adding specific exception handlers..
         /// </summary>
         internal static string SingleGeneralExceptionAnalyzerMessage {
             get {
@@ -917,7 +1268,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verifies whether a try-catch block does not contain just a single Exception clause..
+        ///   Looks up a localized string similar to Verifies whether a try-catch block does not defer all exception handling to a single Exception clause..
         /// </summary>
         internal static string SingleGeneralExceptionAnalyzerTitle {
             get {
@@ -935,7 +1286,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid arguments for the string.Format() call..
+        ///   Looks up a localized string similar to A string.Format() call lacks arguments and will cause a runtime exception..
         /// </summary>
         internal static string StringDotFormatWithDifferentAmountOfArgumentsTitle {
             get {
@@ -953,7 +1304,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Placeholders are not in ascending order..
+        ///   Looks up a localized string similar to string.Format() Placeholders are not in ascending order..
         /// </summary>
         internal static string StringPlaceholdersInWrongOrderMessage {
             get {
@@ -1007,29 +1358,110 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove suffix.
+        ///   Looks up a localized string similar to Implement elementary methods on struct {0}..
         /// </summary>
-        internal static string SyncMethodWithSyncSuffixAnalyzerCodeFixTitle {
+        internal static string StructWithoutElementaryMethodsOverriddenAnalyzerMessage {
             get {
-                return ResourceManager.GetString("SyncMethodWithSyncSuffixAnalyzerCodeFixTitle", resourceCulture);
+                return ResourceManager.GetString("StructWithoutElementaryMethodsOverriddenAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Structs should implement Equals(), GetHashCode(), and ToString()..
+        /// </summary>
+        internal static string StructWithoutElementaryMethodsOverriddenAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("StructWithoutElementaryMethodsOverriddenAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implement {0}.
+        /// </summary>
+        internal static string StructWithoutElementaryMethodsOverriddenCodeFixTitle {
+            get {
+                return ResourceManager.GetString("StructWithoutElementaryMethodsOverriddenCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing enum member in switched cases..
+        /// </summary>
+        internal static string SwitchDoesNotHandleAllEnumOptionsAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("SwitchDoesNotHandleAllEnumOptionsAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add cases for missing enum member..
+        /// </summary>
+        internal static string SwitchDoesNotHandleAllEnumOptionsAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("SwitchDoesNotHandleAllEnumOptionsAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add cases..
+        /// </summary>
+        internal static string SwitchDoesNotHandleAllEnumOptionsCodeFixTitle {
+            get {
+                return ResourceManager.GetString("SwitchDoesNotHandleAllEnumOptionsCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch should have default label..
+        /// </summary>
+        internal static string SwitchIsMissingDefaultSectionAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("SwitchIsMissingDefaultSectionAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch is missing a default label..
+        /// </summary>
+        internal static string SwitchIsMissingDefaultSectionAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("SwitchIsMissingDefaultSectionAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add default label.
+        /// </summary>
+        internal static string SwitchIsMissingDefaultSectionCodeFixTitle {
+            get {
+                return ResourceManager.GetString("SwitchIsMissingDefaultSectionCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove -Async suffix.
+        /// </summary>
+        internal static string SyncMethodWithAsyncSuffixAnalyzerCodeFixTitle {
+            get {
+                return ResourceManager.GetString("SyncMethodWithAsyncSuffixAnalyzerCodeFixTitle", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Synchronous method &quot;{0}&quot; should not end with &apos;Async&apos;..
         /// </summary>
-        internal static string SyncMethodWithSyncSuffixAnalyzerMessage {
+        internal static string SyncMethodWithAsyncSuffixAnalyzerMessage {
             get {
-                return ResourceManager.GetString("SyncMethodWithSyncSuffixAnalyzerMessage", resourceCulture);
+                return ResourceManager.GetString("SyncMethodWithAsyncSuffixAnalyzerMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your method is not async, and should not have the &apos;Async&apos; suffix..
+        ///   Looks up a localized string similar to A non-async, non-Task method should not end with -Async..
         /// </summary>
-        internal static string SyncMethodWithSyncSuffixAnalyzerTitle {
+        internal static string SyncMethodWithAsyncSuffixAnalyzerTitle {
             get {
-                return ResourceManager.GetString("SyncMethodWithSyncSuffixAnalyzerTitle", resourceCulture);
+                return ResourceManager.GetString("SyncMethodWithAsyncSuffixAnalyzerTitle", resourceCulture);
             }
         }
         
@@ -1061,11 +1493,38 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Method {0} might be missing a test attribute.
+        /// </summary>
+        internal static string TestMethodWithoutTestAttributeAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("TestMethodWithoutTestAttributeAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A method might be missing a test attribute..
+        /// </summary>
+        internal static string TestMethodWithoutTestAttributeAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("TestMethodWithoutTestAttributeAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tests.
         /// </summary>
         internal static string TestsCategory {
             get {
                 return ResourceManager.GetString("TestsCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Throwing null will always result in a runtime exception.
+        /// </summary>
+        internal static string ThrowNullMessage {
+            get {
+                return ResourceManager.GetString("ThrowNullMessage", resourceCulture);
             }
         }
         
@@ -1079,7 +1538,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The conversion can be performed without casting twice..
+        ///   Looks up a localized string similar to Use as/null instead of is/as..
         /// </summary>
         internal static string TryCastWithoutUsingAsNotNullAnalyzerTitle {
             get {
@@ -1097,7 +1556,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Actual type can be replaced with &apos;var&apos;..
+        ///   Looks up a localized string similar to Replace the explicit type with &apos;var&apos;.
         /// </summary>
         internal static string TypeToVarAnalyzerMessage {
             get {
@@ -1106,7 +1565,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use var instead of type..
+        ///   Looks up a localized string similar to Use var instead of the explicit type..
         /// </summary>
         internal static string TypeToVarAnalyzerTitle {
             get {
@@ -1133,7 +1592,7 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use alias instead of concrete type..
+        ///   Looks up a localized string similar to Use the built-in type alias instead of the concrete type..
         /// </summary>
         internal static string UseAliasesInsteadOfConcreteTypeAnalyzerTitle {
             get {
@@ -1147,6 +1606,33 @@ namespace VSDiagnostics {
         internal static string UseAliasesInsteadOfConcreteTypeCodeFixTitle {
             get {
                 return ResourceManager.GetString("UseAliasesInsteadOfConcreteTypeCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A using tatement is not delimited with braces..
+        /// </summary>
+        internal static string UsingStatementWithoutBracesAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("UsingStatementWithoutBracesAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A using statement is missing braces..
+        /// </summary>
+        internal static string UsingStatementWithoutBracesAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("UsingStatementWithoutBracesAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add braces.
+        /// </summary>
+        internal static string UsingStatementWithoutBracesCodeFixTitle {
+            get {
+                return ResourceManager.GetString("UsingStatementWithoutBracesCodeFixTitle", resourceCulture);
             }
         }
     }

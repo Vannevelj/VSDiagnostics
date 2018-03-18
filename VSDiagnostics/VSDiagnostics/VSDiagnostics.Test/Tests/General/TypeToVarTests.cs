@@ -280,5 +280,46 @@ namespace ConsoleApplication1
 
             VerifyDiagnostic(original);
         }
+
+        [TestMethod]
+        public void TypeToVar_WithLambdaExpression_NoType()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            Action x = () => { };
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
+
+        [TestMethod]
+        public void TypeToVar_WithLocalDefinedWithDynamic()
+        {
+            var original = @"
+using System.Dynamic;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {   
+        void Method()
+        {
+            dynamic exceptionInfo = new ExpandoObject();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original);
+        }
     }
 }

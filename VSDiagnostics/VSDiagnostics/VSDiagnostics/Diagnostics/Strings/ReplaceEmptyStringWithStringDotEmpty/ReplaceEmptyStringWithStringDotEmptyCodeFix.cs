@@ -8,10 +8,11 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
 {
-    [ExportCodeFixProvider(nameof(ReplaceEmptyStringWithStringDotEmptyCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.ReplaceEmptyStringWithStringDotEmpty + "CF", LanguageNames.CSharp), Shared]
     public class ReplaceEmptyStringWithStringDotEmptyCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
@@ -35,7 +36,7 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
         }
 
         private static Task<Solution> UseStringDotEmptyAsync(Document document, SyntaxNode root,
-            LiteralExpressionSyntax literalDeclaration)
+                                                             LiteralExpressionSyntax literalDeclaration)
         {
             var stringDotEmptyInvocation = SyntaxFactory.ParseExpression("string.Empty").WithTriviaFrom(literalDeclaration);
             var newRoot =

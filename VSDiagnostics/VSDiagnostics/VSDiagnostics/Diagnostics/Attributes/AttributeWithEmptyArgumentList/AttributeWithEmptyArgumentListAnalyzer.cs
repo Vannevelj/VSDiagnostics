@@ -1,15 +1,13 @@
 ﻿using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using VSDiagnostics.Utilities;
-using CSharpSyntaxKind = Microsoft.CodeAnalysis.CSharp.SyntaxKind;
-using VisualBasicSyntaxKind = Microsoft.CodeAnalysis.VisualBasic.SyntaxKind;
-using CSharpAttributeSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.AttributeSyntax;
-using VisualBasicAttributeSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax.AttributeSyntax;
 
 namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
 {
-    [DiagnosticAnalyzer(LanguageNames.CSharp, LanguageNames.VisualBasic)]
+    [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AttributeWithEmptyArgumentListAnalyzer : DiagnosticAnalyzer
     {
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
@@ -25,40 +23,23 @@ namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeCSharpSymbol, CSharpSyntaxKind.Attribute);
-            context.RegisterSyntaxNodeAction(AnalyzeVisualBasicSymbol, VisualBasicSyntaxKind.Attribute);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeCSharpSymbol, SyntaxKind.Attribute);
 
         private void AnalyzeCSharpSymbol(SyntaxNodeAnalysisContext context)
         {
-            var attributeExpression = context.Node as CSharpAttributeSyntax;
+            var attributeSyntax = (AttributeSyntax) context.Node;
 
             // attribute must have arguments
             // if there are no parenthesis, the ArgumentList is null
             // if there are empty parenthesis, the ArgumentList is empty
-            if (attributeExpression?.ArgumentList == null || attributeExpression.ArgumentList.Arguments.Any())
+            if (attributeSyntax.ArgumentList == null || attributeSyntax.ArgumentList.Arguments.Any())
             {
                 return;
             }
 
-            context.ReportDiagnostic(Diagnostic.Create(Rule, attributeExpression.GetLocation()));
-        }
+            var attributeName = attributeSyntax.Name.ToString();
 
-        private void AnalyzeVisualBasicSymbol(SyntaxNodeAnalysisContext context)
-        {
-            var attributeExpression = context.Node as VisualBasicAttributeSyntax;
-
-            // attribute must have arguments
-            // if there are no parenthesis, the ArgumentList is null
-            // if there are empty parenthesis, the ArgumentList is empty
-            if (attributeExpression?.ArgumentList == null || attributeExpression.ArgumentList.Arguments.Any())
-            {
-                return;
-            }
-
-            context.ReportDiagnostic(Diagnostic.Create(Rule, attributeExpression.GetLocation()));
+            context.ReportDiagnostic(Diagnostic.Create(Rule, attributeSyntax.GetLocation(), attributeName));
         }
     }
 }

@@ -1055,5 +1055,50 @@ namespace ConsoleApplication1
             VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
             VerifyFix(original, result);
         }
+
+        [TestMethod]
+        public void CompareBooleanToTrueLiteral_DoesNotReformatEntireDoc()
+        {
+            var original = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method ()  // formatting removes space before parens
+        {
+            bool isAwesome = true;
+            if(isAwesome == true)  // formatting adds space before parens
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            var result = @"
+using System;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method ()  // formatting removes space before parens
+        {
+            bool isAwesome = true;
+            if(isAwesome)  // formatting adds space before parens
+            {
+                Console.WriteLine(""awesome"");
+            }
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, CompareBooleanToTrueLiteralAnalyzer.Rule.MessageFormat.ToString());
+            VerifyFix(original, result);
+        }
     }
 }

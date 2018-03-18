@@ -1,7 +1,10 @@
-version: 1.6.{build}
-os: Visual Studio 2015
+version: 1.8.{build}
+image: Visual Studio 2015
 init:
-- git config --global core.autocrlf true
+- ps: >-
+    git config --global core.autocrlf true
+
+    iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
@@ -10,17 +13,10 @@ assembly_info:
   assembly_informational_version: '{version}'
 environment:
   PATH: C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
-cache: packages -> **\packages.config
-nuget:
-  account_feed: true
-  project_feed: true
 before_build:
-- nuget restore VSDiagnostics/VSDiagnostics.sln
+- cmd: nuget restore VSDiagnostics/VSDiagnostics.sln
 build:
-  publish_nuget: true
-  publish_nuget_symbols: true
-  include_nuget_references: true
-  verbosity: minimal
+  verbosity: normal
 notifications:
 - provider: Webhook
   url: http://stats.zomis.net:8081/hooks/appveyor?roomId=14929
@@ -29,3 +25,5 @@ notifications:
   on_build_success: true
   on_build_failure: true
   on_build_status_changed: true
+# on_finish:
+# - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))

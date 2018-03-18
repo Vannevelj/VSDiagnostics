@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -22,16 +21,13 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.LocalDeclarationStatement);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.LocalDeclarationStatement);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var localDeclaration = context.Node as LocalDeclarationStatementSyntax;
+            var localDeclaration = (LocalDeclarationStatementSyntax) context.Node;
 
-            if (localDeclaration?.Declaration == null)
+            if (localDeclaration.Declaration == null)
             {
                 return;
             }
@@ -42,7 +38,7 @@ namespace VSDiagnostics.Diagnostics.General.TypeToVar
                 return;
             }
 
-            if (localDeclaration.Modifiers.Any(m => m.IsKind(SyntaxKind.ConstKeyword)))
+            if (localDeclaration.Modifiers.Contains(SyntaxKind.ConstKeyword))
             {
                 return;
             }

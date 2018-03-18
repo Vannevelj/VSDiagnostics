@@ -9,10 +9,11 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMemberName
 {
-    [ExportCodeFixProvider(nameof(OnPropertyChangedWithoutCallerMemberNameCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.OnPropertyChangedWithoutCallerMemberName + "CF", LanguageNames.CSharp), Shared]
     public class OnPropertyChangedWithoutCallerMemberNameCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
@@ -29,11 +30,11 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
             var statement = root.FindNode(diagnosticSpan);
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.OnPropertyChangedWithoutCallerMemberNameCodeFixTitle,
-                    x => AddCallerMemberNameAttribute(context.Document, statement),
+                    x => AddCallerMemberNameAttributeAsync(context.Document, statement),
                     OnPropertyChangedWithoutCallerMemberNameAnalyzer.Rule.Id), diagnostic);
         }
 
-        private async Task<Solution> AddCallerMemberNameAttribute(Document document, SyntaxNode statement)
+        private async Task<Solution> AddCallerMemberNameAttributeAsync(Document document, SyntaxNode statement)
         {
             var editor = await DocumentEditor.CreateAsync(document);
 
@@ -45,20 +46,20 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
 
             var newParam = param.Default == null
                 ? param.WithAttributeLists(param.AttributeLists.Add(attributeList))
-                    .WithDefault(SyntaxFactory.EqualsValueClause(SyntaxFactory.ParseExpression("\"\"")))
+                       .WithDefault(SyntaxFactory.EqualsValueClause(SyntaxFactory.ParseExpression("\"\"")))
                 : param.WithAttributeLists(param.AttributeLists.Add(attributeList));
 
             editor.ReplaceNode(param, newParam);
 
-            var parentClass = methodDeclaration.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+            var parentNode = methodDeclaration.GetEnclosingTypeNode();
             var methodInvocations =
-                parentClass.DescendantNodes()
-                    .OfType<InvocationExpressionSyntax>().Where(i =>
-                    {
-                        var identifierExpression = i.Expression as IdentifierNameSyntax;
-                        return identifierExpression != null &&
-                               identifierExpression.Identifier.ValueText == "OnPropertyChanged";
-                    });
+                parentNode.DescendantNodes()
+                           .OfType<InvocationExpressionSyntax>().Where(i =>
+                           {
+                               var identifierExpression = i.Expression as IdentifierNameSyntax;
+                               return identifierExpression != null &&
+                                      identifierExpression.Identifier.ValueText == "OnPropertyChanged";
+                           });
 
             foreach (var methodInvocation in methodInvocations)
             {
@@ -78,10 +79,10 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
             {
                 var usings =
                     compilationUnit.Usings.Add(usingSystemRuntimeCompilerServicesDirective)
-                        .OrderBy(u => u.Name.GetText().ToString());
+                                   .OrderBy(u => u.Name.GetText().ToString());
 
                 newRoot = newRoot.ReplaceNode(compilationUnit, compilationUnit.WithUsings(SyntaxFactory.List(usings))
-                    .WithAdditionalAnnotations(Formatter.Annotation));
+                                                                              .WithAdditionalAnnotations(Formatter.Annotation));
             }
 
             var newDocument = document.WithSyntaxRoot(newRoot);

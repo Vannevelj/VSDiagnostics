@@ -6,10 +6,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Editing;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
 {
-    [ExportCodeFixProvider(nameof(ExplicitAccessModifiersCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.ExplicitAccessModifiers + "CF", LanguageNames.CSharp), Shared]
     public class ExplicitAccessModifiersCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
@@ -31,12 +32,12 @@ namespace VSDiagnostics.Diagnostics.General.ExplicitAccessModifiers
 
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.ExplicitAccessModifiersCodeFixTitle,
-                    x => AddModifier(context.Document, root, statement, accessibility),
+                    x => AddModifierAsync(context.Document, root, statement, accessibility),
                     ExplicitAccessModifiersAnalyzer.Rule.Id), diagnostic);
         }
 
-        private Task<Solution> AddModifier(Document document, SyntaxNode root, SyntaxNode statement,
-            Accessibility accessibility)
+        private Task<Solution> AddModifierAsync(Document document, SyntaxNode root, SyntaxNode statement,
+                                                Accessibility accessibility)
         {
             var generator = SyntaxGenerator.GetGenerator(document);
             var newStatement = generator.WithAccessibility(statement, accessibility);

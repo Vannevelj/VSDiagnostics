@@ -8,10 +8,11 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsInvertedDefaultOptions
 {
-    [ExportCodeFixProvider(nameof(ConditionalOperatorReturnsInvertedDefaultOptionsCodeFix), LanguageNames.CSharp),
+    [ExportCodeFixProvider(DiagnosticId.ConditionalOperatorReturnsInvertedDefaultOptions + "CF", LanguageNames.CSharp),
      Shared]
     public class ConditionalOperatorReturnsInvertedDefaultOptionsCodeFix : CodeFixProvider
     {
@@ -47,7 +48,7 @@ namespace VSDiagnostics.Diagnostics.General.ConditionalOperatorReturnsInvertedDe
             }
 
             var newRoot =
-                root.ReplaceNode(conditionalExpression, newExpression).WithAdditionalAnnotations(Formatter.Annotation);
+                root.ReplaceNode(conditionalExpression, newExpression.WithAdditionalAnnotations(Formatter.Annotation));
 
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);

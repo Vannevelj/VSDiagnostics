@@ -11,7 +11,7 @@ using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
 {
-    [ExportCodeFixProvider(nameof(AsyncMethodWithoutAsyncSuffixCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.AsyncMethodWithoutAsyncSuffix + "CF", LanguageNames.CSharp), Shared]
     public class AsyncMethodWithoutAsyncSuffixCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
@@ -29,15 +29,13 @@ namespace VSDiagnostics.Diagnostics.Async.AsyncMethodWithoutAsyncSuffix
 
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.AsyncMethodWithoutAsyncSuffixCodeFixTitle,
-                    x => AddSuffixAsync(context.Document, methodDeclaration, root, context.CancellationToken),
+                    x => AddSuffixAsync(context.Document, methodDeclaration, root, x),
                     AsyncMethodWithoutAsyncSuffixAnalyzer.Rule.Id),
                 diagnostic);
         }
 
         private async Task<Solution> AddSuffixAsync(Document document, MethodDeclarationSyntax methodDeclaration, SyntaxNode root,
-            CancellationToken cancellationToken)
-        {
-            return await RenameHelper.RenameSymbolAsync(document, root, methodDeclaration.Identifier, methodDeclaration.Identifier.Text + "Async", cancellationToken);
-        }
+                                                    CancellationToken cancellationToken)
+            => await RenameHelper.RenameSymbolAsync(document, root, methodDeclaration.Identifier, methodDeclaration.Identifier.Text + "Async", cancellationToken);
     }
 }

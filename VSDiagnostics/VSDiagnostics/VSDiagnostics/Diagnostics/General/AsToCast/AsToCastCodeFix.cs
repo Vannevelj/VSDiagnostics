@@ -8,10 +8,11 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.AsToCast
 {
-    [ExportCodeFixProvider(nameof(AsToCastCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.AsToCast + "CF", LanguageNames.CSharp), Shared]
     public class AsToCastCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(AsToCastAnalyzer.Rule.Id);
@@ -24,24 +25,20 @@ namespace VSDiagnostics.Diagnostics.General.AsToCast
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
-            var statement = root.FindNode(diagnosticSpan);
+            var statement = root.FindNode(diagnosticSpan).DescendantNodesAndSelf().OfType<BinaryExpressionSyntax>().First();
             context.RegisterCodeFix(
                 CodeAction.Create(VSDiagnosticsResources.AsToCastCodeFixTitle,
                     x => AsToCastAsync(context.Document, root, statement), AsToCastAnalyzer.Rule.Id), diagnostic);
         }
 
-        private Task<Solution> AsToCastAsync(Document document, SyntaxNode root, SyntaxNode statement)
+        private Task<Document> AsToCastAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var binaryExpression = (BinaryExpressionSyntax) statement;
-            var typeSyntax = SyntaxFactory.ParseTypeName(binaryExpression.Right.GetText().ToString());
-            var newExpression =
-                SyntaxFactory.CastExpression(typeSyntax, binaryExpression.Left)
-                    .WithAdditionalAnnotations(Formatter.Annotation);
+            var typeSyntax = (TypeSyntax) binaryExpression.Right;
 
-            var newRoot = root.ReplaceNode(binaryExpression, newExpression);
-
-            var newDocument = document.WithSyntaxRoot(newRoot);
-            return Task.FromResult(newDocument.Project.Solution);
+            var newExpression = SyntaxFactory.CastExpression(typeSyntax, binaryExpression.Left).WithAdditionalAnnotations(Formatter.Annotation);
+            root = root.ReplaceNode(binaryExpression, newExpression);
+            return Task.FromResult(document.WithSyntaxRoot(root));
         }
     }
 }

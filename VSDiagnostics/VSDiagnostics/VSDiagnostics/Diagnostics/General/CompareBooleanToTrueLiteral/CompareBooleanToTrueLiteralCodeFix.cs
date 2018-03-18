@@ -9,12 +9,24 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
 {
-    [ExportCodeFixProvider(nameof(CompareBooleanToTrueLiteralCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.CompareBooleanToTrueLiteral + "CF", LanguageNames.CSharp), Shared]
     public class CompareBooleanToTrueLiteralCodeFix : CodeFixProvider
     {
+        private static readonly Dictionary<SyntaxKind, SyntaxKind> MapOperatorToReverseOperator =
+            new Dictionary<SyntaxKind, SyntaxKind>
+            {
+                { SyntaxKind.EqualsEqualsToken, SyntaxKind.ExclamationEqualsToken },
+                { SyntaxKind.ExclamationEqualsToken, SyntaxKind.EqualsEqualsToken },
+                { SyntaxKind.GreaterThanEqualsToken, SyntaxKind.LessThanToken },
+                { SyntaxKind.LessThanToken, SyntaxKind.GreaterThanEqualsToken },
+                { SyntaxKind.LessThanEqualsToken, SyntaxKind.GreaterThanToken },
+                { SyntaxKind.GreaterThanToken, SyntaxKind.LessThanEqualsToken }
+            };
+
         public override ImmutableArray<string> FixableDiagnosticIds
             => ImmutableArray.Create(CompareBooleanToTrueLiteralAnalyzer.Rule.Id);
 
@@ -55,7 +67,7 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
                 var newOperator = binaryExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken)
                     ? internalBinaryExpression.OperatorToken.Kind()
                     : MapOperatorToReverseOperator.First(kvp => kvp.Key == internalBinaryExpression.OperatorToken.Kind())
-                        .Value;
+                                                  .Value;
 
                 newExpression = internalBinaryExpression.WithOperatorToken(SyntaxFactory.Token(newOperator));
             }
@@ -73,21 +85,10 @@ namespace VSDiagnostics.Diagnostics.General.CompareBooleanToTrueLiteral
             }
 
             var newRoot =
-                root.ReplaceNode(binaryExpression, newExpression).WithAdditionalAnnotations(Formatter.Annotation);
+                root.ReplaceNode(binaryExpression, newExpression.WithAdditionalAnnotations(Formatter.Annotation));
 
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);
         }
-
-        private static readonly Dictionary<SyntaxKind, SyntaxKind> MapOperatorToReverseOperator =
-            new Dictionary<SyntaxKind, SyntaxKind>
-            {
-                {SyntaxKind.EqualsEqualsToken, SyntaxKind.ExclamationEqualsToken},
-                {SyntaxKind.ExclamationEqualsToken, SyntaxKind.EqualsEqualsToken},
-                {SyntaxKind.GreaterThanEqualsToken, SyntaxKind.LessThanToken},
-                {SyntaxKind.LessThanToken, SyntaxKind.GreaterThanEqualsToken},
-                {SyntaxKind.LessThanEqualsToken, SyntaxKind.GreaterThanToken},
-                {SyntaxKind.GreaterThanToken, SyntaxKind.LessThanEqualsToken},
-            };
     }
 }

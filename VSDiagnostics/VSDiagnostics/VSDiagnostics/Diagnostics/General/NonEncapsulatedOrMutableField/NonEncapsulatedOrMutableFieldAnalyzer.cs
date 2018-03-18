@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.FindSymbols;
 using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
@@ -24,29 +22,20 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.FieldDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.FieldDeclaration);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var fieldDeclaration = context.Node as FieldDeclarationSyntax;
-            if (fieldDeclaration == null)
-            {
-                return;
-            }
+            var fieldDeclaration = (FieldDeclarationSyntax) context.Node;
 
             // Don't handle (semi-)immutable fields
-            if (fieldDeclaration.Modifiers.Any(
-                    x => x.IsKind(SyntaxKind.ConstKeyword) || x.IsKind(SyntaxKind.ReadOnlyKeyword)))
+            if (fieldDeclaration.Modifiers.ContainsAny(SyntaxKind.ConstKeyword, SyntaxKind.ReadOnlyKeyword))
             {
                 return;
             }
 
             // Only handle public, internal and protected internal fields
-            if (!fieldDeclaration.Modifiers.Any(
-                    x => x.IsKind(SyntaxKind.PublicKeyword) || x.IsKind(SyntaxKind.InternalKeyword)))
+            if (!fieldDeclaration.Modifiers.ContainsAny(SyntaxKind.PublicKeyword, SyntaxKind.InternalKeyword))
             {
                 return;
             }
@@ -80,7 +69,7 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
             // In this scenario our analyzer is triggered on the field in class X and won't find any references inside that syntax tree (assuming separate files)
             // However it won't find any ref/out usages there so it will create the diagnostic -- which obviously isn't supposed to happen because the other syntax tree DOES contain that
             // However until this ability is added, we'll just have to live with it
-            var outerClass = context.Node.Ancestors().OfType<ClassDeclarationSyntax>().LastOrDefault();
+            var outerClass = context.Node.Ancestors().OfType<ClassDeclarationSyntax>(SyntaxKind.ClassDeclaration).LastOrDefault();
             if (outerClass != null)
             {
                 var semanticModel = context.SemanticModel;
@@ -89,15 +78,15 @@ namespace VSDiagnostics.Diagnostics.General.NonEncapsulatedOrMutableField
                 {
                     var fieldSymbol = semanticModel.GetDeclaredSymbol(variable);
 
-                    foreach (var descendant in outerClass.DescendantNodes().OfType<IdentifierNameSyntax>())
+                    foreach (var descendant in outerClass.DescendantNodes().OfType<IdentifierNameSyntax>(SyntaxKind.IdentifierName))
                     {
                         var descendentSymbol = semanticModel.GetSymbolInfo(descendant).Symbol;
                         if (descendentSymbol != null && descendentSymbol.Equals(fieldSymbol))
                         {
                             // The field is being referenced
                             // Next we check whether it is referenced as an argument and passed by ref/out
-                            var argument = descendant.AncestorsAndSelf().OfType<ArgumentSyntax>().FirstOrDefault();
-                            if (argument != null && !argument.RefOrOutKeyword.IsMissing)
+                            var argument = descendant.AncestorsAndSelf().OfType<ArgumentSyntax>(SyntaxKind.Argument).FirstOrDefault();
+                            if (argument != null && !argument.RefOrOutKeyword.IsKind(SyntaxKind.None))
                             {
                                 return;
                             }

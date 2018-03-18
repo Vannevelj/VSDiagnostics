@@ -8,10 +8,11 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
 {
-    [ExportCodeFixProvider(nameof(NullableToShorthandCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.NullableToShorthand + "CF", LanguageNames.CSharp), Shared]
     public class NullableToShorthandCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
@@ -32,8 +33,7 @@ namespace VSDiagnostics.Diagnostics.General.NullableToShorthand
                     NullableToShorthandAnalyzer.Rule.Id), diagnostic);
         }
 
-        private static async Task<Solution> UseShorthandNotationAsync(Document document, SyntaxNode root,
-            SyntaxToken declaration)
+        private static async Task<Solution> UseShorthandNotationAsync(Document document, SyntaxNode root, SyntaxToken declaration)
         {
             var node = root.FindNode(declaration.Span);
             var typeNode = (GenericNameSyntax) node;

@@ -35,102 +35,120 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
 
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.PropertyDeclaration, SyntaxKind.MethodDeclaration);
+            context.RegisterSyntaxNodeAction(HandleProperty, SyntaxKind.PropertyDeclaration);
+            context.RegisterSyntaxNodeAction(HandleMethod, SyntaxKind.MethodDeclaration);
         }
 
-        private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
+        private void HandleProperty(SyntaxNodeAnalysisContext context)
         {
-            Diagnostic diagnostic = null;
+            var propertyDeclaration = (PropertyDeclarationSyntax) context.Node;
 
-            var asProperty = context.Node as PropertyDeclarationSyntax;
-            if (asProperty != null)
-            {
-                diagnostic = HandleProperty(asProperty);
-            }
-
-            var asMethod = context.Node as MethodDeclarationSyntax;
-            if (asMethod != null)
-            {
-                diagnostic = HandleMethod(asMethod);
-            }
-
-            if (diagnostic != null)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
-        }
-
-        private Diagnostic HandleProperty(PropertyDeclarationSyntax propertyDeclaration)
-        {
             if (propertyDeclaration.ExpressionBody != null)
             {
-                return null;
+                return;
             }
 
-            if (
-                propertyDeclaration.DescendantNodesAndTokensAndSelf()
-                    .Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
+            foreach (var declaration in propertyDeclaration.DescendantNodesAndTokensAndSelf())
             {
-                return null;
+                foreach (var trivia in declaration.GetLeadingTrivia())
+                {
+                    if (!trivia.IsWhitespaceTrivia())
+                    {
+                        return;
+                    }
+                }
+
+                foreach (var trivia in declaration.GetTrailingTrivia())
+                {
+                    if (!trivia.IsWhitespaceTrivia())
+                    {
+                        return;
+                    }
+                }
             }
 
-            if (propertyDeclaration.AccessorList.Accessors.Any(x => x.Keyword.IsKind(SyntaxKind.SetKeyword)))
+            foreach (var accessor in propertyDeclaration.AccessorList.Accessors)
             {
-                return null;
+                if (accessor.Keyword.IsKind(SyntaxKind.SetKeyword))
+                {
+                    return;
+                }
             }
 
-            var getter =
-                propertyDeclaration.AccessorList.Accessors.FirstOrDefault(x => x.Keyword.IsKind(SyntaxKind.GetKeyword));
+            AccessorDeclarationSyntax getter = null;
+            foreach (var accessor in propertyDeclaration.AccessorList.Accessors)
+            {
+                if (accessor.Keyword.IsKind(SyntaxKind.GetKeyword))
+                {
+                    getter = accessor;
+                    break;
+                }
+            }
             if (getter == null)
             {
-                return null;
+                return;
             }
 
-            if (getter.AttributeLists.Any(x => x.Attributes.Any()))
+            foreach (var list in getter.AttributeLists)
             {
-                return null;
+                if (list.Attributes.Any())
+                {
+                    return;
+                }
             }
 
             if (getter.Body?.Statements.Count != 1)
             {
-                return null;
+                return;
             }
 
             if (!Nodes.Contains(getter.Body.Statements[0].Kind()))
             {
-                return null;
+                return;
             }
 
             var statement = getter.Body.Statements.First();
-            return Diagnostic.Create(Rule, statement.GetLocation(), "Property", propertyDeclaration.Identifier);
+            context.ReportDiagnostic(Diagnostic.Create(Rule, statement.GetLocation(), "Property", propertyDeclaration.Identifier));
         }
 
-        private Diagnostic HandleMethod(MethodDeclarationSyntax methodDeclaration)
+        private void HandleMethod(SyntaxNodeAnalysisContext context)
         {
+            var methodDeclaration = (MethodDeclarationSyntax) context.Node;
+
             if (methodDeclaration.ExpressionBody != null)
             {
-                return null;
+                return;
             }
 
-            if (
-                methodDeclaration.DescendantNodesAndTokensAndSelf()
-                    .Any(x => x.GetLeadingTrivia().Concat(x.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia())))
+            foreach (var nodeOrToken in methodDeclaration.DescendantNodesAndTokensAndSelf())
             {
-                return null;
+                if (nodeOrToken.GetLeadingTrivia().Concat(nodeOrToken.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia()))
+                {
+                    return;
+                }
             }
 
             if (methodDeclaration.Body?.Statements.Count != 1)
             {
-                return null;
+                return;
             }
 
-            if (!Nodes.Contains(methodDeclaration.Body.Statements[0].Kind()))
+            var statement = methodDeclaration.Body.Statements[0];
+            if (!Nodes.Contains(statement.Kind()))
             {
-                return null;
+                return;
             }
 
-            return Diagnostic.Create(Rule, methodDeclaration.Identifier.GetLocation(), "Method",
-                methodDeclaration.Identifier.ValueText);
+            if (statement.IsKind(SyntaxKind.ReturnStatement))
+            {
+                var returnStatement = (ReturnStatementSyntax) statement;
+                if (returnStatement.Expression == null)
+                {
+                    return;
+                }
+            }
+
+            context.ReportDiagnostic(Diagnostic.Create(Rule, methodDeclaration.Identifier.GetLocation(), "Method", methodDeclaration.Identifier.ValueText));
         }
     }
 }

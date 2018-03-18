@@ -10,10 +10,11 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
 {
-    [ExportCodeFixProvider(nameof(StringPlaceHoldersInWrongOrderCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.StringPlaceholdersInWrongOrder + "CF", LanguageNames.CSharp), Shared]
     public class StringPlaceHoldersInWrongOrderCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
@@ -40,14 +41,14 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
         }
 
         private static Task<Solution> ReOrderPlaceholdersAsync(Document document, SyntaxNode root,
-            InvocationExpressionSyntax stringFormatInvocation)
+                                                               InvocationExpressionSyntax stringFormatInvocation)
         {
             var firstArgumentIsLiteral =
                 stringFormatInvocation.ArgumentList.Arguments[0].Expression is LiteralExpressionSyntax;
             var formatString =
                 ((LiteralExpressionSyntax)
                     stringFormatInvocation.ArgumentList.Arguments[firstArgumentIsLiteral ? 0 : 1].Expression).GetText()
-                    .ToString();
+                                                                                                             .ToString();
             var elements = PlaceholderHelpers.GetPlaceholdersSplit(formatString);
             var matches = PlaceholderHelpers.GetPlaceholders(formatString);
 
@@ -107,8 +108,8 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
             // Create a new list for the arguments which are injected in the formatting string
             // In order to do this we iterate over the mapping which is in essence a guideline that tells us which index
             IEnumerable<ArgumentSyntax> args = firstArgumentIsLiteral
-                ? new[] {newArgument}
-                : new[] {stringFormatInvocation.ArgumentList.Arguments[0], newArgument};
+                ? new[] { newArgument }
+                : new[] { stringFormatInvocation.ArgumentList.Arguments[0], newArgument };
 
             // Skip the formatting literal and, if applicable, the formatprovider
             var argumentsToSkip = firstArgumentIsLiteral ? 1 : 2;
@@ -116,7 +117,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
             {
                 args =
                     args.Concat(new[]
-                    {stringFormatInvocation.ArgumentList.Arguments[placeholderIndexOrder[index] + argumentsToSkip]});
+                    { stringFormatInvocation.ArgumentList.Arguments[placeholderIndexOrder[index] + argumentsToSkip] });
             }
 
             // If there are less arguments in the new list compared to the old one, it means there was an unused argument
@@ -129,7 +130,7 @@ namespace VSDiagnostics.Diagnostics.Strings.StringPlaceholdersInWrongOrder
                 {
                     if (!args.Contains(arg))
                     {
-                        args = args.Concat(new[] {arg});
+                        args = args.Concat(new[] { arg });
                     }
                 }
             }

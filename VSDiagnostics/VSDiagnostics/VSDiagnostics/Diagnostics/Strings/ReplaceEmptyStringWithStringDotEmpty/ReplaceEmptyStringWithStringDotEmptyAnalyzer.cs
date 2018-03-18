@@ -25,40 +25,39 @@ namespace VSDiagnostics.Diagnostics.Strings.ReplaceEmptyStringWithStringDotEmpty
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.StringLiteralExpression);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.StringLiteralExpression);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node.AncestorsAndSelf().OfType<AttributeArgumentSyntax>().Any())
+            if (context.Node.AncestorsAndSelf().OfType<AttributeArgumentSyntax>(SyntaxKind.AttributeArgument).Any())
             {
                 return;
             }
 
-            var stringLiteral = context.Node as LiteralExpressionSyntax;
-            if (stringLiteral == null)
-            {
-                return;
-            }
+            var stringLiteral = (LiteralExpressionSyntax) context.Node;
 
             if (stringLiteral.Token.Text != "\"\"")
             {
                 return;
             }
 
-            if (stringLiteral.Ancestors().Any(x => x.IsKind(SyntaxKind.Parameter)))
+            foreach (var node in stringLiteral.Ancestors())
             {
-                return;
-            }
-
-            var variableDeclaration = stringLiteral.Ancestors().OfType<FieldDeclarationSyntax>().FirstOrDefault();
-            if (variableDeclaration != null)
-            {
-                if (variableDeclaration.Modifiers.Any(x => x.IsKind(SyntaxKind.ConstKeyword)))
+                if (node.IsKind(SyntaxKind.Parameter))
                 {
                     return;
+                }
+            }
+
+            var variableDeclaration = stringLiteral.Ancestors().OfType<FieldDeclarationSyntax>(SyntaxKind.FieldDeclaration).FirstOrDefault();
+            if (variableDeclaration != null)
+            {
+                foreach (var modifier in variableDeclaration.Modifiers)
+                {
+                    if (modifier.IsKind(SyntaxKind.ConstKeyword))
+                    {
+                        return;
+                    }
                 }
             }
 

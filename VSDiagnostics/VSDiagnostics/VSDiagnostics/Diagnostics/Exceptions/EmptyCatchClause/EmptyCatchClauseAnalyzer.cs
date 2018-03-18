@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -22,15 +21,12 @@ namespace VSDiagnostics.Diagnostics.Exceptions.EmptyCatchClause
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.CatchClause);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.CatchClause);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var catchClause = context.Node as CatchClauseSyntax;
-            if (catchClause?.Block == null)
+            var catchClause = (CatchClauseSyntax) context.Node;
+            if (catchClause.Block == null)
             {
                 return;
             }
@@ -40,9 +36,12 @@ namespace VSDiagnostics.Diagnostics.Exceptions.EmptyCatchClause
                 return;
             }
 
-            if (catchClause.Block.CloseBraceToken.LeadingTrivia.Any(x => x.IsCommentTrivia()))
+            foreach (var trivia in catchClause.Block.CloseBraceToken.LeadingTrivia)
             {
-                return;
+                if (trivia.IsCommentTrivia())
+                {
+                    return;
+                }
             }
 
             context.ReportDiagnostic(Diagnostic.Create(Rule, catchClause.CatchKeyword.GetLocation()));

@@ -1,9 +1,4 @@
-﻿// Copyright (c) Tunnel Vision Laboratories, LLC. All Rights Reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-// Found at https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/StyleCop.Analyzers/StyleCop.Analyzers.CodeFixes/Helpers/RenameHelper.cs
-
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
@@ -37,7 +32,7 @@ namespace VSDiagnostics.Utilities
             "CS0412", // 'generic': a parameter or local variable cannot have the same name as a method type parameter
             "CS0473", // Explicit interface implementation 'method name' matches more than one interface member.
             "CS0542", // 'user-defined type' : member names cannot be the same as their enclosing type,
-            "CS1061", // 'type' does not contain a definition for 'member' and no extension method 'name' accepting (..)
+            "CS1061" // 'type' does not contain a definition for 'member' and no extension method 'name' accepting (..)
         });
 
         public static async Task<Solution> RenameSymbolAsync(Document document, SyntaxNode root, SyntaxToken declarationToken, string newName, CancellationToken cancellationToken)

@@ -22,40 +22,17 @@ namespace VSDiagnostics.Diagnostics.Tests.TestMethodWithoutPublicModifier
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.MethodDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.MethodDeclaration);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var method = context.Node as MethodDeclarationSyntax;
-            if (method == null)
+            var method = (MethodDeclarationSyntax) context.Node;
+
+            if (method.HasTestAttribute() && !method.Modifiers.Any(SyntaxKind.PublicKeyword))
             {
-                return;
+                context.ReportDiagnostic(Diagnostic.Create(Rule, method.Identifier.GetLocation(),
+                    method.Identifier.Text));
             }
-
-            if (IsTestMethod(method))
-            {
-                if (!method.Modifiers.Any(SyntaxKind.PublicKeyword))
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, method.Identifier.GetLocation(),
-                        method.Identifier.Text));
-                }
-            }
-        }
-
-        private static bool IsTestMethod(MethodDeclarationSyntax method)
-        {
-            var methodAttributes = new[] {"Test", "TestMethod", "Fact"};
-            var attributes = method.AttributeLists.FirstOrDefault()?.Attributes;
-
-            if (attributes == null)
-            {
-                return false;
-            }
-
-            return attributes.Value.Any(x => methodAttributes.Contains(x.Name.ToString()));
         }
     }
 }

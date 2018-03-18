@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -28,19 +27,21 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.MethodDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.MethodDeclaration);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var methodDeclaration = (MethodDeclarationSyntax) context.Node;
-            var parentClass = methodDeclaration.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+            var methodDeclaration = (MethodDeclarationSyntax)context.Node;
+            var parentNode = methodDeclaration.GetEnclosingTypeNode();
+            if (!parentNode.IsKind(SyntaxKind.StructDeclaration) && !parentNode.IsKind(SyntaxKind.ClassDeclaration))
+            {
+                return;
+            }
 
+            var typeSymbol = (INamedTypeSymbol)context.SemanticModel.GetDeclaredSymbol(parentNode);
 
             // class must implement INotifyPropertyChanged
-            if (!parentClass.ImplementsInterface(context.SemanticModel, typeof (INotifyPropertyChanged)))
+            if (!typeSymbol.ImplementsInterfaceOrBaseClass(typeof(INotifyPropertyChanged)))
             {
                 return;
             }
@@ -68,13 +69,17 @@ namespace VSDiagnostics.Diagnostics.Attributes.OnPropertyChangedWithoutCallerMem
             }
 
             // parameter must not have CallerMemberNameAttribute
-            if (param.AttributeLists.Any(a => a.Attributes.Any() && a.Attributes.Any(t =>
+            foreach (var list in param.AttributeLists)
             {
-                var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
-                return symbol != null && symbol.ContainingSymbol.MetadataName == typeof (CallerMemberNameAttribute).Name;
-            })))
-            {
-                return;
+                foreach (var attribute in list.Attributes)
+                {
+                    var symbol = context.SemanticModel.GetSymbolInfo(attribute).Symbol;
+                    if (symbol != null &&
+                        symbol.ContainingSymbol.MetadataName == typeof (CallerMemberNameAttribute).Name)
+                    {
+                        return;
+                    }
+                }
             }
 
             context.ReportDiagnostic(Diagnostic.Create(Rule, methodDeclaration.GetLocation()));

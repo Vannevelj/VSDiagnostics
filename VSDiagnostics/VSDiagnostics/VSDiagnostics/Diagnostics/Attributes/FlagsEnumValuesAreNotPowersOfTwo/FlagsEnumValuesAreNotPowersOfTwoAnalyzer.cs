@@ -46,22 +46,31 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
             => ImmutableArray.Create(DefaultRule, ValuesDontFitRule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.EnumDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.EnumDeclaration);
 
         private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
             var declarationExpression = (EnumDeclarationSyntax) context.Node;
-            var flagsAttribute = declarationExpression.AttributeLists.FirstOrDefault(
-                a => a.Attributes.FirstOrDefault(
-                    t =>
-                    {
-                        var symbol = context.SemanticModel.GetSymbolInfo(t).Symbol;
-                        return symbol == null || symbol.ContainingType.MetadataName == typeof(FlagsAttribute).Name;
-                    }) != null);
 
+            AttributeListSyntax flagsAttribute = null;
+
+            foreach (var list in declarationExpression.AttributeLists)
+            {
+                foreach (var attribute in list.Attributes)
+                {
+                    var symbol = context.SemanticModel.GetSymbolInfo(attribute).Symbol;
+                    if (symbol == null || symbol.ContainingType.MetadataName == typeof (FlagsAttribute).Name)
+                    {
+                        flagsAttribute = list;
+                        break;
+                    }
+                }
+
+                if (flagsAttribute != null)
+                {
+                    break; 
+                }
+            }
 
             if (flagsAttribute == null)
             {
@@ -70,7 +79,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 
             var enumName = context.SemanticModel.GetDeclaredSymbol(declarationExpression).Name;
             var enumMemberDeclarations =
-                declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>().ToList();
+                declarationExpression.ChildNodes().OfType<EnumMemberDeclarationSyntax>(SyntaxKind.EnumMemberDeclaration).ToArray();
 
             foreach (var member in enumMemberDeclarations)
             {
@@ -79,11 +88,26 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
                     continue;
                 }
 
-                var descendantNodes = member.EqualsValue.Value.DescendantNodesAndSelf().ToList();
-                if (descendantNodes.OfType<LiteralExpressionSyntax>().Any() &&
-                    descendantNodes.OfType<IdentifierNameSyntax>().Any())
+                var descendantNodes = member.EqualsValue.Value.DescendantNodesAndSelf();
+
+                var containsLiteralExpression = false;
+                var containsIdentifierName = false;
+                foreach (var node in descendantNodes)
                 {
-                    return;
+                    if (node is LiteralExpressionSyntax)
+                    {
+                        containsLiteralExpression = true;
+                    }
+
+                    if (node.IsKind(SyntaxKind.IdentifierName))
+                    {
+                        containsIdentifierName = true;
+                    }
+
+                    if (containsIdentifierName && containsLiteralExpression)
+                    {
+                        return;
+                    }
                 }
             }
 
@@ -109,7 +133,7 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 
             // We have to make sure that by moving to powers of two, we won't exceed the type's maximum value 
             // For example: 255 is the last possible value for a byte enum
-            if (IsOutsideOfRange(keyword, enumMemberDeclarations.Count))
+            if (IsOutsideOfRange(keyword, enumMemberDeclarations.Length))
             {
                 context.ReportDiagnostic(Diagnostic.Create(ValuesDontFitRule,
                     declarationExpression.Identifier.GetLocation(),
@@ -129,9 +153,19 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
 
                 if (member.EqualsValue.Value is BinaryExpressionSyntax)
                 {
-                    var descendantNodes = member.EqualsValue.Value.DescendantNodesAndSelf().ToList();
-                    if (descendantNodes.Any() &&
-                        descendantNodes.All(n => n is IdentifierNameSyntax || n is BinaryExpressionSyntax))
+                    var descendantNodes = new List<SyntaxNode>(member.EqualsValue.Value.DescendantNodesAndSelf());
+
+                    var all = true;
+                    foreach (var node in descendantNodes)
+                    {
+                        if (!node.IsKind(SyntaxKind.IdentifierName) && !(node is BinaryExpressionSyntax))
+                        {
+                            all = false;
+                            break;
+                        }
+                    }
+
+                    if (descendantNodes.Any() && all)
                     {
                         continue;
                     }
@@ -140,7 +174,10 @@ namespace VSDiagnostics.Diagnostics.Attributes.FlagsEnumValuesAreNotPowersOfTwo
                 var symbol = context.SemanticModel.GetDeclaredSymbol(member);
                 var value = symbol.ConstantValue;
 
-                if (value == null) { return; }
+                if (value == null)
+                {
+                    return;
+                }
 
                 /* `value` is an `object`.  Casting it to `dynamic`
                  * will allow us to avoid a huge `switch` statement

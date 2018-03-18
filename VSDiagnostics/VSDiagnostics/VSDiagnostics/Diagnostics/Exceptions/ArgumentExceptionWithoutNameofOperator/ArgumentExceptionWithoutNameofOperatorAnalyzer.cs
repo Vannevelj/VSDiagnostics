@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -27,51 +28,83 @@ namespace VSDiagnostics.Diagnostics.Exceptions.ArgumentExceptionWithoutNameofOpe
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.ObjectCreationExpression);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.ObjectCreationExpression);
 
         private void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
-            var objectCreationExpression = context.Node as ObjectCreationExpressionSyntax;
-            if (objectCreationExpression?.ArgumentList == null || !objectCreationExpression.ArgumentList.Arguments.Any())
+            var objectCreationExpression = (ObjectCreationExpressionSyntax) context.Node;
+            if (objectCreationExpression.ArgumentList == null || !objectCreationExpression.ArgumentList.Arguments.Any())
             {
                 return;
             }
 
             var exceptionType = objectCreationExpression.Type;
             var symbolInformation = context.SemanticModel.GetSymbolInfo(exceptionType);
-            if (symbolInformation.Symbol.InheritsFrom(typeof (ArgumentException)))
+            if (symbolInformation.Symbol.InheritsFrom(typeof(ArgumentException)))
             {
-                var arguments =
-                    objectCreationExpression.ArgumentList.Arguments.Select(x => x.Expression)
-                        .OfType<LiteralExpressionSyntax>();
+                var arguments = new List<LiteralExpressionSyntax>();
+
+                foreach (var argument in objectCreationExpression.ArgumentList.Arguments)
+                {
+                    if (argument.Expression is LiteralExpressionSyntax)
+                    {
+                        arguments.Add((LiteralExpressionSyntax)argument.Expression);
+                    }
+                }
+
                 var methodParameters =
                     objectCreationExpression.Ancestors()
-                        .OfType<MethodDeclarationSyntax>()
-                        .FirstOrDefault()?
-                        .ParameterList.Parameters;
+                                            .OfType<MethodDeclarationSyntax>(SyntaxKind.MethodDeclaration)
+                                            .FirstOrDefault()?
+                                            .ParameterList.Parameters;
 
-                // Exception is declared outside a method
-                if (methodParameters == null)
+                // Exception is declared inside a method
+                if (methodParameters != null)
+                {
+                    foreach (var argument in arguments)
+                    {
+                        var argumentName = argument.Token.ValueText;
+                        ParameterSyntax correspondingParameter = null;
+
+                        foreach (var parameter in methodParameters)
+                        {
+                            if (string.Equals((string)parameter.Identifier.Value, argumentName,
+                                StringComparison.OrdinalIgnoreCase))
+                            {
+                                correspondingParameter = parameter;
+                                break;
+                            }
+                        }
+
+                        if (correspondingParameter != null)
+                        {
+                            context.ReportDiagnostic(Diagnostic.Create(Rule, argument.GetLocation(),
+                                correspondingParameter.Identifier.Value));
+                            return;
+                        }
+                    }
+                }
+
+                // We also account for the situation where an exception is thrown from a property setter and refers to the contextual keyword "value"
+                var propertyDeclaration = objectCreationExpression.Ancestors()
+                    .OfType<PropertyDeclarationSyntax>(SyntaxKind.PropertyDeclaration)
+                    .FirstOrDefault();
+
+                if (propertyDeclaration == null)
                 {
                     return;
                 }
 
-                foreach (var argument in arguments)
+                foreach (var argument in objectCreationExpression.ArgumentList.Arguments)
                 {
-                    var argumentName = argument.Token.ValueText;
-                    var correspondingParameter =
-                        methodParameters.Value.FirstOrDefault(
-                            x =>
-                                string.Equals((string) x.Identifier.Value, (string) argumentName,
-                                    StringComparison.OrdinalIgnoreCase));
-                    if (correspondingParameter != null)
+                    if (argument.Expression.IsKind(SyntaxKind.StringLiteralExpression))
                     {
-                        context.ReportDiagnostic(Diagnostic.Create(Rule, argument.GetLocation(),
-                            correspondingParameter.Identifier.Value));
-                        return;
+                        var stringLiteral = (LiteralExpressionSyntax) argument.Expression;
+                        if (stringLiteral.Token.ValueText == "value")
+                        {
+                            context.ReportDiagnostic(Diagnostic.Create(Rule, argument.GetLocation(), "value"));
+                            return;
+                        }
                     }
                 }
             }

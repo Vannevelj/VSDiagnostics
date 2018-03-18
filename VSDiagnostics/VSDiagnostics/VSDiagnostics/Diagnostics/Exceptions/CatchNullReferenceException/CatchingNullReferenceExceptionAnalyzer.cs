@@ -22,16 +22,13 @@ namespace VSDiagnostics.Diagnostics.Exceptions.CatchNullReferenceException
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.CatchDeclaration);
-        }
+        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.CatchDeclaration);
 
         private void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
-            var catchDeclaration = context.Node as CatchDeclarationSyntax;
+            var catchDeclaration = (CatchDeclarationSyntax) context.Node;
 
-            var catchType = catchDeclaration?.Type;
+            var catchType = catchDeclaration.Type;
             if (catchType == null)
             {
                 return;
@@ -40,7 +37,7 @@ namespace VSDiagnostics.Diagnostics.Exceptions.CatchNullReferenceException
             var catchSymbol = context.SemanticModel.GetSymbolInfo(catchType).Symbol;
             if (catchSymbol != null)
             {
-                if (catchSymbol.MetadataName == typeof (NullReferenceException).Name)
+                if (catchSymbol.MetadataName == typeof(NullReferenceException).Name)
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, catchDeclaration.GetLocation()));
                 }

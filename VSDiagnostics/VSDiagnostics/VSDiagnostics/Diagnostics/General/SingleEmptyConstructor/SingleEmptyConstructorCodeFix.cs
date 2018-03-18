@@ -6,10 +6,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.SingleEmptyConstructor
 {
-    [ExportCodeFixProvider(nameof(SingleEmptyConstructorCodeFix), LanguageNames.CSharp), Shared]
+    [ExportCodeFixProvider(DiagnosticId.SingleEmptyConstructor + "CF", LanguageNames.CSharp), Shared]
     internal class SingleEmptyConstructorCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds

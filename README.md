@@ -1,5 +1,6 @@
-# VSDiagnostics
-A collection of code-quality analyzers based on the new Roslyn platform. This project aims to ensure code-quality as you type it in your editor rather than having to do this as a separate build-step. Likewise it also tries to help avoid some common pitfalls.
+﻿# VSDiagnostics
+A collection of code-quality analyzers based on the Roslyn compiler platform. This project aims to ensure code-quality as you type it in your editor rather than having to do this as a separate build-step.
+By performing static analysis while you're writing code, certain convention violations and hidden pitfalls can be avoided as early in the process as possible.
 
 <img src="https://cloud.githubusercontent.com/assets/2777107/12633986/2e05fc66-c576-11e5-92a2-3c192f2f0d89.gif" />
 
@@ -24,47 +25,68 @@ Currently these diagnostics are implemented:
 
 | Category | Name | Description
 |:-:|:-:|:-:
-| Async | VSD0001 | Asynchronous methods should end with -Async.
-| Async | VSD0041 | A non-async, non-Task method should not end with -Async.
-| Attributes | VSD0002 | Attributes with empty argument lists can have the argument list removed.
-| Attributes | VSD0003 | Gives an enum the [Flags] attribute.
+| Arithmetic | VSD0045 | The operands of a divisive expression are both integers and result in an implicit rounding.
+| Async | VSD0001 | Asynchronous methods should end with the -Async suffix.
+| Async | VSD0041 | A non-`async`, non-`Task` method should not end with -Async.
+| Async | VSD0064 | Async methods should return a `Task` to make them awaitable.
+| Attributes | VSD0002 | An attribute should not have an empty argument list.
+| Attributes | VSD0003 | Gives an enum the `[Flags]` attribute.
 | Attributes | VSD0004 | A `[Flags]` enum its values are not explicit powers of 2
-| Attributes | VSD0039 | A `[Flags]` enum its values are not explicit powers of 2 and does not fit in the specified enum type.
-| Attributes | VSD0005 | Complains if the [Obsolete] attribute is used without an explicit reason.
-| Attributes | VSD0006 | The `OnPropertyChanged()` method can automatically get the caller member name.
-| Exceptions | VSD0007 | `ArgumentException` and its subclasses should use `nameof()` when they refer to a method parameter.
-| Exceptions | VSD0008 | Guards against catching a NullReferenceException.
-| Exceptions | VSD0009 | Guards against using an `ArgumentException` without specifying which argument.
+| Attributes | VSD0039 | A `[Flags]` enum its values are not explicit powers of 2 and its values dont fit in the specified enum type.
+| Attributes | VSD0005 | The `[Obsolete]` attribute doesn't have a reason.
+| Attributes | VSD0006 | `OnPropertyChanged()` can use the `[CallerMemberName]` attribute to automatically pass the property name.
+| Exceptions | VSD0007 | An `ArgumentException` should use `nameof()` to refer to a variable.
+| Exceptions | VSD0008 | Verifies no `NullReferenceException` is caught.
+| Exceptions | VSD0009 | Verifies whether an `ArgumentException` is thrown with a message.
 | Exceptions | VSD0010 | Warns when an exception catch block is empty.
 | Exceptions | VSD0011 | Warns when an exception is rethrown in a way that it loses the stacktrace.
-| Exceptions | VSD0012 | Guards against using a catch-all clause.
-| General | VSD0013 | Allows you to change as statements to cast statements.
-| General | VSD0014 | Allows you to change cast statements to as statements.
-| General | VSD0015 | A boolean expression doesn't have to be compared to `false`.
-| General | VSD0016 | A boolean expression doesn't have to be compared to `true`.
-| General | VSD0017 | The conditional operator shouldn't return redundant `true` and `false` literals.
-| General | VSD0018 | The conditional operator shouldn't return redundant `false` and `true` literals.
-| General | VSD0019 | Complains about `if` statements of the form `if (statement) { /* body */ }`, where "statement" always evaluates to `false`.
-| General | VSD0020 | Complains about `if` statements of the form `if (statement) { /* body */ }`, where "statement" always evaluates to `true`.
+| Exceptions | VSD0012 | Verifies whether a try-catch block does not defer all exception handling to a single `Exception` clause.
+| Exceptions | VSD0052 | An exception is thrown from an implicit operator.
+| Exceptions | VSD0053 | An exception is thrown from a property getter.
+| Exceptions | VSD0054 | An exception is thrown from a static constructor.
+| Exceptions | VSD0055 | An exception is thrown from a finally block.
+| Exceptions | VSD0056 | An exception is thrown from an equality operator.
+| Exceptions | VSD0057 | An exception is thrown from a `Dispose` method.
+| Exceptions | VSD0058 | An exception is thrown from a finalizer method.
+| Exceptions | VSD0059 | An exception is thrown from a `GetHashCode()` method.
+| Exceptions | VSD0060 | An exception is thrown from an `Equals()` method.
+| Exceptions | VSD0065 | A `null` object is attempted to get thrown.
+| General | VSD0013 | Changes an `as` expression to a cast.
+| General | VSD0014 | Changes a cast expression to `as`.
+| General | VSD0015 | A boolean expression comparing to `false` can be simplified.
+| General | VSD0016 | A boolean expression comparing to `true` can be simplified.
+| General | VSD0017 | The conditional operator shouldn't return redundant default options.
+| General | VSD0018 | The conditional operator shouldn't return redundant inverted default options.
+| General | VSD0019 | The condition is a constant (false) and thus unnecessary.
+| General | VSD0020 | The condition is a constant (true) and thus unnecessary.
 | General | VSD0021 | Inserts the default access modifier for a declaration.
 | General | VSD0022 | Detects usage of the `goto` keyword.
-| General | VSD0023 | Changes one-liner `if` and `else` statements to be surrounded in a block.
-| General | VSD0024 | Loop blocks should use braces to denote start and end.
+| General | VSD0023 | Requires braces for `if`, `else`, `for`, `foreach`, `while`, `do`, `using`, `lock`, `fixed` and `switch` constructs.
 | General | VSD0025 | Implements the most common configuration of naming conventions.
 | General | VSD0026 | A `public`, `internal` or `protected internal` non-`const`, non-`readonly` field should be used as a property.
 | General | VSD0027 | Changes `Nullable<T>` to `T?`.
 | General | VSD0028 | Use the `nameof()` operator in conjunction with `OnPropertyChanged`.
 | General | VSD0029 | Simplify the expression using an expression-bodied member.
-| General | VSD0030 | Warns about using a redundant default constructor.
-| General | VSD0031 | A conversion can be done using `as` + a `null` comparison.
-| General | VSD0032 | Use `var` instead of an explicit type.
-| General | VSD0033 | Use the built-in type aliases instead of the concrete type.
-| Strings | VSD0034 | Use `string.Empty` instead of `""`.
-| Strings | VSD0035 | Adjusts the placeholders in `string.Format()` calls to be in numerical order.
-| Strings | VSD0042 | A `string.Format()` call lacks arguments and will cause a runtime exception
-| Structs | VSD0036 | Warns when a struct attempts to assign 'this' to a new instance of the struct.
-| Tests | VSD0037 | Test methods do not need to use the "Test" suffic.
-| Tests | VSD0038 | Change the access modifier to `public` for all methods annotated as test. Supports NUnit, MSTest and xUnit.net.
+| General | VSD0030 | A constructor is the same as a default constructor and can be removed.
+| General | VSD0031 | Use `as`/`null` instead of `is`/`as`.
+| General | VSD0032 | Use `var` instead of the explicit type.
+| General | VSD0033 | Use the built-in type alias instead of the concrete type.
+| General | VSD0044 | Add cases for missing enum members.
+| General | VSD0043 | An instance of type `System.Random` is created in a loop.
+| General | VSD0046 | `Equals()` and `GetHashCode()` must be implemented together.
+| General | VSD0047 | Implement elementary methods for a type used in a collection.
+| General | VSD0048 | A property with a private setter can become a read-only property instead.
+| General | VSD0049 | A `switch` is missing a `default` label.\
+| General | VSD0052 | Implement `Equals()` and `GetHashCode()` using existing fields and properties.
+| General | VSD0063 | A `GetHashCode` implementation refers to a mutable field.
+| Strings | VSD0034 | Replaces an empty string literal with the more expressive `string.Empty`.
+| Strings | VSD0035 | Orders the arguments of a `string.Format()` call in ascending order according to index.
+| Strings | VSD0042 | A `string.Format()` call lacks arguments and will cause a runtime exception.
+| Structs | VSD0036 | Warns when a struct replaces `this` with a new instance.
+| Structs | VSD0050 | Structs should implement `Equals()`, `GetHashCode()`, and `ToString()`.
+| Tests | VSD0037 | A test method should not end with -Test.
+| Tests | VSD0038 | Verifies whether a test method has the `public` modifier.
+| Tests | VSD0062 | A method might be missing a test attribute.
 
 ## How do I use this?
 
@@ -72,7 +94,7 @@ Simply head over to [NuGet](https://www.nuget.org/packages/VSDiagnostics/) and i
 
 ## Can I request diagnostics?
 
-Yes, you can! Create an issue and we'll take a look at your proposal. 
+Yes, you can! Create an issue and we'll take a look at your proposal.
 
 ## What if I don't like a diagnostic?
 
@@ -106,4 +128,4 @@ Release 2.0.0 will come with a website where we document every diagnostic includ
 
 ## How can I get in contact?
 
-You're always free to open an issue but if you would like something more direct you can drop by in [the StackExchange chat channel](http://chat.stackexchange.com/rooms/26639/vsdiagnostics) where the main contributors reside.
+You're always free to open an issue but if you would like something more direct you can drop by in [the StackExchange chat channel](http://chat.stackexchange.com/rooms/26639/vsdiagnostics) where the main contributors reside or send an email to jer_vannevel@outlook.com.

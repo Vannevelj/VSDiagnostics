@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
-using CSharpAttributeSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.AttributeSyntax;
-using VisualBasicAttributeSyntax = Microsoft.CodeAnalysis.VisualBasic.Syntax.AttributeSyntax;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
 {
-    [ExportCodeFixProvider(nameof(AttributeWithEmptyArgumentListCodeFix), LanguageNames.CSharp,
-        LanguageNames.VisualBasic), Shared]
+    [ExportCodeFixProvider(DiagnosticId.AttributeWithEmptyArgumentList + "CF", LanguageNames.CSharp), Shared]
     public class AttributeWithEmptyArgumentListCodeFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds
@@ -34,30 +33,9 @@ namespace VSDiagnostics.Diagnostics.Attributes.AttributeWithEmptyArgumentList
 
         private Task<Solution> RemoveEmptyArgumentListAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
-            SyntaxNode newRoot = null;
-
-            if (statement is CSharpAttributeSyntax)
-            {
-                newRoot = RemoveEmptyArgumentListCSharp(root, (CSharpAttributeSyntax) statement);
-            }
-            else if (statement is VisualBasicAttributeSyntax)
-            {
-                newRoot = RemoveEmptyArgumentListVisualBasic(root, (VisualBasicAttributeSyntax) statement);
-            }
-
+            var newRoot = root.RemoveNode(((AttributeSyntax) statement).ArgumentList, SyntaxRemoveOptions.KeepNoTrivia);
             var newDocument = document.WithSyntaxRoot(newRoot);
             return Task.FromResult(newDocument.Project.Solution);
-        }
-
-        private SyntaxNode RemoveEmptyArgumentListCSharp(SyntaxNode root, CSharpAttributeSyntax attributeExpression)
-        {
-            return root.RemoveNode(attributeExpression.ArgumentList, SyntaxRemoveOptions.KeepNoTrivia);
-        }
-
-        private SyntaxNode RemoveEmptyArgumentListVisualBasic(SyntaxNode root,
-            VisualBasicAttributeSyntax attributeExpression)
-        {
-            return root.RemoveNode(attributeExpression.ArgumentList, SyntaxRemoveOptions.KeepNoTrivia);
         }
     }
 }
