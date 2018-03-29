@@ -79,6 +79,7 @@ Currently these diagnostics are implemented:
 | General | VSD0049 | A `switch` is missing a `default` label.\
 | General | VSD0052 | Implement `Equals()` and `GetHashCode()` using existing fields and properties.
 | General | VSD0063 | A `GetHashCode` implementation refers to a mutable field.
+| General | VSD0066 | Recursively using an overloaded operator.
 | Strings | VSD0034 | Replaces an empty string literal with the more expressive `string.Empty`.
 | Strings | VSD0035 | Orders the arguments of a `string.Format()` call in ascending order according to index.
 | Strings | VSD0042 | A `string.Format()` call lacks arguments and will cause a runtime exception.

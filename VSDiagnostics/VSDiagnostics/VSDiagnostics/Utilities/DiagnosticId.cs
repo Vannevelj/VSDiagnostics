@@ -64,5 +64,6 @@
         public const string GetHashCodeRefersToMutableField = "VSD0063";
         public const string AsyncMethodWithVoidReturnType = "VSD0064";
         public const string ThrowNull = "VSD0065";
+        public const string RecursiveEqualityOperatorOverload = "VSD0066";
     }
 }

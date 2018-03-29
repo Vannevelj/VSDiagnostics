@@ -683,4 +683,7 @@
   <data name="ThrowNullMessage" xml:space="preserve">
     <value>Throwing null will always result in a runtime exception</value>
   </data>
+  <data name="RecursiveEqualityOperatorOverloadMessage" xml:space="preserve">
+    <value>Recursively using overloaded operator</value>
+  </data>
 </root>

@@ -1097,6 +1097,15 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Recursively using overloaded operator.
+        /// </summary>
+        internal static string RecursiveEqualityOperatorOverloadMessage {
+            get {
+                return ResourceManager.GetString("RecursiveEqualityOperatorOverloadMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Property {0} its private setter can be omitted..
         /// </summary>
         internal static string RedundantPrivateSetterAnalyzerMessage {

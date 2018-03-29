@@ -132,6 +132,7 @@
     <Compile Include="Tests\Attributes\FlagsEnumValuesAreNotPowersOfTwoTests.cs" />
     <Compile Include="Tests\General\MissingBracesTests.cs" />
     <Compile Include="Tests\General\GetHashCodeRefersToMutableFieldTests.cs" />
+    <Compile Include="Tests\General\RecursiveEqualityOperatorOverloadTests.cs" />
     <Compile Include="Tests\General\RedudantPrivateSetterTests.cs" />
     <Compile Include="Tests\General\GotoDetectionTests.cs" />
     <Compile Include="Tests\General\ImplementEqualsAndGetHashCodeTests.cs" />
