@@ -57,7 +57,7 @@ namespace VSDiagnostics.Diagnostics.General.RecursiveEqualityOperatorOverload
 
             if (definedToken.IsKind(SyntaxKind.TrueKeyword) || definedToken.IsKind(SyntaxKind.FalseKeyword))
             {
-                CheckForTrueKeyword();
+                CheckForTrueOrFalseKeyword();
                 return;
             }
 
@@ -122,7 +122,7 @@ namespace VSDiagnostics.Diagnostics.General.RecursiveEqualityOperatorOverload
                 return true;
             }
 
-            void CheckForTrueKeyword()
+            void CheckForTrueOrFalseKeyword()
             {
                 if (hasBody)
                 {
