@@ -345,7 +345,7 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
-        public void RecursiveEqualityOperatorOverload_WithBitwiseNotnOperator()
+        public void RecursiveEqualityOperatorOverload_WithBitwiseNotOperator()
         {
             var original = @"
 namespace ConsoleApplication1
