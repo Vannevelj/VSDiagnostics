@@ -17,7 +17,7 @@ Keep in mind that this project is under active development. If you encounter bug
 
 > This might sound a little abstract but if you’ve been using Visual Studio (and/or Resharper) then you know what I mean: have you ever written your classname as class rather than Class? This is a violation of the C# naming conventions and visual studio will warn you about it and provide you a quickfix to turn it into a proper capitalized word. This is exactly the behaviour we can create and which is integrated seemlessly in Visual Studio.
 
-Full text available on [my blog](http://www.vannevel.net/2015/05/03/getting-started-with-your-first-diagnostic/).
+Full text available on [my blog](https://vannevel.net/posts/getting-started-with-your-first-diagnostic/).
 
 ## What is available?
 
