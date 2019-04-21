@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
+using Microsoft.CodeAnalysis.Simplification;
 using VSDiagnostics.Utilities;
 
 namespace VSDiagnostics.Diagnostics.General.NewGuid
@@ -39,13 +40,22 @@ namespace VSDiagnostics.Diagnostics.General.NewGuid
 
         private Task<Document> UseNewGuid(Document document, SyntaxNode root, ObjectCreationExpressionSyntax statement)
         {
-            var newRoot = root.ReplaceNode(statement, SyntaxFactory.ParseExpression("Guid.NewGuid()"));
+            // We're not adding the simplifier in this route because it doesn't seem to work
+            // It works when putting it on the root node but that has too many consequences for other code
+            // We do some simple introspection to see if it is fully qualified already or not
+            var newExpression = "Guid.NewGuid()";
+            if (statement.ChildNodes().First().IsKind(SyntaxKind.QualifiedName))
+            {
+                newExpression = "System.Guid.NewGuid()";
+            }
+
+            var newRoot = root.ReplaceNode(statement, SyntaxFactory.ParseExpression(newExpression));
             return Task.FromResult(document.WithSyntaxRoot(newRoot));
         }
 
         private Task<Document> UseEmptyGuid(Document document, SyntaxNode root, ObjectCreationExpressionSyntax statement)
         {
-            var newRoot = root.ReplaceNode(statement, SyntaxFactory.ParseExpression("Guid.Empty"));
+            var newRoot = root.ReplaceNode(statement, SyntaxFactory.ParseExpression("System.Guid.Empty").WithAdditionalAnnotations(Simplifier.Annotation));
             return Task.FromResult(document.WithSyntaxRoot(newRoot));
         }
     }

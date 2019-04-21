@@ -47,6 +47,37 @@ namespace ConsoleApplication1
         }
 
         [TestMethod]
+        public void NewGuid_Constructor_NewGuid_FullName()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var g = new System.Guid();
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var g = System.Guid.NewGuid();
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, "An empty guid was created in an ambiguous manner");
+            VerifyFix(original, result, codeFixIndex: 0);
+        }
+
+        [TestMethod]
         public void NewGuid_Constructor_EmptyGuid()
         {
             var original = @"
@@ -71,6 +102,37 @@ namespace ConsoleApplication1
         void Method()
         {
             var g = Guid.Empty;
+        }
+    }
+}";
+
+            VerifyDiagnostic(original, "An empty guid was created in an ambiguous manner");
+            VerifyFix(original, result, codeFixIndex: 1);
+        }
+
+        [TestMethod]
+        public void NewGuid_Constructor_EmptyGuid_FullName()
+        {
+            var original = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var g = new System.Guid();
+        }
+    }
+}";
+
+            var result = @"
+namespace ConsoleApplication1
+{
+    class MyClass
+    {
+        void Method()
+        {
+            var g = System.Guid.Empty;
         }
     }
 }";
