@@ -686,4 +686,16 @@
   <data name="RecursiveEqualityOperatorOverloadMessage" xml:space="preserve">
     <value>Recursively using overloaded operator</value>
   </data>
+  <data name="NewGuidAnalyzerMessage" xml:space="preserve">
+    <value>An empty guid was created in an ambiguous manner</value>
+  </data>
+  <data name="NewGuidAnalyzerTitle" xml:space="preserve">
+    <value>Attempted to create empty guid</value>
+  </data>
+  <data name="NewGuidUseEmptyGuidCodeFixTitle" xml:space="preserve">
+    <value>Use Guid.Empty</value>
+  </data>
+  <data name="NewGuidUseNewGuidCodeFixTitle" xml:space="preserve">
+    <value>Use Guid.NewGuid()</value>
+  </data>
 </root>
