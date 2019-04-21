@@ -70,6 +70,8 @@
     <Compile Include="Diagnostics\General\ConditionalOperatorReturnsDefaultOptions\ConditionalOperatorReturnsDefaultOptionsCodeFix.cs" />
     <Compile Include="Diagnostics\General\ConditionIsConstant\ConditionIsConstantAnalyzer.cs" />
     <Compile Include="Diagnostics\General\ConditionIsConstant\ConditionIsConstantCodeFix.cs" />
+    <Compile Include="Diagnostics\General\DateTimeNow\DateTimeNowAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\DateTimeNow\DateTimeNowCodeFix.cs" />
     <Compile Include="Diagnostics\General\ElementaryMethodsOfTypeInCollectionNotOverridden\ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer.cs" />
     <Compile Include="Diagnostics\General\EqualsAndGetHashcodeNotImplementedTogether\EqualsAndGetHashcodeNotImplementedTogetherCodeFix.cs" />
     <Compile Include="Diagnostics\General\EqualsAndGetHashcodeNotImplementedTogether\EqualsAndGetHashcodeNotImplementedTogetherAnalyzer.cs" />

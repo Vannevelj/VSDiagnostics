@@ -119,6 +119,7 @@
     <Compile Include="Tests\Exceptions\RethrowExceptionWithoutLosingStracktraceTests.cs" />
     <Compile Include="Tests\Exceptions\SingleGeneralExceptionTests.cs" />
     <Compile Include="Tests\Exceptions\ThrowNullTests.cs" />
+    <Compile Include="Tests\General\DateTimeNowTests.cs" />
     <Compile Include="Tests\General\EqualsAndGetHashcodeNotImplementedTogetherTests.cs" />
     <Compile Include="Tests\General\AsToCastTests.cs" />
     <Compile Include="Tests\General\CastToAsTests.cs" />

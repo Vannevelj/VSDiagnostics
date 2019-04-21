@@ -66,5 +66,6 @@
         public const string ThrowNull = "VSD0065";
         public const string RecursiveEqualityOperatorOverload = "VSD0066";
         public const string NewGuid = "VSD0067";
+        public const string DateTimeNow = "VSD0068";
     }
 }

@@ -404,6 +404,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use DateTime.UtcNow to get a consistent value.
+        /// </summary>
+        internal static string DateTimeNowAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("DateTimeNowAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DateTime.Now was referenced.
+        /// </summary>
+        internal static string DateTimeNowAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("DateTimeNowAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use DateTime.UtcNow.
+        /// </summary>
+        internal static string DateTimeNowCodeFixTitle {
+            get {
+                return ResourceManager.GetString("DateTimeNowCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The operands in the divisive expression {0} are both integers and result in an implicit rounding..
         /// </summary>
         internal static string DivideIntegerByIntegerAnalyzerMessage {

@@ -698,4 +698,13 @@
   <data name="NewGuidUseNewGuidCodeFixTitle" xml:space="preserve">
     <value>Use Guid.NewGuid()</value>
   </data>
+  <data name="DateTimeNowAnalyzerMessage" xml:space="preserve">
+    <value>Use DateTime.UtcNow to get a consistent value</value>
+  </data>
+  <data name="DateTimeNowAnalyzerTitle" xml:space="preserve">
+    <value>DateTime.Now was referenced</value>
+  </data>
+  <data name="DateTimeNowCodeFixTitle" xml:space="preserve">
+    <value>Use DateTime.UtcNow</value>
+  </data>
 </root>
