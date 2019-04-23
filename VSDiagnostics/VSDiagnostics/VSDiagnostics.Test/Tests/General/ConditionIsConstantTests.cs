@@ -279,12 +279,7 @@ namespace ConsoleApplication1
             VerifyFix(original, result);
         }
 
-        /// <summary>
-        /// Currently ignored due to a minor bug in Microsoft.CodeAnalysis
-        /// See https://github.com/dotnet/roslyn/issues/9878
-        /// </summary>
         [TestMethod]
-        [Ignore]
         public void ConditionIsAlwaysTrue_WithElseIf_ChildIfIsAlwaysTrue_IfIsInElseNode()
         {
             var original = @"

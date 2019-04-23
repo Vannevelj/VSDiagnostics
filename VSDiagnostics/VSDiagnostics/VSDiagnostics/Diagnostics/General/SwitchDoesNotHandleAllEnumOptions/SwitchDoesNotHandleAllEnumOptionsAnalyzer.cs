@@ -34,31 +34,25 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
                 return;
             }
 
-            var caseLabels = new List<ExpressionSyntax>();
-
+            var labelSymbols = new HashSet<ISymbol>();
             foreach (var section in switchBlock.Sections)
             {
                 foreach (var label in section.Labels)
                 {
                     if (label.IsKind(SyntaxKind.CaseSwitchLabel))
                     {
-                        caseLabels.Add(((CaseSwitchLabelSyntax)label).Value);
+                        var switchLabel = (CaseSwitchLabelSyntax) label;
+                        var symbol = context.SemanticModel.GetSymbolInfo(switchLabel.Value).Symbol;
+                        if (symbol == null)
+                        {
+                            // potentially malformed case statement
+                            // or an integer being cast to an enum type
+                            return;
+                        }
+
+                        labelSymbols.Add(symbol);
                     }
                 }
-            }
-
-            var labelSymbols = new List<ISymbol>();
-            foreach (var label in caseLabels)
-            {
-                var symbol = context.SemanticModel.GetSymbolInfo(label).Symbol;
-                if (symbol == null)
-                {
-                    // potentially malformed case statement
-                    // or an integer being cast to an enum type
-                    return;
-                }
-
-                labelSymbols.Add(symbol);
             }
 
             foreach (var member in enumType.GetMembers())
@@ -69,16 +63,7 @@ namespace VSDiagnostics.Diagnostics.General.SwitchDoesNotHandleAllEnumOptions
                     continue;
                 }
 
-                var switchHasSymbol = false;
-                foreach (var symbol in labelSymbols)
-                {
-                    if (symbol == member)
-                    {
-                        switchHasSymbol = true;
-                    }
-                }
-
-                if (!switchHasSymbol)
+                if (!labelSymbols.Contains(member))
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Rule, switchBlock.Expression.GetLocation()));
                     return;

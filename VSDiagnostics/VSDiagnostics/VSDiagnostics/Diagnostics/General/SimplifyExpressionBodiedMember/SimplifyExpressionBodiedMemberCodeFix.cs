@@ -33,20 +33,16 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 diagnostic);
         }
 
-        private Task<Solution> UseExpressionBodiedMemberAsync(Document document, SyntaxNode root, SyntaxNode statement)
+        private Task<Document> UseExpressionBodiedMemberAsync(Document document, SyntaxNode root, SyntaxNode statement)
         {
             var property = statement.AncestorsAndSelf().OfType<PropertyDeclarationSyntax>().FirstOrDefault();
             if (property != null)
             {
-                var firstStatement =
-                    property.AccessorList.Accessors.FirstOrDefault(x => x.Keyword.IsKind(SyntaxKind.GetKeyword))
-                            .Body.Statements.First();
-                var arrowClause =
-                    SyntaxFactory.ArrowExpressionClause(((ReturnStatementSyntax) firstStatement).Expression);
+                var firstStatement = property.AccessorList.Accessors.Single(x => x.Keyword.IsKind(SyntaxKind.GetKeyword)).Body.Statements.First();
+                var arrowClause = SyntaxFactory.ArrowExpressionClause(((ReturnStatementSyntax) firstStatement).Expression);
                 var newProperty = property.RemoveNode(property.AccessorList, SyntaxRemoveOptions.KeepNoTrivia)
                                           .WithExpressionBody(arrowClause)
                                           .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
-
 
                 root = root.ReplaceNode(property, newProperty);
             }
@@ -64,7 +60,7 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                                                       .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
             }
 
-            return Task.FromResult(document.WithSyntaxRoot(root).Project.Solution);
+            return Task.FromResult(document.WithSyntaxRoot(root));
         }
     }
 }

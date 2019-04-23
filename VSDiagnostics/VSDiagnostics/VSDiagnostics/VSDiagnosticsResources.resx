@@ -653,5 +653,57 @@
   </data>
   <data name="FlagsEnumValuesAreNotPowersOfTwoValuesDontFitAnalyzerTitle" xml:space="preserve">
     <value>[Flags] enum's values are not explicit powers of 2 and its values do not fit in the specified enum type.</value>
+  <data name="MissingBracesAnalyzerMessage" xml:space="preserve">
+    <value>{0} {1} statement should be written with braces</value>
+    <comment>{0} - A/An</comment>
+  </data>
+  <data name="MissingBracesAnalyzerTitle" xml:space="preserve">
+    <value>{0} blocks should use braces to denote start and end.</value>
+  </data>
+  <data name="MissingBracesCodeFixTitle" xml:space="preserve">
+    <value>Use braces</value>
+  </data>
+  <data name="GetHashCodeRefersToMutableFieldAnalyzerMessage" xml:space="preserve">
+    <value>GetHashCode() refers to {0}</value>
+  </data>
+  <data name="GetHashCodeRefersToMutableFieldAnalyzerTitle" xml:space="preserve">
+    <value>GetHashCode() refers to mutable, static, or constant member</value>
+  </data>
+  <data name="AsyncMethodWithVoidReturnTypeMessage" xml:space="preserve">
+    <value>Method {0} is marked as async but has a void return type</value>
+    <comment>{0} - Method name</comment>
+  </data>
+  <data name="AsyncMethodWithVoidReturnTypeTitle" xml:space="preserve">
+    <value>Async methods should return a Task to make them awaitable</value>
+  </data>
+  <data name="AsyncMethodWithVoidReturnTypeCodeFixTitle" xml:space="preserve">
+    <value>Use Task as return type</value>
+  </data>
+  <data name="ThrowNullMessage" xml:space="preserve">
+    <value>Throwing null will always result in a runtime exception</value>
+  </data>
+  <data name="RecursiveEqualityOperatorOverloadMessage" xml:space="preserve">
+    <value>Recursively using overloaded operator</value>
+  </data>
+  <data name="NewGuidAnalyzerMessage" xml:space="preserve">
+    <value>An empty guid was created in an ambiguous manner</value>
+  </data>
+  <data name="NewGuidAnalyzerTitle" xml:space="preserve">
+    <value>Attempted to create empty guid</value>
+  </data>
+  <data name="NewGuidUseEmptyGuidCodeFixTitle" xml:space="preserve">
+    <value>Use Guid.Empty</value>
+  </data>
+  <data name="NewGuidUseNewGuidCodeFixTitle" xml:space="preserve">
+    <value>Use Guid.NewGuid()</value>
+  </data>
+  <data name="DateTimeNowAnalyzerMessage" xml:space="preserve">
+    <value>Use DateTime.UtcNow to get a consistent value</value>
+  </data>
+  <data name="DateTimeNowAnalyzerTitle" xml:space="preserve">
+    <value>DateTime.Now was referenced</value>
+  </data>
+  <data name="DateTimeNowCodeFixTitle" xml:space="preserve">
+    <value>Use DateTime.UtcNow</value>
   </data>
 </root>

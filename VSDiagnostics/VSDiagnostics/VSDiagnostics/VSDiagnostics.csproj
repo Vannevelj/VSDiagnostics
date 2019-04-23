@@ -35,6 +35,8 @@
     <Compile Include="Diagnostics\Arithmetic\DivideIntegerByInteger\DivideIntegerByIntegerAnalyzer.cs" />
     <Compile Include="Diagnostics\Async\AsyncMethodWithoutAsyncSuffix\AsyncMethodWithoutAsyncSuffixAnalyzer.cs" />
     <Compile Include="Diagnostics\Async\AsyncMethodWithoutAsyncSuffix\AsyncMethodWithoutAsyncSuffixCodeFix.cs" />
+    <Compile Include="Diagnostics\Async\AsyncMethodWithVoidReturnType\AsyncMethodWithVoidReturnTypeAnalyzer.cs" />
+    <Compile Include="Diagnostics\Async\AsyncMethodWithVoidReturnType\AsyncMethodWithVoidReturnTypeCodeFix.cs" />
     <Compile Include="Diagnostics\Async\SyncMethodWithAsyncSuffix\SyncMethodWithAsyncSuffixAnalyzer.cs" />
     <Compile Include="Diagnostics\Async\SyncMethodWithAsyncSuffix\SyncMethodWithAsyncSuffixCodeFix.cs" />
     <Compile Include="Diagnostics\Attributes\AttributeWithEmptyArgumentList\AttributeWithEmptyArgumentListAnalyzer.cs" />
@@ -53,6 +55,7 @@
     <Compile Include="Diagnostics\Exceptions\RethrowExceptionWithoutLosingStacktrace\RethrowExceptionWithoutLosingStacktraceAnalyzer.cs" />
     <Compile Include="Diagnostics\Exceptions\RethrowExceptionWithoutLosingStacktrace\RethrowExceptionWithoutLosingStacktraceCodeFix.cs" />
     <Compile Include="Diagnostics\Exceptions\SingleGeneralException\SingleGeneralExceptionAnalyzer.cs" />
+    <Compile Include="Diagnostics\Exceptions\ThrowNull\ThrowNullAnalyzer.cs" />
     <Compile Include="Diagnostics\General\CastToAs\CastToAsAnalyzer.cs" />
     <Compile Include="Diagnostics\General\CastToAs\CastToAsCodeFix.cs" />
     <Compile Include="Diagnostics\General\AsToCast\AsToCastAnalyzer.cs" />
@@ -67,6 +70,8 @@
     <Compile Include="Diagnostics\General\ConditionalOperatorReturnsDefaultOptions\ConditionalOperatorReturnsDefaultOptionsCodeFix.cs" />
     <Compile Include="Diagnostics\General\ConditionIsConstant\ConditionIsConstantAnalyzer.cs" />
     <Compile Include="Diagnostics\General\ConditionIsConstant\ConditionIsConstantCodeFix.cs" />
+    <Compile Include="Diagnostics\General\DateTimeNow\DateTimeNowAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\DateTimeNow\DateTimeNowCodeFix.cs" />
     <Compile Include="Diagnostics\General\ElementaryMethodsOfTypeInCollectionNotOverridden\ElementaryMethodsOfTypeInCollectionNotOverriddenAnalyzer.cs" />
     <Compile Include="Diagnostics\General\EqualsAndGetHashcodeNotImplementedTogether\EqualsAndGetHashcodeNotImplementedTogetherCodeFix.cs" />
     <Compile Include="Diagnostics\General\EqualsAndGetHashcodeNotImplementedTogether\EqualsAndGetHashcodeNotImplementedTogetherAnalyzer.cs" />
@@ -74,14 +79,15 @@
     <Compile Include="Diagnostics\General\ExplicitAccessModifiers\ExplicitAccessModifiersCodeFix.cs" />
     <Compile Include="Diagnostics\Attributes\FlagsEnumValuesAreNotPowersOfTwo\FlagsEnumValuesAreNotPowersOfTwoAnalyzer.cs" />
     <Compile Include="Diagnostics\Attributes\FlagsEnumValuesAreNotPowersOfTwo\FlagsEnumValuesAreNotPowersOfTwoCodeFix.cs" />
+    <Compile Include="Diagnostics\General\GetHashCodeRefersToMutableMember\GetHashCodeRefersToMutableMemberAnalyzer.cs" />
     <Compile Include="Diagnostics\General\GotoDetection\GotoDetectionAnalyzer.cs" />
-    <Compile Include="Diagnostics\General\IfStatementWithoutBraces\IfStatementWithoutBracesAnalyzer.cs" />
-    <Compile Include="Diagnostics\General\IfStatementWithoutBraces\IfStatementWithoutBracesCodeFix.cs" />
     <Compile Include="Diagnostics\General\ImplementEqualsAndGetHashCode\ImplementEqualsAndGetHashCodeAnalyzer.cs" />
     <Compile Include="Diagnostics\General\ImplementEqualsAndGetHashCode\ImplementEqualsAndGetHashCodeCodeFix.cs" />
-    <Compile Include="Diagnostics\General\LoopStatementWithoutBraces\LoopStatementWithoutBracesAnalyzer.cs" />
-    <Compile Include="Diagnostics\General\LoopStatementWithoutBraces\LoopStatementWithoutBracesCodeFix.cs" />
+    <Compile Include="Diagnostics\General\MissingBraces\MissingBracesAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\MissingBraces\MissingBracesCodeFix.cs" />
     <Compile Include="Diagnostics\General\NamingConventions\NamingConventionExtensions.cs" />
+    <Compile Include="Diagnostics\General\NewGuid\NewGuidAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\NewGuid\NewGuidCodeFix.cs" />
     <Compile Include="Diagnostics\General\NonEncapsulatedOrMutableField\NonEncapsulatedOrMutableFieldAnalyzer.cs" />
     <Compile Include="Diagnostics\General\NonEncapsulatedOrMutableField\NonEncapsulatedOrMutableFieldCodeFix.cs" />
     <Compile Include="Diagnostics\General\NamingConventions\NamingConventionsAnalyzer.cs" />
@@ -91,6 +97,7 @@
     <Compile Include="Diagnostics\General\OnPropertyChangedWithoutNameOfOperator\OnPropertyChangedWithoutNameOfOperatorAnalyzer.cs" />
     <Compile Include="Diagnostics\General\OnPropertyChangedWithoutNameOfOperator\OnPropertyChangedWithoutNameOfOperatorCodeFix.cs" />
     <Compile Include="Diagnostics\General\LoopedRandomInstantiation\LoopedRandomInstantiationAnalyzer.cs" />
+    <Compile Include="Diagnostics\General\RecursiveEqualityOperatorOverload\RecursiveOperatorOverloadAnalyzer.cs" />
     <Compile Include="Diagnostics\General\RedundantPrivateSetter\RedundantPrivateSetterAnalyzer.cs" />
     <Compile Include="Diagnostics\General\RedundantPrivateSetter\RedundantPrivateSetterCodeFix.cs" />
     <Compile Include="Diagnostics\General\SimplifyExpressionBodiedMember\SimplifyExpressionBodiedMemberAnalyzer.cs" />
@@ -107,8 +114,6 @@
     <Compile Include="Diagnostics\General\TypeToVar\TypeToVarCodeFix.cs" />
     <Compile Include="Diagnostics\General\UseAliasesInsteadOfConcreteType\UseAliasesInsteadOfConcreteTypeCodeFix.cs" />
     <Compile Include="Diagnostics\General\UseAliasesInsteadOfConcreteType\UseAliasesInsteadOfConcreteTypeAnalyzer.cs" />
-    <Compile Include="Diagnostics\General\UsingStatementWithoutBraces\UsingStatementWithoutBracesAnalyzer.cs" />
-    <Compile Include="Diagnostics\General\UsingStatementWithoutBraces\UsingStatementWithoutBracesCodeFix.cs" />
     <Compile Include="Diagnostics\Strings\ReplaceEmptyStringWithStringDotEmpty\ReplaceEmptyStringWithStringDotEmptyAnalyzer.cs" />
     <Compile Include="Diagnostics\Strings\ReplaceEmptyStringWithStringDotEmpty\ReplaceEmptyStringWithStringDotEmptyCodeFix.cs" />
     <Compile Include="Diagnostics\Strings\StringDotFormatWithDifferentAmountOfArguments\StringDotFormatWithDifferentAmountOfArgumentsAnalyzer.cs" />
@@ -150,65 +155,62 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CodeAnalysis, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.CodeAnalysis.Common.1.1.0\lib\portable-net45+win8\Microsoft.CodeAnalysis.dll</HintPath>
+    <EmbeddedResource Include="VSDiagnosticsResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>VSDiagnosticsResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\VSDiagnostics.1.9.4\analyzers\dotnet\cs\VSDiagnostics.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeAnalysis, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.CodeAnalysis.Common.1.0.0\lib\portable-net45+win8\Microsoft.CodeAnalysis.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.CodeAnalysis.CSharp.1.1.0\lib\portable-net45+win8\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.CodeAnalysis.CSharp.1.0.0\lib\portable-net45+win8\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp.Workspaces, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.CodeAnalysis.CSharp.Workspaces.1.1.0\lib\portable-net45+win8\Microsoft.CodeAnalysis.CSharp.Workspaces.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Workspaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.CodeAnalysis.CSharp.Workspaces.1.0.0\lib\portable-net45+win8\Microsoft.CodeAnalysis.CSharp.Workspaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.VisualBasic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.CodeAnalysis.VisualBasic.1.0.0\lib\portable-net45+win8\Microsoft.CodeAnalysis.VisualBasic.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis.Workspaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.CodeAnalysis.Workspaces.Common.1.0.0\lib\portable-net45+win8\Microsoft.CodeAnalysis.Workspaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.Workspaces, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.CodeAnalysis.Workspaces.Common.1.1.0\lib\portable-net45+win8\Microsoft.CodeAnalysis.Workspaces.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.Collections.Immutable.1.1.37\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    <Reference Include="System.Collections.Immutable, Version=1.1.36.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Collections.Immutable.1.1.36\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Composition.AttributedModel, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.AttributedModel.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Composition.Convention, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.Convention.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Composition.Hosting, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.Hosting.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Composition.Runtime, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.Runtime.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Composition.TypedParts, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.TypedParts.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Reflection.Metadata, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.Reflection.Metadata.1.1.0\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
       <Private>True</Private>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
-    <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
-    <Analyzer Include="..\..\packages\VSDiagnostics.1.9.3\tools\analyzers\VSDiagnostics.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="VSDiagnosticsResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>VSDiagnosticsResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <Reference Include="System.Reflection.Metadata, Version=1.0.21.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Reflection.Metadata.1.0.21\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

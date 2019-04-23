@@ -16,8 +16,7 @@ namespace VSDiagnostics.Diagnostics.General.EqualsAndGetHashcodeNotImplementedTo
     [ExportCodeFixProvider(DiagnosticId.EqualsAndGetHashcodeNotImplementedTogether + "CF", LanguageNames.CSharp), Shared]
     public class EqualsAndGetHashcodeNotImplementedTogetherCodeFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds
-            => ImmutableArray.Create(EqualsAndGetHashcodeNotImplementedTogetherAnalyzer.Rule.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(EqualsAndGetHashcodeNotImplementedTogetherAnalyzer.Rule.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 

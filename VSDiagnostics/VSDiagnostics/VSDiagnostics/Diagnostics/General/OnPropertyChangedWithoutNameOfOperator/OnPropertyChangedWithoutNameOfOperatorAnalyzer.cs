@@ -15,19 +15,11 @@ namespace VSDiagnostics.Diagnostics.General.OnPropertyChangedWithoutNameOfOperat
     public class OnPropertyChangedWithoutNameOfOperatorAnalyzer : DiagnosticAnalyzer
     {
         private const DiagnosticSeverity Severity = DiagnosticSeverity.Warning;
-
         private static readonly string Category = VSDiagnosticsResources.GeneralCategory;
+        private static readonly string Message = VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorAnalyzerMessage;
+        private static readonly string Title = VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorAnalyzerTitle;
 
-        private static readonly string Message =
-            VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorAnalyzerMessage;
-
-        private static readonly string Title =
-            VSDiagnosticsResources.OnPropertyChangedWithoutNameOfOperatorAnalyzerTitle;
-
-        internal static DiagnosticDescriptor Rule
-            =>
-                new DiagnosticDescriptor(DiagnosticId.OnPropertyChangedWithoutNameofOperator, Title, Message, Category,
-                    Severity, true);
+        internal static DiagnosticDescriptor Rule => new DiagnosticDescriptor(DiagnosticId.OnPropertyChangedWithoutNameofOperator, Title, Message, Category, Severity, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 

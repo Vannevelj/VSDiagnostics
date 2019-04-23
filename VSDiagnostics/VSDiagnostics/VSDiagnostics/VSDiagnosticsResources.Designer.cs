@@ -20,7 +20,7 @@ namespace VSDiagnostics {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class VSDiagnosticsResources {
@@ -157,6 +157,33 @@ namespace VSDiagnostics {
         internal static string AsyncMethodWithoutAsyncSuffixCodeFixTitle {
             get {
                 return ResourceManager.GetString("AsyncMethodWithoutAsyncSuffixCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Task as return type.
+        /// </summary>
+        internal static string AsyncMethodWithVoidReturnTypeCodeFixTitle {
+            get {
+                return ResourceManager.GetString("AsyncMethodWithVoidReturnTypeCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method {0} is marked as async but has a void return type.
+        /// </summary>
+        internal static string AsyncMethodWithVoidReturnTypeMessage {
+            get {
+                return ResourceManager.GetString("AsyncMethodWithVoidReturnTypeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Async methods should return a Task to make them awaitable.
+        /// </summary>
+        internal static string AsyncMethodWithVoidReturnTypeTitle {
+            get {
+                return ResourceManager.GetString("AsyncMethodWithVoidReturnTypeTitle", resourceCulture);
             }
         }
         
@@ -373,6 +400,33 @@ namespace VSDiagnostics {
         internal static string ConditionIsConstantCodeFixTitle {
             get {
                 return ResourceManager.GetString("ConditionIsConstantCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use DateTime.UtcNow to get a consistent value.
+        /// </summary>
+        internal static string DateTimeNowAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("DateTimeNowAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DateTime.Now was referenced.
+        /// </summary>
+        internal static string DateTimeNowAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("DateTimeNowAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use DateTime.UtcNow.
+        /// </summary>
+        internal static string DateTimeNowCodeFixTitle {
+            get {
+                return ResourceManager.GetString("DateTimeNowCodeFixTitle", resourceCulture);
             }
         }
         
@@ -755,6 +809,24 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to GetHashCode() refers to {0}.
+        /// </summary>
+        internal static string GetHashCodeRefersToMutableFieldAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("GetHashCodeRefersToMutableFieldAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GetHashCode() refers to mutable, static, or constant member.
+        /// </summary>
+        internal static string GetHashCodeRefersToMutableFieldAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("GetHashCodeRefersToMutableFieldAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use of &quot;goto&quot; detected.  Consider using a method or loop instead..
         /// </summary>
         internal static string GotoDetectionAnalyzerMessage {
@@ -872,6 +944,33 @@ namespace VSDiagnostics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} {1} statement should be written with braces.
+        /// </summary>
+        internal static string MissingBracesAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("MissingBracesAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} blocks should use braces to denote start and end..
+        /// </summary>
+        internal static string MissingBracesAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("MissingBracesAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use braces.
+        /// </summary>
+        internal static string MissingBracesCodeFixTitle {
+            get {
+                return ResourceManager.GetString("MissingBracesCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The {0} {1} does not follow naming conventions. Should be {2}..
         /// </summary>
         internal static string NamingConventionsAnalyzerMessage {
@@ -895,6 +994,42 @@ namespace VSDiagnostics {
         internal static string NamingConventionsCodeFixTitle {
             get {
                 return ResourceManager.GetString("NamingConventionsCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An empty guid was created in an ambiguous manner.
+        /// </summary>
+        internal static string NewGuidAnalyzerMessage {
+            get {
+                return ResourceManager.GetString("NewGuidAnalyzerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attempted to create empty guid.
+        /// </summary>
+        internal static string NewGuidAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("NewGuidAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Guid.Empty.
+        /// </summary>
+        internal static string NewGuidUseEmptyGuidCodeFixTitle {
+            get {
+                return ResourceManager.GetString("NewGuidUseEmptyGuidCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Guid.NewGuid().
+        /// </summary>
+        internal static string NewGuidUseNewGuidCodeFixTitle {
+            get {
+                return ResourceManager.GetString("NewGuidUseNewGuidCodeFixTitle", resourceCulture);
             }
         }
         
@@ -1021,6 +1156,15 @@ namespace VSDiagnostics {
         internal static string OnPropertyChangedWithoutNameOfOperatorCodeFixTitle {
             get {
                 return ResourceManager.GetString("OnPropertyChangedWithoutNameOfOperatorCodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recursively using overloaded operator.
+        /// </summary>
+        internal static string RecursiveEqualityOperatorOverloadMessage {
+            get {
+                return ResourceManager.GetString("RecursiveEqualityOperatorOverloadMessage", resourceCulture);
             }
         }
         
@@ -1444,6 +1588,15 @@ namespace VSDiagnostics {
         internal static string TestsCategory {
             get {
                 return ResourceManager.GetString("TestsCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Throwing null will always result in a runtime exception.
+        /// </summary>
+        internal static string ThrowNullMessage {
+            get {
+                return ResourceManager.GetString("ThrowNullMessage", resourceCulture);
             }
         }
         

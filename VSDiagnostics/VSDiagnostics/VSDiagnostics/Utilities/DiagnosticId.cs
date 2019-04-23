@@ -23,8 +23,7 @@
         public const string ConditionIsConstant = "VSD0020";
         public const string ExplicitAccessModifiers = "VSD0021";
         public const string GotoDetection = "VSD0022";
-        public const string IfStatementWithoutBraces = "VSD0023";
-        public const string LoopStatementWithoutBraces = "VSD0024";
+        public const string MissingBraces = "VSD0023";
         public const string NamingConventions = "VSD0025";
         public const string NonEncapsulatedOrMutableField = "VSD0026";
         public const string NullableToShorthand = "VSD0027";
@@ -51,7 +50,6 @@
         public const string RedundantPrivateSetter = "VSD0048";
         public const string SwitchIsMissingDefaultLabel = "VSD0049";
         public const string StructWithoutElementaryMethodsOverridden = "VSD0050";
-        public const string UsingStatementWithoutBraces = "VSD0051";
         public const string ExceptionThrownFromImplicitOperator = "VSD0052";
         public const string ExceptionThrownFromPropertyGetter = "VSD0053";
         public const string ExceptionThrownFromStaticConstructor = "VSD0054";
@@ -63,5 +61,11 @@
         public const string ExceptionThrownFromEquals = "VSD0060";
         public const string ImplementEqualsAndGetHashCode = "VSD0061";
         public const string TestMethodWithoutTestAttribute = "VSD0062";
+        public const string GetHashCodeRefersToMutableField = "VSD0063";
+        public const string AsyncMethodWithVoidReturnType = "VSD0064";
+        public const string ThrowNull = "VSD0065";
+        public const string RecursiveEqualityOperatorOverload = "VSD0066";
+        public const string NewGuid = "VSD0067";
+        public const string DateTimeNow = "VSD0068";
     }
 }

@@ -33,33 +33,19 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        public override void Initialize(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.PropertyDeclaration, SyntaxKind.MethodDeclaration);
-
-        private void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
+        public override void Initialize(AnalysisContext context)
         {
-            Diagnostic diagnostic = null;
-            
-            if (context.Node.IsKind(SyntaxKind.PropertyDeclaration))
-            {
-                diagnostic = HandleProperty((PropertyDeclarationSyntax)context.Node);
-            }
-            
-            if (context.Node.IsKind(SyntaxKind.MethodDeclaration))
-            {
-                diagnostic = HandleMethod((MethodDeclarationSyntax)context.Node);
-            }
-
-            if (diagnostic != null)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            context.RegisterSyntaxNodeAction(HandleProperty, SyntaxKind.PropertyDeclaration);
+            context.RegisterSyntaxNodeAction(HandleMethod, SyntaxKind.MethodDeclaration);
         }
 
-        private Diagnostic HandleProperty(PropertyDeclarationSyntax propertyDeclaration)
+        private void HandleProperty(SyntaxNodeAnalysisContext context)
         {
+            var propertyDeclaration = (PropertyDeclarationSyntax) context.Node;
+
             if (propertyDeclaration.ExpressionBody != null)
             {
-                return null;
+                return;
             }
 
             foreach (var declaration in propertyDeclaration.DescendantNodesAndTokensAndSelf())
@@ -68,7 +54,7 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 {
                     if (!trivia.IsWhitespaceTrivia())
                     {
-                        return null;
+                        return;
                     }
                 }
 
@@ -76,7 +62,7 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 {
                     if (!trivia.IsWhitespaceTrivia())
                     {
-                        return null;
+                        return;
                     }
                 }
             }
@@ -85,7 +71,7 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
             {
                 if (accessor.Keyword.IsKind(SyntaxKind.SetKeyword))
                 {
-                    return null;
+                    return;
                 }
             }
 
@@ -100,55 +86,57 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
             }
             if (getter == null)
             {
-                return null;
+                return;
             }
 
             foreach (var list in getter.AttributeLists)
             {
                 if (list.Attributes.Any())
                 {
-                    return null;
+                    return;
                 }
             }
 
             if (getter.Body?.Statements.Count != 1)
             {
-                return null;
+                return;
             }
 
             if (!Nodes.Contains(getter.Body.Statements[0].Kind()))
             {
-                return null;
+                return;
             }
 
             var statement = getter.Body.Statements.First();
-            return Diagnostic.Create(Rule, statement.GetLocation(), "Property", propertyDeclaration.Identifier);
+            context.ReportDiagnostic(Diagnostic.Create(Rule, statement.GetLocation(), "Property", propertyDeclaration.Identifier));
         }
 
-        private Diagnostic HandleMethod(MethodDeclarationSyntax methodDeclaration)
+        private void HandleMethod(SyntaxNodeAnalysisContext context)
         {
+            var methodDeclaration = (MethodDeclarationSyntax) context.Node;
+
             if (methodDeclaration.ExpressionBody != null)
             {
-                return null;
+                return;
             }
 
             foreach (var nodeOrToken in methodDeclaration.DescendantNodesAndTokensAndSelf())
             {
                 if (nodeOrToken.GetLeadingTrivia().Concat(nodeOrToken.GetTrailingTrivia()).Any(y => !y.IsWhitespaceTrivia()))
                 {
-                    return null;
+                    return;
                 }
             }
 
             if (methodDeclaration.Body?.Statements.Count != 1)
             {
-                return null;
+                return;
             }
 
             var statement = methodDeclaration.Body.Statements[0];
             if (!Nodes.Contains(statement.Kind()))
             {
-                return null;
+                return;
             }
 
             if (statement.IsKind(SyntaxKind.ReturnStatement))
@@ -156,12 +144,11 @@ namespace VSDiagnostics.Diagnostics.General.SimplifyExpressionBodiedMember
                 var returnStatement = (ReturnStatementSyntax) statement;
                 if (returnStatement.Expression == null)
                 {
-                    return null;
+                    return;
                 }
             }
 
-            return Diagnostic.Create(Rule, methodDeclaration.Identifier.GetLocation(), "Method",
-                methodDeclaration.Identifier.ValueText);
+            context.ReportDiagnostic(Diagnostic.Create(Rule, methodDeclaration.Identifier.GetLocation(), "Method", methodDeclaration.Identifier.ValueText));
         }
     }
 }

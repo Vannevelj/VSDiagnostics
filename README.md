@@ -17,7 +17,7 @@ Keep in mind that this project is under active development. If you encounter bug
 
 > This might sound a little abstract but if you’ve been using Visual Studio (and/or Resharper) then you know what I mean: have you ever written your classname as class rather than Class? This is a violation of the C# naming conventions and visual studio will warn you about it and provide you a quickfix to turn it into a proper capitalized word. This is exactly the behaviour we can create and which is integrated seemlessly in Visual Studio.
 
-Full text available on [my blog](http://www.vannevel.net/2015/05/03/getting-started-with-your-first-diagnostic/).
+Full text available on [my blog](https://vannevel.net/posts/getting-started-with-your-first-diagnostic/).
 
 ## What is available?
 
@@ -28,6 +28,7 @@ Currently these diagnostics are implemented:
 | Arithmetic | VSD0045 | The operands of a divisive expression are both integers and result in an implicit rounding.
 | Async | VSD0001 | Asynchronous methods should end with the -Async suffix.
 | Async | VSD0041 | A non-`async`, non-`Task` method should not end with -Async.
+| Async | VSD0064 | Async methods should return a `Task` to make them awaitable.
 | Attributes | VSD0002 | An attribute should not have an empty argument list.
 | Attributes | VSD0003 | Gives an enum the `[Flags]` attribute.
 | Attributes | VSD0004 | A `[Flags]` enum its values are not explicit powers of 2
@@ -49,6 +50,7 @@ Currently these diagnostics are implemented:
 | Exceptions | VSD0058 | An exception is thrown from a finalizer method.
 | Exceptions | VSD0059 | An exception is thrown from a `GetHashCode()` method.
 | Exceptions | VSD0060 | An exception is thrown from an `Equals()` method.
+| Exceptions | VSD0065 | A `null` object is attempted to get thrown.
 | General | VSD0013 | Changes an `as` expression to a cast.
 | General | VSD0014 | Changes a cast expression to `as`.
 | General | VSD0015 | A boolean expression comparing to `false` can be simplified.
@@ -59,8 +61,7 @@ Currently these diagnostics are implemented:
 | General | VSD0020 | The condition is a constant (true) and thus unnecessary.
 | General | VSD0021 | Inserts the default access modifier for a declaration.
 | General | VSD0022 | Detects usage of the `goto` keyword.
-| General | VSD0023 | Changes one-liner `if` and `else` statements to be surrounded in a block.
-| General | VSD0024 | Loop blocks should use braces to denote start and end.
+| General | VSD0023 | Requires braces for `if`, `else`, `for`, `foreach`, `while`, `do`, `using`, `lock`, `fixed` and `switch` constructs.
 | General | VSD0025 | Implements the most common configuration of naming conventions.
 | General | VSD0026 | A `public`, `internal` or `protected internal` non-`const`, non-`readonly` field should be used as a property.
 | General | VSD0027 | Changes `Nullable<T>` to `T?`.
@@ -75,9 +76,12 @@ Currently these diagnostics are implemented:
 | General | VSD0046 | `Equals()` and `GetHashCode()` must be implemented together.
 | General | VSD0047 | Implement elementary methods for a type used in a collection.
 | General | VSD0048 | A property with a private setter can become a read-only property instead.
-| General | VSD0049 | A `switch` is missing a `default` label.
-| General | VSD0051 | A `using` statement is missing braces.
+| General | VSD0049 | A `switch` is missing a `default` label.\
 | General | VSD0052 | Implement `Equals()` and `GetHashCode()` using existing fields and properties.
+| General | VSD0063 | A `GetHashCode` implementation refers to a mutable field.
+| General | VSD0066 | Recursively using an overloaded operator.
+| General | VSD0067 | Usage of `new Guid()` rather than `Guid.NewGuid()` or `Guid.Empty`
+| General | VSD0068 | Warns when using `DateTime.Now`
 | Strings | VSD0034 | Replaces an empty string literal with the more expressive `string.Empty`.
 | Strings | VSD0035 | Orders the arguments of a `string.Format()` call in ascending order according to index.
 | Strings | VSD0042 | A `string.Format()` call lacks arguments and will cause a runtime exception.
