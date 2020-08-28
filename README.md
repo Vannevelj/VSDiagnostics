@@ -77,7 +77,7 @@ Currently these diagnostics are implemented:
 | General | VSD0047 | Implement elementary methods for a type used in a collection.
 | General | VSD0048 | A property with a private setter can become a read-only property instead.
 | General | VSD0049 | A `switch` is missing a `default` label.\
-| General | VSD0052 | Implement `Equals()` and `GetHashCode()` using existing fields and properties.
+| General | VSD0061 | Implement `Equals()` and `GetHashCode()` using existing fields and properties.
 | General | VSD0063 | A `GetHashCode` implementation refers to a mutable field.
 | Strings | VSD0034 | Replaces an empty string literal with the more expressive `string.Empty`.
 | Strings | VSD0035 | Orders the arguments of a `string.Format()` call in ascending order according to index.
