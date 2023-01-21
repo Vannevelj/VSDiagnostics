@@ -1,4 +1,7 @@
-﻿# VSDiagnostics
+| :exclamation:  This project is no longer maintained, use https://github.com/Vannevelj/SharpSource instead   |
+|-----------------------------------------|
+
+# VSDiagnostics
 A collection of code-quality analyzers based on the Roslyn compiler platform. This project aims to ensure code-quality as you type it in your editor rather than having to do this as a separate build-step.
 By performing static analysis while you're writing code, certain convention violations and hidden pitfalls can be avoided as early in the process as possible.
 
@@ -128,7 +131,3 @@ You'll need [Visual Studio 2015](https://www.visualstudio.com/en-us/products/vis
 ## Where can I find more information about every diagnostic?
 
 Release 2.0.0 will come with a website where we document every diagnostic including reasoning behind its implementation choices. In the meantime you can take a look at [the tests](https://github.com/Vannevelj/VSDiagnostics/tree/develop/VSDiagnostics/VSDiagnostics/VSDiagnostics.Test/Tests) that belong to each diagnostic to see what exact scenarios we have accounted for.
-
-## How can I get in contact?
-
-You're always free to open an issue but if you would like something more direct you can drop by in [the StackExchange chat channel](http://chat.stackexchange.com/rooms/26639/vsdiagnostics) where the main contributors reside or send an email to jer_vannevel@outlook.com.
